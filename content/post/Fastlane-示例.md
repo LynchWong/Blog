@@ -8,7 +8,7 @@ tags:
 - Automate
 metaAlignment: center
 autoThumbnailImage: no
-coverImage: /img/2521-8.png
+coverImage: /img/2521-8.jpg
 
 ---
 
