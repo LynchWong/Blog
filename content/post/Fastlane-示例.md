@@ -8,7 +8,7 @@ tags:
 - Automate
 metaAlignment: center
 autoThumbnailImage: no
-coverImage: /img/2521-8.jpg
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
 
 ---
 
