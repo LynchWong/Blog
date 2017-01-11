@@ -1,0 +1,332 @@
+---
+title: Fastlane - Snapshot
+date: 2016-06-19 13:52:28
+categories: 
+- iOS
+tags: 
+- Fastlane
+- Automate
+- Snapshot
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: /img/FastlaneSnapshot/snapshot.png
+
+---
+
+> 说明：翻译的 `Snapshot` 的指南，[ 原文地址 ](https://github.com/fastlane/fastlane/tree/master/snapshot)。
+<!--more-->
+
+![alt text](/img/FastlaneSnapshot/snapshot.png)
+
+# snapshot
+
+对你的 iOS 应用程序在每一种设备上自动截取本地化截图。
+
+你必需手动创建 20 (语言) x 6 (设备) x 5 (截图) = 600 张截图。
+
+很难保证所有的事情都是正确的！
+
+* 所有更新的截图
+* 没有加载提示
+* 屏幕中相同的内容
+* 干净的状态栏
+* 上传截图 ([ `deliver` ](https://github.com/fastlane/fastlane/tree/master/deliver))
+
+更多关于[ 创建完美截图的信息 ](https://krausefx.com/blog/creating-perfect-app-store-screenshots-of-your-ios-app)。
+
+`snapshot`完全运行在后台，当电脑在为你截图时，你可以做其它的事情。
+
+# 注意：新的`snapshot`使用UI Tests in Xcode 7
+
+苹果发布的新的 Xcode 版本内建支持了 UI Tests。这项技术使得`snapshot`比之前更好：不必再处理 UI Automation Javascript 代码，现在你可以使用 Swift 或者 Objective C 来编写截图的代码，并且允许你断点调试。
+
+所以，`snapshot`从底层重写了代码，但是没有改变公共 API。
+
+详见[ MigrationGuide to 1.0 ](https://github.com/fastlane/fastlane/blob/master/snapshot/MigrationGuide.md)。
+
+为什么改为 UI Tests ？
+
+* UI Automation 过时了
+* UI Tests 在未来将会进化支持更多功能
+* UI Tests 更容易调试
+* UI Tests 使用 Swift 或者 Objective C 编写
+* UI Tests 可以使用更干净更好的方式执行
+
+# 功能
+
+* 根据所有的模拟器，不同的语言，创建几百张截图
+* 只需配置一次，存储在 Git 中
+* 当电脑在为你截图的时候，你可以做其它的事情
+* 集成[ fastlane ](https://fastlane.tools) 和 [ deliver ](https://github.com/fastlane/fastlane/tree/master/deliver)
+* 生成漂亮的 Web 页面，展示所有设备的截图。最棒的是你可以发送给 Q&A 或者市场的团队
+* `snapshot`在截图前会自动等待所有的网络请求结束(我们不想在App Store里有网络加载的截图)
+
+在`snapshot`成功创建新的截图后，会生成一个漂亮的HTML文件来展示所有的截图，让你能够快速浏览所有截图：
+
+![alt text](/img/FastlaneSnapshot/htmlPagePreviewFade.jpg)
+
+## 为什使用？
+
+该工具会自动切换语言，设备类型和运行每一个组合的UI测试。
+
+## 为什么要自动化这个过程？
+
+* 要花费很多时间来截图
+* 能够浏览你所有的截图，运行所有可用的模拟器，不需要手动启动上百次
+* 翻译人员非常容易验证的翻译，这些翻译在应用上下文中是有意义的
+* 很容易验证本地化的标签是否在所有设备上合适
+* 可以集成测试：你可以在脚本中测试UI元素
+* 为每一次应用更新提供新的截图，你客户应得的
+* 如果截图有个小错误？只需要修正然后从新运行脚本
+
+# 安装
+
+安装 gem
+
+	sudo gem install snapshot
+
+确保你已经安装了 Xcode 最新版本的命令行工具：
+
+	xcode-select --install
+
+# UI Tests
+
+## 开始
+
+这个项目使用苹果新发布的 UIUI Tests。这里不会讲解如何编写脚本的细节。
+
+可以从如下几个链接开始；
+
+* [WWDC 2015 Introduction to UI Tests](https://developer.apple.com/videos/play/wwdc2015/406/)
+* [A first look into UI Tests](http://www.mokacoding.com/blog/xcode-7-ui-testing/)
+* [UI Testing in Xcode 7](http://masilotti.com/ui-testing-xcode-7/)
+* [HSTestingBackchannel : ‘Cheat’ by communicating directly with your app](https://github.com/ConfusedVorlon/HSTestingBackchannel)
+* [Automating App Store screenshots using fastlane snapshot and frameit](https://tisunov.github.io/2015/11/06/automating-app-store-screenshots-generation-with-fastlane-snapshot-and-sketch.html)
+
+注意：由于没有从 UI Tests 触发截图的官方方法，`snapshot`使用了一种解决方法(在[ How Does It Work? ](https://github.com/fastlane/fastlane/tree/master/snapshot#how-does-it-work)中描述)来触发截图。如果你觉得应该是这样的权利，请复制雷达[ 23062925 ](https://openradar.appspot.com/radar?id=5056366381105152)。(不知道后面一句话是什么鬼意思)
+
+# 快速开始
+
+* 在你的项目中创建一个新的 UI Test target([ top part of this article ](https://krausefx.com/blog/run-xcode-7-ui-tests-from-the-command-line))
+* 在你的项目文件夹中运行`snapshot init`
+* 添加 ./SnapshotHelper.swift 到你的 UI Test target (你可以移动文件到任何你想的地方)
+* (Objective C only) 添加桥接头文件到你的测试类：
+  * `#import "MYUITests-Swift.h"`
+  * 桥接头文件使用你的 test target 名称加上 -Swift.h。
+* 在你UI测试类，点击屏幕左下角`Record`按钮来记录你的交互
+* 需要截图时，在交互之间调用如下方法：
+  * Swift:`snapshot("01LoginScreen")`
+  * Objective C:`[Snapshot snapshot:@"01LoginScreen" waitForLoadingIndicator:YES];`
+* 将如下代码添加到你的 `setUp()` 方法中
+
+**Swift**
+
+	let app = XCUIApplication()
+	setupSnapshot(app)
+	app.launch()
+
+**Objective C**
+
+	XCUIApplication *app = [[XCUIApplication alloc] init];
+	[Snapshot setupSnapshot:app];
+	[app launch];
+
+![alt text](/img/FastlaneSnapshot/snapshot.gif)
+
+你可以看下项目里面的例子，然后把玩一下。
+
+# 使用
+
+	snapshot
+
+你的截图会默认存储在`./screenshots/`文件夹。(如果你使用 fastlane 的话，存储在`./screenshots/`文件夹)
+
+如果在一个设备上运行截图脚本的时候发生了错误，那么那个设备就没有任何截图，然后`snapshot`会继续下一个设备或者下一种语言。在第一错误发生后停止流程，运行
+
+	snapshot --stop_after_first_error
+
+默认情况下，`snapshot`在完成所有工作后会打开 html 。这个步骤可以使用如下命令跳过：
+
+	snapshot --stop_after_first_error --skip_open_summary
+
+有许多可用的选项来定义如何构建你的应用，比如：
+
+	snapshot --scheme "UITests" --configuration "Release"  --sdk "iphonesimulator"
+
+在运行`snapshot`前重新安装应用
+
+	snapshot --reinstall_app --app_identifier "tools.fastlane.app"
+
+默认情况下，如果 UI Tests 失败了，`snapshot`会自动尝试运行。这是因为 UI Tests 随机失败(e.g.[#372](https://github.com/fastlane-old/snapshot/issues/372))。你可以使用如下命令来改写这个数字
+
+	snapshot --number_of_retries 3
+
+在运行`snapshot`之前添加照片和(或者)视频到模拟器
+
+	snapshot --add_photos MyTestApp/Assets/demo.jpg --add_videos MyTestApp/Assets/demo.mp4
+
+列出所有可用的选项：
+
+	snapshot --help
+
+在运行完`snapshot`，你会得到一个非常漂亮的概要：
+
+![alt text](/img/FastlaneSnapshot/testSummary.png)
+
+## Snapfile
+
+所有可用的选项可以存储在一个叫做`Snapfile`的配置文件里面。由于你项目的大部分的值都不会改变，所以推荐存储在这个文件里：
+
+首先确定有`Snapfile`文件(你可以运行`snapshot init`得到这个文件)
+
+`Snapfile`文件可以包含所有`snapshot --help`的可用选项：
+
+	scheme "UITests"
+
+	devices([
+		"iPhone 6",
+		"iPhone 6 Plus",
+		"iPhone 5",
+		"iPhone 4s"
+	])
+
+	languages([
+		"en-US",
+		"de-DE",
+		"es-ES",
+		["pt", "pt_BR"] # Portuguese with Brazilian locale
+	])
+
+	launch_arguments(["-username Felix"])
+
+    # The directory in which the screenshots should be stored
+	output_directory './screenshots'
+
+	clear_previous_screenshots true
+
+	add_photos ["MyTestApp/Assets/demo.jpg"]
+
+## 完全重置所有模拟器
+
+你可以在终端中使用下面的命令来删除和重新创建所有iOS模拟器：
+
+	snapshot reset_simulators
+
+**警告：**这会删除你所有的模拟器然后使用新的替换！当你运行`snapshot`遇到非常奇怪的问题时，这非常有用。
+
+你可以使用环境变量`SNAPSHOT_FORCE_DELETE`来取消删除前要求确认的信息。
+
+## 更新 snapshot 的 helpers
+
+一些更新要求 helper 的文件更新。`snapshot`会自动警告你，然后告诉你怎么升级。
+
+基本的你可以运行
+
+	snapshot update
+
+为了更新`SnapshotHelper.swift`文件。如果你修改了你的`SnapshotHelper.swift`文件，然后想要手动更新文件，查看[ SnapshotHelper.swift ](https://github.com/fastlane/fastlane/blob/master/snapshot/lib/assets/SnapshotHelper.swift)。
+
+## 启动参数
+
+你可以在你应用启动的时候提供额外的参数。这些字符串通过`NSProcessInfo.processInfo().arguments`在你的应用中(eg.不是在 testing target 中)将会可用。另外使用 user-default 语法(`-key value`)，它们将会在`NSUserDefaults.standardUserDefaults()`中当作键值对可用。
+
+	launch_arguments([
+		"-firstName Felix -lastName Krause"
+	])
+
+	name.text = NSUserDefaults.standardUserDefaults().stringForKey("firstName")
+	// name.text = "Felix"
+
+`snapshot`包含`-FASTLANE_SNAPSHOT YES`，会为 user default 设置一个临时的健`FASTLANE_SNAPSHOT`，你可以使用这个来检测`snapshot`何时运行你的应用。
+
+	if NSUserDefaults.standardUserDefaults().boolForKey("FASTLANE_SNAPSHOT") {
+		// runtime check that we are in snapshot mode
+	}
+
+指定多个字符串参数，`snapshot`会为每种参数、设备、语言的组合截图。当你需要比较相同截图不同功能标识、动态文本大小、不懂数据集时非常有用。
+
+    # Snapfile for A/B Test Comparison
+	launch_arguments([
+		"-secretFeatureEnabled YES",
+		"-secretFeatureEnabled NO"
+	])
+
+## 如何工作的？
+
+最简单的解决方法就是在文件里面呈现 UIWindow。但那是不可能的，因为 UI Tests 并不运行在主线程上。所以`snapshot`使用了不同的方法：
+
+当你在 Xcode 中运行单元测试时，会生成一个 plist 文件，记录测试过程中([ 详细信息 ](http://michele.io/test-logs-in-xcode))发生的所有事件。Xcode 会在这些事件之前，之后以及运行时都会生成截图。没有办法手动触发截图事件。这些截图和plist文件存储在 DerivedData 目录，`snapshot`存储在临时文件夹。
+
+当用户在 UI Tests(Swift 或者 Objective C)中调用`snapshot(...)`时，脚本实际上只是执行了一次旋转到.Unknown，实际上对应用没有任何影响，但是足够来触发截图了。这对应用程序没有任何影响，在你的测试中也不会做任何事情。目标就是找出一些用户永远不会触发的事件，所以这样我们就能知道是来自`snapshot`了。
+
+`snapshot`然后就会迭代所有的测试的事件，然后检查我们在哪里做了这个奇怪的旋转。一旦`snapshot`找到了所有由`snapshot`触发的事件，它会收集应用所有实际截图的文件名的有序序列。
+
+在测试的输出中，Swift的`snapshot`函数会打印如下格式的输出：
+
+	snapshot: [some random text here]
+
+`snapshot`使用正则表达式找到这些条目。在终端中`snapshot`输出的数目和plist文件中`snapshot`的事件数目应该是一样的。知道了这些，`snapshot`会自动匹配这两个序列来分辨所有这些截图的名字。然后它们会被复制到输出目录然后根据语言和设备分开。
+
+两样东西必需从`snapshot`传递给`xcodebuild`命令行工具：
+
+* 设备类型通过`xcodebuild`参数的`destination`参数传递
+* 语言通过一个临时文件传递，这个文件在运行测试之前由`snapshot`写入。然后在 UI Tests 启动应用前读入。
+
+如果你找到了更好的方法来做所有这里列出的工作，请提交一个 issue 到 GitHub 或者甚至是 pull request。
+
+同样，feel free to duplicate radar [23062925](https://openradar.appspot.com/radar?id=5056366381105152)。
+
+# 提示
+
+## `fastlane`工具链
+
+* [ `fastlane` ](https://fastlane.tools)：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法
+* [ `deliver` ](https://github.com/fastlane/fastlane/tree/master/deliver)：将你的应用、截图、元数据上传到App Store
+* [ `frameit` ](https://github.com/fastlane/fastlane/tree/master/frameit)：快速将你的截图放入到适合的设备框中
+* [ `pem` ](https://github.com/fastlane/fastlane/tree/master/pem)：自动生成和更新你的推送通知证书
+* [ `sigh` ](https://github.com/fastlane/fastlane/tree/master/sigh)：管理你的 provisioning profiles
+* [ `produce` ](https://github.com/fastlane/fastlane/tree/master/produce)：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用
+* [ `cert` ](https://github.com/fastlane/fastlane/tree/master/cert)：自动创建和维护iOS的 code signing certificates
+* [ `spaceship` ](https://github.com/fastlane/fastlane/tree/master/spaceship)：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect
+* [ `pilot` ](https://github.com/fastlane/fastlane/tree/master/pilot)：管理你TestFlight测试人员的最好方式，使用终端构建
+* [ `boarding` ](https://github.com/fastlane/boarding)：邀请你 TestFlight 的beta测试人员的最简单方式
+* [ `gym` ](https://github.com/fastlane/fastlane/tree/master/gym)：构建你iOS应用程序
+* [ `scan` ](https://github.com/fastlane/fastlane/tree/master/scan)：为你iOS和Mac应用运行测试的最简单方法
+* [ `match` ](https://github.com/fastlane/fastlane/tree/master/match)：使用Git在你的团队中同步你的 certificates 和 profiles 
+* [ `supply` ](https://github.com/fastlane/fastlane/tree/master/supply)：将你的Android应用和数据上传到 Google Play
+* [ `screengrab` ](https://github.com/fastlane/fastlane/tree/master/screengrab)：Android版`snapshot`，一样的功能
+
+## 将截图框起来
+
+如果你想给截图周围加一个边框，甚至是在顶部添加一个标题，查看[ frameit ](https://github.com/fastlane/fastlane/tree/master/frameit)。
+
+## 可用的语言代码
+
+	ALL_LANGUAGES = ["da", "de-DE", "el", "en-AU", "en-CA", "en-GB", "en-US", "es-ES", "es-MX", "fi", "fr-CA", "fr-FR", "id", "it", "ja", "ko", "ms", "nl", "no", "pt-BR", "pt-PT", "ru", "sv", "th", "tr", "vi", "zh-Hans", "zh-Hant"]
+
+获取更多关于语言和本地代码的信息，参阅[ Internationalization and Localization Guide ](https://developer.apple.com/library/ios/documentation/MacOSX/Conceptual/BPInternational/LanguageandLocaleIDs/LanguageandLocaleIDs.html)。
+
+## 使用干净的状态栏
+
+你可以使用[ SimulatorStatusMagic ](https://github.com/shinydevelopment/SimulatorStatusMagic)来清理状态栏。
+
+## 编辑`Snapfile`
+
+将语法高亮改为Ruby。
+
+## 模拟器没有启动应用
+
+当应用程序启动后，App直接死掉。可能有两个问题：
+
+* 模拟器处于损坏的状态，你需要重新创建。你可以使用`snapshot reset_simulators`来重置所有的模拟器(这将会删除所有安装的App)
+* 重启往往非常有用
+
+## 检测语言
+
+使用如下代码可以检测你当前测试使用的本地化：
+
+	You can access the language using the `deviceLanguage` variable.
+
+# 帮助？
+
+请提交 issue 到 GitHub，并提供你关于设置的信息。

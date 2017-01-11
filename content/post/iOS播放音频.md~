@@ -1,0 +1,31 @@
+---
+title: "iOS播放音频"
+date: 2015-09-29 23:31:11
+categories: 
+- iOS
+tags: 
+- 音频
+
+---
+
+上一篇博客提到了播放声音的接口，所以本篇就是播放声音的接口了。声音播放也是项目的需求，最开始是使用的[SKTUtils](https://github.com/raywenderlich/SKTUtils)工具类。
+<!--more-->
+
+这个工具类是大神raywenderlich写给SpriteKit的。这个工具类里面有播放声音的接口，我就直接使用了，然后进行了一些小的修改。
+
+既然是写给游戏的，里面就只有播放背景和音效的方法，而且音频大多是本地的，不涉及到网络音频。所以刚开始的时候我也不知道这个接口不能播放网络音频，直到后来项目需要播放网络音频的时候才发现。这个接口源码很简单，使用的是**AVAudioPlayer**，参考这里[AVAudioPlayer Streaming Support](https://developer.apple.com/library/ios/qa/qa1634/_index.html)发现是不能播放网络音频的。当然我们可以先将音频下载下来，然后再播放也是可以的。而且上面也提到了可以使用**AVPlayer**或者使用**Audio File Stream Services**和**Audio Queue Services**。
+
+其实项目里面除了音频播放的需求，还有播放视频的需求，之前就有研究过**AVPlayer**，它能播放视频，同时也可以单独播放音频。项目中视频播放的模块交给了另外一个同事做，就是使用**AVPlayer**的，播放器做的很棒，下一篇博文可能就写视频播放器吧。这里给出两篇博文，写iOS的音频和视频的，超级棒的文章，推荐给大家，也给了我很多启发和帮助，同时苹果**AVFoundation**的官方编程指南也是很好的参考。
+
+[iOS开发系列--音频播放、录音、视频播放、拍照、视频录制](http://www.cnblogs.com/kenshincui/p/4186022.html)
+[iOS音频播放 (一)：概述](http://msching.github.io/blog/2014/07/07/audio-in-ios/)
+[AVFoundation Programming Guide](https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html)
+
+# 接口源码 #
+
+[YKTAudio](https://github.com/LynchWong/YKTAudio)，接口代码也很简单，就不讲解了。
+
+说明：
+
+* 如果你需要知道网络音频的播放进度，你需要实现**RemotePlayProgressDelegate**。
+* 避免将接口修改为单列模式，导致多处使用播放网络音频方法时音频重叠播放。

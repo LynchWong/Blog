@@ -1,0 +1,60 @@
+---
+title: "Advanced Memory Management Programming Guide - Introduction"
+date: 2016-02-28 15:02:20
+categories: 
+- 编程指南
+tags: 
+- 内存管理
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
+
+---
+
+[官方文档](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011-SW1)
+<!--more-->
+
+说明：网上能找到《iOS高级内存管理编程指南》，主要就是参考的这篇。基本上也就是照着这篇把原文过了一遍，做了一些整理。
+
+# About Memory Management
+(关于内存管理)
+
+应用程序的内存管理是一个在程序运行时进行内存分配、使用、结束时释放内存的过程。一个书写良好的应用程序会尽可能少的使用内存。在Objective-C中，这个过程也是一个在很多代码片段或者数据中传播有限内存资源的“所有权”的方式。在完成本指南之后，你可以“显式地”管理对象的生命周期，并在不用的时候释放他们。
+
+尽管内存管理通常认为是在单个独立对象层面上考虑，但是我们的任务实际上是管理“对象图”。你需要确保除了你真的需要的对象之外，内存中没有其它的对象。
+
+![alt text](/img/MemoryManagementProgrammingGuideIntroduction/1.png)
+
+## At a Glance
+(概览)
+
+Objective-C提供了两种应用程序内存管理方式：
+
+1. 在本指南中描述的方式被称为“manual retain-release”或者MRR，你通过跟踪你拥有的对象显式地管理内存。这种方式通过“引用计数”模型来实现，该模型由Foundation框架的NSObject类和运行时环境共同提供。
+2. 自动引用计数，或ARC，使用于MRR相同的引用计数系统，但是在编译时插入了内存管理的方法。对于新的项目强烈建议使用ARC。如果你使用ARC，你就不需要明白文档中描述的底层实现了，尽管在有些情形下很有用。更多关于ARC的信息，参见[ Transitioning to ARC Release Notes ](https://developer.apple.com/library/ios/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011226)。
+
+### Good Practices Prevent Memory-Related Problems
+(防止内存泄漏的最佳实践)
+
+错误的内存管理主要包含两类：
+
+* 释放或者覆盖正在使用中的数据。造成内存异常，通常导致程序崩溃，甚至导致数据损坏。
+* 不用的数据不释放，导致内存泄漏。内存泄漏就是分配了内存，但是不释放，尽管再也不会使用。内存泄漏导致你的应用程序占用越来越多的内存，可能会导致系统性能下降，或导致应用程序被终止。
+
+如果你总是考虑内存管理的实现细节，而不是你实际的管理目标，那么你会感觉到从“引用计数”的角度理解内存管理实际是极其困难的。所以，你真正应该考虑的是对象的所有权以及对象图。
+
+当一个方法所返回的对象，其所有权属于你的时候，Cocoa用一种非常直接的命名规范来告诉你。参见[ Memory Management Policy ](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmRules.html#//apple_ref/doc/uid/20000994-BAJHFBGH)。
+
+尽管基础的策略很直接，有一些有效的做法可以让内存管理更加容易，从而帮助你实现程序的稳定性和健壮性，从而使其占用更少的资源。参见[ Practical Memory Management ](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW1)。
+
+自动释放池使你可以用一种不同的方式来发送release消息。当你想放弃对一个对象的所有权，但又不想让这个对象的释放立即生效(比如，你在方法中要返回这个对象)，这种机制就很有用了。有几种情况你应该需要使用自动释放池。参见[ Using Autorelease Pool Blocks ](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmAutoreleasePools.html#//apple_ref/doc/uid/20000047-CJBFBEDI)。
+
+### Use Analysis Tools to Debug Memory Problems
+(使用分析工具来调试内存问题)
+
+为了在编译时定位你代码的问题，你可以使用Xcode内建的Clang Static Ananlyzer工具。
+
+如果内存管理问题依然存在，还有其他的工具和技术可以帮助你分析问题。
+
+* 这些工具和书籍在技术文章TN2239，[ iOS Debugging Magic ](https://developer.apple.com/library/ios/technotes/tn2239/_index.html#//apple_ref/doc/uid/DTS40010638)中描述。更确切的说，是使用NSZombie来发现release过多的对象。
+* 你可以使用Instruments来跟踪引用计数事件，并寻找内存泄漏。参见[ Collecting Data on Your App ](https://developer.apple.com/library/ios/documentation/DeveloperTools/Conceptual/InstrumentsUserGuide/TheInstrumentsWorkflow.html#//apple_ref/doc/uid/TP40004652-CH5)。

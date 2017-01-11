@@ -1,0 +1,126 @@
+---
+title: "Advanced Memory Management Programming Guide - Memory Management Policy"
+date: 2016-02-28 15:02:46
+categories: 
+- 编程指南
+tags: 
+- 内存管理
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
+
+---
+
+[官方文档](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmRules.html#//apple_ref/doc/uid/20000994-BAJHFBGH)
+<!--more-->
+
+# Memory Management Policy
+(内存管理策略)
+
+通过引用计数来进行内存管理的基本模型是由NSObject协议中的方法以及标准的方法命名规范来提供的。NSObject还定义了一个dealloc方法，该方法会在对象需要析构的时候自动调用。本文描述了在Cocoa程序中正确管理内存的基本规则，并提供了正确的示例。
+
+## Basic Memory Management Rules
+(基本内存管理规则)
+
+内存管理的模型是基于对象所有权的。任何对象都可以有一个或者多个所有者。当对象至少有一个所有者的时候，对象就会继续存在。如果一个对象没有所有者，运行时系统就会自动析构它。为了清晰的描述你何时拥有一个对象、何时放弃所有权，Cocoa遵循如下策略：
+
+* **你拥有你所创建的对象**：你如果用下面字幕作为开头的方法来创建对象，那么你拥有这个对象，alloc，new，copy，mutableCopy。比如，alloc、newObject、或者mutableCopy。
+* **你可以使用retain来实现对一个对象的所有权**：如果你在一个方法体中，得到了一个对象，那么这个对象在本方法内部是一直都有效的。而且你还可以在本方法中将这个对象作为返回值返回给方法的调用者。在下面两种情况下，你需要用retain：1.在访问方法(getter、setter)或者init方法中，你希望将得到的返回对象作为成员变量(property)来存储。2.在执行某些操作时，你担心在过程中对象变得无效。(在[ Avoid Causing Deallocation of Objects You’re Using ](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/20000043-1000922)中解释)。
+* **当你不再需要一个对象时，你必须放弃对对象的所有权**：通过向对象发送release或者autorelease消息来放弃所有权。用Cocoa的术语说，所谓放弃所有权，就是release一个对象。
+* **你不能放弃你没有拥有的对象的所有权**：这一点跟上一条对应，无需多言。
+
+### A Simple Example
+(简单例子)
+
+下面的代码做了示范：
+
+    {
+        Person *aPerson = [[Person alloc] init];
+        // ...
+        NSString *name = aPerson.fullName;
+        // ...
+        [aPerson release];
+    }
+
+这里的Person对象使用alloc初始化，然后用release消息来释放。Person的name因为不是使用所有权的方法得来的，所以不必release。请注意，这里使用的是release，而非autorelease。
+
+### Use autorelease to Send a Deferred release
+(使用autorelease延时release)
+
+当你需要延时release方式时，就需要autorelease了，特别是当你从方法中返回一个对象的时候，比如，你可以这样来实现fullName方法：
+
+    - (NSString *)fullName {
+        NSString *string = [[[NSString alloc] initWithFormat:@"%@ %@",
+                             self.firstName, self.lastName] autorelease];
+        return string;
+    }
+
+你拥有alloc返回的string，所以你有该对象的所有权。为了遵守内存管理规则，你必须在失去引用前放弃该对象的所有权。如果你使用release，那么string在返回前就释放了(该方法就会返回一个无效的对象)。使用autorelease来声明(这里仅仅是一种意愿的表达，而非实际放弃的动作。)我们对所有权的放弃，但是同时允许fullName方法的调用者在返回的string释放前使用返回的string对象。
+
+你也可以如下实现这个方法：
+
+    - (NSString *)fullName {
+        NSString *string = [NSString stringWithFormat:@"%@ %@",
+                            self.firstName, self.lastName];
+        return string;
+    }
+
+根据基本规则，你并不拥有stringWithFormat:方法返回的string，所以你可以安全的返回这个string。
+
+下面的实现是错误的：
+
+    - (NSString *)fullName {
+        NSString *string = [[NSString alloc] initWithFormat:@"%@ %@",
+                            self.firstName, self.lastName];
+        return string;
+    }
+
+根据方法的命名规范，从这个方法的名字(fullName)看不出fullName方法的调用者将拥有返回的对象(译者:因为它并没有以 alloc、 new、 init 等开头)。因此，该方法的调用者自然也没有理由来release这个返回的string。最终导致内存泄漏。
+
+### You Don’t Own Objects Returned by Reference
+(通过引用返回的对象，你没有所有权)
+
+Cocoa中的一些方法是通过指定引用来返回对象(即，这些方法接收ClassName **或者id *类型的参数)。常见的情形就是当出现错误时，一个NSError对象来承载错误的信息。比如initWithContentsOfURL:options:error:和initWithContentsOfFile:encoding:error:。
+
+在这些情形下，我们前面说的规则依然有效，当你调用这类方法的时候，你没有创建NSError对象，所以你没有对它的所有权，也不必release它。如下所示：
+
+    NSString *fileName = <#Get a file name#>;
+    NSError *error;
+    NSString *string = [[NSString alloc] initWithContentsOfFile:fileName
+                                                       encoding:NSUTF8StringEncoding error:&error];
+    if (string == nil) {
+        // Deal with error...
+    }
+    // ...
+    [string release];
+
+## Implement dealloc to Relinquish Ownership of Objects
+(实现dealloc来放弃对象的所有权)
+
+NSObject类定义了一个名为dealloc的方法，这个方法在对象没有所有者，内存回收的时候会由系统自动调用。用Cocoa的术语就是freed或者deallocated。dealloc方法的作用就是释放对象的内存，并弃掉它持有的任何资源--以及它对其他任何实例变量对象的所有权。
+
+下面的例子示范了你应该如何实现Person类的dealloc方法：
+
+    @interface Person : NSObject
+    @property (retain) NSString *firstName;
+    @property (retain) NSString *lastName;
+    @property (assign, readonly) NSString *fullName;
+    @end
+
+    @implementation Person
+    // ...
+    - (void)dealloc
+    [_firstName release];
+    [_lastName release];
+    [super dealloc];
+    }
+    @end
+
+**重要：**永远不要直接调用另一个对象的dealloc方法。你必须在尾部调用super类的实现。你不可以把系统的资源和对象的生命周期进行绑定，参见[ Don’t Use dealloc to Manage Scarce Resources ](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW13)(就是说你不能等到对象dealloc时才放弃对关键系统资源的独占，后面就是原因)。当一个应用程序终止时，对象可能不会发送dealloc消息。因为进程的内存在退出时会自动回收，与调用所有对象的内存管理的方法的方式比起来，操作系统的这种做法是高效率的。
+
+## Core Foundation Uses Similar but Different Rules
+(Core Foundation使用类似但却不同的规则)
+
+Core Foundation的对象采用了类似的内存管理方式(参见[ Memory Management Programming Guide for Core Foundation ](https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFMemoryMgmt/CFMemoryMgmt.html#//apple_ref/doc/uid/10000127i))。Cocoa和Core Foundation在命名规则上是不同的。具体说，Core Foundation的创建规则不适用于返回Objective-C对象的那些方法。比如下面的代码片段中，你没有责任或义务来释放对myInstance的所有权：
+
+	MyClass *myInstance = [MyClass createInstance];
