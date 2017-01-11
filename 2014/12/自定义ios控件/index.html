@@ -1,0 +1,1070 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>自定义iOS控件</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="刚开始学习iOS开发的时候接触了很多Cocoa Touch的标准控件，那时就觉得这些控件好用是好用，但是可定制性不高。往往我们的需求又比较变态，特别是控件外观方面基本达不到需求，所以很多时候我们需要自己做控件。
+">
+    <meta property="og:description" content="刚开始学习iOS开发的时候接触了很多Cocoa Touch的标准控件，那时就觉得这些控件好用是好用，但是可定制性不高。往往我们的需求又比较变态，特别是控件外观方面基本达不到需求，所以很多时候我们需要自己做控件。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="自定义iOS控件">
+    <meta property="og:url" content="/2014/12/%E8%87%AA%E5%AE%9A%E4%B9%89ios%E6%8E%A7%E4%BB%B6/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="刚开始学习iOS开发的时候接触了很多Cocoa Touch的标准控件，那时就觉得这些控件好用是好用，但是可定制性不高。往往我们的需求又比较变态，特别是控件外观方面基本达不到需求，所以很多时候我们需要自己做控件。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      自定义iOS控件
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2014-12-17T11:40:47Z">
+    
+  
+  
+  
+  
+    2014-12-17 11:40:47
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>刚开始学习iOS开发的时候接触了很多Cocoa Touch的标准控件，那时就觉得这些控件好用是好用，但是可定制性不高。往往我们的需求又比较变态，特别是控件外观方面基本达不到需求，所以很多时候我们需要自己做控件。
+</p>
+
+<p>不过很多需求我们可以通过组合已经存在的原生控件来达到，但是还是有一些需求不能实现。比如我们要实现一个类似汽车驾驶室的界面，这个界面的功能不要太复杂：</p>
+
+<ul>
+<li>能控制汽车的方向，我们可以做一个方向盘的控件；</li>
+<li>能控制汽车前进、后退、停止，我们还需要一个油门的控件；这个我们可以把油门和变速器用一个控件实现。</li>
+</ul>
+
+<p>这个界面的实现思路：</p>
+
+<ul>
+<li>首先可以给这个界面一个汽车驾驶室的图片，当作背景，图片内容主要就是驾驶室方向盘那部分，可以让美工设计下；</li>
+<li>其次我们把方向盘放在界面右边，如果背景图片有仪表盘，最好方向盘和仪表盘有对应。界面右边我们放油门这个空间；</li>
+<li>操作方式可以这样来设定，油门上有个按钮，往前拖就是前进，越拖到上面速度越快；然后有个N档，拖到这里就是停止；有个R档，拖到这里就后退。方向盘就是根据手指在控件上的滑动来计算出角度，然后根角度进行旋转，我们还可以给方向盘加上重力感应来控制方向盘。</li>
+</ul>
+
+<p>思路大概就是上面这样，具体的实现和细节还要再讨论。这里我只做“油门”这个控件的自定义，接下来我们就一步一步的来实现。方向盘这个控件大家可以自行实现一下，后面可能会贴出源码（可能贴出来）。</p>
+
+<p>这里有一篇很好的<a href="http://beyondvincent.com/blog/2014/01/20/how-to-build-a-custom-control-in-ios/">博文</a>，就是讲解怎么在iOS中自定义控件的，所以我们根据这篇博文来实现我们的“油门”控件。</p>
+
+<p>现在我们就一步一步的开始实现“油门”控件，OS X是10.10.1，Xcode是6.6.1。我们新建一个项目，名字叫做“AcceleratorView”，我们使用OC开发。建好后的项目截图如下所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSSelfDefine/1.png" alt="alt text" /></p>
+
+<p>新建一个文件<code>Accelerator</code>，继承自<code>UIControl</code>。</p>
+
+<p>然后我们打开<code>Main.storyboard</code>文件，拖拽一个<code>View</code>控件到<code>View Controller</code>里面。如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSSelfDefine/2.png" alt="alt text" /></p>
+
+<p>然后我们将<code>Class</code>属性改成我们刚创建的，如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSSelfDefine/3.png" alt="alt text" /></p>
+
+<p>接下来就是为<code>View</code>控件添加约束，我们大小设置为200 x 580，x 和 y分别是5 和 20。首先设置长宽的约束，如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSSelfDefine/4.png" alt="alt text" /></p>
+
+<p>设置完成之后Xcode会有红色的警示线，表示添加的约束无法确定<code>View</code>的位置，如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSSelfDefine/5.png" alt="alt text" /></p>
+
+<p>所以我们还要继续添加约束，添加x和y的约束，如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSSelfDefine/6.png" alt="alt text" /></p>
+
+<p>添加完成后红色的虚线消失，如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSSelfDefine/7.png" alt="alt text" /></p>
+
+<p>大家可以试下不为<code>View</code>添加约束，然后运行会发现视图错乱，那是因为iOS8、Xcode6新建的项目使用了<code>Size Classes</code>，是为多种设备做适配用的。iOS的设备越来越多，所以适配是必须要做的，所以<code>AutoLayout</code>和<code>Size Classes</code>是必备技能了。这里就不说了，以后有时间也要搞一篇。这时候运行模拟器还没有什么东西，让我们继续。</p>
+
+<p>在<code>ViewController.m</code>文件里面添加如下三个方法：</p>
+
+<pre><code>    - (BOOL)shouldAutorotate
+    {
+        return YES;
+    }
+
+    - (NSUInteger)supportedInterfaceOrientations
+    {
+        return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
+    }
+
+    - (BOOL)prefersStatusBarHidden
+    {
+        return YES; //返回NO表示要显示，返回YES将hiden
+    }
+</code></pre>
+
+<p>前两个方法会让当前显示的Controller支持横屏显示。若我要跳转到下一个Controller，而下一个Controller要求竖屏显示，那么我们同样实现上述两个方法，只不过<code>- (NSUInteger)supportedInterfaceOrientations</code>方法返回<code>UIInterfaceOrientationMaskPortrait</code>。或者完全不实现这两个方法，默认就会竖屏显示。第三个方法会隐藏状态栏。</p>
+
+<p>接下来我们的主要工作就是实现<code>Accelerator</code>。</p>
+
+<pre><code>@property (strong, nonatomic) UIImage *accButtonImage;
+@property (assign, nonatomic) CGPoint accButtonPosition;
+</code></pre>
+
+<p>新建两个属性，第一个属性表示按钮图片，第二个属性就是按钮的位置。至于为什么要有这两个属性，一开始我做的时候也不是就想好了要有这两个属性，一开始做的时候只有个大概的思路，很多东西和细节都是在做的过程中想到或者遇到的，经过不断修改而来的。所以有时候最重要的就是要动手开始做，去做了才知道。</p>
+
+<p>这个“油门”控件要做成什么样的，大家都没看过，所以说有思路是不可能的，所以我们先看下效果图，然后来分析分析，应该怎么做，有个大体的思路。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSSelfDefine/8.png" alt="alt text" /></p>
+
+<p>上图就是完成后的效果图，当然不是很美观，跟我项目里完整的还是有很大的差别，这里我们只实现这一部分。首先控件的按钮是一张图片，其他的部分全都是在<code>- (void)drawRect:(CGRect)rect</code>方法中绘图绘上去的。N、和R分别标示不同的档位，即空档和倒档，效果分别是制动和后退。上面的档位表示前进，档位越高表示速度越快。拖动按钮来变换档位，而且标示档位的线的颜色也会改变。需求就是这些了，看到效果图，实现也应该是比较简单的。</p>
+
+<ul>
+<li>所以在控件里面应该有监测手指在控件上触摸和滑动的方法。</li>
+<li>当手指在控件上滑动时，按钮要不停的改变位置，而且我们还要计算按钮的位置来判断是否要给标示档位的档位线上色。而且按钮这张图片，不是<code>addSubview:</code>到控件里面的，而是在<code>- (void)drawRect:(CGRect)rect</code>方法里面使用<code>UIKit</code> <code>UIImage</code>自带的方法<code>[self.accButtonImage drawAtPoint:self.accButtonPosition];</code>绘制到屏幕上的。同理，档位线的R、N字幕也是用<code>NSString</code>的<code>drawAtPoint:withFont:</code>绘制的。</li>
+<li>当方法检测到控件上有手指滑动时，每次都需要重绘，大家都知道不能直接调用<code>- (void)drawRect:(CGRect)rect</code>方法，所以要调用<code>setNeedsDisplay</code>方法来重绘。</li>
+</ul>
+
+<p>下面我们就直接上代码了。</p>
+
+<pre><code>- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if ((self = [super initWithCoder:aDecoder])) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (void)initialize
+{
+    self.backgroundColor = [UIColor clearColor];
+    self.accButtonImage = [UIImage imageNamed:@&quot;accelerator_but&quot;];
+    self.accButtonPosition = CGPointMake((self.bounds.size.width - 54.0f) / 2, 224.0f);
+}
+</code></pre>
+
+<p>这是控件初始化的代码，很简单，就不讲解了。控件大小是固定的，所以我很多位置的代码都是写固定位置的，简单一点。</p>
+
+<pre><code>- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    [super beginTrackingWithTouch:touch withEvent:event];
+
+    CGPoint touchLocation = [touch locationInView:self];
+
+    if (CGRectContainsPoint(CGRectMake(self.accButtonPosition.x - 73.0f, self.accButtonPosition.y, 200.0f, 32.0f), touchLocation)) {
+        NSLog(@&quot;YES&quot;);
+        return YES;
+    } else {
+        NSLog(@&quot;NO&quot;);
+        [self calculatorButtonPosition:touchLocation];
+        return YES;
+    }
+}
+
+- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    [super continueTrackingWithTouch:touch withEvent:event];
+    CGPoint touchLocation = [touch locationInView:self];
+    [self calculatorButtonPosition:touchLocation];
+    return YES;
+}
+
+- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+}
+</code></pre>
+
+<p>上面三个方法就是用来检测触摸和滑动的，只有前面的方法返回<code>YES</code>的时候才会调用下一个方法。方法首先调用父类的方法，然后获取手指当前在控件上的位置。第一个方法中<code>if</code>和<code>else</code>分支，一开始只有<code>if</code>分支，即手指在按钮内滑动的时候才会返回<code>YES</code>，然后调用<code>continueTrackingWithTouch</code>方法，既而计算按钮的位置，在<code>calculatorButtonPosition:touchLocation</code>中，我们计算出位置后，然后再调用<code>setNeedsDisplay</code>方法来重绘。<code>else</code>分支是为了满足项目需求加上的，即当手指接触到控件，即使没有在按钮内，也会马上计算出按钮位置，然后重绘。下面我们就来看看<code>calculatorButtonPosition:touchLocation</code>方法。</p>
+
+<pre><code>- (void)calculatorButtonPosition:(CGPoint)touchLocation
+{
+    CGFloat y = touchLocation.y;
+
+    if (y &lt;= 30.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 4.0f);
+    } else if (y &gt; 30.0f &amp;&amp; y &lt;= 50.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 24.0f);
+    } else if (y &gt; 50.0f &amp;&amp; y &lt;= 70.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 44.0f);
+    } else if (y &gt; 70.0f &amp;&amp; y &lt;= 90.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 64.0f);
+    } else if (y &gt; 90.0f &amp;&amp; y &lt;= 110.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 84.0f);
+    } else if (y &gt; 110.0f &amp;&amp; y &lt;= 130.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 104.0f);
+    } else if (y &gt; 130.0f &amp;&amp; y &lt;= 150.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 124.0f);
+    } else if (y &gt; 150.0f &amp;&amp; y &lt;= 170.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 144.0f);
+    } else if (y &gt; 170.0f &amp;&amp; y &lt;= 190.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 164.0f);
+    } else if (y &gt; 190.0f &amp;&amp; y &lt;= 210.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 184.0f);
+    } else if (y &gt; 210.0f &amp;&amp; y &lt;= 270.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 224.0f);
+    } else if (y &gt; 270.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 264.0f);
+    }
+
+    [self setNeedsDisplay];
+}
+</code></pre>
+
+<p>这个方法也很简单，主要就是根据手指触摸的位置的y值和档位线的y值比较来计算按钮的位置。</p>
+
+<pre><code>- (int)calculatorLineIndex:(CGPoint)buttonPosition
+{
+    CGFloat y = buttonPosition.y + 16.0f;
+    int index = 0;
+
+    if (y &lt;= 30.0f) {
+        index = 0;
+    } else if (y &gt; 30.0f &amp;&amp; y &lt;= 50.0f) {
+        index = 1;
+    } else if (y &gt; 50.0f &amp;&amp; y &lt;= 70.0f) {
+        index = 2;
+    } else if (y &gt; 70.0f &amp;&amp; y &lt;= 90.0f) {
+        index = 3;
+    } else if (y &gt; 90.0f &amp;&amp; y &lt;= 110.0f) {
+        index = 4;
+    } else if (y &gt; 110.0f &amp;&amp; y &lt;= 130.0f) {
+        index = 5;
+    } else if (y &gt; 130.0f &amp;&amp; y &lt;= 150.0f) {
+        index = 6;
+    } else if (y &gt; 150.0f &amp;&amp; y &lt;= 170.0f) {
+        index = 7;
+    } else if (y &gt; 170.0f &amp;&amp; y &lt;= 190.0f) {
+        index = 8;
+    } else if (y &gt; 190.0f &amp;&amp; y &lt;= 210.0f) {
+        index = 9;
+    } else if (y &gt; 210.0f &amp;&amp; y &lt;= 270.0f) {
+        index = 10;
+    } else if (y &gt; 270.0f) {
+        index = 11;
+    }
+
+    return index;
+}
+</code></pre>
+
+<p>类似的，上面的方法是用来计算当前按钮在哪个档位线，然后在重绘方法里面决定那些档位线需要上色。</p>
+
+<pre><code>- (void)drawRect:(CGRect)rect
+{
+    [super drawRect:rect];
+    NSLog(@&quot;drawRect&quot;);
+    int buttonIndex = [self calculatorLineIndex:self.accButtonPosition];
+    //NSLog(@&quot;buttonIndex : %d&quot;, buttonIndex);
+
+    [[UIColor whiteColor] set];
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(currentContext, 1.0f);
+
+    for (int i = 0; i &lt; 12; i++) {
+
+        if (i &lt; 10) {
+
+            if (i &gt;= buttonIndex) {
+                if (i == 0) {
+                    [[UIColor colorWithHexString:@&quot;#ff0000&quot;] set];
+                } else if (i == 1) {
+                    [[UIColor colorWithHexString:@&quot;#ed5002&quot;] set];
+                } else if (i == 2) {
+                    [[UIColor colorWithHexString:@&quot;#f25102&quot;] set];
+                } else if (i == 3) {
+                    [[UIColor colorWithHexString:@&quot;#ed5d03&quot;] set];
+                } else if (i == 4) {
+                    [[UIColor colorWithHexString:@&quot;#f27202&quot;] set];
+                } else if (i == 5) {
+                    [[UIColor colorWithHexString:@&quot;#f18a02&quot;] set];
+                } else if (i == 6) {
+                    [[UIColor colorWithHexString:@&quot;#f2a102&quot;] set];
+                } else if (i == 7) {
+                    [[UIColor colorWithHexString:@&quot;#f2b702&quot;] set];
+                } else if (i == 8) {
+                    [[UIColor colorWithHexString:@&quot;#ecc202&quot;] set];
+                } else if (i == 9) {
+                    [[UIColor colorWithHexString:@&quot;#f2c602&quot;] set];
+                }
+            } else {
+                [[UIColor whiteColor] set];
+            }
+
+            CGFloat leftStartX = 0.0f;
+            CGFloat rightEndX = 0.0f;
+
+            if (i != 9) {
+                leftStartX = 42.5f;
+                rightEndX = 157.5f;
+            } else {
+                leftStartX = 2.5f;
+                rightEndX = 197.5f;
+            }
+
+            CGContextMoveToPoint(currentContext, leftStartX, 20.0f * (i + 1));
+            CGContextAddLineToPoint(currentContext, 87.5f, 20.0f * (i + 1));
+            CGContextStrokePath(currentContext);
+
+            CGContextMoveToPoint(currentContext, 112.5f, 20.0f * (i + 1));
+            CGContextAddLineToPoint(currentContext, rightEndX, 20.0f * (i + 1));
+            CGContextStrokePath(currentContext);
+        } else {
+            if (i == 10) {
+
+                if (i == buttonIndex) {
+                    [[UIColor colorWithHexString:@&quot;#ff0000&quot;] set];
+                } else {
+                    [[UIColor whiteColor] set];
+                }
+                NSString *string = @&quot;N&quot;;
+                [string drawAtPoint:CGPointMake(20.0f, 10.0f + 20.0f * (i  + 1)) withFont:[UIFont systemFontOfSize:20.0f]];
+                [string drawAtPoint:CGPointMake(165.5f, 10.0f + 20.0f * (i  + 1)) withFont:[UIFont systemFontOfSize:20.0f]];
+
+                CGContextMoveToPoint(currentContext, 42.5f, 20.0f * (i  + 2));
+                CGContextAddLineToPoint(currentContext, 87.5f, 20.0f * (i  + 2));
+                CGContextStrokePath(currentContext);
+
+                CGContextMoveToPoint(currentContext, 112.5f, 20.0f * (i  + 2));
+                CGContextAddLineToPoint(currentContext, 157.5f, 20.0f * (i  + 2));
+                CGContextStrokePath(currentContext);
+            }
+            if (i == 11) {
+
+                if (i == buttonIndex) {
+                    [[UIColor colorWithHexString:@&quot;#00ff00&quot;] set];
+                } else {
+                    [[UIColor whiteColor] set];
+                }
+
+                NSString *string = @&quot;R&quot;;
+                [string drawAtPoint:CGPointMake(20.0f, 10.0f + 20.0f * (i  + 2)) withFont:[UIFont systemFontOfSize:20.0f]];
+                [string drawAtPoint:CGPointMake(165.5f, 10.0f + 20.0f * (i  + 2)) withFont:[UIFont systemFontOfSize:20.0f]];
+
+                CGContextMoveToPoint(currentContext, 42.5f, 20.0f * (i  + 3));
+                CGContextAddLineToPoint(currentContext, 87.5f, 20.0f * (i  + 3));
+                CGContextStrokePath(currentContext);
+
+                CGContextMoveToPoint(currentContext, 112.5f, 20.0f * (i  + 3));
+                CGContextAddLineToPoint(currentContext, 157.5f, 20.0f * (i  + 3));
+                CGContextStrokePath(currentContext);
+            }
+        }
+    }
+    [self.accButtonImage drawAtPoint:self.accButtonPosition];
+}
+</code></pre>
+
+<p><code>- (void)drawRect:(CGRect)rect</code>方法也很简单，主要复杂的就是业务逻辑，也没多大好讲解的。这里有个比较坑的地方就是<code>- (void)drawRect:(CGRect)rect</code>方法何时调用的问题。之前有个需求，需要重绘控件，调用<code>setNeedsDisplay</code>方法后并没有立即重绘。而且我在一个10次循环里面调用了10次<code>setNeedsDisplay</code>方法，但是最终只调用了一次<code>- (void)drawRect:(CGRect)rect</code>方法。最后在Stack Overflow上找到了方法：</p>
+
+<pre><code>[self setNeedsDisplay];
+[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
+</code></pre>
+
+<p>上面的方法会立即重绘。</p>
+
+<p>项目代码：<a href="https://github.com/LynchWong/AcceleratorView">AcceleratorView</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/ios%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6/">iOS自定义控件</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%88%9D%E8%A7%81/" data-tooltip="Swift之初见">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2014/12/ios%E8%93%9D%E7%89%99corebluetooth%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8/" data-tooltip="iOS蓝牙，CoreBluetooth框架简介及入门使用">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2014%2f12%2f%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589ios%25E6%258E%25A7%25E4%25BB%25B6%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2014%2f12%2f%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589ios%25E6%258E%25A7%25E4%25BB%25B6%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2014%2f12%2f%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589ios%25E6%258E%25A7%25E4%25BB%25B6%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%88%9D%E8%A7%81/" data-tooltip="Swift之初见">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2014/12/ios%E8%93%9D%E7%89%99corebluetooth%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8/" data-tooltip="iOS蓝牙，CoreBluetooth框架简介及入门使用">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2014%2f12%2f%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589ios%25E6%258E%25A7%25E4%25BB%25B6%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2014%2f12%2f%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589ios%25E6%258E%25A7%25E4%25BB%25B6%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2014%2f12%2f%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589ios%25E6%258E%25A7%25E4%25BB%25B6%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2014%2f12%2f%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589ios%25E6%258E%25A7%25E4%25BB%25B6%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2014%2f12%2f%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589ios%25E6%258E%25A7%25E4%25BB%25B6%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2014%2f12%2f%25E8%2587%25AA%25E5%25AE%259A%25E4%25B9%2589ios%25E6%258E%25A7%25E4%25BB%25B6%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2014\/12\/%E8%87%AA%E5%AE%9A%E4%B9%89ios%E6%8E%A7%E4%BB%B6\/';
+          
+            this.page.identifier = '\/2014\/12\/%E8%87%AA%E5%AE%9A%E4%B9%89ios%E6%8E%A7%E4%BB%B6\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>事件处理 on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86/index.xml</link>
+    <description>Recent content in 事件处理 on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Event Handling Guide for iOS</title>
+      <link>http://lynchwong.com/blog/2015/04/event-handling-guide-for-ios/</link>
+      <pubDate>Mon, 27 Apr 2015 14:43:26 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/04/event-handling-guide-for-ios/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009541-CH1-SW1&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;简介&#34;&gt;简介&lt;/h1&gt;
+
+&lt;h2 id=&#34;关于ios中的事件&#34;&gt;关于iOS中的事件&lt;/h2&gt;
+
+&lt;h3 id=&#34;概览&#34;&gt;概览&lt;/h3&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

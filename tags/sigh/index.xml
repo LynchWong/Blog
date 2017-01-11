@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sigh on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/sigh/index.xml</link>
+    <description>Recent content in Sigh on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/sigh/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Fastlane - Sigh</title>
+      <link>http://lynchwong.com/blog/2016/06/fastlane---sigh/</link>
+      <pubDate>Mon, 27 Jun 2016 12:39:46 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/fastlane---sigh/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;说明：翻译的 &lt;code&gt;Sigh&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; 原文地址 &lt;/a&gt;。
+&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSigh/sigh.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;sigh&#34;&gt;sigh&lt;/h1&gt;
+
+&lt;p&gt;因为你宁愿把时间花在其它方面，也不要花在和 Provisioning 文件作斗争上。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sigh&lt;/code&gt;可以创建、更新、下载和修复 Provisioning Profiles(只需一条命令)。它支持 App Store，Ad Hoc，Development 和 Enterprise Profiles 以及一些很棒的功能，比如自动添加所有的测试设备。&lt;/p&gt;
+
+&lt;h1 id=&#34;功能&#34;&gt;功能&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;为你的应用程序 &lt;strong&gt;下载&lt;/strong&gt; 最新的 Provisioning Profile&lt;/li&gt;
+&lt;li&gt;当 Provisioning Profile 过期的时候会 &lt;strong&gt;更新&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;当 Provisioning Profile 损坏的时候会 &lt;strong&gt;修复&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;如果不存在 Provisioning Profile 就会 &lt;strong&gt;创建&lt;/strong&gt; 一个新的&lt;/li&gt;
+&lt;li&gt;支持 &lt;strong&gt;App Store&lt;/strong&gt;，&lt;strong&gt;Ad Hoc&lt;/strong&gt; 和 &lt;strong&gt;Development&lt;/strong&gt; Profiles&lt;/li&gt;
+&lt;li&gt;支持 &lt;strong&gt;多个苹果账户&lt;/strong&gt;，你的证书(Credentials)安装的存储在Keychain中&lt;/li&gt;
+&lt;li&gt;支持 &lt;strong&gt;多个团队&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;支持 &lt;strong&gt;Enterprise Profiles&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;自动管理iOS的推送证书，你可以使用&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; pem &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;为什么不让-xcode-做这些工作&#34;&gt;为什么不让 Xcode 做这些工作？&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sigh&lt;/code&gt;可以很容易的集成到你的 CI-server(e.g. Jenkins)&lt;/li&gt;
+&lt;li&gt;Xcode 有时会让 &lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/sigh/assets/SignErrors.png&#34;&gt;所有存在的 Profiles&lt;/a&gt; 失效&lt;/li&gt;
+&lt;li&gt;你可以对发生的事情进行控制&lt;/li&gt;
+&lt;li&gt;你仍然可以获取到 Signing Files，可用于你的脚本文件或者存储在Git中&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;参见&lt;code&gt;sigh&lt;/code&gt;的执行：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSigh/sighRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;注意:&lt;/strong&gt;根据 &lt;a href=&#34;https://codesigning.guide&#34;&gt;codesigning.guide&lt;/a&gt;，生成和维护你的 Provisioning Profiles，我们推荐使用 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt;match&lt;/a&gt;。如果你想完整的控制要发生的事情以及知道Codesigning的更多知识，可以直接使用&lt;code&gt;sigh&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo gem install sigh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;确保你已经安装了 Xcode 最新版本的命令行工具：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xcode-select --install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;是的，这就是所有的命令！&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sigh&lt;/code&gt;默认会为 App Store 创建、修复和下载 Profiles。&lt;/p&gt;
+
+&lt;p&gt;你可以像如下这样传递 Bundle identifier 和 username：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh -a com.krausefx.app -u username
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你想生成 &lt;strong&gt;Ad Hoc&lt;/strong&gt; 的Profile 替代 App Store 的Profile：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh --adhoc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Development&lt;/strong&gt; Profile：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh --development
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在指定的目录生成 Profile：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh -o &amp;quot;~/Certificates/&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下载你所有的 Provisioning Profiles：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh download_all
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;列出所有可用的参数和命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh --help
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;高级&#34;&gt;高级&lt;/h2&gt;
+
+&lt;p&gt;默认 &lt;code&gt;sigh&lt;/code&gt; 会在你的机器上安装下载的 Profile。如果你只想生成 Profile 跳过安装，使用如下标志：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh --skip_install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用指定的名字保存 Provisioning Profile，使用 -q 选项：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh -a com.krausefx.app -u username -q &amp;quot;myProfile.mobileprovision&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;出于某些原因，你不想 &lt;code&gt;sigh&lt;/code&gt; 验证安装在你本地机器上的 Code Signing identity：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh --skip_certificate_verification
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你需要 Provisioning Profile 更新，而不管是什么状态，使用 &lt;code&gt;--force&lt;/code&gt; 选项。这会给你的 Profile 最大的生命周期。&lt;code&gt;--force&lt;/code&gt; 也会将所有可用的设备添加到这个Profile。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh --force
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;默认情况下，&lt;code&gt;sigh&lt;/code&gt;会在 Development Profiles 上包含所有的 Certificates，第一个 Certificate 是其它类型的。如果你需要指定使用哪一个 Certificate ，你可以使用环境变量 &lt;code&gt;SIGH_CERTIFICATE&lt;/code&gt;，或者传递 Certificate 的 name 或者 expiry date 当做参数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh -c &amp;quot;SunApps GmbH&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;列出可用的参数和命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh --help
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;和-fastlane-https-github-com-fastlane-fastlane-tree-master-fastlane-一起使用&#34;&gt;和&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/fastlane&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;一起使用&lt;/h2&gt;
+
+&lt;p&gt;当和&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/fastlane&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;中的&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; &lt;code&gt;cert&lt;/code&gt; &lt;/a&gt;一起使用时 &lt;code&gt;sigh&lt;/code&gt; 就变的很有趣了。&lt;/p&gt;
+
+&lt;p&gt;更新你的 &lt;code&gt;Fastfile&lt;/code&gt; 文件包含如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lane :beta do
+    cert
+    sigh(force: true)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;force: true&lt;/code&gt; 会确保在每次运行的时候都会重新生成 Provisioning Profile 。这会保证 &lt;code&gt;sigh&lt;/code&gt; 始终使用正确的 Signing Certificate ，会安装在本地机器上。&lt;/p&gt;
+
+&lt;h2 id=&#34;修复-repair&#34;&gt;修复(Repair)&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;sigh&lt;/code&gt; 会自动修复你那些已经存在并且过期或者无效的所有 Provisioning Profiles 。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh repair
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;重新签名-resign&#34;&gt;重新签名(Resign)&lt;/h1&gt;
+
+&lt;p&gt;如果你生成了 &lt;code&gt;ipa&lt;/code&gt; 文件，但是想给 ipa 文件应用不同的 Code Signing，你可以使用 &lt;code&gt;sigh resign&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh resign
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果 ipa 文件和 Provisioning Profile 位于当前文件夹，&lt;code&gt;sigh&lt;/code&gt; 会为你找到它们。&lt;/p&gt;
+
+&lt;p&gt;你可以使用命令行传递更多的信息：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh resign ./path/app.ipa --signing_identity &amp;quot;iPhone Distribution: Felix Krause&amp;quot; -n &amp;quot;my.mobileprovision&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;管理&#34;&gt;管理&lt;/h2&gt;
+
+&lt;p&gt;使用 &lt;code&gt;sigh manage&lt;/code&gt; ，会列出所有本地安装的 Provisioning Profiles ：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh manage
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;删除所有过期的 Provisioning Profiles ：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh manage -e
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者使用正则表达式删除所有的 &lt;code&gt;iOS Team Provisioning Profile&lt;/code&gt; ：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sigh manage -p &amp;quot;iOS\ ?Team Provisioning Profile:&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;环境变量&#34;&gt;环境变量&lt;/h2&gt;
+
+&lt;p&gt;运行 &lt;code&gt;sigh --help&lt;/code&gt; 列出所有可用的环境变量的列表。&lt;/p&gt;
+
+&lt;p&gt;如果你使用 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt;cert&lt;/a&gt; 与 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/fastlane&#34;&gt;fastlane&lt;/a&gt;的组合，会自动为你选择 Signing Certificate。(确保在 &lt;code&gt;sigh&lt;/code&gt; 之前运行 &lt;code&gt;cert&lt;/code&gt;)&lt;/p&gt;
+
+&lt;h1 id=&#34;如何工作&#34;&gt;如何工作？&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;sigh&lt;/code&gt; 会访问 &lt;code&gt;iOS Dev Center&lt;/code&gt; 下载、更新或者生成 &lt;code&gt;.mobileprovision&lt;/code&gt;文件。它使用 &lt;a href=&#34;https://spaceship.airforce&#34;&gt;spaceship&lt;/a&gt; 和 Apple&amp;rsquo;s web services 通信。&lt;/p&gt;
+
+&lt;h2 id=&#34;如何存储我的密码&#34;&gt;如何存储我的密码？&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;sigh&lt;/code&gt; 使用来自 &lt;code&gt;fastlane&lt;/code&gt; 的 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt;CredentialsManager&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h1 id=&#34;提示&#34;&gt;提示&lt;/h1&gt;
+
+&lt;h2 id=&#34;fastlane-工具链&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt;工具链&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; &lt;code&gt;deliver&lt;/code&gt; &lt;/a&gt;：将你的应用、截图、元数据上传到App Store&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; &lt;code&gt;snapshot&lt;/code&gt; &lt;/a&gt;：将你iOS应用在每一种设备上进行本地化自动截图&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; &lt;code&gt;frameit&lt;/code&gt; &lt;/a&gt;：快速将你的截图放入到适合的设备框中&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; &lt;code&gt;pem&lt;/code&gt; &lt;/a&gt;：自动生成和更新你的推送通知证书&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; &lt;code&gt;produce&lt;/code&gt; &lt;/a&gt;：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; &lt;code&gt;cert&lt;/code&gt; &lt;/a&gt;：自动创建和维护iOS的 code signing certificates&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; &lt;code&gt;spaceship&lt;/code&gt; &lt;/a&gt;：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; &lt;code&gt;pilot&lt;/code&gt; &lt;/a&gt;：管理你TestFlight测试人员的最好方式，使用终端构建&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; &lt;code&gt;boarding&lt;/code&gt; &lt;/a&gt;：邀请你 TestFlight 的beta测试人员的最简单方式&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; &lt;code&gt;gym&lt;/code&gt; &lt;/a&gt;：构建你iOS应用程序&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; &lt;code&gt;scan&lt;/code&gt; &lt;/a&gt;：为你iOS和Mac应用运行测试的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; &lt;code&gt;match&lt;/code&gt; &lt;/a&gt;：使用Git在你的团队中同步你的 certificates 和 profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/supply&#34;&gt; &lt;code&gt;supply&lt;/code&gt; &lt;/a&gt;：将你的Android应用和数据上传到 Google Play&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/screengrab&#34;&gt; &lt;code&gt;screengrab&lt;/code&gt; &lt;/a&gt;：Android版&lt;code&gt;snapshot&lt;/code&gt;，一样的功能&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;使用-provisioning-quicklook-plugin&#34;&gt;使用&amp;rsquo;Provisioning Quicklook plugin&amp;rsquo;&lt;/h2&gt;
+
+&lt;p&gt;下载然后安装 &lt;a href=&#34;https://github.com/chockenberry/Provisioning&#34;&gt;Provisioning Plugin&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;它会像下图这样向你展示 &lt;code&gt;mobileprovision&lt;/code&gt; 文件：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSigh/QuickLookScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;找不到-app-identifier&#34;&gt;找不到 App Identifier&lt;/h2&gt;
+
+&lt;p&gt;如果你也想在 Apple Developer Portal 上创建一个新的 App Identifier，查看 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt;produce&lt;/a&gt;，它就是做这个的。&lt;/p&gt;
+
+&lt;h2 id=&#34;对-xcode-管理的-profiles-有什么影响&#34;&gt;对 Xcode 管理的 Profiles 有什么影响？&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;sigh&lt;/code&gt; 永远不会触碰或者使用被 Xcode 创建、管理的 Profiles。相反， &lt;code&gt;sigh&lt;/code&gt; 只会管理自己的 Provisioning Profiles 集合。&lt;/p&gt;
+
+&lt;h1 id=&#34;帮助&#34;&gt;帮助？&lt;/h1&gt;
+
+&lt;p&gt;请提交 issue 到 GitHub，并提供你关于设置的信息。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

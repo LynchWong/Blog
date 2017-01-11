@@ -1,0 +1,1393 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Swift之基础部分</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="Swift 是一门开发 iOS, OS X 和 watchOS 应用的新语言。然而,如果你有 C 或者 Objective-C 开发经验的话,你会发现 Swift 的很多内容都是你熟悉的。
+">
+    <meta property="og:description" content="Swift 是一门开发 iOS, OS X 和 watchOS 应用的新语言。然而,如果你有 C 或者 Objective-C 开发经验的话,你会发现 Swift 的很多内容都是你熟悉的。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Swift之基础部分">
+    <meta property="og:url" content="/2015/01/swift%E4%B9%8B%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="Swift 是一门开发 iOS, OS X 和 watchOS 应用的新语言。然而,如果你有 C 或者 Objective-C 开发经验的话,你会发现 Swift 的很多内容都是你熟悉的。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Swift之基础部分
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-01-24T20:27:42Z">
+    
+  
+  
+  
+  
+    2015-01-24 20:27:42
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>Swift 是一门开发 iOS, OS X 和 watchOS 应用的新语言。然而,如果你有 C 或者 Objective-C 开发经验的话,你会发现 Swift 的很多内容都是你熟悉的。
+</p>
+
+<p>Swift 包含了 C 和 Objective-C 上所有基础数据类型, Int 表示整型值; Double 和 Float 表示浮点型值; Bool 是布尔型值; String 是文本型数据。Swift 还提供了三个基本的集合类型, Array, Set 和 Dictionary,详见集合类型。</p>
+
+<p>就像 C 语言一样,Swift 使用变量来进行存储并通过变量名来关联值。在 Swift 中,广泛的使用着值不可变的变量,它们就是常量,而且比 C 语言的常量更强大。在 Swift 中,如果你要处理的值不需要改变,那使用常量可以让你的代码更加安全并且更清晰地表达你的意图。</p>
+
+<p>除了我们熟悉的类型,Swift 还增加了 Objective-C 中没有的高阶数据类型比如元组(Tuple)。元组可以让你创建或者传递一组数据,比如作为函数的返回值时,你可以用一个元组可以返回多个值。</p>
+
+<p>Swift 还增加了可选(Optional)类型,用于处理值缺失的情况。可选表示“那儿有一个值,并且它等于 x ”或者“那儿没有值”。可选有点像在 Objective-C 中使用 nil,但是它可以用在任何类型上,不仅仅是类。可选类型比 Objective-C 中的 nil 指针更加安全也更具表现力,它是 Swift 许多强大特性的重要组成部分。</p>
+
+<p>Swift 是一门类型安全的语言,可选类型就是一个很好的例子。Swift 可以让你清楚地知道值的类型。如果你的代码期望得到一个 String,类型安全会阻止你不小心传入一个 Int。你可以在开发阶段尽早发现并修正错误。</p>
+
+<h2 id="常量和变量">常量和变量</h2>
+
+<p>常量和变量把一个名字(比如 maximumNumberOfLoginAttempts 或者 welcomeMessage)和一个指定类型的值(比如数字 10 或者字符串&rdquo;Hello&rdquo;)关联起来。常量的值一旦设定就不能改变,而变量的值可以随意更改。</p>
+
+<h3 id="声明常量和变量">声明常量和变量</h3>
+
+<p>常量和变量必须在使用前声明,用 let 来声明常量,用 var 来声明变量。下面的例子展示了如何用常量和变量来记录用户尝试登录的次数:</p>
+
+<pre><code>let maximumNumberOfLoginAttempts = 10 
+var currentLoginAttempt = 0
+</code></pre>
+
+<p>这两行代码可以被理解为:</p>
+
+<p>“声明一个名字是 maximumNumberOfLoginAttempts 的新常量,并给它一个值 10。然后, 声明一个名字是 currentLoginAttempt 的变量并将它的值初始化为 0.”</p>
+
+<p>在这个例子中,允许的最大尝试登录次数被声明为一个常量,因为这个值不会改变。当前尝试登录次数被声明为一个变量,因为每次尝试登录失败的时候都需要增加这个值。</p>
+
+<p>你可以在一行中声明多个常量或者多个变量,用逗号隔开:</p>
+
+<pre><code>varx=0.0,y=0.0,z=0.0
+</code></pre>
+
+<p>注意:如果你的代码中有不需要改变的值,请使用 let 关键字将它声明为常量。只将需要改变的值声明为变量。</p>
+
+<h3 id="类型标注">类型标注</h3>
+
+<p>当你声明常量或者变量的时候可以加上类型标注(type annotation),说明常量或者变量中要存储的值的类型。如果要添加类型标注,需要在常量或者变量名后面加上一个冒号和空格,然后加上类型名称。</p>
+
+<p>这个例子给 welcomeMessage 变量添加了类型标注,表示这个变量可以存储 String 类型的值:</p>
+
+<pre><code>var welcomeMessage: String
+</code></pre>
+
+<p>声明中的冒号代表着“是&hellip;类型”,所以这行代码可以被理解为:</p>
+
+<p>“声明一个类型为 String ,名字为 welcomeMessage 的变量。”</p>
+
+<p>“类型为 String ”的意思是“可以存储任意 String 类型的值。”</p>
+
+<p>welcomeMessage 变量现在可以被设置成任意字符串:</p>
+
+<pre><code>welcomeMessage = &quot;Hello&quot;
+</code></pre>
+
+<p>你可以在一行中定义多个同样类型的变量,用逗号分割,并在最后一个变量名之后添加类型标注:</p>
+
+<pre><code>var red, green, blue: Double
+</code></pre>
+
+<p>注意: 一般来说你很少需要写类型标注。如果你在声明常量或者变量的时候赋了一个初始值,Swift可以推断出这个常量或者变量的类型,请参考类型安全和类型推断。在上面的例子中,没有给 welcomeMessage 赋初始值,所以变量 welcomeMessage 的类型是通过一个类型标注指定的,而不是通过初始值推断的。</p>
+
+<h3 id="常量和变量的命名">常量和变量的命名</h3>
+
+<p>你可以用任何你喜欢的字符作为常量和变量名,包括 Unicode 字符:</p>
+
+<pre><code>let π = 3.14159
+let 你好 = &quot;你好世界&quot;
+let ?? = &quot;dogcow&quot;
+</code></pre>
+
+<p>常量与变量名不能包含数学符号,箭头,保留的(或者非法的)Unicode 码位,连线与制表符。也不能以数字开头,但是可以在常量与变量名的其他地方包含数字。</p>
+
+<p>一旦你将常量或者变量声明为确定的类型,你就不能使用相同的名字再次进行声明,或者改变其存储的值的类型。同时,你也不能将常量与变量进行互转。</p>
+
+<p>注意:如果你需要使用与 Swift 保留关键字相同的名称作为常量或者变量名,你可以使用反引号(`)将关键字包围的方式将其作为名字使用。无论如何,你应当避免使用关键字作 为常量或变量名,除非你别无选择。</p>
+
+<p>你可以更改现有的变量值为其他同类型的值,在下面的例子中,friendlyWelcome 的值从 &ldquo;Hello!&ldquo;改为了&rdquo;Bonjour!&rdquo;:</p>
+
+<pre><code>var friendlyWelcome = &quot;Hello!&quot;
+friendlyWelcome = &quot;Bonjour!&quot;
+// friendlyWelcome 现在是 &quot;Bonjour!&quot;
+</code></pre>
+
+<p>与变量不同,常量的值一旦被确定就不能更改了。尝试这样做会导致编译时报错:</p>
+
+<pre><code>let languageName = &quot;Swift&quot;
+languageName = &quot;Swift++&quot;
+// 这会报编译时错误 - languageName 不可改变
+</code></pre>
+
+<h3 id="输出常量和变量">输出常量和变量</h3>
+
+<p>你可以用 print(_:separator:terminator:) 函数来输出当前常量或变量的值:</p>
+
+<pre><code>print(friendlyWelcome)
+// 输出 &quot;Bonjour!&quot;
+</code></pre>
+
+<p>print(<em>:separator:terminator:) 是一个用来输出一个或多个值到适当输出区的全局函数。如果你用 Xcode, print(</em>:separator:terminator:) 将会输出内容到“console”面板上。 separator 和 terminator 参数具有默认值,因此你调用这个函数的时候可以忽略它们。默认情况下,该函数通过添加换行符来结束当前行。如果不想换行,可以传递一个空字符串给 terminator 参数&ndash;例如, print(someValue, terminator:&ldquo;&rdquo;) 。关于参数默认值的更多信息,请参考默认参数值。</p>
+
+<p>Swift 用字符串插值(string interpolation)的方式把常量名或者变量名当做占位符加入到长字符串中,Swift 会用当前常量或变量的值替换这些占位符。将常量或变量名放入圆括号中,并在开括号前使用反斜杠将其转义:</p>
+
+<pre><code>print(&quot;The current value of friendlyWelcome is \(friendlyWelcome)&quot;)
+// 输出 &quot;The current value of friendlyWelcome is Bonjour!
+</code></pre>
+
+<p>注意:字符串插值所有可用的选项,请参考字符串插值。</p>
+
+<h2 id="注释">注释</h2>
+
+<p>请将你的代码中的非执行文本注释成提示或者笔记以方便你将来阅读。Swift 的编译器将会在编译代码时自动忽略掉注释部分。</p>
+
+<p>Swift 中的注释与 C 语言的注释非常相似。单行注释以双正斜杠( // )作为起始标记:</p>
+
+<pre><code>// 这是一个注释
+</code></pre>
+
+<p>你也可以进行多行注释,其起始标记为单个正斜杠后跟随一个星号( /* ),终止标记为一个星号后跟随单个正斜 杠( */ ):</p>
+
+<pre><code>/* 这是一个, 
+多行注释 */
+</code></pre>
+
+<p>与 C 语言多行注释不同,Swift 的多行注释可以嵌套在其它的多行注释之中。你可以先生成一个多行注释块,然后在这个注释块之中再嵌套成第二个多行注释。终止注释时先插入第二个注释块的终止标记,然后再插入第一个注释块的终止标记:</p>
+
+<pre><code>/* 这是第一个多行注释的开头
+/* 这是第二个被嵌套的多行注释*/
+这是第一个多行注释的结尾 */
+</code></pre>
+
+<p>通过运用嵌套多行注释,你可以快速方便的注释掉一大段代码,即使这段代码之中已经含有了多行注释块。</p>
+
+<h2 id="分号">分号</h2>
+
+<p>与其他大部分编程语言不同,Swift 并不强制要求你在每条语句的结尾处使用分号( ; ),当然,你也可以按照你 自己的习惯添加分号。有一种情况下必须要用分号,即你打算在同一行内写多条独立的语句:</p>
+
+<pre><code>let cat = &quot;?&quot;;
+println(cat)
+// prints &quot;?&quot;
+</code></pre>
+
+<h2 id="整数">整数</h2>
+
+<p>整数就是没有小数部分的数字,比如 42 和 -23 。整数可以是 有符号 (正、负、零)或者无符号 (正、零)。</p>
+
+<p>Swift 提供了8,16,32和64位的有符号和无符号整数类型。这些整数类型和 C 语言的命名方式很像,比如8位无符号整数类型是 UInt8 ,32位有符号整数类型是 Int32 。就像 Swift 的其他类型一样,整数类型采用大写命名法。</p>
+
+<h3 id="整数范围">整数范围</h3>
+
+<p>你可以访问不同整数类型的 min 和 max 属性来获取对应类型的最小值和最大值:</p>
+
+<pre><code>let minValue = UInt8.min // minValue 为 0,是 UInt8 类型
+let maxValue = UInt8.max // maxValue 为 255,是 UInt8 类型
+</code></pre>
+
+<p>min 和 max 所传回值的类型,正是其所对的整数类型(如上例UInt8, 所传回的类型是UInt8),可用在表达式中相同类型值旁。</p>
+
+<h3 id="int">Int</h3>
+
+<p>一般来说,你不需要专门指定整数的长度。Swift 提供了一个特殊的整数类型 Int,长度与当前平台的原生字长相同:</p>
+
+<ul>
+<li>在 32 位平台上,Int 和 Int32 长度相同。</li>
+<li>在 64 位平台上,Int 和 Int64 长度相同。</li>
+</ul>
+
+<p>除非你需要特定长度的整数,一般来说使用 Int 就够了。这可以提高代码一致性和可复用性。即使是在 32 位平台上,Int 可以存储的整数范围也可以达到- 2147483648~2147483647,大多数时候这已经足够大了。</p>
+
+<h3 id="uint">UInt</h3>
+
+<p>Swift 也提供了一个特殊的无符号类型 UInt,长度与当前平台的原生字长相同:</p>
+
+<ul>
+<li>在 32 位平台上,UInt 和 UInt32 长度相同。</li>
+<li>在 64 位平台上,UInt 和 UInt64 长度相同。</li>
+</ul>
+
+<p>注意:尽量不要使用 UInt,除非你真的需要存储一个和当前平台原生字长相同的无符号整数。除了这种情况,最好使用 Int,即使你要存储的值已知是非负的。统一使用 Int 可以提高代码的可复用性,避免不同类型数字之间的转换,并且匹配数字的类型推断,请参考类型安全和类型推断。</p>
+
+<h2 id="浮点数">浮点数</h2>
+
+<p>浮点数是有小数部分的数字,比如 3.14159,0.1 和-273.15。</p>
+
+<p>浮点类型比整数类型表示的范围更大,可以存储比 Int 类型更大或者更小的数字。Swift 提供了两种有符号浮点数类型:</p>
+
+<ul>
+<li>Double 表示 64 位浮点数。当你需要存储很大或者很高精度的浮点数时请使用此类型。</li>
+<li>Float 表示 32 位浮点数。精度要求不高的话可以使用此类型。</li>
+</ul>
+
+<p>注意:Double 精确度很高,至少有 15 位数字,而 Float 最少只有 6 位数字。选择哪个类型取决于你的代码需要处理的值的范围。</p>
+
+<h2 id="类型安全和类型推测">类型安全和类型推测</h2>
+
+<p>Swift 是一个类型安全(type safe)的语言。类型安全的语言可以让你清楚地知道代码要处理的值的类型。如果你的代码需要一个 String,你绝对不可能不小心传进去一个 Int。</p>
+
+<p>由于 Swift 是类型安全的,所以它会在编译你的代码时进行类型检查(type checks),并把不匹配的类型标记为错误。这可以让你在开发的时候尽早发现并修复错误。</p>
+
+<p>当你要处理不同类型的值时,类型检查可以帮你避免错误。然而,这并不是说你每次声明常量和变量的时候都需要显式指定类型。如果你没有显式指定类型,Swift 会使用类型推测(type inference)来选择合适的类型。有了类型推测,编译器可以在编译代码的时候自动推测出表达式的类型。原理很简单,只要检查你赋的值即可。</p>
+
+<p>因为有类型推测,和 C 或者 Objective-C 比起来 Swift 很少需要声明类型。常量和变量虽然需要明确类型,但是大部分工作并不需要你自己来完成。</p>
+
+<p>当你声明常量或者变量并赋初值的时候类型推测非常有用。当你在声明常量或者变量的时候赋给它们一个字面量(literal value 或 literal)即可触发类型推测。(字面量就是会直接出现在你代码中的值,比如 42 和 3.14159。)</p>
+
+<p>例如,如果你给一个新常量赋值 42 并且没有标明类型,Swift 可以推测出常量类型是 Int,因为你给它赋的初始值看起来像一个整数:</p>
+
+<pre><code>let meaningOfLife = 42
+// meaningOfLife 会被推测为 Int 类型
+</code></pre>
+
+<p>同理,如果你没有给浮点字面量标明类型,Swift 会推测你想要的是 Double:</p>
+
+<pre><code>let pi = 3.14159
+// pi 会被推测为 Double 类型
+</code></pre>
+
+<p>当推测浮点数的类型时,Swift 总是会选择 Double 而不是 Float。</p>
+
+<p>如果表达式中同时出现了整数和浮点数,会被推测为 Double 类型:</p>
+
+<pre><code>let anotherPi = 3 + 0.14159
+// anotherPi 会被推测为 Double 类型
+</code></pre>
+
+<p>原始值 3 没有显式声明类型,而表达式中出现了一个浮点字面量,所以表达式会被推测为Double 类型。</p>
+
+<h2 id="数值型字面量">数值型字面量</h2>
+
+<p>整数字面量可以被写作:</p>
+
+<ul>
+<li>一个十进制数,没有前缀</li>
+<li>一个二进制数,前缀是 0b</li>
+<li>一个八进制数,前缀是 0o</li>
+<li>一个十六进制数,前缀是 0x</li>
+</ul>
+
+<p>下面的所有整数字面量的十进制值都是 17:</p>
+
+<pre><code>let decimalInteger = 17
+let binaryInteger = 0b10001 // 二进制的 17
+let octalInteger = 0o21 // 八进制的17 
+let hexadecimalInteger = 0x11 // 十六进制的 17
+</code></pre>
+
+<p>浮点字面量可以是十进制(没有前缀)或者是十六进制(前缀是 0x)。小数点两边必须有至少一个十进制数字(或者是十六进制的数字)。浮点字面量还有一个可选的指数 (exponent),在十进制浮点数中通过大写或者小写的 e 来指定,在十六进制浮点数中通过大写或者小写的 p 来指定。</p>
+
+<p>如果一个十进制数的指数为 exp,那这个数相当于基数和$10^{exp}$的乘积: 1.25e2 表示 $1.25 × 10^{2}$,等于 125.0。1.25e-2 表示 $1.25 × 10^{-2}$,等于 0.0125。</p>
+
+<p>如果一个十六进制数的指数为 exp,那这个数相当于基数和$2^{exp}$的乘积: 0xFp2 表示 $15 × 2^{2}$,等于 60.0。
+0xFp-2 表示 $15 × 2^{-2}$,等于 3.75。</p>
+
+<p>下面的这些浮点字面量都等于十进制的 12.1875:</p>
+
+<pre><code>let decimalDouble = 12.1875
+let exponentDouble = 1.21875e1
+let hexadecimalDouble = 0xC.3p0
+</code></pre>
+
+<p>数值类字面量可以包括额外的格式来增强可读性。整数和浮点数都可以添加额外的零并且包含下划线,并不会影响字面量:</p>
+
+<pre><code>let paddedDouble = 000123.456 
+let oneMillion = 1_000_000
+let justOverOneMillion = 1_000_000.000_000_1
+</code></pre>
+
+<h2 id="数值型类型转换">数值型类型转换</h2>
+
+<p>通常来讲,即使代码中的整数常量和变量已知非负,也请使用 Int 类型。总是使用默认的整数类型可以保证你的整数常量和变量可以直接被复用并且可以匹配整数类字面量的类型推断。</p>
+
+<p>只有在必要的时候才使用其他整数类型,比如要处理外部的长度明确的数据或者为了优化性能、内存占用等等。使用显式指定长度的类型可以及时发现值溢出并且可以暗示正在处理特殊数据。</p>
+
+<h3 id="整数转换">整数转换</h3>
+
+<p>不同整数类型的变量和常量可以存储不同范围的数字。Int8 类型的常量或者变量可以存储的数字范围是-128~127,而 UInt8 类型的常量或者变量能存储的数字范围是 0~255。如果数字超出了常量或者变量可存储的范围,编译的时候会报错:</p>
+
+<pre><code>let cannotBeNegative: UInt8 = -1 
+// UInt8 类型不能存储负数,所以会报错
+let tooBig: Int8 = Int8.max + 1
+// Int8 类型不能存储超过最大值的数,所以会报错
+</code></pre>
+
+<p>由于每中整数类型都可以存储不同范围的值,所以你必须根据不同情况选择性使用数值型类型转换。这种选择性使用的方式,可以预防隐式转换的错误并让你的代码中的类型转换意图变得清晰。</p>
+
+<p>要将一种数字类型转换成另一种,你要用当前值来初始化一个期望类型的新数字,这个数字的类型就是你的目标类型。在下面的例子中,常量 twoThousand 是 UInt16 类型,然而常量 one 是 Uint8 类型。它们不能直接相加,因为它们类型不同。所以要调用 UInt16(one)来创建一个新的 UInt16 数字并用 one 的值来初始化,然后使用这个新数字来计算:</p>
+
+<pre><code>let twoThousand: UInt16 = 2_000
+let one: UInt8 = 1
+let twoThousandAndOne = twoThousand + UInt16(one)
+</code></pre>
+
+<p>现在两个数字的类型都是 UInt16,可以进行相加。目标常量 twoThousandAndOne 的类型被推测为UInt16,因为它是两个 UInt16 值的和。</p>
+
+<p>SomeType(ofInitialValue)是调用 Swift 构造器并传入一个初始值的默认方法。在语言内部,UInt16 有一个构造器,可以接受一个 UInt8 类型的值,所以这个构造器可以用现有的UInt8 来创建一个新的 UInt16。注意,你并不能传入任意类型的值,只能传入 UInt16 内部有对应构造器的值。不过你可以扩展现有的类型来让它可以接收其他类型的值(包括自定义类型),请参考扩展。</p>
+
+<h3 id="整数和浮点数转换">整数和浮点数转换</h3>
+
+<p>整数和浮点数的转换必须显式指定类型:</p>
+
+<pre><code>let three = 3
+let pointOneFourOneFiveNine = 0.14159
+let pi = Double(three) + pointOneFourOneFiveNine 
+// pi 等于 3.14159,所以被推测为 Double 类型
+</code></pre>
+
+<p>这个例子中,常量 three 的值被用来创建一个 Double 类型的值,所以加号两边的数类型相同。如果不进行转换,两者无法相加。</p>
+
+<p>浮点数到整数的反向转换同样行,整数类型可以用 Double 或者 Float 类型来初始化:</p>
+
+<pre><code>let integerPi = Int(pi)
+// integerPi 等于 3,所以被推测为 Int 类型
+</code></pre>
+
+<p>当用这种方式来初始化一个新的整数值时,浮点值会被截断。也就是说 4.75 会变成 4,-3.9 会变成-3。</p>
+
+<p>注意:结合数字类常量和变量不同于结合数字类字面量。字面量 3 可以直接和字面量0.14159 相加,因为数字字面量本身没有明确的类型。它们的类型只在编译器需要求值的时候被推测。</p>
+
+<h2 id="类型别名">类型别名</h2>
+
+<p>类型别名(type aliases)就是给现有类型定义另一个名字。你可以使用 typealias 关键字来定义类型别名。</p>
+
+<p>当你想要给现有类型起一个更有意义的名字时,类型别名非常有用。假设你正在处理特定长度的外部资源的数据:</p>
+
+<pre><code>typealias AudioSample = UInt16
+</code></pre>
+
+<p>定义了一个类型别名之后,你可以在任何使用原始名的地方使用别名:</p>
+
+<pre><code>var maxAmplitudeFound = AudioSample.min
+// maxAmplitudeFound 现在是 0
+</code></pre>
+
+<p>本例中,AudioSample 被定义为 UInt16 的一个别名。因为它是别名,AudioSample.min 实际上是 UInt16.min,所以会给 maxAmplitudeFound 赋一个初值 0。</p>
+
+<h2 id="布尔值">布尔值</h2>
+
+<p>Swift 有一个基本的布尔(Boolean)类型,叫做 Bool。布尔值指逻辑上的(logical),因为它们只能是真或者假。Swift 有两个布尔常量,true 和 false:</p>
+
+<pre><code>let orangesAreOrange = true
+let turnipsAreDelicious = false
+</code></pre>
+
+<p>orangesAreOrange 和 turnipsAreDelicious 的类型会被推测为 Bool,因为它们的初值是布尔字面量。就像之前提到的 Int 和 Double 一样,如果你创建变量的时候给它们赋值 true 或者 false,那你不需要将常量或者变量声明为 Bool 类型。初始化常量或者变量的时候如果所赋的值类型已知,就可以触发类型推测,这让 Swift 代码更加简洁并且可读性更高。</p>
+
+<p>当你编写条件语句比如 if 语句的时候,布尔值非常有用:</p>
+
+<pre><code>if turnipsAreDelicious {
+    println(&quot;Mmm, tasty turnips!&quot;)
+} else {
+    println(&quot;Eww, turnips are horrible.&quot;) 
+}
+// 输出 &quot;Eww, turnips are horrible.&quot;
+</code></pre>
+
+<p>条件语句,例如 if,请参考控制流。</p>
+
+<p>如果你在需要使用 Bool 类型的地方使用了非布尔值,Swift 的类型安全机制会报错。下面的例子会报告一个编译时错误:</p>
+
+<pre><code>let i = 1 
+if i {
+    // 这个例子不会通过编译,会报错 
+}
+</code></pre>
+
+<p>然而,下面的例子是合法的:</p>
+
+<pre><code>let i = 1
+if i==1 {
+    // 这个例子会编译成功 
+}
+</code></pre>
+
+<p>i == 1 的比较结果是 Bool 类型,所以第二个例子可以通过类型检查。类似 i == 1 这样的比较,请参考基本操作符。</p>
+
+<p>和 Swift 中的其他类型安全的例子一样,这个方法可以避免错误并保证这块代码的意图总是清晰的。</p>
+
+<h2 id="元组">元组</h2>
+
+<p>元组(tuples)把多个值组合成一个复合值。元组内的值可以使任意类型,并不要求是相同类型。</p>
+
+<p>下面这个例子中,(404, &ldquo;Not Found&rdquo;)是一个描述 HTTP 状态码(HTTP status code)的元组。HTTP 状态码是当你请求网页的时候 web 服务器返回的一个特殊值。如果你请求的网页不存在就会返回一个 404 Not Found 状态码。</p>
+
+<pre><code>let http404Error = (404, &quot;Not Found&quot;)
+// http404Error 的类型是 (Int, String),值是 (404, &quot;Not Found&quot;)
+</code></pre>
+
+<p>(404, &ldquo;Not Found&rdquo;)元组把一个 Int 值和一个 String 值组合起来表示 HTTP 状态码的两个部分:一个数字和一个人类可读的描述。这个元组可以被描述为“一个类型为(Int, String)的元组”。</p>
+
+<p>你可以把任意顺序的类型组合成一个元组,这个元组可以包含所有类型。只要你想,你可以创建一个类型为(Int, Int, Int)或者(String, Bool)或者其他任何你想要的组合的元组。</p>
+
+<p>你可以将一个元组的内容分解(decompose)成单独的常量和变量,然后你就可以正常使用它们了:</p>
+
+<pre><code>let (statusCode, statusMessage) = http404Error
+println(&quot;The status code is \(statusCode)&quot;)
+// 输出 &quot;The status code is 404&quot;
+println(&quot;The status message is \(statusMessage)&quot;) 
+// 输出 &quot;The status message is Not Found&quot;
+</code></pre>
+
+<p>如果你只需要一部分元组值,分解的时候可以把要忽略的部分用下划线(_)标记:</p>
+
+<pre><code>let (justTheStatusCode, _) = http404Error
+println(&quot;The status code is \(justTheStatusCode)&quot;)
+// 输出 &quot;The status code is 404&quot;
+</code></pre>
+
+<p>此外,你还可以通过下标来访问元组中的单个元素,下标从零开始:</p>
+
+<pre><code>println(&quot;The status code is \(http404Error.0)&quot;) 
+// 输出 &quot;The status code is 404&quot;
+println(&quot;The status message is \(http404Error.1)&quot;)
+// 输出 &quot;The status message is Not Found&quot;
+</code></pre>
+
+<p>你可以在定义元组的时候给单个元素命名:</p>
+
+<pre><code>let http200Status = (statusCode: 200, description: &quot;OK&quot;)
+</code></pre>
+
+<p>给元组中的元素命名后,你可以通过名字来获取这些元素的值:</p>
+
+<pre><code>println(&quot;The status code is \(http200Status.statusCode)&quot;)
+// 输出 &quot;The status code is 200&quot;
+println(&quot;The status message is \(http200Status.description)&quot;)
+// 输出 &quot;The status message is OK&quot;
+</code></pre>
+
+<p>作为函数返回值时,元组非常有用。一个用来获取网页的函数可能会返回一个(Int, String) 元组来描述是否获取成功。和只能返回一个类型的值比较起来,一个包含两个不同类型值的元组可以让函数的返回信息更有用。</p>
+
+<p>注意:元组在临时组织值的时候很有用,但是并不适合创建复杂的数据结构。如果你的数据结构并不是临时使用,请使用类或者结构体而不是元组。请参考类和结构体。</p>
+
+<h2 id="可选类型">可选类型</h2>
+
+<p>使用可选(optionals)来处理值可能缺失的情况。可选表示:</p>
+
+<p>有值,等于 x</p>
+
+<p>或者</p>
+
+<p>没有值</p>
+
+<p>注意:C 和 Objective-C 中并没有可选这个概念。最接近的是 Objective-C 中的一个特性,一个方法要不返回一个对象要不返回 nil,nil 表示“缺少一个合法的对象”。然而,这只对对象起作用——对于结构体,基本的 C 类型或者枚举类型不起作用。对于这些类型,Objective-C 方法一般会返回一个特殊值(比如 NSNotFound)来暗示值缺失。这种方法假设方法的调用者知道并记得对特殊值进行判断。然而,Swift 的可选可以让你暗示任意类型的值缺失,并不需要一个特殊值。</p>
+
+<p>来看一个例子。Swift 的 String 类型有一个叫做 toInt 的方法,作用是将一个 String 值转换成一个 Int 值。然而,并不是所有的字符串都可以转换成一个整数。字符串&rdquo;123&rdquo;可以被转换成数字 123,但是字符串&rdquo;hello, world&rdquo;不行。</p>
+
+<p>下面的例子使用 toInt 方法来尝试将一个 String 转换成 Int:</p>
+
+<pre><code>let possibleNumber = &quot;123&quot;
+let convertedNumber = possibleNumber.toInt()
+// convertedNumber 被推测为类型 &quot;Int?&quot;, 或者类型 &quot;optional Int&quot;
+</code></pre>
+
+<p>因为 toInt 方法可能会失败,所以它返回一个可选的(optional)Int,而不是一个 Int。一个可选的 Int 被写作 Int?而不是 Int。问号暗示包含的值是可选,也就是说可能包含 Int 值也可能不包含值。(不能包含其他任何值比如 Bool 值或者 String 值。只能是 Int 或者什么都没有。)</p>
+
+<h3 id="nil">nil</h3>
+
+<p>你可以给可选变量赋值为 nil 来表示它没有值:</p>
+
+<pre><code>var serverResponseCode: Int? = 404
+// serverResponseCode 包含一个可选的 Int 值 404 
+serverResponseCode = nil
+// serverResponseCode 现在不包含值
+</code></pre>
+
+<p>注意:nil 不能用于非可选的常量和变量。如果你的代码中有常量或者变量需要处理值缺失的情况,请把它们声明成对应的可选类型。</p>
+
+<p>如果你声明一个可选常量或者变量但是没有赋值,它们会自动被设置为 nil:</p>
+
+<pre><code>var surveyAnswer: String?
+// surveyAnswer 被自动设置为 nil
+</code></pre>
+
+<p>注意:Swift 的 nil 和 Objective-C 中的 nil 并不一样。在 Objective-C 中,nil 是一个指向不存在对象的指针。在 Swift 中,nil 不是指针——它是一个确定的值,用来表示值缺失。任何类型的可选都可以被设置为 nil,不只是对象类型。</p>
+
+<h3 id="if-语句以及强制解析">if 语句以及强制解析</h3>
+
+<p>你可以使用 if 语句和 nil 比较来判断一个可选值是否包含值。你可以使用“相等”( == )或“不等”( != )来执行比较。</p>
+
+<p>如果可选类型有值,它将不等于 nil :</p>
+
+<pre><code>if convertedNumber != nil {
+    print(&quot;convertedNumber contains some integer value.&quot;)
+}
+// 输出 &quot;convertedNumber contains some integer value.&quot;
+</code></pre>
+
+<p>当你确定可选类型确实包含值之后,你可以在可选的名字后面加一个感叹号( ! )来获取值。这个惊叹号表示“我知道这个可选有值,请使用它。”这被称为可选值的强制解析(forced unwrapping):</p>
+
+<p>更多关于 if 语句的内容,请参考控制流。</p>
+
+<p>注意:使用 ! 来获取一个不存在的可选值会导致运行时错误。使用 ! 来强制解析值之前,一定要确定可选包含一个非nil 的值。</p>
+
+<h3 id="可选绑定">可选绑定</h3>
+
+<p>使用可选绑定(optional binding)来判断可选是否包含值,如果包含就把值赋给一个临时常量或者变量。可选绑定可以用在 if 和 while 语句中来对可选的值进行判断并把值赋给一个常量或者变量。if 和 while 语句,请参考控制流。</p>
+
+<p>像下面这样在 if 语句中写一个可选绑定:</p>
+
+<pre><code>if let constantName = someOptional {
+    statements
+}
+</code></pre>
+
+<p>你可以像上面这样使用可选绑定来重写 possibleNumber 这个例子:</p>
+
+<pre><code>if let actualNumber = possibleNumber.toInt() {
+    println(&quot;\'\(possibleNumber)\' has an integer value of \(actualNumber)&quot;)
+} else {
+    println(&quot;\'\(possibleNumber)\' could not be converted to an integer&quot;)
+}
+// prints &quot;'123' has an integer value of 123&quot;
+</code></pre>
+
+<p>这段代码可以被理解为:</p>
+
+<p>“如果 possibleNumber.toInt 返回的可选 Int 包含一个值,创建一个叫做 actualNumber 的新常量并将可选包含的值赋给它。”</p>
+
+<p>如果转换成功,actualNumber 常量可以在 if 语句的第一个分支中使用。它已经被可选包含的值初始化过,所以不需要再使用!后缀来获取它的值。在这个例子中,actualNumber 只被用来输出转换结果。</p>
+
+<p>你可以在可选绑定中使用常量和变量。如果你想在 if 语句的第一个分支中操作 actualNumber 的值,你可以改成 if var actualNumber,这样可选包含的值就会被赋给一个变量而非常量。</p>
+
+<p>多个可选绑定可以用逗号分隔,作为一列表达式出现在一个语句中。</p>
+
+<pre><code>if let constantName = someOptional, anotherConstantName = someOtherOptional {
+    statements
+}
+</code></pre>
+
+<h3 id="隐式解析可选">隐式解析可选</h3>
+
+<p>如上所述,可选暗示了常量或者变量可以“没有值”。可选可以通过 if 语句来判断是否有值,如果有值的话可以通过可选绑定来解析值。</p>
+
+<p>有时候在程序架构中,第一次被赋值之后,可以确定一个可选总会有值。在这种情况下,每次都要判断和解析可选值是非常低效的,因为可以确定它总会有值。</p>
+
+<p>这种类型的可选被定义为隐式解析可选(implicitly unwrapped optionals)。把想要用作可选的类型的后面的问号(String?)改成感叹号(String!)来声明一个隐式解析可选。</p>
+
+<p>当可选被第一次赋值之后就可以确定之后一直有值的时候,隐式解析可选非常有用。隐式解析可选主要被用在 Swift 中类的构造过程中,请参考无主引用以及隐式解析可选属性。</p>
+
+<p>一个隐式解析可选其实就是一个普通的可选,但是可以被当做非可选来使用,并不需要每次都使用解析来获取可选值。下面的例子展示了可选 String 和隐式解析可选 String 之间的区别:</p>
+
+<pre><code>let possibleString: String? = &quot;An optional string.&quot;
+let forcedString: String = possibleString! // 需要惊叹号来获取值
+
+let assumedString: String! = &quot;An implicitly unwrapped optional string.&quot;
+let implicitString: String = assumedString // 不需要感叹号
+</code></pre>
+
+<p>你可以把隐式解析可选当做一个可以自动解析的可选。你要做的只是声明的时候把感叹号放到类型的结尾,而不是每次取值的可选名字的结尾。</p>
+
+<p>注意:如果你在隐式解析可选没有值的时候尝试取值,会触发运行时错误。和你在没有值的普通可选后面加一个惊叹号一样。</p>
+
+<p>你仍然可以把隐式解析可选当做普通可选来判断它是否包含值:</p>
+
+<pre><code>if assumedString != nil {
+    println(assumedString)
+}
+// 输出 &quot;An implicitly unwrapped optional string.&quot;
+</code></pre>
+
+<p>你也可以在可选绑定中使用隐式解析可选来检查并解析它的值:</p>
+
+<pre><code>if let definiteString = assumedString { 
+    println(definiteString)
+}
+// 输出 &quot;An implicitly unwrapped optional string.&quot;
+</code></pre>
+
+<p>注意:如果一个变量之后可能变成 nil 的话请不要使用隐式解析可选。如果你需要在变量的生命周期中判断是否是 nil 的话,请使用普通可选类型。</p>
+
+<h2 id="错误处理">错误处理</h2>
+
+<p>你可以使用错误处理(error handling)来应对程序执行中可能会遇到的错误条件。</p>
+
+<p>相对于可选中运用值的存在与缺失来表达函数的成功与失败,错误处理可以推断失败的原因,并传播至程序的其他部分。</p>
+
+<p>当一个函数遇到错误条件,它能报错。调用函数的地方能抛出错误消息并合理处理。</p>
+
+<pre><code>func canThrowAnErrow() throws {
+    // 这个函数有可能抛出错误
+}
+</code></pre>
+
+<p>一个函数可以通过在声明中添加 throws 关键词来抛出错误消息。当你的函数能抛出错误消息时, 你应该在表达式中前置 try 关键词。</p>
+
+<pre><code>do {
+    try canThrowAnErrow() // 没有错误消息抛出
+} catch {
+    // 有一个错误消息抛出
+}
+</code></pre>
+
+<p>一个 do 语句创建了一个新的包含作用域,使得错误能被传播到一个或多个 catch 从句。</p>
+
+<p>这里有一个错误处理如何用来应对不同错误条件的例子。</p>
+
+<pre><code>func makeASandwich() throws {
+    // ...
+}
+do {
+    try makeASandwich()
+    eatASandwich()
+} catch Error.OutOfCleanDishes {
+    washDishes()
+} catch Error.MissingIngredients(let ingredients) {
+    buyGroceries(ingredients)
+}
+</code></pre>
+
+<p>在此例中, makeASandwich() (做一个三明治)函数会抛出一个错误消息如果没有干净的盘子或者某个原料缺失。因为 makeASandwich() 抛出错误,函数调用被包裹在 try 表达式中。将函数包裹在一个 do 语句中,任何被抛出的错误会被传播到提供的 catch 从句中。</p>
+
+<p>如果没有错误被抛出, eatASandwich() 函数会被调用。如果一个匹配 Error.OutOfCleanDishes 的错误被抛出, washDishes 函数会被调用。如果一个匹配 Error.MissingIngredients 的错误被抛出, buyGroceries(_:) 函数会随着被 catch 所捕捉到的关联值 [String] 被调用。</p>
+
+<p>抛出,捕捉,以及传播错误会在错误处理章节详细说明。</p>
+
+<h2 id="断言">断言</h2>
+
+<p>可选可以让你判断值是否存在,你可以在代码中优雅地处理值缺失的情况。然而,在某些情况下,如果值缺失或者值并不满足特定的条件,你的代码可能并不需要继续执行。这时,你可以在你的代码中触发一个断言(assertion）来结束代码运行并通过调试来找到值缺失的原因。</p>
+
+<h3 id="使用断言进行调试">使用断言进行调试</h3>
+
+<p>断言会在运行时判断一个逻辑条件是否为 true。从字面意思来说,断言“断言”一个条件是否为真。你可以使用断言来保证在运行其他代码之前,某些重要的条件已经被满足。如果条件判断为 true,代码运行会继续进行;如果条件判断为 false,代码运行停止,你的应用被终止。</p>
+
+<p>如果你的代码在调试环境下触发了一个断言,比如你在 Xcode 中构建并运行一个应用, 你可以清楚地看到不合法的状态发生在哪里并检查断言被触发时你的应用的状态。此外, 断言允许你附加一条调试信息。</p>
+
+<p>你可以使用全局 assert 函数来写一个断言。向 assert 函数传入一个结果为 true 或者 false 的表达式以及一条信息,当表达式为 false 的时候这条信息会被显示:</p>
+
+<pre><code>let age = -3
+assert(age &gt;= 0, &quot;A person's age cannot be less than zero&quot;)
+// 因为 age &lt; 0,所以断言会触发
+</code></pre>
+
+<p>在这个例子中,只有 age &gt;= 0 为 true 的时候代码运行才会继续,也就是说,当 age 的值非负的时候。如果 age 的值是负数,就像代码中那样,age &gt;= 0 为 false,断言被触发, 结束应用。</p>
+
+<p>断言信息不能使用字符串插值。断言信息可以省略,就像这样:</p>
+
+<pre><code>assert(age &gt;= 0)
+</code></pre>
+
+<h3 id="何时使用断言">何时使用断言</h3>
+
+<p>当条件可能为假时使用断言,但是最终一定要保证条件为真,这样你的代码才能继续运行。断言的适用情景:</p>
+
+<ul>
+<li>整数的附属脚本索引被传入一个自定义附属脚本实现,但是下标索引值可能太小或者太 大。</li>
+<li>需要给函数传入一个值,但是非法的值可能导致函数不能正常执行。</li>
+<li>一个可选值现在是 nil,但是后面的代码运行需要一个非 nil 值。</li>
+</ul>
+
+<p>请参考附属脚本和函数。</p>
+
+<p>注意:断言可能导致你的应用终止运行,所以你应当仔细设计你的代码来让非法条件不会出现。然而,在你的应用发布之前,有时候非法条件可能出现,这时使用断言可以快速发现问题。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/" data-tooltip="Swift之基本运算符">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%88%9D%E8%A7%81/" data-tooltip="Swift之初见">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%259F%25BA%25E7%25A1%2580%25E9%2583%25A8%25E5%2588%2586%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%259F%25BA%25E7%25A1%2580%25E9%2583%25A8%25E5%2588%2586%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%259F%25BA%25E7%25A1%2580%25E9%2583%25A8%25E5%2588%2586%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/" data-tooltip="Swift之基本运算符">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%88%9D%E8%A7%81/" data-tooltip="Swift之初见">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%259F%25BA%25E7%25A1%2580%25E9%2583%25A8%25E5%2588%2586%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%259F%25BA%25E7%25A1%2580%25E9%2583%25A8%25E5%2588%2586%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%259F%25BA%25E7%25A1%2580%25E9%2583%25A8%25E5%2588%2586%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%259F%25BA%25E7%25A1%2580%25E9%2583%25A8%25E5%2588%2586%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%259F%25BA%25E7%25A1%2580%25E9%2583%25A8%25E5%2588%2586%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%259F%25BA%25E7%25A1%2580%25E9%2583%25A8%25E5%2588%2586%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/01\/swift%E4%B9%8B%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86\/';
+          
+            this.page.identifier = '\/2015\/01\/swift%E4%B9%8B%E5%9F%BA%E7%A1%80%E9%83%A8%E5%88%86\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

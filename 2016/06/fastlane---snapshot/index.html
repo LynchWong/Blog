@@ -1,0 +1,1109 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Fastlane - Snapshot</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="
+说明：翻译的 Snapshot 的指南， 原文地址 。
+">
+    <meta property="og:description" content="
+说明：翻译的 Snapshot 的指南， 原文地址 。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Fastlane - Snapshot">
+    <meta property="og:url" content="/2016/06/fastlane---snapshot/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="
+说明：翻译的 Snapshot 的指南， 原文地址 。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="http://lynchwong.com/img/FastlaneSnapshot/snapshot.png">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('/img/FastlaneSnapshot/snapshot.png')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Fastlane - Snapshot
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2016-06-19T13:52:28Z">
+    
+  
+  
+  
+  
+    2016-06-19 13:52:28
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>说明：翻译的 <code>Snapshot</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/snapshot"> 原文地址 </a>。
+</p>
+</blockquote>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneSnapshot/snapshot.png" alt="alt text" /></p>
+
+<h1 id="snapshot">snapshot</h1>
+
+<p>对你的 iOS 应用程序在每一种设备上自动截取本地化截图。</p>
+
+<p>你必需手动创建 20 (语言) x 6 (设备) x 5 (截图) = 600 张截图。</p>
+
+<p>很难保证所有的事情都是正确的！</p>
+
+<ul>
+<li>所有更新的截图</li>
+<li>没有加载提示</li>
+<li>屏幕中相同的内容</li>
+<li>干净的状态栏</li>
+<li>上传截图 (<a href="https://github.com/fastlane/fastlane/tree/master/deliver"> <code>deliver</code> </a>)</li>
+</ul>
+
+<p>更多关于<a href="https://krausefx.com/blog/creating-perfect-app-store-screenshots-of-your-ios-app"> 创建完美截图的信息 </a>。</p>
+
+<p><code>snapshot</code>完全运行在后台，当电脑在为你截图时，你可以做其它的事情。</p>
+
+<h1 id="注意-新的-snapshot-使用ui-tests-in-xcode-7">注意：新的<code>snapshot</code>使用UI Tests in Xcode 7</h1>
+
+<p>苹果发布的新的 Xcode 版本内建支持了 UI Tests。这项技术使得<code>snapshot</code>比之前更好：不必再处理 UI Automation Javascript 代码，现在你可以使用 Swift 或者 Objective C 来编写截图的代码，并且允许你断点调试。</p>
+
+<p>所以，<code>snapshot</code>从底层重写了代码，但是没有改变公共 API。</p>
+
+<p>详见<a href="https://github.com/fastlane/fastlane/blob/master/snapshot/MigrationGuide.md"> MigrationGuide to 1.0 </a>。</p>
+
+<p>为什么改为 UI Tests ？</p>
+
+<ul>
+<li>UI Automation 过时了</li>
+<li>UI Tests 在未来将会进化支持更多功能</li>
+<li>UI Tests 更容易调试</li>
+<li>UI Tests 使用 Swift 或者 Objective C 编写</li>
+<li>UI Tests 可以使用更干净更好的方式执行</li>
+</ul>
+
+<h1 id="功能">功能</h1>
+
+<ul>
+<li>根据所有的模拟器，不同的语言，创建几百张截图</li>
+<li>只需配置一次，存储在 Git 中</li>
+<li>当电脑在为你截图的时候，你可以做其它的事情</li>
+<li>集成<a href="https://fastlane.tools"> fastlane </a> 和 <a href="https://github.com/fastlane/fastlane/tree/master/deliver"> deliver </a></li>
+<li>生成漂亮的 Web 页面，展示所有设备的截图。最棒的是你可以发送给 Q&amp;A 或者市场的团队</li>
+<li><code>snapshot</code>在截图前会自动等待所有的网络请求结束(我们不想在App Store里有网络加载的截图)</li>
+</ul>
+
+<p>在<code>snapshot</code>成功创建新的截图后，会生成一个漂亮的HTML文件来展示所有的截图，让你能够快速浏览所有截图：</p>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneSnapshot/htmlPagePreviewFade.jpg" alt="alt text" /></p>
+
+<h2 id="为什使用">为什使用？</h2>
+
+<p>该工具会自动切换语言，设备类型和运行每一个组合的UI测试。</p>
+
+<h2 id="为什么要自动化这个过程">为什么要自动化这个过程？</h2>
+
+<ul>
+<li>要花费很多时间来截图</li>
+<li>能够浏览你所有的截图，运行所有可用的模拟器，不需要手动启动上百次</li>
+<li>翻译人员非常容易验证的翻译，这些翻译在应用上下文中是有意义的</li>
+<li>很容易验证本地化的标签是否在所有设备上合适</li>
+<li>可以集成测试：你可以在脚本中测试UI元素</li>
+<li>为每一次应用更新提供新的截图，你客户应得的</li>
+<li>如果截图有个小错误？只需要修正然后从新运行脚本</li>
+</ul>
+
+<h1 id="安装">安装</h1>
+
+<p>安装 gem</p>
+
+<pre><code>sudo gem install snapshot
+</code></pre>
+
+<p>确保你已经安装了 Xcode 最新版本的命令行工具：</p>
+
+<pre><code>xcode-select --install
+</code></pre>
+
+<h1 id="ui-tests">UI Tests</h1>
+
+<h2 id="开始">开始</h2>
+
+<p>这个项目使用苹果新发布的 UIUI Tests。这里不会讲解如何编写脚本的细节。</p>
+
+<p>可以从如下几个链接开始；</p>
+
+<ul>
+<li><a href="https://developer.apple.com/videos/play/wwdc2015/406/">WWDC 2015 Introduction to UI Tests</a></li>
+<li><a href="http://www.mokacoding.com/blog/xcode-7-ui-testing/">A first look into UI Tests</a></li>
+<li><a href="http://masilotti.com/ui-testing-xcode-7/">UI Testing in Xcode 7</a></li>
+<li><a href="https://github.com/ConfusedVorlon/HSTestingBackchannel">HSTestingBackchannel : ‘Cheat’ by communicating directly with your app</a></li>
+<li><a href="https://tisunov.github.io/2015/11/06/automating-app-store-screenshots-generation-with-fastlane-snapshot-and-sketch.html">Automating App Store screenshots using fastlane snapshot and frameit</a></li>
+</ul>
+
+<p>注意：由于没有从 UI Tests 触发截图的官方方法，<code>snapshot</code>使用了一种解决方法(在<a href="https://github.com/fastlane/fastlane/tree/master/snapshot#how-does-it-work"> How Does It Work? </a>中描述)来触发截图。如果你觉得应该是这样的权利，请复制雷达<a href="https://openradar.appspot.com/radar?id=5056366381105152"> 23062925 </a>。(不知道后面一句话是什么鬼意思)</p>
+
+<h1 id="快速开始">快速开始</h1>
+
+<ul>
+<li>在你的项目中创建一个新的 UI Test target(<a href="https://krausefx.com/blog/run-xcode-7-ui-tests-from-the-command-line"> top part of this article </a>)</li>
+<li>在你的项目文件夹中运行<code>snapshot init</code></li>
+<li>添加 ./SnapshotHelper.swift 到你的 UI Test target (你可以移动文件到任何你想的地方)</li>
+<li>(Objective C only) 添加桥接头文件到你的测试类：
+
+<ul>
+<li><code>#import &quot;MYUITests-Swift.h&quot;</code></li>
+<li>桥接头文件使用你的 test target 名称加上 -Swift.h。</li>
+</ul></li>
+<li>在你UI测试类，点击屏幕左下角<code>Record</code>按钮来记录你的交互</li>
+<li>需要截图时，在交互之间调用如下方法：
+
+<ul>
+<li>Swift:<code>snapshot(&quot;01LoginScreen&quot;)</code></li>
+<li>Objective C:<code>[Snapshot snapshot:@&quot;01LoginScreen&quot; waitForLoadingIndicator:YES];</code></li>
+</ul></li>
+<li>将如下代码添加到你的 <code>setUp()</code> 方法中</li>
+</ul>
+
+<p><strong>Swift</strong></p>
+
+<pre><code>let app = XCUIApplication()
+setupSnapshot(app)
+app.launch()
+</code></pre>
+
+<p><strong>Objective C</strong></p>
+
+<pre><code>XCUIApplication *app = [[XCUIApplication alloc] init];
+[Snapshot setupSnapshot:app];
+[app launch];
+</code></pre>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneSnapshot/snapshot.gif" alt="alt text" /></p>
+
+<p>你可以看下项目里面的例子，然后把玩一下。</p>
+
+<h1 id="使用">使用</h1>
+
+<pre><code>snapshot
+</code></pre>
+
+<p>你的截图会默认存储在<code>./screenshots/</code>文件夹。(如果你使用 fastlane 的话，存储在<code>./screenshots/</code>文件夹)</p>
+
+<p>如果在一个设备上运行截图脚本的时候发生了错误，那么那个设备就没有任何截图，然后<code>snapshot</code>会继续下一个设备或者下一种语言。在第一错误发生后停止流程，运行</p>
+
+<pre><code>snapshot --stop_after_first_error
+</code></pre>
+
+<p>默认情况下，<code>snapshot</code>在完成所有工作后会打开 html 。这个步骤可以使用如下命令跳过：</p>
+
+<pre><code>snapshot --stop_after_first_error --skip_open_summary
+</code></pre>
+
+<p>有许多可用的选项来定义如何构建你的应用，比如：</p>
+
+<pre><code>snapshot --scheme &quot;UITests&quot; --configuration &quot;Release&quot;  --sdk &quot;iphonesimulator&quot;
+</code></pre>
+
+<p>在运行<code>snapshot</code>前重新安装应用</p>
+
+<pre><code>snapshot --reinstall_app --app_identifier &quot;tools.fastlane.app&quot;
+</code></pre>
+
+<p>默认情况下，如果 UI Tests 失败了，<code>snapshot</code>会自动尝试运行。这是因为 UI Tests 随机失败(e.g.<a href="https://github.com/fastlane-old/snapshot/issues/372">#372</a>)。你可以使用如下命令来改写这个数字</p>
+
+<pre><code>snapshot --number_of_retries 3
+</code></pre>
+
+<p>在运行<code>snapshot</code>之前添加照片和(或者)视频到模拟器</p>
+
+<pre><code>snapshot --add_photos MyTestApp/Assets/demo.jpg --add_videos MyTestApp/Assets/demo.mp4
+</code></pre>
+
+<p>列出所有可用的选项：</p>
+
+<pre><code>snapshot --help
+</code></pre>
+
+<p>在运行完<code>snapshot</code>，你会得到一个非常漂亮的概要：</p>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneSnapshot/testSummary.png" alt="alt text" /></p>
+
+<h2 id="snapfile">Snapfile</h2>
+
+<p>所有可用的选项可以存储在一个叫做<code>Snapfile</code>的配置文件里面。由于你项目的大部分的值都不会改变，所以推荐存储在这个文件里：</p>
+
+<p>首先确定有<code>Snapfile</code>文件(你可以运行<code>snapshot init</code>得到这个文件)</p>
+
+<p><code>Snapfile</code>文件可以包含所有<code>snapshot --help</code>的可用选项：</p>
+
+<pre><code>scheme &quot;UITests&quot;
+
+devices([
+    &quot;iPhone 6&quot;,
+    &quot;iPhone 6 Plus&quot;,
+    &quot;iPhone 5&quot;,
+    &quot;iPhone 4s&quot;
+])
+
+languages([
+    &quot;en-US&quot;,
+    &quot;de-DE&quot;,
+    &quot;es-ES&quot;,
+    [&quot;pt&quot;, &quot;pt_BR&quot;] # Portuguese with Brazilian locale
+])
+
+launch_arguments([&quot;-username Felix&quot;])
+
+# The directory in which the screenshots should be stored
+output_directory './screenshots'
+
+clear_previous_screenshots true
+
+add_photos [&quot;MyTestApp/Assets/demo.jpg&quot;]
+</code></pre>
+
+<h2 id="完全重置所有模拟器">完全重置所有模拟器</h2>
+
+<p>你可以在终端中使用下面的命令来删除和重新创建所有iOS模拟器：</p>
+
+<pre><code>snapshot reset_simulators
+</code></pre>
+
+<p><strong>警告：</strong>这会删除你所有的模拟器然后使用新的替换！当你运行<code>snapshot</code>遇到非常奇怪的问题时，这非常有用。</p>
+
+<p>你可以使用环境变量<code>SNAPSHOT_FORCE_DELETE</code>来取消删除前要求确认的信息。</p>
+
+<h2 id="更新-snapshot-的-helpers">更新 snapshot 的 helpers</h2>
+
+<p>一些更新要求 helper 的文件更新。<code>snapshot</code>会自动警告你，然后告诉你怎么升级。</p>
+
+<p>基本的你可以运行</p>
+
+<pre><code>snapshot update
+</code></pre>
+
+<p>为了更新<code>SnapshotHelper.swift</code>文件。如果你修改了你的<code>SnapshotHelper.swift</code>文件，然后想要手动更新文件，查看<a href="https://github.com/fastlane/fastlane/blob/master/snapshot/lib/assets/SnapshotHelper.swift"> SnapshotHelper.swift </a>。</p>
+
+<h2 id="启动参数">启动参数</h2>
+
+<p>你可以在你应用启动的时候提供额外的参数。这些字符串通过<code>NSProcessInfo.processInfo().arguments</code>在你的应用中(eg.不是在 testing target 中)将会可用。另外使用 user-default 语法(<code>-key value</code>)，它们将会在<code>NSUserDefaults.standardUserDefaults()</code>中当作键值对可用。</p>
+
+<pre><code>launch_arguments([
+    &quot;-firstName Felix -lastName Krause&quot;
+])
+
+name.text = NSUserDefaults.standardUserDefaults().stringForKey(&quot;firstName&quot;)
+// name.text = &quot;Felix&quot;
+</code></pre>
+
+<p><code>snapshot</code>包含<code>-FASTLANE_SNAPSHOT YES</code>，会为 user default 设置一个临时的健<code>FASTLANE_SNAPSHOT</code>，你可以使用这个来检测<code>snapshot</code>何时运行你的应用。</p>
+
+<pre><code>if NSUserDefaults.standardUserDefaults().boolForKey(&quot;FASTLANE_SNAPSHOT&quot;) {
+    // runtime check that we are in snapshot mode
+}
+</code></pre>
+
+<p>指定多个字符串参数，<code>snapshot</code>会为每种参数、设备、语言的组合截图。当你需要比较相同截图不同功能标识、动态文本大小、不懂数据集时非常有用。</p>
+
+<pre><code># Snapfile for A/B Test Comparison
+launch_arguments([
+    &quot;-secretFeatureEnabled YES&quot;,
+    &quot;-secretFeatureEnabled NO&quot;
+])
+</code></pre>
+
+<h2 id="如何工作的">如何工作的？</h2>
+
+<p>最简单的解决方法就是在文件里面呈现 UIWindow。但那是不可能的，因为 UI Tests 并不运行在主线程上。所以<code>snapshot</code>使用了不同的方法：</p>
+
+<p>当你在 Xcode 中运行单元测试时，会生成一个 plist 文件，记录测试过程中(<a href="http://michele.io/test-logs-in-xcode"> 详细信息 </a>)发生的所有事件。Xcode 会在这些事件之前，之后以及运行时都会生成截图。没有办法手动触发截图事件。这些截图和plist文件存储在 DerivedData 目录，<code>snapshot</code>存储在临时文件夹。</p>
+
+<p>当用户在 UI Tests(Swift 或者 Objective C)中调用<code>snapshot(...)</code>时，脚本实际上只是执行了一次旋转到.Unknown，实际上对应用没有任何影响，但是足够来触发截图了。这对应用程序没有任何影响，在你的测试中也不会做任何事情。目标就是找出一些用户永远不会触发的事件，所以这样我们就能知道是来自<code>snapshot</code>了。</p>
+
+<p><code>snapshot</code>然后就会迭代所有的测试的事件，然后检查我们在哪里做了这个奇怪的旋转。一旦<code>snapshot</code>找到了所有由<code>snapshot</code>触发的事件，它会收集应用所有实际截图的文件名的有序序列。</p>
+
+<p>在测试的输出中，Swift的<code>snapshot</code>函数会打印如下格式的输出：</p>
+
+<pre><code>snapshot: [some random text here]
+</code></pre>
+
+<p><code>snapshot</code>使用正则表达式找到这些条目。在终端中<code>snapshot</code>输出的数目和plist文件中<code>snapshot</code>的事件数目应该是一样的。知道了这些，<code>snapshot</code>会自动匹配这两个序列来分辨所有这些截图的名字。然后它们会被复制到输出目录然后根据语言和设备分开。</p>
+
+<p>两样东西必需从<code>snapshot</code>传递给<code>xcodebuild</code>命令行工具：</p>
+
+<ul>
+<li>设备类型通过<code>xcodebuild</code>参数的<code>destination</code>参数传递</li>
+<li>语言通过一个临时文件传递，这个文件在运行测试之前由<code>snapshot</code>写入。然后在 UI Tests 启动应用前读入。</li>
+</ul>
+
+<p>如果你找到了更好的方法来做所有这里列出的工作，请提交一个 issue 到 GitHub 或者甚至是 pull request。</p>
+
+<p>同样，feel free to duplicate radar <a href="https://openradar.appspot.com/radar?id=5056366381105152">23062925</a>。</p>
+
+<h1 id="提示">提示</h1>
+
+<h2 id="fastlane-工具链"><code>fastlane</code>工具链</h2>
+
+<ul>
+<li><a href="https://fastlane.tools"> <code>fastlane</code> </a>：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/deliver"> <code>deliver</code> </a>：将你的应用、截图、元数据上传到App Store</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/frameit"> <code>frameit</code> </a>：快速将你的截图放入到适合的设备框中</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/pem"> <code>pem</code> </a>：自动生成和更新你的推送通知证书</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/sigh"> <code>sigh</code> </a>：管理你的 provisioning profiles</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/produce"> <code>produce</code> </a>：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/cert"> <code>cert</code> </a>：自动创建和维护iOS的 code signing certificates</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> <code>spaceship</code> </a>：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/pilot"> <code>pilot</code> </a>：管理你TestFlight测试人员的最好方式，使用终端构建</li>
+<li><a href="https://github.com/fastlane/boarding"> <code>boarding</code> </a>：邀请你 TestFlight 的beta测试人员的最简单方式</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/gym"> <code>gym</code> </a>：构建你iOS应用程序</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/scan"> <code>scan</code> </a>：为你iOS和Mac应用运行测试的最简单方法</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/match"> <code>match</code> </a>：使用Git在你的团队中同步你的 certificates 和 profiles</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/supply"> <code>supply</code> </a>：将你的Android应用和数据上传到 Google Play</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/screengrab"> <code>screengrab</code> </a>：Android版<code>snapshot</code>，一样的功能</li>
+</ul>
+
+<h2 id="将截图框起来">将截图框起来</h2>
+
+<p>如果你想给截图周围加一个边框，甚至是在顶部添加一个标题，查看<a href="https://github.com/fastlane/fastlane/tree/master/frameit"> frameit </a>。</p>
+
+<h2 id="可用的语言代码">可用的语言代码</h2>
+
+<pre><code>ALL_LANGUAGES = [&quot;da&quot;, &quot;de-DE&quot;, &quot;el&quot;, &quot;en-AU&quot;, &quot;en-CA&quot;, &quot;en-GB&quot;, &quot;en-US&quot;, &quot;es-ES&quot;, &quot;es-MX&quot;, &quot;fi&quot;, &quot;fr-CA&quot;, &quot;fr-FR&quot;, &quot;id&quot;, &quot;it&quot;, &quot;ja&quot;, &quot;ko&quot;, &quot;ms&quot;, &quot;nl&quot;, &quot;no&quot;, &quot;pt-BR&quot;, &quot;pt-PT&quot;, &quot;ru&quot;, &quot;sv&quot;, &quot;th&quot;, &quot;tr&quot;, &quot;vi&quot;, &quot;zh-Hans&quot;, &quot;zh-Hant&quot;]
+</code></pre>
+
+<p>获取更多关于语言和本地代码的信息，参阅<a href="https://developer.apple.com/library/ios/documentation/MacOSX/Conceptual/BPInternational/LanguageandLocaleIDs/LanguageandLocaleIDs.html"> Internationalization and Localization Guide </a>。</p>
+
+<h2 id="使用干净的状态栏">使用干净的状态栏</h2>
+
+<p>你可以使用<a href="https://github.com/shinydevelopment/SimulatorStatusMagic"> SimulatorStatusMagic </a>来清理状态栏。</p>
+
+<h2 id="编辑-snapfile">编辑<code>Snapfile</code></h2>
+
+<p>将语法高亮改为Ruby。</p>
+
+<h2 id="模拟器没有启动应用">模拟器没有启动应用</h2>
+
+<p>当应用程序启动后，App直接死掉。可能有两个问题：</p>
+
+<ul>
+<li>模拟器处于损坏的状态，你需要重新创建。你可以使用<code>snapshot reset_simulators</code>来重置所有的模拟器(这将会删除所有安装的App)</li>
+<li>重启往往非常有用</li>
+</ul>
+
+<h2 id="检测语言">检测语言</h2>
+
+<p>使用如下代码可以检测你当前测试使用的本地化：</p>
+
+<pre><code>You can access the language using the `deviceLanguage` variable.
+</code></pre>
+
+<h1 id="帮助">帮助？</h1>
+
+<p>请提交 issue 到 GitHub，并提供你关于设置的信息。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/fastlane/">Fastlane</a>
+
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/automate/">Automate</a>
+
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/snapshot/">Snapshot</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/06/fastlane---frameit/" data-tooltip="Fastlane - Frameit">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/06/fastlane---deliver/" data-tooltip="Fastlane - Deliver">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---snapshot%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---snapshot%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---snapshot%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/06/fastlane---frameit/" data-tooltip="Fastlane - Frameit">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/06/fastlane---deliver/" data-tooltip="Fastlane - Deliver">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---snapshot%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---snapshot%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---snapshot%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---snapshot%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---snapshot%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---snapshot%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2016\/06\/fastlane---snapshot\/';
+          
+            this.page.identifier = '\/2016\/06\/fastlane---snapshot\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

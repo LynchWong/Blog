@@ -1,0 +1,939 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Fastlane - 示例</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="说明：之前把关于 Fastlane 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+">
+    <meta property="og:description" content="说明：之前把关于 Fastlane 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Fastlane - 示例">
+    <meta property="og:url" content="/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="说明：之前把关于 Fastlane 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Fastlane - 示例
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2016-07-07T23:08:32Z">
+    
+  
+  
+  
+  
+    2016-07-07 23:08:32
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p>
+
+<p>既然文档什么的都整完了，是时候写自己的 <code>lane</code> 了。最近花了点时间研究了下各个工具，还是挺方便好用的。这里我把我自己的配置过程、以及一些自己的体会记录下来。</p>
+
+<p>首先说明下我的配置满足的需求：</p>
+
+<ul>
+<li>管理团队的证书，包括开发、发布、AdHoc</li>
+<li>能够上传App到 ITC(iTunes Connect) 进行审核</li>
+<li>能够使用 InHouse 证书打包，然后上传服务器</li>
+</ul>
+
+<p>Fastlane 是个工具集，里面所有的工具都可以单独使用。</p>
+
+<h1 id="matchfile-文件"><strong>Matchfile</strong>文件：</h1>
+
+<pre><code>git_url &quot;https://LynchWong@bitbucket.org/LynchWong/eplayermatch.git&quot;
+
+type &quot;development&quot; # The default type, can be: appstore, adhoc or development
+
+app_identifier &quot;com.lynch.ePlayer&quot; 
+username &quot;lynch.wong@me.com&quot; # Your Apple Developer Portal username
+
+# For all available options run `match --help`
+# Remove the # in the beginning of the line to enable the other options
+</code></pre>
+
+<p>首先我直接进入到项目文件夹直接运行 <code>fastlane init</code> 进行初始化，具体做了些什么工作参见 <a href="https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Guide.md">这里</a> 或者 <a href="http://lynchwong.com/2016/06/11/Fastlane-Guide/">这里</a>。</p>
+
+<p>完成之后运行 <code>match init</code> 来配置 <code>Match</code>。这一步你需要一个私有的 Repository 。之后我运行了 <code>match development</code>、<code>match adhoc</code>、<code>match appstore</code> 创建证书和配置文件。完成之后在 <code>fastlane</code> 文件夹里面生成了 <code>Matchfile</code> 文件，如上面所示，这里我做了一些小修改。</p>
+
+<p>关于 <code>Match</code> 的说明，参考 <a href="https://github.com/fastlane/fastlane/tree/master/match">这里</a> 或者 <a href="http://lynchwong.com/2016/06/28/Fastlane-Match/">这里</a>。貌似 <code>Match</code> 这里不对企业帐号的证书进行管理，我这里没有尝试。我用企业证书打包时是使用的 <code>cert</code> 和 <code>sigh</code>。</p>
+
+<h1 id="appfile-文件"><strong>Appfile</strong>文件</h1>
+
+<pre><code>app_identifier &quot;com.lynch.ePlayer&quot; # The bundle identifier of your app
+apple_id &quot;lynch.wong@me.com&quot; # Your Apple email address
+team_id &quot;&quot;  # Developer Portal Team ID
+
+for_platform :ios do
+    team_id ''
+    for_lane :ent do
+        app_identifier 'com.lynch.ePlayerEnt'
+        apple_id '企业帐号'
+    end
+end
+
+# you can even provide different app identifiers, Apple IDs and team names per lane:
+# More information: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Appfile.md
+</code></pre>
+
+<p>关于 <code>Appfile</code> 文件可以参考 <a href="https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Appfile.md">这里</a> 。</p>
+
+<p>这里我对lane <code>ent</code> 使用不同的 app_identifier 和 apple_id 。我这里的lane <code>ent</code> 就是使用 InHouse 证书进行打包。</p>
+
+<h1 id="fastfile-文件"><strong>Fastfile</strong>文件</h1>
+
+<pre><code>    # coding: utf-8
+    # Customise this file, documentation can be found here:
+    # https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+    # All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
+    # can also be listed using the `fastlane actions` command
+
+    # Change the syntax highlighting to Ruby
+    # All lines starting with a # are ignored when running `fastlane`
+
+    # If you want to automatically update fastlane if a new version is available:
+    # update_fastlane
+
+    # This is the minimum version number required.
+    # Update this, if you use features of a newer version
+    fastlane_version &quot;1.97.2&quot;
+
+    default_platform :ios
+
+    platform :ios do
+        before_all do
+            # ENV[&quot;SLACK_URL&quot;] = &quot;https://hooks.slack.com/services/...&quot;
+            # cocoapods
+
+        end
+
+        desc &quot;安装 FixCode 插件，禁用 Xcode 中的 Fix Issue 按钮。&quot;
+        lane :xcode do
+            install_xcode_plugin(
+                url: &quot;https://github.com/fastlane/FixCode/releases/download/0.2.0/FixCode.xcplugin.zip&quot;
+            )
+        end
+
+        desc &quot;使用 InHouse 证书打包。&quot;
+        lane :ent do
+            produce(
+                skip_itc: true
+            )
+            cert
+            sigh(
+                force: false
+            )
+            gym(
+                workspace: &quot;ePlayer.xcworkspace&quot;,
+                configuration: &quot;Release&quot;,
+                scheme: &quot;ePlayer&quot;,
+                silent: true,
+                clean: false,
+                output_directory: &quot;IPA&quot;,
+                output_name: &quot;ePlayerEnt.ipa&quot;,
+                use_legacy_build_api: true,
+            )
+        end
+
+        desc &quot;证书管理，不能管理企业帐号的证书。&quot;
+        lane :iosmatch do
+            match(app_identifier: &quot;com.lynch.ePlayer&quot;, type: &quot;development&quot;, readonly: true)
+            match(app_identifier: &quot;com.lynch.ePlayer&quot;, type: &quot;adhoc&quot;, readonly: true)
+            match(app_identifier: &quot;com.lynch.ePlayer&quot;, type: &quot;appstore&quot;, readonly: true)
+        end
+
+        desc &quot;Runs all the tests&quot;
+        lane :test do
+            scan
+        end
+
+        desc &quot;Submit a new Beta Build to Apple TestFlight&quot;
+        desc &quot;This will also make sure the profile is up to date&quot;
+        lane :beta do
+            # match(app_identifier: &quot;com.lynch.ePlayer&quot;, type: &quot;appstore&quot;, readonly: true) # more information: https://codesigning.guide
+            gym(
+                workspace: &quot;ePlayer.xcworkspace&quot;,
+                configuration: &quot;Release&quot;,
+                scheme: &quot;ePlayer&quot;,
+                silent: true,
+                clean: false,
+                output_directory: &quot;IPA&quot;,
+                output_name: &quot;ePlayerTestFlight.ipa&quot;,
+                use_legacy_build_api: true,
+            ) # Build your app - more options available
+            pilot
+
+            # sh &quot;your_script.sh&quot;
+            # You can also use other beta testing services here (run `fastlane actions`)
+        end
+
+        desc &quot;Deploy a new version to the App Store&quot;
+        lane :appstore do
+            # match(type: &quot;appstore&quot;)
+            # snapshot
+            gym(scheme: &quot;ePlayer&quot;) # Build your app - more options available
+            deliver(force: true)
+            # frameit
+        end
+
+        # You can define as many lanes as you want
+
+        after_all do |lane|
+            # This block is called, only if the executed lane was successful
+
+            # slack(
+            #   message: &quot;Successfully deployed new App Update.&quot;
+            # )
+        end
+
+        error do |lane, exception|
+            # slack(
+            #   message: exception.message,
+            #   success: false
+            # )
+        end
+    end
+
+
+    # More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+    # All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
+
+    # fastlane reports which actions are used
+    # No personal data is recorded. Learn more at https://github.com/fastlane/enhancer
+</code></pre>
+
+<h2 id="lane-ent">lane :ent</h2>
+
+<p>使用 InHouse 证书来打包。首先使用 produce，设置 skip_itc: true 不会在 ITC 上进行创建App，因为是企业帐号。然后使用 <code>cert</code> 和 <code>sigh</code> 进行签名创建证书(不使用 <code>Match</code> 参考前面)。然后就是一些打包的设置。</p>
+
+<h2 id="lane-xcode">lane :xcode</h2>
+
+<p>安装 Xcode 的创建，主要是禁止使用 Xcode 来管理证书。至于为什么，参考 <a href="https://github.com/fastlane/fastlane/tree/master/fastlane/docs/Codesigning">这里</a>，不再赘述。</p>
+
+<h2 id="lane-iosmatch">lane :iosmatch</h2>
+
+<p>主要用来获取安装相关证书，这里设置了 readonly: true，只会获取已经存在的签名和证书，而不会去生成一个新的。</p>
+
+<p>另外几个 lane 基本就是生成<strong>Fastfile</strong>文件默认配置的。没什么好说的。我尝试运行了 <code>beta</code> lane，主要就是多了 pilot，将打包好的上传到 TestFlight 进行测试。然而我发现 pilot 的几个命令也都是针对外部测试的，但是外部测试也是需要提交审核的，这个时间要多久我不知道。而内部测试也只有25个名额，每个名额10台设备。所以我觉得这个 pilot 没什么用啊，除此之外，另外一个工具 Boarding 进行配置的时候 Heroku 一直报错。所以我觉得还不如使用企业帐号打包，然后运行脚本(脚本这里就不提供了)，将IPA放到服务器提供下载安装。小团队还不如打包 AdHoc，不过使用 pilot 进行内部测试也很好。</p>
+
+<p><code>appstore</code> lane 没有尝试，留到后面发版的时候使用。</p>
+
+<h1 id="总结">总结</h1>
+
+<p><a href="https://github.com/fastlane/fastlane/blob/master/fastlane/docs/README.md">这里还有很多文档可以参考</a>，这些文档没有翻译。每个工具都可以使用 <code>--help</code> 命令来查看帮助，很方便，看看就懂了。另外一点要提的就是你项目的 <code>.gitignore</code>，可以参考 <a href="https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Gitignore.md">这里</a>。比如我打包的IPA是在项目文件夹里面的，所以我的 <code>.gitignore</code> 还会忽略 <code>IPA</code> 这个文件夹。</p>
+
+<p>翻译太花时间了，以后应该不会翻译了，以上。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/fastlane/">Fastlane</a>
+
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/automate/">Automate</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/" data-tooltip="UILabel 使用 Autolayout 自动换行的BUG">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/06/fastlane---match/" data-tooltip="Fastlane - Match">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f07%2ffastlane---%25E7%25A4%25BA%25E4%25BE%258B%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f07%2ffastlane---%25E7%25A4%25BA%25E4%25BE%258B%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f07%2ffastlane---%25E7%25A4%25BA%25E4%25BE%258B%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/" data-tooltip="UILabel 使用 Autolayout 自动换行的BUG">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/06/fastlane---match/" data-tooltip="Fastlane - Match">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f07%2ffastlane---%25E7%25A4%25BA%25E4%25BE%258B%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f07%2ffastlane---%25E7%25A4%25BA%25E4%25BE%258B%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f07%2ffastlane---%25E7%25A4%25BA%25E4%25BE%258B%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f07%2ffastlane---%25E7%25A4%25BA%25E4%25BE%258B%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f07%2ffastlane---%25E7%25A4%25BA%25E4%25BE%258B%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f07%2ffastlane---%25E7%25A4%25BA%25E4%25BE%258B%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2016\/07\/fastlane---%E7%A4%BA%E4%BE%8B\/';
+          
+            this.page.identifier = '\/2016\/07\/fastlane---%E7%A4%BA%E4%BE%8B\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

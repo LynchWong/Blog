@@ -1,0 +1,1055 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Swift之访问控制</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="访问控制可以限定其他源文件或模块中代码对你代码的访问级别。这个特性可以让我们隐藏功能实现的一些细
+节,并且可以明确的申明我们提供给其他人的接口中哪些部分是他们可以访问和使用的。
+">
+    <meta property="og:description" content="访问控制可以限定其他源文件或模块中代码对你代码的访问级别。这个特性可以让我们隐藏功能实现的一些细
+节,并且可以明确的申明我们提供给其他人的接口中哪些部分是他们可以访问和使用的。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Swift之访问控制">
+    <meta property="og:url" content="/2015/03/swift%E4%B9%8B%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="访问控制可以限定其他源文件或模块中代码对你代码的访问级别。这个特性可以让我们隐藏功能实现的一些细
+节,并且可以明确的申明我们提供给其他人的接口中哪些部分是他们可以访问和使用的。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Swift之访问控制
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-03-07T23:24:25Z">
+    
+  
+  
+  
+  
+    2015-03-07 23:24:25
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>访问控制可以限定其他源文件或模块中代码对你代码的访问级别。这个特性可以让我们隐藏功能实现的一些细
+节,并且可以明确的申明我们提供给其他人的接口中哪些部分是他们可以访问和使用的。
+</p>
+
+<p>你可以明确地给单个类型(类、结构体、枚举)设置访问级别,也可以给这些类型的属性、函数、初始化方
+法、基本类型、下标索引等设置访问级别。协议也可以被限定在一定的范围内使用,包括协议里的全局常量、变
+量和函数。</p>
+
+<p>在提供了不同访问级别的同时,Swift还为某些典型场景提供了默认的访问级别,这样就不需要我们在每段代码中 都申明显式访问级别。其实,如果只是开发一个单目标应用程序,我们完全可以不用申明代码的显式访问级别。</p>
+
+<p>注意:简单起见,代码中可以设置访问级别的特性(属性、基本类型、函数等),在下面的章节中我们会以“实
+体”代替。</p>
+
+<h2 id="模块和源文件">模块和源文件</h2>
+
+<p>Swift 中的访问控制模型基于模块和源文件这两个概念。</p>
+
+<p>模块指的是以独立单元构建和发布的 Framework 或 Application 。在Swift 中的一个模块可以使用 import 关键 字引入另外一个模块。</p>
+
+<p>在 Swift 中,Xcode的每个构建目标(比如 Framework 或 app bundle )都被当作模块处理。如果你是为了实 现某个通用的功能,或者是为了封装一些常用方法而将代码打包成独立的 Framework ,这个 Framework 在 S wift 中就被称为模块。当它被引入到某个 app 工程或者另外一个 Framework 时,它里面的一切(属性、函数 等)仍然属于这个独立的模块。</p>
+
+<p>源文件指的是 Swift 中的 Swift File ,就是编写 Swift 源代码的文件,它通常属于一个模块。尽管一般我们将不 同的 类 分别定义在不同的源文件中,但是同一个源文件可以包含多个 类 和 函数 的定义。</p>
+
+<h2 id="访问级别">访问级别</h2>
+
+<p>Swift 为代码中的实体提供了三种不同的访问级别。这些访问级别不仅与源文件中定义的实体相关,同时也与源文 件所属的模块相关。</p>
+
+<ul>
+<li>public:可以访问自己模块中源文件里的任何实体,别人也可以通过引入该模块来访问源文件里的所有实 体。通常情况下, Framework 中的某个接口是可以被任何人使用时,你可以将其设置为 public 级别。</li>
+<li>internal:可以访问自己模块中源文件里的任何实体,但是别人不能访问该模块中源文件里的实体。通常情 况下,某个接口或 Framework 作为内部结构使用时,你可以将其设置为 internal 级别。</li>
+<li>private:只能在当前源文件中使用的实体,称为私有实体。使用 private 级别,可以用作隐藏某些功能的 实现细节。</li>
+</ul>
+
+<p>public 为最高级的访问级别，private 为最低级的访问级别。</p>
+
+<p>注意:Swift中的 private 访问和其他语言中的 private 访问不太一样,它的范围限于整个源文件,而不是声 明。这就意味着,一个类可以访问定义该类的源文件中定义的所有 private 实体,但是如果一个类的扩展 是定义在独立的源文件中,那么就不能访问这个类的 private 成员。</p>
+
+<h3 id="访问级别的使用原则">访问级别的使用原则</h3>
+
+<p>Swift 中的访问级别遵循一个使用原则:访问级别统一性。 比如说:</p>
+
+<ul>
+<li>一个 public 访问级别的变量,不能将它的类型定义为 internal 和 private 。因为变量可以被任何人访问,但 是定义它的类型不可以,所以这样就会出现错误。</li>
+</ul>
+
+<h3 id="默认访问级别">默认访问级别</h3>
+
+<p>如果你不为代码中的所有实体定义显式访问级别,那么它们默认为 internal 级别。在大多数情况下,我们不需要 设置实体的显式访问级别。因为我们一般都是在开发一个 app bundle。</p>
+
+<h3 id="单目标应用程序的访问级别">单目标应用程序的访问级别</h3>
+
+<p>当你编写一个单目标应用程序时,该应用的所有功能都是为该应用服务,不需要提供给其他应用或者模块使 用,所以我们不需要明确设置访问级别,使用默认的访问级别 internal 即可。但是如果你愿意,你也可以使用 private 级别,用于隐藏一些功能的实现细节。</p>
+
+<h3 id="framework的访问级别">Framework的访问级别</h3>
+
+<p>当你开发 Framework 时,就需要把一些对外的接口定义为 public 级别,以便其他人导入该 Framework 后可以
+正常使用其功能。这些被你定义为 public 的接口,就是这个 Framework 的API。</p>
+
+<p>注意: Framework 的内部实现细节依然可以使用默认的 internal 级别,或者也可以定义为 private 级别。只
+有当你想把它作为 API 的一部分的时候,才将其定义为 public 级别。</p>
+
+<h3 id="单元测试目标的访问级别">单元测试目标的访问级别</h3>
+
+<p>当你的app有单元测试目标时,为了方便测试,测试模块需要能访问到你app中的代码。默认情况下只有 public 级别的实体才可以被其他模块访问。然而,如果在引入一个生产模块时使用 @testable 注解,然后用带测试的方 式编译这个生产模块,单元测试目标就可以访问所有 internal 级别的实体。</p>
+
+<h2 id="访问控制语法">访问控制语法</h2>
+
+<p>通过修饰符 public 、 internal 、 private 来声明实体的访问级别:</p>
+
+<pre><code>public class SomePublicClass {} 
+internal class SomeInternalClass {} 
+private class SomePrivateClass {}
+public var somePublicVariable = 0 
+internal let someInternalConstant = 0 
+private func somePrivateFunction() {}
+</code></pre>
+
+<p>除非有特殊的说明,否则实体都使用默认的访问级别 internal ,可以查阅默认访问级别 (页 0)这一节。这意味着 在不使用修饰符声明显式访问级别的情况下, SomeInternalClass 和 someInternalConstant 仍然拥有隐式的访 问级别 internal :</p>
+
+<pre><code>class SomeInternalClass {} // 隐式访问级别 internal 
+var someInternalConstant = 0 // 隐式访问级别 internal
+</code></pre>
+
+<h2 id="自定义类型">自定义类型</h2>
+
+<p>如果想为一个自定义类型申明显式访问级别,那么要明确一点。那就是你要确保新类型的访问级别和它实际的作 用域相匹配。比如说,如果你定义了一个 private 类,那这个类就只能在定义它的源文件中当作属性类型、函数 参数或者返回类型使用。</p>
+
+<p>类的访问级别也可以影响到类成员(属性、函数、初始化方法等)的默认访问级别。如果你将类申明为 private 类,那么该类的所有成员的默认访问级别也会成为 private 。如果你将类申明为 public 或者 internal 类(或者不 明确的申明访问级别,而使用默认的 internal 访问级别),那么该类的所有成员的访问级别是 internal 。</p>
+
+<p>注意:上面提到,一个 public 类的所有成员的访问级别默认为 internal 级别,而不是 public 级别。如果你想 将某个成员申明为 public 级别,那么你必须使用修饰符明确的声明该成员。这样做的好处是,在你定义公共接 口API的时候,可以明确的选择哪些属性或方法是需要公开的,哪些是内部使用的,可以避免将内部使用的属性 方法公开成公共API的错误。</p>
+
+<pre><code>public class SomePublicClass { // 显式的 public 类
+    public var somePublicProperty = 0 // 显式的 public 类成员 
+    var someInternalProperty = 0 // 隐式的 internal 类成员 
+    private func somePrivateMethod() {} // 显式的 private 类成员
+}
+class SomeInternalClass { // 隐式的 internal 类
+    var someInternalProperty = 0 // 隐式的 internal 类成员 
+    private func somePrivateMethod() {} // 显式的 private 类成员
+}
+private class SomePrivateClass { // 显式的 private 类
+    var somePrivateProperty = 0 // 隐式的 private 类成员
+    func somePrivateMethod() {} // 隐式的 private 类成员
+}
+</code></pre>
+
+<h3 id="元组类型">元组类型</h3>
+
+<p>元组的访问级别使用是所有类型的访问级别使用中最为严谨的。比如说,如果你构建一个包含两种不同类型元素 的元组,其中一个元素类型的访问级别为 internal ,另一个为 private 级别,那么这个元组的访问级别为 private 。也就是说元组的访问级别与元组中访问级别最低的类型一致。</p>
+
+<p>注意:元组不同于类、结构体、枚举、函数那样有单独的定义。元组的访问级别是在它被使用时自动推导出的,而不是明确的申明。</p>
+
+<h3 id="函数类型">函数类型</h3>
+
+<p>函数的访问级别需要根据该函数的参数类型和返回类型的访问级别得出。如果根据参数类型和返回类型得出的函
+数访问级别不符合默认上下文,那么就需要明确地申明该函数的访问级别。</p>
+
+<p>下面的例子定义了一个名为 someFunction 全局函数,并且没有明确地申明其访问级别。也许你会认为该函数应 该拥有默认的访问级别 internal ,但事实并非如此。事实上,如果按下面这种写法,代码是无法编译通过的:</p>
+
+<pre><code>func someFunction() -&gt; (SomeInternalClass, SomePrivateClass) {
+    // function implementation goes here
+}
+</code></pre>
+
+<p>我们可以看到,这个函数的返回类型是一个元组,该元组中包含两个自定义的类(可查阅自定义类型)。其中一个类的访问级别是 internal ,另一个的访问级别是 private ,所以根据元组访问级别的原则,该元 组的访问级别是 private (元组的访问级别与元组中访问级别最低的类型一致)。</p>
+
+<p>因为该函数返回类型的访问级别是 private ,所以你必须使用 private 修饰符,明确的声明该函数:</p>
+
+<pre><code>private func someFunction() -&gt; (SomeInternalClass, SomePrivateClass) {
+    // function implementation goes here
+}
+</code></pre>
+
+<p>将该函数申明为 public 或 internal ,或者使用默认的访问级别 internal 都是错误的,因为如果把该函数当做 public 或 internal 级别来使用的话,是无法得到 private 级别的返回值的。</p>
+
+<h3 id="枚举类型">枚举类型</h3>
+
+<p>枚举中成员的访问级别继承自该枚举,你不能为枚举中的成员单独申明不同的访问级别。</p>
+
+<p>比如下面的例子,枚举 CompassPoint 被明确的申明为 public 级别，那么它的成员 North，South，East，West的访问级别同样也是public：</p>
+
+<pre><code>public enum CompassPoint {
+    case North
+    case South
+    case East
+    case West
+}
+</code></pre>
+
+<h3 id="原始值和关联值">原始值和关联值</h3>
+
+<p>枚举定义中的任何原始值或关联值的类型都必须有一个访问级别,这个级别至少要不低于枚举的访问级别。比如 说,你不能在一个 internal 访问级别的枚举中定义 private 级别的原始值类型。</p>
+
+<h3 id="嵌套类型">嵌套类型</h3>
+
+<p>如果在 private 级别的类型中定义嵌套类型,那么该嵌套类型就自动拥有 private 访问级别。如果在 public 或者 internal 级别的类型中定义嵌套类型,那么该嵌套类型自动拥有 internal 访问级别。如果想让嵌套类型拥有 public 访问级别,那么需要明确地申明该嵌套类型的访问级别。</p>
+
+<h2 id="子类">子类</h2>
+
+<p>子类的访问级别不得高于父类的访问级别。比如说,父类的访问级别是 internal ,子类的访问级别就不能申明为 public 。</p>
+
+<p>此外,在满足子类不高于父类访问级别以及遵循各访问级别作用域(即模块或源文件)的前提下,你可以重写任
+意类成员(方法、属性、初始化方法、下标索引等)。</p>
+
+<p>如果我们无法直接访问某个类中的属性或函数等,那么可以继承该类,从而可以更容易的访问到该类的类成 员。下面的例子中,类 A 的访问级别是 public ,它包含一个函数 someMethod ,访问级别为 private 。类 B 继承类 A ,并且访问级别申明为 internal ,但是在类 B 中重写了类 A 中访问级别为 private 的方法 someMet hod ,并重新申明为 internal 级别。通过这种方式,我们就可以访问到某类中 private 级别的类成员,并且可以 重新申明其访问级别,以便其他人使用:</p>
+
+<pre><code>public class A {
+    private func someMethod() {}
+}
+
+internal class B: A {
+    override internal func someMethod() {}
+}
+</code></pre>
+
+<p>只要满足子类不高于父类访问级别以及遵循各访问级别作用域的前提下(即 private 的作用域在同一个源文件中, internal 的作用域在同一个模块下),我们甚至可以在子类中,用子类成员访问父类成员,哪怕父类成员的 访问级别比子类成员的要低:</p>
+
+<pre><code>public class A {
+    private func someMethod() {}
+}
+
+internal class B: A {
+    override internal func someMethod() {
+    super.someMethod() }
+}
+</code></pre>
+
+<p>因为父类 A 和子类 B 定义在同一个源文件中,所以在类 B 中可以在重写的 someMethod 方法中调用 super.someMethod()。</p>
+
+<h2 id="常量-变量-属性-下标">常量、变量、属性、下标</h2>
+
+<p>常量、变量、属性不能拥有比它们的类型更高的访问级别。比如说,你定义一个 public 级别的属性,但是它的类
+型是 private 级别的,这是编译器所不允许的。同样,下标也不能拥有比索引类型或返回类型更高的访问级别。</p>
+
+<p>如果常量、变量、属性、下标索引的定义类型是 private 级别的,那么它们必须要明确的申明访问级别为 private:</p>
+
+<pre><code>private var privateInstance = SomePrivateClass()
+</code></pre>
+
+<h3 id="getter和setter">Getter和Setter</h3>
+
+<p>常量、变量、属性、下标索引的 Getters 和 Setters 的访问级别继承自它们所属成员的访问级别。</p>
+
+<p>Setter 的访问级别可以低于对应的 Getter 的访问级别,这样就可以控制变量、属性或下标索引的读写权限。在
+var 或 subscript 定义作用域之前,你可以通过 private(set) 或 internal(set) 先为它们的写权限申明一个较低的 访问级别。</p>
+
+<p>注意:这个规定适用于用作存储的属性或用作计算的属性。即使你不明确地申明存储属性的 Getter 、 Sette r ,Swift也会隐式的为其创建 Getter 和 Setter ,用于对该属性进行读取操作。使用 private(set) 和 interna l(set) 可以改变Swift隐式创建的 Setter 的访问级别。这对计算属性也同样适用。</p>
+
+<p>下面的例子中定义了一个名为 TrackedString 的结构体,它记录了 value 属性被修改的次数:</p>
+
+<pre><code>struct TrackedString {
+    private(set) var numberOfEdits = 0
+    var value: String = &quot;&quot; {
+        didSet {
+            numberOfEdits++
+        }
+    }
+}
+</code></pre>
+
+<p>TrackedString 结构体定义了一个用于存储 String 类型的属性 value，并将初始化值设为&rdquo;&ldquo;(即一个空字符串)。该结构体同时也定义了另一个用于存储 Int 类型的属性名 numberOfEdits，它用于记录属性 value 被修改的次数。这个功能的实现通过属性 value 的 didSet 方法实现，每当给 value 赋新值时就会调用 didSet 方法，然后将 numberOfEdits 的值加一。</p>
+
+<p>结构体 TrackedString 和它的属性 value 均没有申明显式访问级别，所以他们都拥有默认的访问级别 internal。但是该结构体的 numberOfEdits 属性使用 private(set) 修饰符进行申明，这意味着 numberOfEdits 属性只能在定义该结构体的源文件中赋值。numberOfEdits 属性的 Getter 依然是默认的访问级别 internal，但是 Setter 的访问级别是 private ，这表示该属性只有在当前源文件中是可读写的，而在当前源文件所属的模块中它只是一个可读的属性。</p>
+
+<p>如果你实例化 TrackedString 结构体,并且多次对 value 属性的值进行修改,你就会看到 numberOfEdits 的值会随着修改次数进行变化:</p>
+
+<pre><code>var stringToEdit = TrackedString()
+stringToEdit.value = &quot;This string will be tracked.&quot;
+stringToEdit.value += &quot; This edit will increment numberOfEdits.&quot;
+stringToEdit.value += &quot; So will this one.&quot;
+print(&quot;The number of edits is \(stringToEdit.numberOfEdits)&quot;)
+// prints &quot;The number of edits is 3&quot;
+</code></pre>
+
+<p>虽然你可以在其他的源文件中实例化该结构体并且获取到 numberOfEdits 属性的值。这样就能很好的告诉使用者,你只管使用,而不需要知道其实现细节。</p>
+
+<p>如果有必要你可以为 Getter 和 Setter 方法设定显式访问级别。下面的例子就是明确申明了 public 访问级别的 TrackedString 结构体。结构体的成员(包括 numberOfEdits 属性)拥有默认的访问级别 internal 。你可以结
+合 public 和 private(set) 修饰符把结构体中的 numberOfEdits 属性 Getter 方法的访问级别设置为 public，而 Setter 方法的访问级别设置为 private :</p>
+
+<pre><code>public struct TrackedString {
+    public private(set) var numberOfEdits = 0
+    public var value: String = &quot;&quot; {
+        didSet {
+            numberOfEdits++
+        }
+    }
+    public init() {}
+}
+</code></pre>
+
+<h2 id="初始化">初始化</h2>
+
+<p>我们可以给自定义的初始化方法申明访问级别,但是要不高于它所属类的访问级别。但必要构造器例 外,它的访问级别必须和所属类的访问级别相同。</p>
+
+<p>如同函数或方法参数,初始化方法参数的访问级别也不能低于初始化方法的访问级别。</p>
+
+<h3 id="默认初始化方法">默认初始化方法</h3>
+
+<p>Swift为结构体、类都提供了一个默认的无参初始化方法,用于给它们的所有属性提供赋值操作,但不会给出具体 值。默认初始化方法可以参阅默认构造器。默认初始化方法的访问级别与所属类型的访问级别相同。</p>
+
+<p>注意:如果一个类型被申明为 public 级别,那么默认的初始化方法的访问级别为 internal 。如果你想让无参的 初始化方法在其他模块中可以被使用,那么你必须提供一个具有 public 访问级别的无参初始化方法。</p>
+
+<h3 id="结构体的默认成员初始化方法">结构体的默认成员初始化方法</h3>
+
+<p>如果结构体中的任一存储属性的访问级别为 private ,那么它的默认成员初始化方法访问级别就是 private 。尽 管如此,结构体的初始化方法的访问级别依然是 internal 。</p>
+
+<p>如果你想在其他模块中使用该结构体的默认成员初始化方法,那么你需要提供一个访问级别为 public 的默认成员初始化方法。</p>
+
+<h2 id="协议">协议</h2>
+
+<p>如果想为一个协议明确的申明访问级别,那么需要注意一点,就是你要确保该协议只在你申明的访问级别作用域
+中使用。</p>
+
+<p>协议中的每一个必须要实现的函数都具有和该协议相同的访问级别。这样才能确保该协议的使用者可以实现它所
+提供的函数。</p>
+
+<p>注意:如果你定义了一个 public 访问级别的协议,那么实现该协议提供的必要函数也会是 public 的访问级 别。这一点不同于其他类型,比如, public 访问级别的其他类型,他们成员的访问级别为 internal。</p>
+
+<h3 id="协议继承">协议继承</h3>
+
+<p>如果定义了一个新的协议,并且该协议继承了一个已知的协议,那么新协议拥有的访问级别最高也只和被继承协 议的访问级别相同。比如说,你不能定义一个 public 的协议而去继承一个 internal 的协议。</p>
+
+<h3 id="协议一致性">协议一致性</h3>
+
+<p>类可以采用比自身访问级别低的协议。比如说,你可以定义一个 public 级别的类,可以让它在其他模块中使 用,同时它也可以采用一个 internal 级别的协议,并且只能在定义了该协议的模块中使用。</p>
+
+<p>采用了协议的类的访问级别取它本身和所采用协议中最低的访问级别。也就是说如果一个类是 public 级别,采用 的协议是 internal 级别,那么采用了这个协议后,该类的访问级别也是 internal。</p>
+
+<p>如果你采用了协议,那么实现了协议所必须的方法后,该方法的访问级别遵循协议的访问级别。比如说,一个 public 级别的类,采用了 internal 级别的协议,那么该类实现协议的方法至少也得是 internal 。</p>
+
+<p>注意:Swift和Objective-C一样,协议的一致性保证了一个类不可能在同一个程序中用不同的方法采用同一个协议。</p>
+
+<h2 id="扩展">扩展</h2>
+
+<p>你可以在条件允许的情况下对类、结构体、枚举进行扩展。扩展成员应该具有和原始类成员一致的访问级别。比
+如你扩展了一个公共类型,那么你新加的成员应该具有和原始成员一样的默认的 internal 访问级别。</p>
+
+<p>或者,你可以明确申明扩展的访问级别(比如使用 private extension )给该扩展内所有成员申明一个新的默认访
+问级别。这个新的默认访问级别仍然可以被单独成员所申明的访问级别所覆盖。</p>
+
+<h3 id="协议的扩展">协议的扩展</h3>
+
+<p>如果一个扩展采用了某个协议,那么你就不能对该扩展使用访问级别修饰符来申明了。该扩展中实现协议的方法
+都会遵循该协议的访问级别。</p>
+
+<h2 id="泛型">泛型</h2>
+
+<p>泛型类型或泛型函数的访问级别取泛型类型、函数本身、泛型类型参数三者中的最低访问级别。</p>
+
+<h2 id="类型别名">类型别名</h2>
+
+<p>任何你定义的类型别名都会被当作不同的类型,以便于进行访问控制。一个类型别名的访问级别不可高于原类型 的访问级别。比如说,一个 private 级别的类型别名可以设定给一个 public 、 internal 、 private 的类型,但是 一个 public 级别的类型别名只能设定给一个 public 级别的类型,不能设定给 internal 或 private 级别的类型。</p>
+
+<p>注意:这条规则也适用于为满足协议一致性而给相关类型命名别名的情况。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97%E7%AC%A6/" data-tooltip="Swift之高级运算符">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%B3%9B%E5%9E%8B/" data-tooltip="Swift之泛型">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E8%25AE%25BF%25E9%2597%25AE%25E6%258E%25A7%25E5%2588%25B6%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E8%25AE%25BF%25E9%2597%25AE%25E6%258E%25A7%25E5%2588%25B6%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E8%25AE%25BF%25E9%2597%25AE%25E6%258E%25A7%25E5%2588%25B6%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97%E7%AC%A6/" data-tooltip="Swift之高级运算符">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%B3%9B%E5%9E%8B/" data-tooltip="Swift之泛型">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E8%25AE%25BF%25E9%2597%25AE%25E6%258E%25A7%25E5%2588%25B6%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E8%25AE%25BF%25E9%2597%25AE%25E6%258E%25A7%25E5%2588%25B6%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E8%25AE%25BF%25E9%2597%25AE%25E6%258E%25A7%25E5%2588%25B6%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E8%25AE%25BF%25E9%2597%25AE%25E6%258E%25A7%25E5%2588%25B6%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E8%25AE%25BF%25E9%2597%25AE%25E6%258E%25A7%25E5%2588%25B6%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E8%25AE%25BF%25E9%2597%25AE%25E6%258E%25A7%25E5%2588%25B6%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/03\/swift%E4%B9%8B%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6\/';
+          
+            this.page.identifier = '\/2015\/03\/swift%E4%B9%8B%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

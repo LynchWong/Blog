@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Alamofire on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/alamofire/index.xml</link>
+    <description>Recent content in Alamofire on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/alamofire/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Alamofire 源码学习 - Download</title>
+      <link>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---download/</link>
+      <pubDate>Sat, 19 Mar 2016 13:11:31 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---download/</guid>
+      <description>&lt;p&gt;其实下载很简单，模式上来说和上传基本是一样的，至少在创建请求上模式没有区别。感觉上已经多说无益了，也是浪费时间。
+&lt;/p&gt;
+
+&lt;p&gt;首先这里下载也分两种情况，全新的下载和从指定的数据继续下载。所以在Alamofire.swift文件里面的那三个入口方法就很好理解；包括在Download.swift文件中的代码和Upload.swift文件中的代码形式上都是和上传类似的，这些也很好理解。&lt;/p&gt;
+
+&lt;p&gt;所以这里就不再赘述了，其它下载相关的一些细节：比如NSURLSession的API下载完成后返回的是临时文件的地址，所以你最好将文件保存到别处；以及后台下载等等的一些处理，请参考编程指南。&lt;/p&gt;
+
+&lt;p&gt;到这里就结束了，当然Alamofire还有很多内容我这里没有涉及到，比如SSL、验证、时间线、网络检测等等很多内容。除了框架核心的代码，还有测试的代码、示例项目的代码都没有提及，相信这些代码里面还有很多内容、知识。&lt;/p&gt;
+
+&lt;p&gt;从开始看Alamofire源码以来，对于我来说感觉还是学了不少知识的，也许在这几篇博文里面难以体现。至少又去熟悉了一遍HTTP协议，又熟悉了一遍Swift语法，仔细看了苹果的编程指南。当然最重要的就是学习了大神的代码，学习了编码风格，还有思想。&lt;/p&gt;
+
+&lt;p&gt;诚惶诚恐，以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Alamofire 源码学习 - Upload</title>
+      <link>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---upload/</link>
+      <pubDate>Sat, 19 Mar 2016 13:11:25 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---upload/</guid>
+      <description>&lt;p&gt;创建这篇文章的时候是3月19号，今天已经是4月7号了。感觉时间过的好快啊，但是博客一直没更新，顿时感觉堕落了，没有成长。废话不多说了，直接进入正题。
+&lt;/p&gt;
+
+&lt;p&gt;其实Upload跟前面讲的Request模式基本是一样的，所以这篇文章应该就讲个大概，尽量简单些，很细分的东西自行了解学习了。&lt;/p&gt;
+
+&lt;p&gt;Alamofire有更新过代码，我当前的版本是3.3.0。上篇的版本是多少，忘记了，所以代码可能会有不一样的地方。&lt;/p&gt;
+
+&lt;h1 id=&#34;alamofire-swift&#34;&gt;Alamofire.swift&lt;/h1&gt;
+
+&lt;p&gt;这个文件里面包含了很多的便捷方法，上篇有截图展示过，所以我们还是从这里开始。&lt;/p&gt;
+
+&lt;p&gt;这个文件里关于上传的方法有八个，但是仔细看下，作者分为了4类：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;File&lt;/li&gt;
+&lt;li&gt;Data&lt;/li&gt;
+&lt;li&gt;Stream&lt;/li&gt;
+&lt;li&gt;MultipartFormData&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;每一类都有URLString和URLRequest两种，所以我们只需要看一种就行了。&lt;/p&gt;
+
+&lt;p&gt;这里我们主要把前面三种当做一类，最后面一种当做一类来，所以主要就简单说明下这两种情况。因为前三种NSURLSession的API都提供了支持(方法源码如下所示)，只需要讲解一种就可以了。最后一种是作者自己实现的，但是后面也是借用了NSURLSession的API。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/* Creates an upload task with the given request.  The body of the request will be created from the file referenced by fileURL */
+public func uploadTaskWithRequest(request: NSURLRequest, fromFile fileURL: NSURL) -&amp;gt; NSURLSessionUploadTask
+
+/* Creates an upload task with the given request.  The body of the request is provided from the bodyData. */
+public func uploadTaskWithRequest(request: NSURLRequest, fromData bodyData: NSData) -&amp;gt; NSURLSessionUploadTask
+
+/* Creates an upload task with the given request.  The previously set body stream of the request (if any) is ignored and the URLSession:task:needNewBodyStream: delegate will be called when the body payload is required. */
+public func uploadTaskWithStreamedRequest(request: NSURLRequest) -&amp;gt; NSURLSessionUploadTask
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;仔细看下这些API的方法名称，正好对应前面三种，方法的注释都说明了一些相关的信息，自行了解。&lt;a href=&#34;https://developer.apple.com/library/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW15&#34;&gt; NSURLSession编程指南 &lt;/a&gt;，&lt;a href=&#34;http://lynchwong.com/2016/01/29/URL-Session-Programming-Guide-Using-NSURLSession/&#34;&gt; 中文翻译 &lt;/a&gt;(翻译的不好见谅) 对这三种类型的上传也有说明：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Your app can provide the request body content for an HTTP POST request in three ways: as an NSData object, as a file, or as a stream. In general, your app should:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Use an NSData object if your app already has the data in memory and has no reason to dispose of it.&lt;/li&gt;
+&lt;li&gt;Use a file if the content you are uploading exists as a file on disk, if you are doing background transfer, or if it is to your app’s benefit to write it to disk so that it can release the memory associated with that data.&lt;/li&gt;
+&lt;li&gt;Use a stream if you are receiving the data over a network or are converting existing NSURLConnection code that provides the request body as a stream.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Regardless of which style you choose, if your app provides a custom session delegate, that delegate should implement the URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend: delegate method to obtain upload progress information.&lt;/p&gt;
+
+&lt;p&gt;Additionally, if your app provides the request body using a stream, it must provide a custom session delegate that implements the URLSession:task:needNewBodyStream: method, described in more detail in Uploading Body Content Using a Stream.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;所以这里就不再赘述这三种方法有什么区别，何时该使用哪种方法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;MultipartFormData&lt;/strong&gt;其实到最后也是借助了&lt;strong&gt;File&lt;/strong&gt;和&lt;strong&gt;Data&lt;/strong&gt;来实现的，接下来就看源码。&lt;/p&gt;
+
+&lt;h1 id=&#34;upload-swift&#34;&gt;Upload.swift&lt;/h1&gt;
+
+&lt;p&gt;上传相关的信息都在这个文件里，包括创建上传的请求和上传需要的代理方法。这个文件并没有创建新的类，就是对&lt;strong&gt;Manager&lt;/strong&gt;类和&lt;strong&gt;Request&lt;/strong&gt;类的拓展。&lt;/p&gt;
+
+&lt;p&gt;我们以&lt;strong&gt;File&lt;/strong&gt;为例，找到入口方方法，源码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public func upload(
+    method: Method,
+    _ URLString: URLStringConvertible,
+    headers: [String: String]? = nil,
+    file: NSURL)
+    -&amp;gt; Request
+{
+    return Manager.sharedInstance.upload(method, URLString, headers: headers, file: file)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是Alamofire.swift文件里的入口方法，点击跳转到Upload.swift文件里，方法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public func upload(
+    method: Method,
+    _ URLString: URLStringConvertible,
+    headers: [String: String]? = nil,
+    file: NSURL)
+    -&amp;gt; Request
+{
+    let mutableURLRequest = URLRequest(method, URLString, headers: headers)
+    return upload(mutableURLRequest, file: file)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;继续点击跳转到的方法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public func upload(URLRequest: URLRequestConvertible, file: NSURL) -&amp;gt; Request {
+    return upload(.File(URLRequest.URLRequest, file))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后调用的方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;private func upload(uploadable: Uploadable) -&amp;gt; Request {
+    var uploadTask: NSURLSessionUploadTask!
+    var HTTPBodyStream: NSInputStream?
+
+    switch uploadable {
+    case .Data(let request, let data):
+        dispatch_sync(queue) {
+            uploadTask = self.session.uploadTaskWithRequest(request, fromData: data)
+        }
+    case .File(let request, let fileURL):
+        dispatch_sync(queue) {
+            uploadTask = self.session.uploadTaskWithRequest(request, fromFile: fileURL)
+        }
+    case .Stream(let request, let stream):
+        dispatch_sync(queue) {
+            uploadTask = self.session.uploadTaskWithStreamedRequest(request)
+        }
+
+        HTTPBodyStream = stream
+    }
+
+    let request = Request(session: session, task: uploadTask)
+
+    if HTTPBodyStream != nil {
+        request.delegate.taskNeedNewBodyStream = { _, _ in
+            return HTTPBodyStream
+        }
+    }
+
+    delegate[request.delegate.task] = request.delegate
+
+    if startRequestsImmediately {
+        request.resume()
+    }
+
+    return request
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上的方法是一个工厂方法，其它上传类型&lt;strong&gt;Data&lt;/strong&gt;和&lt;strong&gt;Stream&lt;/strong&gt;最终也是从这个方法创建的。&lt;/p&gt;
+
+&lt;p&gt;作者定义了具有关联值的枚举来标示这三种类型的上传：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;private enum Uploadable {
+    case Data(NSURLRequest, NSData)
+    case File(NSURLRequest, NSURL)
+    case Stream(NSURLRequest, NSInputStream)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后在这个工厂方法里面通过枚举创建了不同的上传请求(都调用的是对应的NSURLSession的API)，最后返回了创建的Request实例，跟我们上篇讲解的Request模式是一样的。&lt;/p&gt;
+
+&lt;p&gt;然后拓展了Request类，新添加了UploadTaskDelegate类：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class UploadTaskDelegate: DataTaskDelegate {
+    var uploadTask: NSURLSessionUploadTask? { return task as? NSURLSessionUploadTask }
+    var uploadProgress: ((Int64, Int64, Int64) -&amp;gt; Void)!
+
+    // MARK: - NSURLSessionTaskDelegate
+
+    // MARK: Override Closures
+
+    var taskDidSendBodyData: ((NSURLSession, NSURLSessionTask, Int64, Int64, Int64) -&amp;gt; Void)?
+
+    // MARK: Delegate Methods
+
+    func URLSession(
+        session: NSURLSession,
+        task: NSURLSessionTask,
+        didSendBodyData bytesSent: Int64,
+        totalBytesSent: Int64,
+        totalBytesExpectedToSend: Int64)
+    {
+        if initialResponseTime == nil { initialResponseTime = CFAbsoluteTimeGetCurrent() }
+
+        if let taskDidSendBodyData = taskDidSendBodyData {
+            taskDidSendBodyData(session, task, bytesSent, totalBytesSent, totalBytesExpectedToSend)
+        } else {
+            progress.totalUnitCount = totalBytesExpectedToSend
+            progress.completedUnitCount = totalBytesSent
+
+            uploadProgress?(bytesSent, totalBytesSent, totalBytesExpectedToSend)
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个代理类以及实现的代理方法是为了获得上传的进度，这些知识点前面引用的部分有提及，不再赘述。以及这里代理调用的模式与上篇讲过的DataTaskDelegate和TaskDelegate是一样的，故这里也不再赘述了。基本上前面三种就这么些东西，只要明白了上篇Request的模式，上传和下载基本也就明白了。&lt;/p&gt;
+
+&lt;h2 id=&#34;multipartformdata&#34;&gt;MultipartFormData&lt;/h2&gt;
+
+&lt;p&gt;主要讲讲这个，使用方法如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Alamofire.upload(
+    .POST,
+    &amp;quot;https://httpbin.org/post&amp;quot;,
+    multipartFormData: { multipartFormData in
+        multipartFormData.appendBodyPart(fileURL: unicornImageURL, name: &amp;quot;unicorn&amp;quot;)
+        multipartFormData.appendBodyPart(fileURL: rainbowImageURL, name: &amp;quot;rainbow&amp;quot;)
+    },
+    encodingCompletion: { encodingResult in
+        switch encodingResult {
+            case .Success(let upload, _, _):
+                upload.responseJSON { response in
+                    debugPrint(response)
+                }
+            case .Failure(let encodingError):
+                print(encodingError)
+        }
+    }
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据这个方法我们找到入口方法，然后找到最后处理的方法，源码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+    Encodes the `MultipartFormData` and creates a request to upload the result to the specified URL request.
+
+    It is important to understand the memory implications of uploading `MultipartFormData`. If the cummulative
+    payload is small, encoding the data in-memory and directly uploading to a server is the by far the most
+    efficient approach. However, if the payload is too large, encoding the data in-memory could cause your app to
+    be terminated. Larger payloads must first be written to disk using input and output streams to keep the memory
+    footprint low, then the data can be uploaded as a stream from the resulting file. Streaming from disk MUST be
+    used for larger payloads such as video content.
+
+    The `encodingMemoryThreshold` parameter allows Alamofire to automatically determine whether to encode in-memory
+    or stream from disk. If the content length of the `MultipartFormData` is below the `encodingMemoryThreshold`,
+    encoding takes place in-memory. If the content length exceeds the threshold, the data is streamed to disk
+    during the encoding process. Then the result is uploaded as data or as a stream depending on which encoding
+    technique was used.
+
+    If `startRequestsImmediately` is `true`, the request will have `resume()` called before being returned.
+
+    - parameter URLRequest:              The URL request.
+    - parameter multipartFormData:       The closure used to append body parts to the `MultipartFormData`.
+    - parameter encodingMemoryThreshold: The encoding memory threshold in bytes.
+                                         `MultipartFormDataEncodingMemoryThreshold` by default.
+    - parameter encodingCompletion:      The closure called when the `MultipartFormData` encoding is complete.
+*/
+public func upload(
+    URLRequest: URLRequestConvertible,
+    multipartFormData: MultipartFormData -&amp;gt; Void,
+    encodingMemoryThreshold: UInt64 = Manager.MultipartFormDataEncodingMemoryThreshold,
+    encodingCompletion: (MultipartFormDataEncodingResult -&amp;gt; Void)?)
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        let formData = MultipartFormData()
+        multipartFormData(formData)
+
+        let URLRequestWithContentType = URLRequest.URLRequest
+        URLRequestWithContentType.setValue(formData.contentType, forHTTPHeaderField: &amp;quot;Content-Type&amp;quot;)
+
+        let isBackgroundSession = self.session.configuration.identifier != nil
+
+        if formData.contentLength &amp;lt; encodingMemoryThreshold &amp;amp;&amp;amp; !isBackgroundSession {
+            do {
+                let data = try formData.encode()
+                let encodingResult = MultipartFormDataEncodingResult.Success(
+                    request: self.upload(URLRequestWithContentType, data: data),
+                    streamingFromDisk: false,
+                    streamFileURL: nil
+                )
+
+                dispatch_async(dispatch_get_main_queue()) {
+                    encodingCompletion?(encodingResult)
+                }
+            } catch {
+                dispatch_async(dispatch_get_main_queue()) {
+                    encodingCompletion?(.Failure(error as NSError))
+                }
+            }
+        } else {
+            let fileManager = NSFileManager.defaultManager()
+            let tempDirectoryURL = NSURL(fileURLWithPath: NSTemporaryDirectory())
+            let directoryURL = tempDirectoryURL.URLByAppendingPathComponent(&amp;quot;com.alamofire.manager/multipart.form.data&amp;quot;)
+            let fileName = NSUUID().UUIDString
+            let fileURL = directoryURL.URLByAppendingPathComponent(fileName)
+
+            do {
+                try fileManager.createDirectoryAtURL(directoryURL, withIntermediateDirectories: true, attributes: nil)
+                try formData.writeEncodedDataToDisk(fileURL)
+
+                dispatch_async(dispatch_get_main_queue()) {
+                    let encodingResult = MultipartFormDataEncodingResult.Success(
+                        request: self.upload(URLRequestWithContentType, file: fileURL),
+                        streamingFromDisk: true,
+                        streamFileURL: fileURL
+                    )
+                    encodingCompletion?(encodingResult)
+                }
+            } catch {
+                dispatch_async(dispatch_get_main_queue()) {
+                    encodingCompletion?(.Failure(error as NSError))
+                }
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法在Upload.swift文件中，我们一点一点来看这个方法，首先看作者的注释，大概意思：&lt;/p&gt;
+
+&lt;p&gt;使用&lt;code&gt;MultipartFormData&lt;/code&gt;方式进行上传时需要明白的最重要的一点就是内存的占用。如果上传的数据很小，那么直接将数据编码在内存中上传到服务器是最高效的方式。然而，如果上传的数据很大，将数据编码在内存中可能导致你的应用程序被终结。所以应该将这些大的要上传的数据使用输入或输出流写到硬盘上，这样会使内存占用比较低，然后将写入的文件转换成流进行上传。encodingMemoryThreshold允许Alamofire自动检测是将数据编码到内存还是写入硬盘。如果MultipartFormData的内容长度比encodingMemoryThreshold小，就会编码到内存中。如果大，就会在编码的过程中使用流写入硬盘。然后根据使用的编码方式来决定是使用Data还是Stream来进行上传。&lt;/p&gt;
+
+&lt;p&gt;通过注释基本上也明白了参数的作用，encodingMemoryThreshold参数，默认值定义如下，大小应该是10M：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/// Default memory threshold used when encoding `MultipartFormData`.
+public static let MultipartFormDataEncodingMemoryThreshold: UInt64 = 10 * 1024 * 1024
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;encodingCompletion参数的类型类似于Result，只是没有泛型。MultipartFormData类型现在先不管，只需要知道它的作用就是对数据进行编码的就行了，我们先看这个方法。&lt;/p&gt;
+
+&lt;p&gt;首先是GCD的异步操作，队列是全局并发队列中的DISPATCH_QUEUE_PRIORITY_DEFAULT，这里多线程没什么好讲的。首先创建了一个MultipartFormData实例，然后作为了multipartFormData闭包的参数，结合最开始我们提到的使用方式，这里的作用就是将数据添加到这个实例中，以便于我们之后再编码。然后设置了HTTP请求的首部字段&lt;strong&gt;Content-Type&lt;/strong&gt;，值由前面创建的MultipartFormData实例提供，我们后面再讲解。然后根据NSURLSession实例的identifier属性来判断是否是后台回话，属性源码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/* identifier for the background session configuration */
+public var identifier: String? { get }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后根据要上传的数据的大小和encodingMemoryThreshold的比较，以及是否是后台回话进行条件判断，if else 二选一。进入if的条件就是要上传的数据比encodingMemoryThreshold小而且不是后台会话，然后我们直接调用MultipartFormData实例的encode()方法将数据编码到了内存中(因为数据比较小，跟encodingMemoryThreshold参数比较，所以直接编码到内存中，前面方法注释有提过)，然后创建一个MultipartFormDataEncodingResult实例encodingResult，在构造的方法中可以看出是使用Data的上传方式。然后返回主线程调用回调，传入前面创建的encodingResult当做参数。如果编码数据的时候直接产生错误就返回主线程调用回调，然后将错误传回去。&lt;/p&gt;
+
+&lt;p&gt;然后是else分支，首先是构建目录、创建路径。首先在临时目录下创建一个&amp;rdquo;com.alamofire.manager/multipart.form.data&amp;rdquo;目录，然后使用这个目录和NSUUID().UUIDString生成的文件名生成了文件路径。然后在创建目录，将数据写入文件路径，这些都有错误处理。使用临时目录的好处就是iOS系统会自动清理临时目录。然后就是跟if里面类似的，创建MultipartFormDataEncodingResult实例encodingResult，构造方中可以看出是使用了File的上传方式，其它的都是一样的不再赘述。把是否是后台会话加入判断是因为基于后台会话的上传方式只支持基于文件的上传，基于Data和Stream的上传任务在程序退出时就会失败，这点在编程指南里面也有提及。关于后台传输(包括上传和下载)的一些信息，参考&lt;a href=&#34;https://developer.apple.com/library/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW44&#34;&gt; Background Transfer Considerations &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;multipartformdata-swift&#34;&gt;MultipartFormData.swift&lt;/h2&gt;
+
+&lt;p&gt;MultipartFormData上传方式的主要核心就是这个文件里面的内容了，前面那个方法只是一些逻辑的处理。其实这个文件里面的内容也没什么难度，当然是代码上没什么难度，难的地方可能就是你不懂MultipartFormData的相关概念和定义，所以可能看起代码来不知道到底是在干什么。&lt;/p&gt;
+
+&lt;p&gt;所以首先应该搞清楚MultipartFormData相关的概念、定义、知识等。这里就直接贴两个我之前研究学习的链接，就不详细讲解了。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.zhaojie.me/2011/03/html-form-file-uploading-programming.html&#34;&gt; 模拟HTML表单上传文件（RFC 1867） &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.csdn.net/baple/article/details/45890405&#34;&gt; Android文件图片上传的详细讲解（一）HTTP multipart/form-data 上传报文格式实现手机端上传GOOD &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;第二篇虽然是Android的，但是没关系，只需了解MultipartFormData的东西就可以了。&lt;/p&gt;
+
+&lt;p&gt;理解了MultipartFormData相关的知识和概念后再看这个文件里面的代码就很简单了。&lt;/p&gt;
+
+&lt;p&gt;之前有说过我山寨了Alamofire，但有些地方也做了些小修改。比如我写的MultipartFormData方式上传的方法支持参数，这里并不是Alamofire不支持，其实Alamofire是支持的，我这里做了些小修改只是在调用上更清晰而已。(经测试是可以使用的)&lt;/p&gt;
+
+&lt;p&gt;源码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public class func upload(
+    request: NSURLRequest,
+    parameters: [String: AnyObject]? = nil,
+    encodingMemoryThreshold: UInt64 = Manager.MultipartFormDataEncodingMemoryThreshold,
+    multipartFormData: MultipartFormData -&amp;gt; Void)
+{
+    Manager.sharedInstance.upload(
+        request,
+        parameters: parameters,
+        encodingMemoryThreshold: encodingMemoryThreshold,
+        multipartFormData: multipartFormData
+    )
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后在MultipartFormData.swift的基础上也做了些小修改，&lt;a href=&#34;https://github.com/LynchWong/Speedy/blob/master/Speedy/Speedy/MultipartFormData.swift&#34;&gt; 源码链接 &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;其实我们只需要将参数当做数据编码到HTTP请求Body中就可以了，&lt;a href=&#34;http://blog.zhaojie.me/2011/03/html-form-file-uploading-programming.html&#34;&gt; 模拟HTML表单上传文件（RFC 1867） &lt;/a&gt;中的例子就是这种情况。&lt;/p&gt;
+
+&lt;p&gt;假设我们上传的时候需要携带&lt;code&gt;userName&lt;/code&gt;这个参数，那么使用Alamofire的代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    Alamofire.upload(
+        .POST,
+        &amp;quot;&amp;quot;,
+        multipartFormData: { multipartFormData in
+            multipartFormData.appendBodyPart(data: &amp;quot;Nobodyknows+&amp;quot;.dataUsingEncoding(NSUTF8StringEncoding)!, name: &amp;quot;userName&amp;quot;)
+            multipartFormData.appendBodyPart(fileURL: unicornImageURL, name: &amp;quot;unicorn&amp;quot;)
+            multipartFormData.appendBodyPart(fileURL: rainbowImageURL, name: &amp;quot;rainbow&amp;quot;)
+        }) { encodingResult in
+            switch encodingResult {
+                case .Success(let upload, _, _):
+                    upload.responseJSON { response in
+                        debugPrint(response)
+                    }
+                case .Failure(let encodingError):
+                    print(encodingError)
+            }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;理论上这样是可以的，实际没有测试过。&lt;/p&gt;
+
+&lt;p&gt;以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Alamofire 源码学习 - Request</title>
+      <link>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---request/</link>
+      <pubDate>Sat, 19 Mar 2016 13:11:15 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---request/</guid>
+      <description>&lt;p&gt;本来想先把框架的类图画出来，便于大家好理解类、枚举、结构体之间的关系。无奈UML全忘光了，好多画UML图的软件都是付费的，所以就打消了这个念头。
+&lt;/p&gt;
+
+&lt;p&gt;既然这样就从头开始，就像是第一次接触这个框架。&lt;/p&gt;
+
+&lt;p&gt;所以最好的方式就是按照我们使用框架的代码来学习，从下面这个用例开始：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Alamofire.request(.GET, &amp;quot;https://httpbin.org/get&amp;quot;, parameters: [&amp;quot;foo&amp;quot;: &amp;quot;bar&amp;quot;])
+    .responseJSON { response in
+        print(response.request)  // original URL request
+        print(response.response) // URL response
+        print(response.data)     // server data
+        print(response.result)   // result of response serialization
+
+        if let JSON = response.result.value {
+            print(&amp;quot;JSON: \(JSON)&amp;quot;)
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上篇这段代码就是发起一个请求然后进行JSON解析的代码，我们就从这里开始。&lt;/p&gt;
+
+&lt;h1 id=&#34;alamofire-swift&#34;&gt;Alamofire.swift&lt;/h1&gt;
+
+&lt;p&gt;如果你有链接框架在Xcode中编写上面代码，使用Option点击request方法能看到方法的一些信息，使用Command点击request会跳转到源码文件或者接口文件。&lt;/p&gt;
+
+&lt;p&gt;我们Command点击request方法，跳转到了Alamofire.swift文件里面，方法源码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public func request(
+    method: Method,
+    _ URLString: URLStringConvertible,
+    parameters: [String: AnyObject]? = nil,
+    encoding: ParameterEncoding = .URL,
+    headers: [String: String]? = nil)
+    -&amp;gt; Request
+{
+    return Manager.sharedInstance.request(
+        method,
+        URLString,
+        parameters: parameters,
+        encoding: encoding,
+        headers: headers
+    )
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在来看这个方法，看方法参数列表和返回值。参数列表主要有用于请求的HTTP方法，请求的URL，请求的参数，请求的编码方式，请求的首部信息，然后返回值是一个自定义的&lt;strong&gt;Request&lt;/strong&gt;类。方法的第二个参数忽略了外部参数，所以你调用的时候不会有外部参数名；后面三个参数都有默认值，所以你调用方法的时候可以省略，这些都是Swift的知识，这里再不详解了。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;method&lt;/code&gt;参数的类型是&lt;strong&gt;Method&lt;/strong&gt;，我们还是点击过去看源码。源码在ParameterEncoding.swift文件中，&lt;strong&gt;Method&lt;/strong&gt;类型是枚举类型的，rawValue类型为String。这里访问权限有必要提下，特别是在写框架的时候要把访问权限弄清楚，public，internal，private针对到每一个类、枚举、结构体、变量、属性、方法、函数。这里就提下，不详解了，参考&lt;a href=&#34;http://lynchwong.com/2015/03/07/Swift%E4%B9%8B%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/&#34;&gt; Swift之访问控制 &lt;/a&gt;。&lt;strong&gt;Method&lt;/strong&gt;的定义很简单，定义了基本所有的HTTP方法，不再赘述。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;URLString&lt;/code&gt;参数的类型是&lt;strong&gt;URLStringConvertible&lt;/strong&gt;。&lt;strong&gt;URLStringConvertible&lt;/strong&gt;类型是协议，该协议只有一个只读的URLString属性，类型为String。然后String、NSURL、NSURLComponents、NSURLRequest都适配了这个协议，所以这些类型都有了一个只读的URLString属性。这样的好处就是你可以把所有适配了这个协议的类型当作URLString的参数，然后我们编码的时候只需要读取URLString属性就可以得到URL字符串。&lt;strong&gt;URLRequestConvertible&lt;/strong&gt;协议是类似的，后面我们遇到了就不再赘述了。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;parameters&lt;/code&gt;参数是可选字典类型，键为String类型，值为AnyObject类型，默认值为nil。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;encoding&lt;/code&gt;参数类型是&lt;strong&gt;ParameterEncoding&lt;/strong&gt;，看参数默认值的形式应该是枚举。参数编码的方式，这里先不讲解，后面来。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;headers&lt;/code&gt;参数类型是可选的字典类型，键值都是String类型，默认值为nil。这个就是指定HTTP首部字段的值。&lt;/p&gt;
+
+&lt;p&gt;返回值我们现在只需要知道是返回的一个自定义的&lt;strong&gt;Request&lt;/strong&gt;类，我们再来看看整个Alamofire.swift文件。&lt;/p&gt;
+
+&lt;p&gt;整个文件结构很清晰，没有定义类。首先定义了两个协议，然后就是request、upload、download的方法，其实这些方法都是一些便捷方法，方便开发者直接使用。如下图所示，结构就很清晰了：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AlamofireRequest/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;parameterencoding-swift&#34;&gt;ParameterEncoding.swift&lt;/h1&gt;
+
+&lt;p&gt;这个文件除了之前提到的&lt;strong&gt;Method&lt;/strong&gt;类型外就是&lt;strong&gt;ParameterEncoding&lt;/strong&gt;类型了，两个都是枚举类型。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ParameterEncoding&lt;/strong&gt;类型定义了五种值，源码上面有作者的注释：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;URL&lt;/code&gt;：对于&lt;code&gt;GET&lt;/code&gt;、&lt;code&gt;HEAD&lt;/code&gt;、&lt;code&gt;DELETE&lt;/code&gt;方法，编码后的参数拼接在URL后面，其他方法编码后的参数作为表单提交，设为HTTP的Body。如果编码后的参数作为HTTP的Body，那么HTTP首部字段&lt;code&gt;Content-Type&lt;/code&gt;设为&lt;code&gt;application/x-www-form-urlencoded; charset=utf-8&lt;/code&gt;。因为没有一个公开的标准来编码集合类型，所以我们约定键后面跟&lt;code&gt;[]&lt;/code&gt;来编码数组值(&lt;code&gt;foo[]=1&amp;amp;foo[]=2&lt;/code&gt;)。&lt;code&gt;foo[bar]=baz&lt;/code&gt;编码字典值。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;URLEncodedInURL&lt;/code&gt;：编码方式与上面一样，但是编码的结果总是拼接在URL后面。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;JSON&lt;/code&gt;：使用&lt;code&gt;NSJSONSerialization&lt;/code&gt;来序列化参数对象，设置为HTTP请求的Body。&lt;code&gt;Content-Type&lt;/code&gt;的值设为&lt;code&gt;application/json&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PropertyList&lt;/code&gt;：关联值为NSPropertyListFormat和NSPropertyListWriteOptions，根据这些信息来创建plist对象。编码后的值设为HTTP的请求Body，&lt;code&gt;Content-Type&lt;/code&gt;的值设为&lt;code&gt;application/json&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Custom&lt;/code&gt;：关联值是一个闭包，闭包参数是URLRequestConvertible类型和[String: AnyObject]?可选类型，返回值为(NSMutableURLRequest, NSError?)的元组类型。该闭包的参数类型和返回值类型跟我们编码的方法的参数和返回值类型是一样的。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;编码的方法的具体实现的细节就不详细讲解了，主要是HTTP协议相关的一些事情，不懂就搜索下，是能看懂的。这个文件中的代码，是可以高度重用的，完全可以学习保留。&lt;/p&gt;
+
+&lt;h1 id=&#34;manager-swift&#34;&gt;Manager.swift&lt;/h1&gt;
+
+&lt;p&gt;方法的方法体中的代码如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;return Manager.sharedInstance.request(
+    method,
+    URLString,
+    parameters: parameters,
+    encoding: encoding,
+    headers: headers
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;所以Manager类的实例的request方法的返回值类型就是&lt;strong&gt;Request&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;sharedInstance的实现代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public static let sharedInstance: Manager = {
+    let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+    configuration.HTTPAdditionalHeaders = Manager.defaultHTTPHeaders
+
+    return Manager(configuration: configuration)
+}()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;虽然返回的都是Manager对象的实例，但是并不是单列，每次都是新建的一个实例。看上面的代码，首先创建了用于创建NSURLSession的配置对象，然后设置了默认的HTTP首部字段。最后将配置对象传递给Manager类的初始化方法，最后返回Manager类的实例。如果你之前有看过关于NSURLSession的编程指南，你肯定还记得NSURLSessionConfiguration对象，比如有default、ephemeral、background三种类型的配置对象。另外还有NSURLSessionTask、NSURLSessionDataTask、NSURLSessionUploadTask、NSURLSessionDownloadTask，以及这些类之间的关系。这些你应该了解才行，看起源码来才更容易理解作者的意图。这一方面的知识，这里不再赘述，只会提及一下。&lt;/p&gt;
+
+&lt;p&gt;defaultHTTPHeaders属性这里也不再说明了，与HTTP协议相关的内容，自行了解下。接下来我们就来看Manager的初始化方法。&lt;/p&gt;
+
+&lt;p&gt;初始化方法都跟属性是相关的，我们先看属性：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let queue = dispatch_queue_create(nil, DISPATCH_QUEUE_SERIAL)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;定义了一个常量属性，并初始化赋值，创建了一个串行队列。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public let session: NSURLSession
+public let delegate: SessionDelegate
+public var startRequestsImmediately: Bool = true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;定义了NSURLSession和它的代理，SessionDelegate是自定义的代理对象，这里我们先不具体展开。startRequestsImmediately属性标识是否立即开始请求。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public var backgroundCompletionHandler: (() -&amp;gt; Void)?
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个属性作者有注释说明。是后台处理完成的回调闭包，由UIApplicationDelegate的&lt;code&gt;application:handleEventsForBackgroundURLSession:completionHandler:&lt;/code&gt;方法提供。通过设置后台处理完成的回调，SessionDelegate的&lt;code&gt;sessionDidFinishEventsForBackgroundURLSession&lt;/code&gt;闭包实现会自动调用回调。如果你需要在回调之前处理自己的事件，你需要重写SessionDelegate的&lt;code&gt;sessionDidFinishEventsForBackgroundURLSession&lt;/code&gt;闭包，然后在结束的时候手动调用回调。&lt;/p&gt;
+
+&lt;p&gt;接下来看初始化方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public init(
+    configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration(),
+    delegate: SessionDelegate = SessionDelegate(),
+    serverTrustPolicyManager: ServerTrustPolicyManager? = nil)
+{
+    self.delegate = delegate
+    self.session = NSURLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
+
+    commonInit(serverTrustPolicyManager: serverTrustPolicyManager)
+}
+
+public init?(
+    session: NSURLSession,
+    delegate: SessionDelegate,
+    serverTrustPolicyManager: ServerTrustPolicyManager? = nil)
+{
+    self.delegate = delegate
+    self.session = session
+
+    guard delegate === session.delegate else { return nil }
+
+    commonInit(serverTrustPolicyManager: serverTrustPolicyManager)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Manager是基类，不需要调用父类的指定初始化器，属性赋值完成之后就可以使用self了，以及方法调用。第一个初始化方法很简单，参数都有默认值。第二个初始化方法是直接使用NSURLSession来初始化的，是一个可失败的初始化器，当NSURLSession的代理不是传入的delegate代理时就初始化失败。这里使用了===符来判断对象是否是同一个，两个初始化方法都调用了如下的私有方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;private func commonInit(serverTrustPolicyManager serverTrustPolicyManager: ServerTrustPolicyManager?) {
+    session.serverTrustPolicyManager = serverTrustPolicyManager
+
+    delegate.sessionDidFinishEventsForBackgroundURLSession = { [weak self] session in
+        guard let strongSelf = self else { return }
+        dispatch_async(dispatch_get_main_queue()) { strongSelf.backgroundCompletionHandler?() }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这行代码&lt;code&gt;session.serverTrustPolicyManager = serverTrustPolicyManager&lt;/code&gt;我们先放着，后面再说。方法的最后是给delegate的&lt;code&gt;sessionDidFinishEventsForBackgroundURLSession&lt;/code&gt;赋值，如作者注释的那样，闭包会自动调用&lt;code&gt;backgroundCompletionHandler&lt;/code&gt;闭包，所以如果你重写delegate的&lt;code&gt;sessionDidFinishEventsForBackgroundURLSession&lt;/code&gt;闭包，那么在结束的时候要手动调用&lt;code&gt;backgroundCompletionHandler&lt;/code&gt;闭包。为了避免强引用环，作者这里定义了捕获列表。在闭包中做了guard判断，确保弱引用不是nil。最后在主线程上可选调用了闭包，当闭包为nil时什么都不做。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deinit {
+    session.invalidateAndCancel()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;析构函数这里就不多说了。&lt;/p&gt;
+
+&lt;p&gt;在sharedInstance之后就调用请求方法，所以接下来我们就看请求的方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public func request(
+    method: Method,
+    _ URLString: URLStringConvertible,
+    parameters: [String: AnyObject]? = nil,
+    encoding: ParameterEncoding = .URL,
+    headers: [String: String]? = nil)
+    -&amp;gt; Request
+{
+    let mutableURLRequest = URLRequest(method, URLString, headers: headers)
+    let encodedURLRequest = encoding.encode(mutableURLRequest, parameters: parameters).0
+    return request(encodedURLRequest)
+}
+
+public func request(URLRequest: URLRequestConvertible) -&amp;gt; Request {
+    var dataTask: NSURLSessionDataTask!
+    dispatch_sync(queue) { dataTask = self.session.dataTaskWithRequest(URLRequest.URLRequest) }
+
+    let request = Request(session: session, task: dataTask)
+    delegate[request.delegate.task] = request.delegate
+
+    if startRequestsImmediately {
+        request.resume()
+    }
+
+    return request
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;请求的方法如上所示，第一个方法最后调用了第二个方法，所以我们主要看第二个方法。第一个方法很简单，根据参数构造了请求，然后对参数进行编码，最后将构造的请求传递给第二个方法并返回。&lt;/p&gt;
+
+&lt;p&gt;现在我们主要看第二个方法，一开始就声明了一个变量，类型为隐式解析可选的NSURLSessionDataTask。然后同步执行我们提交到queue队列上的Block对象，这行代码会在调用request方法的线程上执行，并且会阻塞这个线程，直到操作完成。这行代码保证了dataTask变量在后面使用的时候是赋值完成了的，赋值的过程是调用NSURLSession的API完成的，这里不赘述了。然后我们使用session属性和dataTask变量来初始化&lt;strong&gt;Request&lt;/strong&gt;对象，创建的&lt;strong&gt;Request&lt;/strong&gt;的实例就是我们函数的返回值。接下来的这行代码也很简单，使用了Swift的下标脚本，参考&lt;a href=&#34;http://lynchwong.com/2015/03/05/Swift%E4%B9%8B%E4%B8%8B%E6%A0%87%E8%84%9A%E6%9C%AC/&#34;&gt; Swift之下标脚本 &lt;/a&gt;。这里下标脚本接收NSURLSessionTask类型的值，可以设置和返回request.delegate类型的值。request.delegate我们这里先理解为：每个&lt;strong&gt;Request&lt;/strong&gt;对象也都有自己的代理，这个代理我们后面再说。然后我们根据startRequestsImmediately属性的值，判断是否马上开始请求，最后返回我们创建的&lt;strong&gt;Request&lt;/strong&gt;的实例。&lt;/p&gt;
+
+&lt;p&gt;其实到这里，默认情况下我们的请求已经开始了。这里我们发现Alamofire.swift文件完全可以不需要的，我们可以自己创建Manager的实例，然后发起请求。Alamofire.swift文件里的方法只是方便了开发者而已。&lt;/p&gt;
+
+&lt;p&gt;我们最开始的请求的那个方法只剩最后一步了，因为默认情况下我们的请求已经开始了，所以接下来的事情就是接收服务器的响应，然后解析数据等等一些操作了。我们看最后一步是&lt;code&gt;responseJSON&lt;/code&gt;，这个操作，不管是方法还是闭包属性，都是属于&lt;strong&gt;Request&lt;/strong&gt;实例的。但是我们现在先不急着去看&lt;strong&gt;Request&lt;/strong&gt;的源码，因为还有SessionDelegate的源码，接下来我们先看SessionDelegate的源码。&lt;/p&gt;
+
+&lt;h2 id=&#34;sessiondelegate&#34;&gt;SessionDelegate&lt;/h2&gt;
+
+&lt;p&gt;SessionDelegate定义在Manager内部，是内部类，所以在Manager以外的地方使用需要加上前缀：｀Manager.SessionDelegate｀。使用final修饰，说明不能被继承。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    private var subdelegates: [Int: Request.TaskDelegate] = [:]
+    private let subdelegateQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_CONCURRENT)
+
+    subscript(task: NSURLSessionTask) -&amp;gt; Request.TaskDelegate? {
+        get {
+            var subdelegate: Request.TaskDelegate?
+            dispatch_sync(subdelegateQueue) { subdelegate = self.subdelegates[task.taskIdentifier] }
+
+            return subdelegate
+        }
+
+        set {
+            dispatch_barrier_async(subdelegateQueue) { self.subdelegates[task.taskIdentifier] = newValue }
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先定义了两个私有属性，然后就是前面提到的下标脚本的源码。第一个属性subdelegates是字典类型，键为Int类型，值为Request.TaskDelegate类型，然后初始化赋值为空的字典。第二个属性subdelegateQueue是一个并发队列，接下来就来看下标脚本的实现。&lt;/p&gt;
+
+&lt;p&gt;下标脚本接收NSURLSessionTask的参数，返回的是Request.TaskDelegate?类型。获取的时候会阻塞当前线程，但是队列是并发的，根据参数的taskIdentifier作为键来获取subdelegates字典中对应的值。当使用下标脚本赋值的时候dispatch_barrier_async会等待之前的操作完成，然后再执行，执行完成之后再执行后面的操作。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public final class SessionDelegate: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate, NSURLSessionDownloadDelegate {
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;SessionDelegate继承了NSObject，主要是为了适配NSObjectProtocol协议。然后就是适配了一连串的代理协议：NSURLSessionDelegate、NSURLSessionTaskDelegate、NSURLSessionDataDelegate、NSURLSessionDownloadDelegate。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public func dataTaskWithRequest(request: NSURLRequest, completionHandler: (NSData?, NSURLResponse?, NSError?) -&amp;gt; Void) -&amp;gt; NSURLSessionDataTask
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以使用上面的方法来创建NSURLSessionDataTask，提供一个完成后的回调闭包。但是NSURLSession编程指南有提到：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Note: Completion callbacks are primarily intended as an alternative to using a custom delegate. If you create a task using a method that takes a completion callback, the delegate methods for response and data delivery are not called.&lt;/p&gt;
+
+&lt;p&gt;注意：完成回调主要用来当作一种可替代的自定义代理。如果你使用接收完成回调的方法创建了一个任务，那么用来传输响应和数据的代理方法就不会被调用。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;所以要注意这些细节。&lt;/p&gt;
+
+&lt;p&gt;然后SessionDelegate提供了大量的如下属性，这些属性都是可选的闭包类型，让开发者可以通过给这些闭包赋值来重写作者提供的默认行为。这种属性太多，就不一一列举了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    /// Overrides default behavior for NSURLSessionDelegate method `URLSession:didBecomeInvalidWithError:`.
+    public var sessionDidBecomeInvalidWithError: ((NSURLSession, NSError?) -&amp;gt; Void)?
+
+    /// Overrides default behavior for NSURLSessionDelegate method `URLSession:didReceiveChallenge:completionHandler:`.
+    public var sessionDidReceiveChallenge: ((NSURLSession, NSURLAuthenticationChallenge) -&amp;gt; (NSURLSessionAuthChallengeDisposition, NSURLCredential?))?
+
+    /// Overrides default behavior for NSURLSessionDelegate method `URLSessionDidFinishEventsForBackgroundURLSession:`.
+    public var sessionDidFinishEventsForBackgroundURLSession: ((NSURLSession) -&amp;gt; Void)?
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;大部分的代理方法都是调用默认的闭包实现，如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    public func URLSessionDidFinishEventsForBackgroundURLSession(session: NSURLSession) {
+        sessionDidFinishEventsForBackgroundURLSession?(session)
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然还有一些方法除了是调用默认闭包实现外，还有调用Request.TaskDelegate的实现的，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+        if let taskDidComplete = taskDidComplete {
+            taskDidComplete(session, task, error)
+        } else if let delegate = self[task] {
+            delegate.URLSession(session, task: task, didCompleteWithError: error)
+        }
+
+        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.Task.DidComplete, object: task)
+
+        self[task] = nil
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其实到这里基本上Alamofire框架的架构都出来了，每个NSURLSession都有一个代理，默认情况下代理使用默认的闭包实现，要么调用Request.TaskDelegate的实现。所以SessionDelegate就像是一个枢纽或者代理一样，处理一些基本的操作或者将操作分发给&lt;strong&gt;Request&lt;/strong&gt;对象的代理（Request.TaskDelegate）。&lt;/p&gt;
+
+&lt;p&gt;当然还有一些处理认证、缓存、重定向等的代理方法，基本都是这样的模式，这里就不再一一讲解，等到遇到的时候再说。&lt;/p&gt;
+
+&lt;p&gt;相关知识&lt;a href=&#34;http://lynchwong.com/2016/01/29/URL-Session-Programming-Guide-Appendix-A-Life-Cycle-of-a-URL-Session/&#34;&gt; NSURLSession的生命周期 &lt;/a&gt;和&lt;a href=&#34;http://lynchwong.com/2016/01/29/URL-Session-Programming-Guide-Using-NSURLSession/&#34;&gt; 使用NSURLSession &lt;/a&gt;，这些知识比较重要，特别是NSURLSession的生命周期，代理方法的调用顺序等等知识很重要，不然就算你看懂了框架的源码，也不能理解框架这样写的原因、框架设计的精髓。以及其他的一些HTTP协议相关的知识、认证授权等等。这些知识官方编程指南都有提及，参见官方编程指南或者那方面的专业知识。&lt;/p&gt;
+
+&lt;h1 id=&#34;request-swift&#34;&gt;Request.swift&lt;/h1&gt;
+
+&lt;p&gt;这个文件里面的内容看起来还蛮多的，但是&lt;code&gt;Request&lt;/code&gt;类的内容并不多。我们一步步的来，先看类的属性和初始化方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// MARK: - Properties
+
+/// The delegate for the underlying task.
+public let delegate: TaskDelegate
+
+/// The underlying task.
+public var task: NSURLSessionTask { return delegate.task }
+
+/// The session belonging to the underlying task.
+public let session: NSURLSession
+
+/// The request sent or to be sent to the server.
+public var request: NSURLRequest? { return task.originalRequest }
+
+/// The response received from the server, if any.
+public var response: NSHTTPURLResponse? { return task.response as? NSHTTPURLResponse }
+
+/// The progress of the request lifecycle.
+public var progress: NSProgress { return delegate.progress }
+
+var startTime: CFAbsoluteTime?
+var endTime: CFAbsoluteTime?
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;大部分属性作者都有注释，主要有当前任务的代理、当前任务、当前任务所属的NSURLSession、原始请求、响应、请求所在的生命周期、开始时间、结束时间等等。大部分属性是计算型属性，还有两个可选属性，剩下的属性只进行了声明没有赋值，所以在初始化里这些属性需要赋值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;init(session: NSURLSession, task: NSURLSessionTask) {
+    self.session = session
+
+    switch task {
+    case is NSURLSessionUploadTask:
+        delegate = UploadTaskDelegate(task: task)
+    case is NSURLSessionDataTask:
+        delegate = DataTaskDelegate(task: task)
+    case is NSURLSessionDownloadTask:
+        delegate = DownloadTaskDelegate(task: task)
+    default:
+        delegate = TaskDelegate(task: task)
+    }
+
+    delegate.queue.addOperationWithBlock { self.endTime = CFAbsoluteTimeGetCurrent() }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;初始化方法也很简单，先赋值&lt;code&gt;session&lt;/code&gt;属性。然后根据不同的任务类型，使用任务来初始化不同的代理并赋值给&lt;code&gt;delegate&lt;/code&gt;属性，最后我们向代理里面的一个队列添加了任务，任务很简单，就是赋值结束时间。这些不同类型的代理，我们留到后面。注意这里应该结合Manager类的request方法一起看，因为Request的实例是在那个方法里面创建的，这样前后联系起来看更便于理解。&lt;/p&gt;
+
+&lt;p&gt;两个认证的方法以及一些其他的方法我们现在先不看，主要把一开始用例涉及到的代码走以一遍。&lt;code&gt;resume&lt;/code&gt;、&lt;code&gt;suspend&lt;/code&gt;很简单，方法最后都post相应的通知，所以你可以在应用里面注册这些通知，当这些方法调用时你能接收到通知。&lt;code&gt;cancel&lt;/code&gt;方法这里看起来复杂点，其实也很简单，首先判断当前任务的代理和任务，如果属于下载任务，将已经下载的数据保存到代理里面；如果不是下载任务，直接取消，然后post通知。&lt;/p&gt;
+
+&lt;p&gt;这里只是&lt;code&gt;Request&lt;/code&gt;类的一部分，其他内容在另外的一些文件里面，使用&lt;code&gt;extension&lt;/code&gt;实现。在我们一开始的用例里面就差&lt;code&gt;responseJSON&lt;/code&gt;这个操作没有说明了，但是说明这一步涉及到的内容挺多的，如果你去看会发现这个方法的定义和实现在&lt;code&gt;ResponseSerialization.swift&lt;/code&gt;文件里面，然后里面还有各种协议、泛型、还有个新的类型。使用&lt;code&gt;extension&lt;/code&gt;将&lt;code&gt;responseJSON&lt;/code&gt;这个行为添加到&lt;code&gt;Request&lt;/code&gt;类。&lt;/p&gt;
+
+&lt;p&gt;所以我们先看一些相关的内容。&lt;/p&gt;
+
+&lt;h2 id=&#34;taskdelegate&#34;&gt;TaskDelegate&lt;/h2&gt;
+
+&lt;p&gt;这个类我们先不说属性、初始化，先说说这个类的作用。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The task delegate is responsible for handling all delegate callbacks for the underlying task as well as executing all operations attached to the serial operation queue upon task completion.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;code&gt;TaskDelegate&lt;/code&gt;类继承自&lt;code&gt;NSObject&lt;/code&gt;，作者注释如上所示。大概意思就是这个代理类为任务处理所有代理回调，以及执行所有添加到串行队列(这个队列就是代理属性&lt;code&gt;queue&lt;/code&gt;)里面的任务。&lt;/p&gt;
+
+&lt;p&gt;其实这个框架的核心就在上面这句话里，理解了上面的这句话，基本这个框架就懂了大半，框架的结构、代码的执行流程也就很清晰了。&lt;/p&gt;
+
+&lt;p&gt;下面我就从两个方面来解释上面的那句话：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;处理所有代理的回调。&lt;/li&gt;
+&lt;li&gt;执行串行队列里面的所有任务。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;处理所有代理的回调&#34;&gt;处理所有代理的回调&lt;/h3&gt;
+
+&lt;p&gt;首先我们得搞清楚这里所指的代理到底是什么，其实这里的代理指的是NSURLSession的代理，即我们在Manager里面初始化时为NSURLSession指定的代理&lt;code&gt;SessionDelegate&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;这个代理类我们前面就讲解过了，只是没有详细分析而已。这个代理类适配了所有与NSURLSession和NSURLSessionTask相关的代理：NSURLSessionDelegate、NSURLSessionTaskDelegate、NSURLSessionDataDelegate、NSURLSessionDownloadDelegate。需要注意的事情就是这些代理之间的继承关系以及有些代理方法是可选有些是必须的。&lt;/p&gt;
+
+&lt;p&gt;现在我们看一个具体的代理实现，代码如下；&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+        if let taskDidComplete = taskDidComplete {
+            taskDidComplete(session, task, error)
+        } else if let delegate = self[task] {
+            delegate.URLSession(session, task: task, didCompleteWithError: error)
+        }
+
+        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.Task.DidComplete, object: task)
+
+        self[task] = nil
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个代理方法属于NSURLSessionTaskDelegate，不管什么任务，当任务完成时，都会调用这个方法，所以这是代理生命周期中的最后一个方法。首先方法用可选绑定判断开发者是否重写了代理的行为(前面我们说过，代理提供了很多可选的闭包类型给开发者来重写代理的默认行为)，如果重写了就调用开发者的重写闭包；然后用可选绑定来获取代理对象(这里涉及到我们前面讲的下标脚本)，注意这里的代理对象的类型是&lt;code&gt;Request.TaskDelegate&lt;/code&gt;(其他的代理方法会有类型转换，可能为Request.UploadTaskDelegate、Request.DownloadTaskDelegate、Request.DataTaskDelegate)，如果代理存在就调用与本方法类似的代理方法。然后发送通知，任务完成，最后从&lt;code&gt;subdelegates&lt;/code&gt;字典中移除任务和任务的代理(任务和任务的代理是在Request实例创建后添加到字典中的，参见Manager的request方法)。&lt;/p&gt;
+
+&lt;p&gt;所以&lt;code&gt;SessionDelegate&lt;/code&gt;要么调用开发者重写代理行为的闭包，要么调用子代理(Request.TaskDelegate、Request.TaskDelegateDataTaskDelegate等)实现的相应的代理方法。大部分的代理方法都是这种类似的模式，或者有些不必要处理的代理方法就直接带过。&lt;/p&gt;
+
+&lt;p&gt;所以Request.TaskDelegate、Request.TaskDelegateDataTaskDelegate，以及后面会涉及到的Request.UploadTaskDelegate、Request.DownloadTaskDelegate为任务处理所有代理回调都是上面这种模式。&lt;/p&gt;
+
+&lt;h3 id=&#34;执行串行队列里面的所有任务&#34;&gt;执行串行队列里面的所有任务&lt;/h3&gt;
+
+&lt;p&gt;这里的串行队列指的是TaskDelegate里面的queue属性，类型为NSOperationQueue，NSOperationQueue默认就是异步并发的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    init(task: NSURLSessionTask) {
+        self.task = task
+        self.progress = NSProgress(totalUnitCount: 0)
+        self.queue = {
+            let operationQueue = NSOperationQueue()
+            operationQueue.maxConcurrentOperationCount = 1
+            operationQueue.suspended = true
+
+            if #available(OSX 10.10, *) {
+                operationQueue.qualityOfService = NSQualityOfService.Utility
+            }
+
+            return operationQueue
+        }()
+    }
+
+    deinit {
+        queue.cancelAllOperations()
+        queue.suspended = false
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;初始化函数主要就是初始化赋值了queue属性，设置了队列的maxConcurrentOperationCount属性1，那么队列就是串行的了，然后将队列的suspended属性设置为true，那么添加的队列的任务就不会执行，直到suspended属性为false。析构函数取消了队列的所有操作，然后设置suspended属性为false。&lt;/p&gt;
+
+&lt;p&gt;前面Request初始化的时候给队列添加了任务，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;delegate.queue.addOperationWithBlock { self.endTime = CFAbsoluteTimeGetCurrent() }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为队列是挂起的，所以并不会开始执行，除非队列的suspended属性为false。我们再看看何时将队列的suspended属性设置为了false，除了在析构器设置之外。&lt;/p&gt;
+
+&lt;p&gt;仔细找找就会发现在Request.TaskDelegate的一个方法里面设置了队列的suspended属性为false。方法源码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+        if let taskDidCompleteWithError = taskDidCompleteWithError {
+            taskDidCompleteWithError(session, task, error)
+        } else {
+            if let error = error {
+                self.error = error
+
+                if let
+                    downloadDelegate = self as? DownloadTaskDelegate,
+                    userInfo = error.userInfo as? [String: AnyObject],
+                    resumeData = userInfo[NSURLSessionDownloadTaskResumeData] as? NSData
+                {
+                    downloadDelegate.resumeData = resumeData
+                }
+            }
+
+            queue.suspended = false
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法的源码很简单，首先判断开发者是否重写了默认的行为，如果重写了就调用开发者重写的闭包，然后结束；如果没有就进行一些相应的处理，然后设置队列的suspended属性为false，队列就开始执行之前添加到队列里面的任务。&lt;/p&gt;
+
+&lt;p&gt;之所以在这个方法里面设置队列suspended属性的原因就是这个方法是代理的生命周期中的最后一个方法(前面就说过，SessionDelegate的相应代理方法默认情况下就会调用这个方法)，这时候请求、响应都已经结束了。那为什么一定要等请求和响应结束之后才开始执行队列里面的任务呢？试想一下，如果我们队列里面的任务是要获取响应数据，而请求和响应都还没结束，我们从何获取数据。事实上，&lt;code&gt;responseJSON&lt;/code&gt;操作就是把我们传入的闭包参数添加到了&lt;code&gt;queue&lt;/code&gt;队列里面，而闭包的输入参数就是响应数据，所以我们传入的闭包是等到了请求和响应结束之后才执行的。&lt;code&gt;queue&lt;/code&gt;队列是异步串行的，所以不会阻塞调用&lt;code&gt;responseJSON&lt;/code&gt;操作的线程。包括其它的诸如&lt;code&gt;response&lt;/code&gt;、&lt;code&gt;responseData&lt;/code&gt;、&lt;code&gt;responseString&lt;/code&gt;、&lt;code&gt;responsePropertyList&lt;/code&gt;操作也都是添加到队列里面，然后等到请求和响应结束之后才执行的。&lt;/p&gt;
+
+&lt;p&gt;所以一开始的用例基本上都已经讲解完了，而且你可以在&lt;code&gt;responseJSON&lt;/code&gt;操作之后再接其它操作(&lt;code&gt;response&lt;/code&gt;、&lt;code&gt;responseData&lt;/code&gt;、&lt;code&gt;responseString&lt;/code&gt;等)。实际上这些操作只是先添加到了队列上，并没有立即开始执行，而是等到请求响应结束之后再执行。&lt;/p&gt;
+
+&lt;h1 id=&#34;responseserialization-swift&#34;&gt;ResponseSerialization.swift&lt;/h1&gt;
+
+&lt;p&gt;剩下的最后内容就是对响应数据的处理了，先看两个简单的类型。&lt;/p&gt;
+
+&lt;h2 id=&#34;result-swift&#34;&gt;Result.swift&lt;/h2&gt;
+
+&lt;p&gt;定义了泛型枚举&lt;code&gt;Result&lt;/code&gt;类型，方便我们封装值，定义很简单，这里就不讲解了。&lt;/p&gt;
+
+&lt;h2 id=&#34;response-swift&#34;&gt;Response.swift&lt;/h2&gt;
+
+&lt;p&gt;这里定义的是泛型结构体&lt;code&gt;Response&lt;/code&gt;类型，用于封装响应的数据，都很简单，看源码就明白了。&lt;/p&gt;
+
+&lt;p&gt;然后这两个类型都适配了&lt;code&gt;CustomStringConvertible&lt;/code&gt;、&lt;code&gt;CustomDebugStringConvertible&lt;/code&gt;协议，便于开发调试，接下来我们主要看ResponseSerialization.swift文件里面的内容。&lt;/p&gt;
+
+&lt;h2 id=&#34;responseserializertype协议&#34;&gt;ResponseSerializerType协议&lt;/h2&gt;
+
+&lt;p&gt;该协议源码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// MARK: ResponseSerializer
+
+/**
+    The type in which all response serializers must conform to in order to serialize a response.
+*/
+public protocol ResponseSerializerType {
+    /// The type of serialized object to be created by this `ResponseSerializerType`.
+    typealias SerializedObject
+
+    /// The type of error to be created by this `ResponseSerializer` if serialization fails.
+    typealias ErrorObject: ErrorType
+
+    /**
+        A closure used by response handlers that takes a request, response, data and error and returns a result.
+    */
+    var serializeResponse: (NSURLRequest?, NSHTTPURLResponse?, NSData?, NSError?) -&amp;gt; Result&amp;lt;SerializedObject, ErrorObject&amp;gt; { get }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在写这篇博客的时候，Xcode已经升至7.3、iOS9.3、Swift2.2版本。所以在协议里已经推荐使用&lt;code&gt;associatedtype&lt;/code&gt;关键字了，而不是&lt;code&gt;typealias&lt;/code&gt;，解释说这样更符合语义，确实当初也觉得&lt;code&gt;typealias&lt;/code&gt;理解起来总是感觉有点别扭。&lt;/p&gt;
+
+&lt;p&gt;这个协议很简单，定义了&lt;code&gt;SerializedObject&lt;/code&gt;和&lt;code&gt;ErrorObject&lt;/code&gt;关联类型，&lt;code&gt;ErrorObject&lt;/code&gt;类型必须适配了&lt;code&gt;ErrorType&lt;/code&gt;协议，然后定义了一个只读的闭包属性&lt;code&gt;serializeResponse&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;所有处理响应数据的序列化器必须适配该协议。&lt;/p&gt;
+
+&lt;p&gt;然后定义了泛型结构体&lt;code&gt;ResponseSerializer&amp;lt;Value, Error: ErrorType&amp;gt;&lt;/code&gt;，并且适配了上述的&lt;code&gt;ResponseSerializerType&lt;/code&gt;协议，所以之后我们会使用这个结构体来处理响应的数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+    A generic `ResponseSerializerType` used to serialize a request, response, and data into a serialized object.
+*/
+public struct ResponseSerializer&amp;lt;Value, Error: ErrorType&amp;gt;: ResponseSerializerType {
+    /// The type of serialized object to be created by this `ResponseSerializer`.
+    public typealias SerializedObject = Value
+
+    /// The type of error to be created by this `ResponseSerializer` if serialization fails.
+    public typealias ErrorObject = Error
+
+    /**
+        A closure used by response handlers that takes a request, response, data and error and returns a result.
+    */
+    public var serializeResponse: (NSURLRequest?, NSHTTPURLResponse?, NSData?, NSError?) -&amp;gt; Result&amp;lt;Value, Error&amp;gt;
+
+    /**
+        Initializes the `ResponseSerializer` instance with the given serialize response closure.
+
+        - parameter serializeResponse: The closure used to serialize the response.
+
+        - returns: The new generic response serializer instance.
+    */
+    public init(serializeResponse: (NSURLRequest?, NSHTTPURLResponse?, NSData?, NSError?) -&amp;gt; Result&amp;lt;Value, Error&amp;gt;) {
+        self.serializeResponse = serializeResponse
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先使用泛型制定了&lt;code&gt;SerializedObject&lt;/code&gt;和&lt;code&gt;ErrorObject&lt;/code&gt;的类型，然后实现了&lt;code&gt;serializeResponse&lt;/code&gt;属性，到这里就适配完了&lt;code&gt;ResponseSerializerType&lt;/code&gt;协议，最后创建了一个初始化方法用来赋值&lt;code&gt;serializeResponse&lt;/code&gt;属性。注意&lt;code&gt;serializeResponse&lt;/code&gt;属性是闭包类型，所以初始化器接收的参数是一个闭包类型。&lt;/p&gt;
+
+&lt;p&gt;接下来我们就来具体看看&lt;code&gt;responseJSON&lt;/code&gt;操作，方法源码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+    Adds a handler to be called once the request has finished.
+
+    - parameter options:           The JSON serialization reading options. `.AllowFragments` by default.
+    - parameter completionHandler: A closure to be executed once the request has finished.
+
+    - returns: The request.
+*/
+public func responseJSON(
+    options options: NSJSONReadingOptions = .AllowFragments,
+    completionHandler: Response&amp;lt;AnyObject, NSError&amp;gt; -&amp;gt; Void)
+    -&amp;gt; Self
+{
+    return response(
+        responseSerializer: Request.JSONResponseSerializer(options: options),
+        completionHandler: completionHandler
+    )
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;该方法在&lt;code&gt;ResponseSerialization.swift&lt;/code&gt;文件中，通过拓展&lt;code&gt;extension&lt;/code&gt;添加给&lt;code&gt;Request&lt;/code&gt;类，是实例方法。方法接收的参数&lt;code&gt;options&lt;/code&gt;类型为&lt;code&gt;NSJSONReadingOptions&lt;/code&gt;且有默认值，调用的时候可以省略；&lt;code&gt;completionHandler&lt;/code&gt;参数为&lt;code&gt;Response&amp;lt;AnyObject, NSError&amp;gt; -&amp;gt; Void&lt;/code&gt;类型，即对应了我们最开始用例里面的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{ response in
+    print(response.request)  // original URL request
+    print(response.response) // URL response
+    print(response.data)     // server data
+    print(response.result)   // result of response serialization
+
+    if let JSON = response.result.value {
+        print(&amp;quot;JSON: \(JSON)&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这一部分。注意这里Response的实际类型，如果你是&lt;code&gt;responseString&lt;/code&gt;操作，那么就是&lt;code&gt;Response&amp;lt;String, NSError&amp;gt;&lt;/code&gt;；如果是&lt;code&gt;responseData&lt;/code&gt;，那么就是&lt;code&gt;Response&amp;lt;NSData, NSError&amp;gt;&lt;/code&gt;。这就是泛型的好处，可以写更通用、更精简的代码。方法的返回值为&lt;code&gt;Self&lt;/code&gt;，这是Swift里面的知识 ，当方法的返回值为该类型本身的时候，你可以使用&lt;code&gt;Self&lt;/code&gt;代替，不用明确的写出类型。这些方法返回了类型的实例，所以我们才能在&lt;code&gt;responseData&lt;/code&gt;等这些操作之后再接其它的类似的操作。&lt;/p&gt;
+
+&lt;p&gt;实现&lt;code&gt;responseJSON&lt;/code&gt;操作的源码如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;return response(
+    responseSerializer: Request.JSONResponseSerializer(options: options),
+    completionHandler: completionHandler
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;直接返回了response方法的返回值，第二个参数即是我们传入的闭包，这个不多做解释。主要说说第一个参数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Request.JSONResponseSerializer(options: options)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;第一个参数就是&lt;code&gt;JSONResponseSerializer&lt;/code&gt;方法的返回值，方法的源码如下；&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+    Creates a response serializer that returns a JSON object constructed from the response data using 
+    `NSJSONSerialization` with the specified reading options.
+
+    - parameter options: The JSON serialization reading options. `.AllowFragments` by default.
+
+    - returns: A JSON object response serializer.
+*/
+public static func JSONResponseSerializer(
+    options options: NSJSONReadingOptions = .AllowFragments)
+    -&amp;gt; ResponseSerializer&amp;lt;AnyObject, NSError&amp;gt;
+{
+    return ResponseSerializer { _, response, data, error in
+        guard error == nil else { return .Failure(error!) }
+
+        if let response = response where response.statusCode == 204 { return .Success(NSNull()) }
+
+        guard let validData = data where validData.length &amp;gt; 0 else {
+            let failureReason = &amp;quot;JSON could not be serialized. Input data was nil or zero length.&amp;quot;
+            let error = Error.errorWithCode(.JSONSerializationFailed, failureReason: failureReason)
+            return .Failure(error)
+        }
+
+        do {
+            let JSON = try NSJSONSerialization.JSONObjectWithData(validData, options: options)
+            return .Success(JSON)
+        } catch {
+            return .Failure(error as NSError)
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法也是通过拓展&lt;code&gt;extension&lt;/code&gt;添加给&lt;code&gt;Request&lt;/code&gt;类的，而且是类方法，不需要初始化实例，直接调用。这个方法的返回值就是我们前面讲过的泛型结构体&lt;code&gt;ResponseSerializer&amp;lt;Value, Error: ErrorType&amp;gt;&lt;/code&gt;，这个方法的实现也很简单，就是初始化了一个实例而已。之前就说了初始化方法接收的参数是一个闭包，是用来序列化响应数据的。具体的序列化的过程其实也很简单，就是把响应数据序列化为JSON对象，然后将序列化后的数据封装在&lt;code&gt;Result&lt;/code&gt;里面，作为闭包的返回值。详细的序列化过程不再讲解，主要涉及到错误处理、&lt;code&gt;guard&lt;/code&gt;关键字等，都是Swift的知识。&lt;/p&gt;
+
+&lt;p&gt;然后我们再来看response方法，源码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+    Adds a handler to be called once the request has finished.
+
+    - parameter queue:              The queue on which the completion handler is dispatched.
+    - parameter responseSerializer: The response serializer responsible for serializing the request, response, 
+                                    and data.
+    - parameter completionHandler:  The code to be executed once the request has finished.
+
+    - returns: The request.
+*/
+public func response&amp;lt;T: ResponseSerializerType&amp;gt;(
+    queue queue: dispatch_queue_t? = nil,
+    responseSerializer: T,
+    completionHandler: Response&amp;lt;T.SerializedObject, T.ErrorObject&amp;gt; -&amp;gt; Void)
+    -&amp;gt; Self
+{
+    delegate.queue.addOperationWithBlock {
+        let result = responseSerializer.serializeResponse(
+            self.request,
+            self.response,
+            self.delegate.data,
+            self.delegate.error
+        )
+
+        let requestCompletedTime = self.endTime ?? CFAbsoluteTimeGetCurrent()
+        let initialResponseTime = self.delegate.initialResponseTime ?? requestCompletedTime
+
+        let timeline = Timeline(
+            requestStartTime: self.startTime ?? CFAbsoluteTimeGetCurrent(),
+            initialResponseTime: initialResponseTime,
+            requestCompletedTime: requestCompletedTime,
+            serializationCompletedTime: CFAbsoluteTimeGetCurrent()
+        )
+
+        let response = Response&amp;lt;T.SerializedObject, T.ErrorObject&amp;gt;(
+            request: self.request,
+            response: self.response,
+            data: self.delegate.data,
+            result: result,
+            timeline: timeline
+        )
+
+        dispatch_async(queue ?? dispatch_get_main_queue()) { completionHandler(response) }
+    }
+
+    return self
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法是个泛型方法，首先指定了一个占位类型，该类型适配了&lt;code&gt;ResponseSerializerType&lt;/code&gt;协议。然后方法的第二个参数就是该占位类型，即适配了&lt;code&gt;ResponseSerializerType&lt;/code&gt;协议的所有类型都可以作为第二个参数，比如我们刚刚说过的泛型结构体&lt;code&gt;ResponseSerializer&amp;lt;Value, Error: ErrorType&amp;gt;&lt;/code&gt;，因为它适配了&lt;code&gt;ResponseSerializerType&lt;/code&gt;协议，完全符合这个占位类型，而这里也的确是传入了这个结构体的实例作为参数。第三个参数就是我们传入的闭包，而Response的类型由占位类型来确定。&lt;/p&gt;
+
+&lt;p&gt;然后我们看方法的实现，首先就是给队列添加任务，即我们传入的闭包也包含在这个任务中，也就是在这里把&lt;code&gt;responseJSON&lt;/code&gt;操作添加到队列里面的。简单讲解下这个任务具体做了什么事情，首先使用第二个参数来获取序列化后的结果，其它的就先不讲解了，接着使用这些数据初始化了一个&lt;code&gt;Response&lt;/code&gt;的实例，最后将这个实例当作我们传入闭包的输入参数，然后执行闭包。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;??&lt;/code&gt;是空合运算符，自行了解。所以任务里面的最后一行代码在默认情况下，我们的闭包是在主线程上执行的。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;responseData&lt;/code&gt;、&lt;code&gt;responseString&lt;/code&gt;、&lt;code&gt;responsePropertyList&lt;/code&gt;都是类似的，这里不再赘述。到这里基本就差不多了，其实上传和下载也是这种类似的模式，只是有些细节不一样，大概的模式以及流程是相似的。&lt;/p&gt;
+
+&lt;p&gt;以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Alamofire 源码学习 - 序</title>
+      <link>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---%E5%BA%8F/</link>
+      <pubDate>Wed, 16 Mar 2016 13:33:16 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---%E5%BA%8F/</guid>
+      <description>&lt;p&gt;本来这篇博文的标题是“Alamofire 源码分析”，后来想想不太恰当，所以就改成了现在的标题。&lt;/p&gt;
+
+&lt;p&gt;前段时间正好翻译完了并发编程指南和NSURLSession相关的一些东西，所以这篇博文也是必须的。
+&lt;/p&gt;
+
+&lt;p&gt;一直想做个自己的网络请求框架，所以这段时间准备了下：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;先是翻译了并发编程指南和NSURLSession的东西。&lt;/li&gt;
+&lt;li&gt;详细了解了下HTTP协议。&lt;/li&gt;
+&lt;li&gt;用Go语言写了个Web Service用于测试。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;当这些都弄好了要开始写框架的时候却是一头雾水，所以就找了些网络请求的开源框架学习。主要是用Swift写，所以直接看了Alamofire的源码。Alamofire的作者就是AFNetworking的作者，据说99.8%的iOS开发人员的网络请求框架都是AFNetworking。所以这个框架肯定是很适合来学习的，毕竟这作者是大神。&lt;/p&gt;
+
+&lt;p&gt;当看完源码着手开始写的时候，又一个问题出现了。我发现我已经跳不出Alamofire的实现方式了，不知不觉就设计的跟Alamofire一样了。首先编写网络请求框架方面，我没有多少经验，所以在实现功能的时候，除了Alamofire的实现方式之外，我想不到更好的方法了。所以我到最后其实就是从新写了一个Alamofire，或者说是山寨了一个。目前我这个山寨框架已经写完了，测试了下数据请求、上传、下载都实现了，但没有经过严格测试，并不完善，不适合在项目中使用。但我会在自己的项目中使用，然后不断完善，改进。&lt;/p&gt;
+
+&lt;p&gt;之前翻译的并发编程指南和NSURLSession的文档帮助我理解Alamofire的源码起了很大的作用，所以这个翻译是值得的。Alamofire是完全基于NSURLSession的，看源码的时候你会发现它是按照苹果的编程指南来实现的，简直就是最佳实践。这也说明了苹果官方的编程指南对于开发人员是很重要的，在开发之前先了解官方的编程指南会让我们少走很多弯路，避免很多不必要的BUG。看完了源码之后觉得其实很简单，但是就会有自己怎么想不到的疑问，但是再看第二遍、第三遍的时候发现好像又并不是那么简单。现在我也不敢说全部代码都看懂了，甚至都没看完。感觉看了60%吧，还有很多代码路径没有覆盖到，包括测试代码和Demo的代码。&lt;/p&gt;
+
+&lt;p&gt;所以在这里还是声明下：这篇博文只是记录一些自己看源码时候的一些理解，由于博主颜值太高导致智商不是很高，难免会有错误，如果博主有什么不对的地方，那NTMD来打我啊。最后我会将自己写的山寨框架和Go的Web Service上传到GitHub，但是请不要在正式项目里面使用这些源码，要是出了什么纰漏，NTMD就不要来打我了，这个锅你自己背。&lt;/p&gt;
+
+&lt;p&gt;接下来的博文就从Request、Upload、Download三个方面进行源码学习。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/SpeedyServer&#34;&gt; Go WebService &lt;/a&gt;
+&lt;a href=&#34;https://github.com/LynchWong/Speedy&#34;&gt; Speedy &lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

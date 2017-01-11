@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Produce on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/produce/index.xml</link>
+    <description>Recent content in Produce on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/produce/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Fastlane - Produce</title>
+      <link>http://lynchwong.com/blog/2016/06/fastlane---produce/</link>
+      <pubDate>Mon, 27 Jun 2016 17:24:12 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/fastlane---produce/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;说明：翻译的 &lt;code&gt;Produce&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; 原文地址 &lt;/a&gt;。
+&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneProduce/produce.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;produce&#34;&gt;produce&lt;/h1&gt;
+
+&lt;p&gt;使用你的命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;produce&lt;/code&gt; 会使用最少的信息在 Apple Developer Portal 和 iTunes Connect 上创建新的iOS应用。&lt;/p&gt;
+
+&lt;h1 id=&#34;功能&#34;&gt;功能&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在 iTunes Connect 和 Dev Portal 上&lt;strong&gt;创建&lt;/strong&gt;新的应用&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;修改&lt;/strong&gt; Apple Developer Portal 上的应用服务&lt;/li&gt;
+&lt;li&gt;在 Apple Developer Portal 上&lt;strong&gt;创建&lt;/strong&gt; App Groups&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;关联&lt;/strong&gt; Apple Developer Portal 上的应用和 App Groups&lt;/li&gt;
+&lt;li&gt;支持&lt;strong&gt;多个苹果帐号&lt;/strong&gt;，你的证书安全的存储在 Keychain 中&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo gem install produce
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+
+&lt;h2 id=&#34;创建新的应用程序&#34;&gt;创建新的应用程序&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;produce
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;列出可用的参数列表：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;produce --help
+
+Commands:
+    associate_group  Associate with a group, which is create if needed or simply located otherwise
+    create           Creates a new app on iTunes Connect and the Apple Developer Portal
+    disable_services Disable specific Application Services for a specific app on the Apple Developer Portal
+    enable_services  Enable specific Application Services for a specific app on the Apple Developer Portal
+    group            Ensure that a specific App Group exists
+    help             Display global or [command] help documentation
+
+Global Options:
+    -u, --username STRING Your Apple ID Username (PRODUCE_USERNAME)
+    -a, --app_identifier STRING App Identifier (Bundle ID, e.g. com.krausefx.app) (PRODUCE_APP_IDENTIFIER)
+    -e, --bundle_identifier_suffix STRING App Identifier Suffix (Ignored if App Identifier does not ends with .*) (PRODUCE_APP_IDENTIFIER_SUFFIX)
+    -q, --app_name STRING App Name (PRODUCE_APP_NAME)
+    -z, --app_version STRING Initial version number (e.g. &#39;1.0&#39;) (PRODUCE_VERSION)
+    -y, --sku STRING     SKU Number (e.g. &#39;1234&#39;) (PRODUCE_SKU)
+    -m, --language STRING Primary Language (e.g. &#39;English&#39;, &#39;German&#39;) (PRODUCE_LANGUAGE)
+    -c, --company_name STRING The name of your company. Only required if it&#39;s the first app you create (PRODUCE_COMPANY_NAME)
+    -i, --skip_itc       Skip the creation of the app on iTunes Connect (PRODUCE_SKIP_ITC)
+    -d, --skip_devcenter  Skip the creation of the app on the Apple Developer Portal (PRODUCE_SKIP_DEVCENTER)
+    -b, --team_id STRING The ID of your team if you&#39;re in multiple teams (PRODUCE_TEAM_ID)
+    -l, --team_name STRING The name of your team if you&#39;re in multiple teams (PRODUCE_TEAM_NAME)
+    -h, --help           Display help documentation
+    -v, --version        Display version information
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;启用-禁用应用程序服务&#34;&gt;启用／禁用应用程序服务&lt;/h2&gt;
+
+&lt;p&gt;如果你想要为一个 App ID 启用应用程序服务(Application Services)，这个例子中是 HomeKit 和 HealthKit：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;produce enable_services --homekit --healthkit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你想为一个 App ID 禁用应用程序服务，这个例子中是 iCloud：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;produce disable_service --icloud
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你想创建新的 App Group：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;produce group -g group.krausefx -n &amp;quot;Example App Group&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你想关联应用和 App Group：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;produce associate_group -a com.krausefx.app group.krausefx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;参数&#34;&gt;参数&lt;/h2&gt;
+
+&lt;p&gt;获取可使用的选项列表：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;produce enable_services --help
+
+--app-group          Enable App Groups
+--associated-domains Enable Associated Domains
+--data-protection STRING Enable Data Protection, suitable values are &amp;quot;complete&amp;quot;, &amp;quot;unlessopen&amp;quot; and &amp;quot;untilfirstauth&amp;quot;
+--healthkit          Enable HealthKit
+--homekit            Enable HomeKit
+--wireless-conf      Enable Wireless Accessory Configuration
+--icloud STRING      Enable iCloud, suitable values are &amp;quot;legacy&amp;quot; and &amp;quot;cloudkit&amp;quot;
+--inter-app-audio    Enable Inter-App-Audio
+--passbook           Enable Passbook
+--push-notification  Enable Push notification (only enables the service, does not configure certificates)
+--vpn-conf           Enable VPN Configuration
+
+produce disable_services --help
+
+--app-group          Disable App Groups
+--associated-domains Disable Associated Domains
+--data-protection    Disable Data Protection
+--healthkit          Disable HealthKit
+--homekit            Disable HomeKit
+--wireless-conf      Disable Wireless Accessory Configuration
+--icloud             Disable iCloud
+--inter-app-audio    Disable Inter-App-Audio
+--passbook           Disable Passbook
+--push-notification  Disable Push notifications
+--vpn-conf           Disable VPN Configuration
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;环境变量&#34;&gt;环境变量&lt;/h2&gt;
+
+&lt;p&gt;所有可用的值也可以使用环境变量传递，运行 &lt;code&gt;produce --help&lt;/code&gt; 来获取所有可用参数的列表。&lt;/p&gt;
+
+&lt;h2 id=&#34;fastlane-https-github-com-fastlane-fastlane-tree-master-fastlane-整合&#34;&gt;&lt;code&gt;[fastlane](https://github.com/fastlane/fastlane/tree/master/fastlane)&lt;/code&gt; 整合&lt;/h2&gt;
+
+&lt;p&gt;你的 &lt;code&gt;fastlane&lt;/code&gt; 看起来应该是这样的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lane :appstore do
+    produce(
+        username: &#39;felix@krausefx.com&#39;,
+        app_identifier: &#39;com.krausefx.app&#39;,
+        app_name: &#39;MyApp&#39;,
+        language: &#39;English&#39;,
+        app_version: &#39;1.0&#39;,
+        sku: &#39;123&#39;,
+        team_name: &#39;SunApps GmbH&#39; # only necessary when in multiple teams
+    )
+
+    deliver
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了在 &lt;code&gt;deliver&lt;/code&gt; 中使用你新生成的应用，你需要将下面的代码添加到 &lt;code&gt;Deliverfile&lt;/code&gt; 文件中：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;apple_id ENV[&#39;PRODUCE_APPLE_ID&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当应用程序还在 App Store 中不可用的时候，这会告诉 &lt;code&gt;deliver&lt;/code&gt; 使用哪一个 App ID 。&lt;/p&gt;
+
+&lt;p&gt;你仍然必需填写剩余的信息(比如截图，应用描述及价格)。你可以使用 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt;deliver&lt;/a&gt; 和 CLI 上传应用的元数据。&lt;/p&gt;
+
+&lt;h2 id=&#34;如何存储我的密码&#34;&gt;如何存储我的密码？&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;produce&lt;/code&gt; 使用来自 &lt;code&gt;fastlane&lt;/code&gt; 的 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt;password manager&lt;/a&gt;。查看 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt;CredentialsManager README&lt;/a&gt; 获取更多信息。&lt;/p&gt;
+
+&lt;h1 id=&#34;提示&#34;&gt;提示&lt;/h1&gt;
+
+&lt;h2 id=&#34;fastlane-工具链&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt;工具链&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; &lt;code&gt;deliver&lt;/code&gt; &lt;/a&gt;：将你的应用、截图、元数据上传到App Store&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; &lt;code&gt;snapshot&lt;/code&gt; &lt;/a&gt;：将你iOS应用在每一种设备上进行本地化自动截图&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; &lt;code&gt;frameit&lt;/code&gt; &lt;/a&gt;：快速将你的截图放入到适合的设备框中&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; &lt;code&gt;pem&lt;/code&gt; &lt;/a&gt;：自动生成和更新你的推送通知证书&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; &lt;code&gt;sigh&lt;/code&gt; &lt;/a&gt;：管理你的 provisioning profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; &lt;code&gt;cert&lt;/code&gt; &lt;/a&gt;：自动创建和维护iOS的 code signing certificates&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; &lt;code&gt;spaceship&lt;/code&gt; &lt;/a&gt;：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; &lt;code&gt;pilot&lt;/code&gt; &lt;/a&gt;：管理你TestFlight测试人员的最好方式，使用终端构建&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; &lt;code&gt;boarding&lt;/code&gt; &lt;/a&gt;：邀请你 TestFlight 的beta测试人员的最简单方式&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; &lt;code&gt;gym&lt;/code&gt; &lt;/a&gt;：构建你iOS应用程序&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; &lt;code&gt;scan&lt;/code&gt; &lt;/a&gt;：为你iOS和Mac应用运行测试的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; &lt;code&gt;match&lt;/code&gt; &lt;/a&gt;：使用Git在你的团队中同步你的 certificates 和 profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/supply&#34;&gt; &lt;code&gt;supply&lt;/code&gt; &lt;/a&gt;：将你的Android应用和数据上传到 Google Play&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/screengrab&#34;&gt; &lt;code&gt;screengrab&lt;/code&gt; &lt;/a&gt;：Android版&lt;code&gt;snapshot&lt;/code&gt;，一样的功能&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;帮助&#34;&gt;帮助&lt;/h1&gt;
+
+&lt;p&gt;请提交 issue 到 GitHub，并提供你关于设置的信息。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

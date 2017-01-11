@@ -1,0 +1,1018 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Swift之闭包</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="闭包是自包含的函数代码块,可以在代码中被传递和使用。Swift 中的闭包与 C 和 Objective-C 中的代码块(blocks)以及其他一些编程语言中的匿名函数比较相似。
+">
+    <meta property="og:description" content="闭包是自包含的函数代码块,可以在代码中被传递和使用。Swift 中的闭包与 C 和 Objective-C 中的代码块(blocks)以及其他一些编程语言中的匿名函数比较相似。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Swift之闭包">
+    <meta property="og:url" content="/2015/01/swift%E4%B9%8B%E9%97%AD%E5%8C%85/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="闭包是自包含的函数代码块,可以在代码中被传递和使用。Swift 中的闭包与 C 和 Objective-C 中的代码块(blocks)以及其他一些编程语言中的匿名函数比较相似。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Swift之闭包
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-01-28T11:12:42Z">
+    
+  
+  
+  
+  
+    2015-01-28 11:12:42
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>闭包是自包含的函数代码块,可以在代码中被传递和使用。Swift 中的闭包与 C 和 Objective-C 中的代码块(blocks)以及其他一些编程语言中的匿名函数比较相似。
+</p>
+
+<p>闭包可以捕获和存储其所在上下文中任意常量和变量的引用。这就是所谓的闭合并包裹着这些常量和变量,俗称闭包。Swift 会为您管理在捕获过程中涉及到的所有内存操作。</p>
+
+<p>注意: 如果您不熟悉捕获(capturing)这个概念也不用担心,您可以在值捕获章节对其进行详细了解。</p>
+
+<p>在函数章节中介绍的全局和嵌套函数实际上也是特殊的闭包,闭包采取如下三种形式之一:</p>
+
+<ol>
+<li>全局函数是一个有名字但不会捕获任何值的闭包;</li>
+<li>嵌套函数是一个有名字并可以捕获其封闭函数域内值的闭包;</li>
+<li>闭包表达式是一个利用轻量级语法所写的可以捕获其上下文中变量或常量值的匿名闭包。</li>
+</ol>
+
+<p>Swift 的闭包表达式拥有简洁的风格,并鼓励在常见场景中进行语法优化,主要优化如下:</p>
+
+<ol>
+<li>利用上下文推断参数和返回值类型;</li>
+<li>隐式返回单表达式闭包,即单表达式闭包可以省略 return 关键字;</li>
+<li>参数名称缩写;</li>
+<li>尾随(Trailing)闭包语法。</li>
+</ol>
+
+<h2 id="闭包表达式-closure-expressions">闭包表达式(Closure Expressions)</h2>
+
+<p>嵌套函数是一个在较复杂函数中方便进行命名和定义自包含代码模块的方式。当然,有时候撰写小巧的没有完整定义和命名的类函数结构也是很有用处的,尤其是在您处理一些函数并需要将另外一些函数作为该函数的参数时。</p>
+
+<p>闭包表达式是一种利用简洁语法构建内联闭包的方式。闭包表达式提供了一些语法优化,使得撰写闭包变得简单明了。下面闭包表达式的例子通过使用几次迭代展示了 sort(_:) 方法定义和语法优化的方式。每一次迭代都用更简洁的方式描述了相同的功能。</p>
+
+<h3 id="sort-函数-the-sort-function">sort 函数(The Sort Function)</h3>
+
+<p>Swift 标准库提供了名为 sort 的函数,会根据您提供的用于排序的闭包函数将已知类型数组中的值进行排序。一旦排序完成, sort(<em>:) 方法会返回一个与原数组大小相同,包含同类型元素且元素已正确排序的新数组。原数组不会被 sort(</em>:) 方法修改。</p>
+
+<p>下面的闭包表达式示例使用 sort(_:) 方法对一个String类型的数组进行字母逆序排序,以下是初始数组值:</p>
+
+<pre><code>let names = [&quot;Chris&quot;, &quot;Alex&quot;, &quot;Ewa&quot;, &quot;Barry&quot;, &quot;Daniella&quot;]
+</code></pre>
+
+<p>sort(_:) 方法需要传入两个参数:</p>
+
+<ol>
+<li>已知类型的数组;</li>
+<li>闭包函数,该闭包函数需要传入与数组元素类型相同的两个值,并返回一个布尔类型值来表明当排序结束后传入的第一个参数排在第二个参数前面还是后面。如果第一个参数值出现在第二个参数值前面,排序闭包函数需要返回 true ,反之返回 false 。</li>
+</ol>
+
+<p>该例子对一个 String 类型的数组进行排序,因此排序闭包函数类型需为 (String, String) -&gt; Bool 。</p>
+
+<p>提供排序闭包函数的一种方式是撰写一个符合其类型要求的普通函数,并将其作为 ssort(_:) 方法的参数传入:</p>
+
+<pre><code>func backwards(s1: String, s2: String) -&gt; Bool {
+    return s1 &gt; s2
+}
+var reversed = sorted(names, backwards)
+// reversed is equal to [&quot;Ewa&quot;, &quot;Daniella&quot;, &quot;Chris&quot;, &quot;Barry&quot;, &quot;Alex&quot;]
+</code></pre>
+
+<p>如果第一个字符串 ( s1 ) 大于第二个字符串 ( s2 ), backwards 函数返回 true ,表示在新的数组中 s1 应该出现在 s2 前。 对于字符串中的字符来说,“大于” 表示 “按照字母顺序较晚出现”。 这意味着字母 &ldquo;B&rdquo; 大于字 母 &ldquo;A&rdquo; ,字符串 &ldquo;Tom&rdquo; 大于字符串 &ldquo;Tim&rdquo; 。 其将进行字母逆序排序, &ldquo;Barry&rdquo; 将会排在 &ldquo;Alex&rdquo; 之前。</p>
+
+<p>然而,这是一个相当冗长的方式,本质上只是写了一个单表达式函数 (a &gt; b)。 在下面的例子中,利用闭合表达式语法可以更好的构造一个内联排序闭包。</p>
+
+<h3 id="闭包表达式语法">闭包表达式语法</h3>
+
+<p>闭包表达式语法有如下一般形式:</p>
+
+<pre><code>{ (parameters) -&gt; return type in
+    statements
+}
+</code></pre>
+
+<p>闭包表达式语法可以使用常量、变量和 inout 类型作为参数,不提供默认值。也可以在参数列表的最后使用可变参数。元组也可以作为参数和返回值。</p>
+
+<p>下面的例子展示了之前 backwards 函数对应的闭包表达式版本的代码:</p>
+
+<pre><code>reversed = sorted(names, { (s1: String, s2: String) -&gt; Bool in
+    return s1 &gt; s2
+})
+</code></pre>
+
+<p>需要注意的是内联闭包参数和返回值类型声明与 backwards 函数类型声明相同。 在这两种方式中,都写成了 (s 1: String, s2: String) -&gt; Bool 。 然而在内联闭包表达式中,函数和返回值类型都写在大括号内,而不是大括号外。</p>
+
+<p>闭包的函数体部分由关键字 in 引入。 该关键字表示闭包的参数和返回值类型定义已经完成,闭包函数体即将开始。</p>
+
+<p>因为这个闭包的函数体部分如此短以至于可以将其改写成一行代码:</p>
+
+<pre><code>reversed = sorted(names, { (s1: String, s2: String) -&gt; Bool in return s1 &gt; s2 } )
+</code></pre>
+
+<p>这说明 sort(_:) 方法的整体调用保持不变,一对圆括号仍然包裹住了函数中整个参数集合。而其中一个参数现在变成了内联闭包(相比于 backwards 版本的代码)</p>
+
+<h3 id="根据上下文推断类型-inferring-type-from-context">根据上下文推断类型(Inferring Type From Context)</h3>
+
+<p>因为排序闭包函数是作为 sort(_:) 方法的参数进行传入的,Swift可以推断其参数和返回值的类型。 sorted 期望第二个参数是类型为 (String, String) -&gt; Bool 的函数,因此实际上 String , String 和 Bool 类型并不需要作为闭包表达式定义中的一部分。 因为所有的类型都可以被正确推断,返回箭头 ( -&gt; ) 和围绕在参数周围的括号也可以被省略:</p>
+
+<pre><code>reversed = sorted(names, { s1, s2 in return s1 &gt; s2 } )
+</code></pre>
+
+<p>实际上任何情况下,通过内联闭包表达式构造的闭包作为参数传递给函数时,都可以推断出闭包的参数和返回值类型,这意味着您几乎不需要利用完整格式构造任何内联闭包。</p>
+
+<p>然而您仍然可以明确写出有着完整格式的闭包。如果完整格式的闭包能够提高代码的可读性,则可以采用完整格式的闭包。而在 sort(_:) 方法这个例子里,闭包的目的就是排序,读者能够推测除这个闭包是用于字符串处理的,因为这个闭包是为了处理字符串数组的排序。</p>
+
+<h3 id="单表达式闭包隐式返回-implicit-return-from-single-expression-clossures">单表达式闭包隐式返回(Implicit Return From Single-Expression Clossures)</h3>
+
+<p>单行表达式闭包可以通过隐藏 return 关键字来隐式返回单行表达式的结果,如上版本的例子可以改写为:</p>
+
+<pre><code>reversed = sorted(names, { s1, s2 in s1 &gt; s2 } )
+</code></pre>
+
+<p>在这个例子中, sort(_:) 方法的第二个参数函数类型明确了闭包必须返回一个 Bool 类型值。因为闭包函数体只包含了一个单一表达式 ( s1 &gt; s2 ),该表达式返回 Bool 类型值,因此这里没有歧义, return 关键字可以省略。</p>
+
+<h3 id="参数名称缩写-shorthand-argument-names">参数名称缩写(Shorthand Argument Names)</h3>
+
+<p>Swift 自动为内联函数提供了参数名称缩写功能,您可以直接通过 $0 , $1 , $2 来顺序调用闭包的参数。</p>
+
+<p>如果您在闭包表达式中使用参数名称缩写,您可以在闭包参数列表中省略对其的定义,并且对应参数名称缩写的类型会通过函数类型进行推断。 in 关键字也同样可以被省略,因为此时闭包表达式完全由闭包函数体构成:</p>
+
+<pre><code>reversed = sorted(names, { $0 &gt; $1 } )
+</code></pre>
+
+<p>在这个例子中, $0 和 $1 表示闭包中第一个和第二个 String 类型的参数。</p>
+
+<h3 id="运算符函数-operator-functions">运算符函数(Operator Functions)</h3>
+
+<p>实际上还有一种更简短的方式来撰写上面例子中的闭包表达式。 Swift 的 String 类型定义了关于大于号 ( &gt; ) 的字符串实现,其作为一个函数接受两个 String 类型的参数并返回 Bool 类型的值。 而这正好与 sort(_:) 方法的第二个参数需要的函数类型相符合。 因此,您可以简单地传递一个大于号,Swift可以自动推断出您想使用大于号的字符串函数实现:</p>
+
+<pre><code>reversed = sorted(names, &gt;)
+</code></pre>
+
+<p>更多关于运算符表达式的内容请查看运算符函数。</p>
+
+<h2 id="尾随闭包-trailing-closures">尾随闭包(Trailing Closures)</h2>
+
+<p>如果您需要将一个很长的闭包表达式作为最后一个参数传递给函数,可以使用尾随闭包来增强函数的可读性。尾随闭包是一个书写在函数括号之后的闭包表达式,函数支持将其作为最后一个参数调用。</p>
+
+<pre><code>func someFunctionThatTakesAClosure(closure: () -&gt; ()) {
+    // function body goes here
+}
+
+// here's how you call this function without using a trailing closure:
+
+someFunctionThatTakesAClosure({
+    // closure's body goes here
+})
+
+// here's how you call this function with a trailing closure instead:
+
+someFunctionThatTakesAClosure() {
+    // trailing closure's body goes here
+}
+</code></pre>
+
+<p>注意: 如果函数只需要闭包表达式一个参数,当您使用尾随闭包时,您甚至可以把 () 省略掉。</p>
+
+<p>在上例中作为 sorted 函数参数的字符串排序闭包可以改写为:</p>
+
+<pre><code>reversed = sorted(names) { $0 &gt; $1 }
+</code></pre>
+
+<p>当闭包非常长以至于不能在一行中进行书写时,尾随闭包变得非常有用。举例来说,Swift 的 Array 类型有一个 map 方法,其获取一个闭包表达式作为其唯一参数。数组中的每一个元素调用一次该闭包函数,并返回该元素所映射的值(也可以是不同类型的值)。 具体的映射方式和返回值类型由闭包来指定。</p>
+
+<p>当提供给数组闭包函数后, map 方法将返回一个新的数组,数组中包含了与原数组一一对应的映射后的值。</p>
+
+<p>下例介绍了如何在 map 方法中使用尾随闭包将 Int 类型数组 [16,58,510] 转换为包含对应 String 类型的数组 [&ldquo;OneSix&rdquo;, &ldquo;FiveEight&rdquo;, &ldquo;FiveOneZero&rdquo;] :</p>
+
+<pre><code>let digitNames = [
+    0: &quot;Zero&quot;, 1: &quot;One&quot;, 2: &quot;Two&quot;,   3: &quot;Three&quot;, 4: &quot;Four&quot;,
+    5: &quot;Five&quot;, 6: &quot;Six&quot;, 7: &quot;Seven&quot;, 8: &quot;Eight&quot;, 9: &quot;Nine&quot;
+]
+let numbers = [16, 58, 510]
+</code></pre>
+
+<p>如上代码创建了一个数字位和它们名字映射的英文版本字典。同时定义了一个准备转换为字符串的整型数组。</p>
+
+<p>您现在可以通过传递一个尾随闭包给 numbers 的 map 方法来创建对应的字符串版本数组。需要注意的是调用 numbers.map 不需要在 map 后面包含任何括号,因为其只需要传递闭包表达式这一个参数,并且该闭包表达式参数通过尾随方式进行撰写:</p>
+
+<pre><code>let strings = numbers.map {
+    (var number) -&gt; String in
+    var output = &quot;&quot;
+    while number &gt; 0 {
+        output = digitNames[number % 10]! + output
+        number /= 10
+    }
+    return output
+}
+// strings is inferred to be of type [String]
+// its value is [&quot;OneSix&quot;, &quot;FiveEight&quot;, &quot;FiveOneZero&quot;]
+</code></pre>
+
+<p>map 在数组中为每一个元素调用了闭包表达式。您不需要指定闭包的输入参数 number 的类型,因为可以通过要映射的数组类型进行推断。</p>
+
+<p>闭包 number 参数被声明为一个变量参数(变量的具体描述请参看常量参数和变量参数),因此可以在闭 包函数体内对其进行修改。闭包表达式制定了返回类型为 String ,以表明存储映射值的新数组类型为 String 。</p>
+
+<p>闭包表达式在每次被调用的时候创建了一个字符串并返回。其使用求余运算符 (number % 10) 计算最后一位数字并利用 digitNames 字典获取所映射的字符串。</p>
+
+<p>注意: 字典 digitNames 下标后跟着一个叹号 (!),因为字典下标返回一个可选值 (optional value),表明即使该 key 不存在也不会查找失败。 在上例中,它保证了 number % 10 可以总是作为一个 digitNames 字典的有效下标 key。 因此叹号可以用于强制解析 (force-unwrap) 存储在可选下标项中的类型值。</p>
+
+<p>从 digitNames 字典中获取的字符串被添加到输出的前部,逆序建立了一个字符串版本的数字。(在表达式中,如果number为16,则返回6,58返回8,510返回0)。</p>
+
+<p>number 变量之后除以10。因为其是整数,在计算过程中未除尽部分被忽略。因此16变成了1,58变成了5,510变成了51。</p>
+
+<p>整个过程重复进行,直到 number /= 10 为0,这时闭包会将字符串输出,而 map 函数则会将字符串添加到所映射的数组中。</p>
+
+<p>上例中尾随闭包语法在函数后整洁封装了具体的闭包功能,而不再需要将整个闭包包裹在 map 函数的括号内。</p>
+
+<h2 id="捕获值-capturing-values">捕获值(Capturing Values)</h2>
+
+<p>闭包可以在其定义的上下文中捕获常量或变量。即使定义这些常量和变量的原域已经不存在,闭包仍然可以在闭包函数体内引用和修改这些值。</p>
+
+<p>Swift最简单的闭包形式是嵌套函数,也就是定义在其他函数的函数体内的函数。嵌套函数可以捕获其外部函数所有的参数以及定义的常量和变量。</p>
+
+<p>下例为一个叫做 makeIncrementor 的函数,其包含了一个叫做 incrementor 嵌套函数。嵌套函数 incrementor 从上下文中捕获了两个值,runningTotal 和 amount。 之后 makeIncrementor 将 incrementor 作为闭包返回。每次调用 incrementor 时,其会以 amount 作为增量增加 runningTotal 的值。</p>
+
+<pre><code>func makeIncrementor(forIncrement amount: Int) -&gt; () -&gt; Int {
+    var runningTotal = 0
+    func incrementor() -&gt; Int {
+        runningTotal += amount
+        return runningTotal
+    }
+    return incrementor
+}
+</code></pre>
+
+<p>makeIncrementor 返回类型为 () -&gt; Int 。 这意味着其返回的是一个函数,而不是一个简单类型值。该函数在每次调用时不接受参数只返回一个 Int 类型的值。 关于函数返回其他函数的内容,请查看函数类型作为返回类型。</p>
+
+<p>makeIncrementor 函数定义了一个整型变量 runningTotal (初始为 0) 用来存储当前增加总数。该值通过 incrementor 返回。</p>
+
+<p>makeIncrementor 有一个 Int 类型的参数,其外部命名为 forIncrement, 内部命名为 amount,表示每次 incrementor 被调用时 runningTotal 将要增加的量。</p>
+
+<p>incrementor 函数用来执行实际的增加操作。该函数简单地使 runningTotal 增加 amount,并将其返回。</p>
+
+<p>如果我们单独看这个函数,会发现看上去不同寻常:</p>
+
+<pre><code>func incrementor() -&gt; Int {
+    runningTotal += amount
+    return runningTotal
+}
+</code></pre>
+
+<p>incrementor 函数并没有获取任何参数,但是在函数体内访问了 runningTotal 和 amount 变量。这是因为其通过捕获在包含它的函数体内已经存在的 runningTotal 和 amount 变量的引用(reference)而实现。捕捉了变量引用,保证了 runningTotal 和 amount 变量在调用完 makeIncrementor 后不会消失,并且保证了当下一次执行 incrementor 函数时, runningTotal 可以继续增加。</p>
+
+<p>注意: 为了优化,Swift可能会捕捉和保存一份对值的拷贝,如果这个值是不可变或是在闭包外的。 Swift同样负责被捕捉的所有变量的内存管理,包括释放不被需要的变量。</p>
+
+<p>下面为一个使用 makeIncrementor 的例子:</p>
+
+<pre><code>let incrementByTen = makeIncrementor(forIncrement: 10)
+</code></pre>
+
+<p>该例子定义了一个叫做 incrementByTen 的常量,该常量指向一个每次调用会加 10 的 incrementor 函数。调用这个函数多次可以得到以下结果:</p>
+
+<pre><code>incrementByTen()
+// returns a value of 10
+incrementByTen()
+// returns a value of 20
+incrementByTen()
+// returns a value of 30
+</code></pre>
+
+<p>如果您创建了另一个 incrementor,其会有一个属于自己的独立的 runningTotal 变量的引用。下面的例子中,incrementBySevne 捕获了一个新的 runningTotal 变量,该变量和 incrementByTen 中捕获的变量没有任何联系:</p>
+
+<pre><code>let incrementBySeven = makeIncrementor(forIncrement: 7)
+incrementBySeven()
+// returns a value of 7
+incrementByTen()
+// returns a value of 40
+</code></pre>
+
+<p>注意: 如果您将闭包赋值给一个类实例的属性,并且该闭包通过指向该实例或其成员来捕获了该实例,您将创建一个在闭包和实例间的强引用环。 Swift 使用捕获列表来打破这种强引用环。更多信息,请参考闭包引起的循环强引用。</p>
+
+<h2 id="闭包是引用类型-closures-are-reference-types">闭包是引用类型(Closures Are Reference Types)</h2>
+
+<p>上面的例子中, incrementBySeven 和 incrementByTen 是常量,但是这些常量指向的闭包仍然可以增加其捕获的变量值。这是因为函数和闭包都是引用类型。</p>
+
+<p>无论您将函数/闭包赋值给一个常量还是变量,您实际上都是将常量/变量的值设置为对应函数/闭包的引用。上面的例子中, incrementByTen 指向闭包的引用是一个常量,而并非闭包内容本身。</p>
+
+<p>这也意味着如果您将闭包赋值给了两个不同的常量/变量,两个值都会指向同一个闭包:</p>
+
+<pre><code>let alsoIncrementByTen = incrementByTen
+alsoIncrementByTen()
+// returns a value of 50
+</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/02/swift%E4%B9%8B%E6%9E%9A%E4%B8%BE/" data-tooltip="Swift之枚举">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%87%BD%E6%95%B0/" data-tooltip="Swift之函数">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E9%2597%25AD%25E5%258C%2585%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E9%2597%25AD%25E5%258C%2585%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E9%2597%25AD%25E5%258C%2585%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/02/swift%E4%B9%8B%E6%9E%9A%E4%B8%BE/" data-tooltip="Swift之枚举">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%87%BD%E6%95%B0/" data-tooltip="Swift之函数">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E9%2597%25AD%25E5%258C%2585%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E9%2597%25AD%25E5%258C%2585%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E9%2597%25AD%25E5%258C%2585%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E9%2597%25AD%25E5%258C%2585%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E9%2597%25AD%25E5%258C%2585%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E9%2597%25AD%25E5%258C%2585%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/01\/swift%E4%B9%8B%E9%97%AD%E5%8C%85\/';
+          
+            this.page.identifier = '\/2015\/01\/swift%E4%B9%8B%E9%97%AD%E5%8C%85\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

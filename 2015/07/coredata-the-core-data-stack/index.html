@@ -1,0 +1,1165 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>CoreData: The Core Data Stack</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="到现在为止我们都是使用的Xcode生成的CoreData模板。使用Xcode来帮助我们并没有什么错，Xcode就是用来帮助我们提升开发效率的，而且在这些细节之处也体现了Xcode的优秀。一般情形下使用Xcode生成的CoreData模板就够用了，但是如果你想知道CoreData是如何工作的，那么你就必须创建自己的Core Data Stack。
+">
+    <meta property="og:description" content="到现在为止我们都是使用的Xcode生成的CoreData模板。使用Xcode来帮助我们并没有什么错，Xcode就是用来帮助我们提升开发效率的，而且在这些细节之处也体现了Xcode的优秀。一般情形下使用Xcode生成的CoreData模板就够用了，但是如果你想知道CoreData是如何工作的，那么你就必须创建自己的Core Data Stack。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="CoreData: The Core Data Stack">
+    <meta property="og:url" content="/2015/07/coredata-the-core-data-stack/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="到现在为止我们都是使用的Xcode生成的CoreData模板。使用Xcode来帮助我们并没有什么错，Xcode就是用来帮助我们提升开发效率的，而且在这些细节之处也体现了Xcode的优秀。一般情形下使用Xcode生成的CoreData模板就够用了，但是如果你想知道CoreData是如何工作的，那么你就必须创建自己的Core Data Stack。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      CoreData: The Core Data Stack
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-07-21T21:48:02Z">
+    
+  
+  
+  
+  
+    2015-07-21 21:48:02
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>到现在为止我们都是使用的Xcode生成的CoreData模板。使用Xcode来帮助我们并没有什么错，Xcode就是用来帮助我们提升开发效率的，而且在这些细节之处也体现了Xcode的优秀。一般情形下使用Xcode生成的CoreData模板就够用了，但是如果你想知道CoreData是如何工作的，那么你就必须创建自己的Core Data Stack。
+</p>
+
+<p>这个Stack由四个Core Data类组成：</p>
+
+<ul>
+<li>NSManagedObjectModel</li>
+<li>NSManagedObjectModel</li>
+<li>NSPersistentStoreCoordinator</li>
+<li>NSManagedObjectContext</li>
+</ul>
+
+<p>之前我们已经接触过<strong>NSManagedObjectContext</strong>了。但是其他的三个类都在场景后面给予<strong>NSManagedObjectContext</strong>提供支持。</p>
+
+<h1 id="准备工作">准备工作</h1>
+
+<p>本章的示例不想弄的太复杂，我们还是使用最开始的那个仓库管理的例子，在这基础上再改进一下，比如仓库中有商品等。只不过这次我们不使用Xcode为我们生成的模板，而是创建自己的Stack。所以我们应该新开一个项目，只是在新建的时候不要勾选<strong>Use Core Data</strong>。</p>
+
+<p>在开始编码前，我们先来了解上面提及到的类。</p>
+
+<h1 id="the-managed-object-model">The managed object model</h1>
+
+<p><strong>NSManagedObjectModel</strong>表示你数据模型中的所有对象类型，它们能够拥有的属性，以及它们之间的关系。Stack使用这个模型去创建对象，存储属性以及保存数据。</p>
+
+<p>你可以将<strong>NSManagedObjectModel</strong>想象成数据库中的表视图。如果你的Stack在底层使用SQLite，那么<strong>NSManagedObjectModel</strong>代表什么就很明显。</p>
+
+<p>然而，SQLite只是CoreData中很多持久化存储类型之一，所以应该在一般情形下思考<strong>NSManagedObjectModel</strong>。</p>
+
+<p><strong>注意：</strong>你可能对<strong>NSManagedObjectModel</strong>是怎样与数据模型编辑器联系起来的。可视的编辑器创建和编辑<strong>xcdatamodel</strong>文件。那里有一个特殊的编译器(<strong>momc</strong>)，这个编译器会将模型文件在<strong>momd</strong>文件夹中编译成一个文件集合。就像Swift代码能够编译优化然后运行在设备上，编译后的模型能够在运行时被高效的访问。CoreData在运行时使用<strong>momd</strong>文件夹中编译后的内容来初始化生成<strong>NSManagedObjectModel</strong>。</p>
+
+<h1 id="the-persistent-store">The persistent store</h1>
+
+<p><strong>NSPersistentStore</strong>会读取和写入数据，无论你决定使用哪个存储方法。CoreData提供了四种<strong>NSPersistentStore</strong>的类型：3种原子的和1种非原子的。</p>
+
+<p>原子的<strong>NSPersistentStore</strong>在做任何读写操作前需要完全的反序列化然后加载到内存中。相反，非原子的<strong>NSPersistentStore</strong>可以根据需要将自己的部分加载到内存中。</p>
+
+<p>下面简述了这四种内置类型：</p>
+
+<ol>
+<li><strong>NSQLiteStoreType</strong>使用SQLite数据库存储。这是CoreData支持的唯一一种非原子的，轻量级的操作及高效的内存使用。让它成为了大部分iOS项目的最佳选择。Xcode的模板默认使用该类型。</li>
+<li><strong>NSXMLStoreType</strong>使用XML文件存储，是所有类型中最具可读性的。该类型是原子的，所以会有大量的内存使用。该类型只在OS X中可用。</li>
+<li><strong>NSBinaryStoreType</strong>使用二进制数据文件存储。同样也是原子的，所以在操作之前你必须将所有的二进制数据加载到内存中。在现实世界中你基本很难找到使用该类型的应用程序。</li>
+<li><strong>NSInMemoryStoreType</strong>在某种程度上来说，这种类型并不是真正的持久化。如果你终止应用程序或者关掉了你的手机，这些在内存中的数据就会消失。感觉上这违背了CoreData的目的，但是该类型在单元测试或者某种缓存中是很有用的。</li>
+</ol>
+
+<p><strong>注意：</strong>是否有JSON文件或者CSV文件来作为持久存储类型呢？好消息是你可以通过子类化<strong>NSIncrementalStore</strong>来创建你自己的持久存储类型。<a href="https://developer.apple.com/library/ios/documentation/DataManagement/Conceptual/IncrementalStorePG/Introduction/Introduction.html"> 详见 </a>。</p>
+
+<h1 id="the-persistent-store-coordinator">The persistent store coordinator</h1>
+
+<p><strong>NSPersistentStoreCoordinator</strong>是<strong>NSManagedObjectModel</strong>与<strong>NSPersistentStore</strong>的桥梁。在CoreData中它负责使用model和persistent stores来完成大部分繁重的工作。它明白<strong>NSManagedObjectModel</strong>，知道怎样给它发送消息，以及从<strong>NSPersistentStore</strong>获取信息。</p>
+
+<p><strong>NSPersistentStoreCoordinator</strong>也隐藏了怎样配置persistent store或者stores的实现细节。这样很有用，主要有两个原因：</p>
+
+<ol>
+<li><strong>NSManagedObjectContext</strong>不需要知道它保存的数据是保存在SQLite数据库，XML文件或者iCloud。</li>
+<li>如果你有多个persistent stores，对于<strong>NSManagedObjectContext</strong>来说，<strong>NSPersistentStoreCoordinator</strong>提供了一个统一的接口。只要<strong>NSManagedObjectContext</strong>关心，它总会表现成一个单一的聚合的persistent store。</li>
+</ol>
+
+<h1 id="the-managed-object-context">The managed object context</h1>
+
+<p>大多数情况下我们都是在和<strong>NSManagedObjectContext</strong>打交道。基本上你只会在设置你的Stack或者做迁移的时候才会看见其他三个组件。</p>
+
+<p>因此，明白它是如何工作的就很重要。下面这几点可能是到目前为止你学到的：</p>
+
+<ul>
+<li>一个context是存储managed objects的内存里面的暂存器。</li>
+<li>使用context来处理所有CoreData对象的工作。</li>
+<li>所有你做的改变并不会影响磁盘上的数据，直到你调用了context的save()方法。</li>
+</ul>
+
+<p>这里还有另外的五点在之前没有提及，这些很重要，所以请注意：</p>
+
+<ol>
+<li>context管理它创建或者请求的对象的生命周期。这个生命周期管理包括一些强大的功能，比如断层，逆向关系处理以及验证。</li>
+<li>一个managed object不能在context之外独立存在。事实上，一个managed object和它的context是紧密耦合的，所以所有的managed object都有它context的引用，可以像这样访问<code>let employeeContext = employee.managedObjectContext</code>。</li>
+<li>context是非常有领域性的。一旦一个managed object与一个特定的context关联后，那么在它的生命周期中会一直保持这种连接。</li>
+<li>一个应用程序可以使用不止一个的context，大部分比较复杂的CoreData应用程序都是这一类的。由于context是磁盘内容在内存中的暂存器，事实上你可以在同一时间加载相同的CoreData对象到两个不同的context。</li>
+<li>context不是线程安全的，managed object也是。你可以在创建它们的那个线程上与context和managed objects进行交互。苹果提供了多种方式在多线程应用程序中与context交互(后面详解)。</li>
+</ol>
+
+<h1 id="creating-your-stack-object">Creating your stack object</h1>
+
+<p>我新建了一个项目，只是没有勾选要使用CoreData，这里就不详细讲解了。然后新建了一个Swift源文件，叫做<code>CoreDataStack</code>，将内容替换成了如下代码：</p>
+
+<pre><code>import CoreData
+
+class CoreDataStack {
+    let context: NSManagedObjectContext
+    let psc: NSPersistentStoreCoordinator
+    let model: NSManagedObjectModel
+    var store: NSPersistentStore?
+}
+</code></pre>
+
+<p>这是编译器会报错，说没有Initializers，我们先暂时不管。这里的四个属性对应了之前的组件。</p>
+
+<p>我们继续添加如下方法：</p>
+
+<pre><code>func applicationDocumentsDirectory() -&gt; NSURL {
+    let fileManager = NSFileManager.defaultManager()
+
+    let urls = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask) as! [NSURL]
+    return urls[0]
+}
+</code></pre>
+
+<p>这个方法返回了应用程序documents目录的URL。我们需要将SQLite数据库(就是一个文件)存放在这个documents目录内。这里是用来存放用户数据推荐的目录，不管你是否使用CoreData。</p>
+
+<p>现在我们增加Initializer，如下所示：</p>
+
+<pre><code>init() {
+    //1
+    let bundle = NSBundle.mainBundle()
+    let modelURL = bundle.URLForResource(&quot;&quot;, withExtension: &quot;momd&quot;)!
+    model = NSManagedObjectModel(contentsOfURL: modelURL)!
+
+    //2
+    psc = NSPersistentStoreCoordinator(managedObjectModel: model)
+
+    //3
+    context = NSManagedObjectContext()
+    context.persistentStoreCoordinator = psc
+
+    //4
+    let documentsURL = applicationDocumentsDirectory()
+    let storeURL = documentsURL.URLByAppendingPathComponent(&quot;&quot;)
+
+    let options = [NSMigratePersistentStoresAutomaticallyOption: true]
+    var error: NSError?
+    store = psc.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil,
+        URL: storeURL, options: options, error: &amp;error)
+
+    if store == nil {
+        println(&quot;Error adding persistent store: \(error)&quot;)
+        abort()
+    }
+}
+</code></pre>
+
+<p>Initializer负责对Stack中每一个独立的组件进行配置：</p>
+
+<ol>
+<li>第一步是从磁盘加载managed object model到<strong>NSManagedObjectModel</strong>对象。你通过得到包含<strong>.xcdatamodeld</strong>文件编译后的版本的<strong>momd</strong>目录的URL来完成这些操作。</li>
+<li>一旦你初始化了<strong>NSManagedObjectModel</strong>，下一步就是创建<strong>NSPersistentStoreCoordinator</strong>。记住persistent store coordinator斡旋于persistent store与NSManagedObjectModel之间。</li>
+<li><strong>NSManagedObjectContext</strong>的初始化器并不接受参数。然后在连接<strong>NSPersistentStoreCoordinator</strong>之后并没有多少用。你可以设置context的persistentStoreCoordinator属性。</li>
+<li>你并没有直接初始化创建一个persistent store。persistent store coordinator帮你处理了NSPersistentStore对象。你只需要简单的指定store type，store file的URL location以及一些配置选项。</li>
+</ol>
+
+<p>上面代码中的一些URL并没有设置，稍后设置。</p>
+
+<p>继续添加如下方法：</p>
+
+<pre><code>func saveContext() {
+    var error: NSError?
+    if context.hasChanges &amp;&amp; !context.save(&amp;error) {
+        println(&quot;Could not save: \(error), \(error?.userInfo)&quot;)
+    }
+}
+</code></pre>
+
+<p>这个方法保存了Stack的managed object context，当错误发生时进行处理。</p>
+
+<p>接下来到<strong>ViewController.swift</strong>，替换为如下内容：</p>
+
+<pre><code>import UIKit
+import CoreData
+
+class ViewController: UIViewController {
+
+    var managedContext: NSManagedObjectContext!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+
+}
+</code></pre>
+
+<p>然后到<strong>AppDelegate.swift</strong>进行设置，引入CoreData框架<code>import CoreData</code>。然后在<code>var window: UIWindow?</code>下面添加如下代码：</p>
+
+<pre><code>lazy var coreDataStack = CoreDataStack()
+</code></pre>
+
+<p>我们将coreDataStack属性设置为延迟属性，表示Stack在第一次被访问时才会被初始化。然后在application(_:didFinishLaunchingWithOptions:)方法中添加如下代码，主要就是设置<strong>ViewController</strong>的<strong>managedContext</strong>属性：</p>
+
+<pre><code>let navigationController = window?.rootViewController as! UINavigationController
+
+let viewController = navigationController.topViewController as! ViewController
+viewController.managedContext = coreDataStack.context
+</code></pre>
+
+<p>修改如下方法：</p>
+
+<pre><code>func applicationDidEnterBackground(application: UIApplication) {
+    coreDataStack.saveContext()
+}
+
+func applicationWillTerminate(application: UIApplication) {
+    coreDataStack.saveContext()
+}
+</code></pre>
+
+<p>这些方法保证了程序不管什么原因导致的进入后台或者被终结，都会将挂起的改变进行保存。</p>
+
+<h1 id="modeling-your-data">Modeling your data</h1>
+
+<p>现在我们就来创建数据模型，<strong>File\New\File&hellip;</strong>，选择<strong>iOS\Core Data\Data Model</strong>，这里我使用了默认的名字，所以我的Data Model就叫做<strong>Model.xcdatamodeld</strong>。现在我们回头去设置之前没有设置的一些URL。</p>
+
+<pre><code>let modelURL = bundle.URLForResource(&quot;Model&quot;, withExtension: &quot;momd&quot;)!
+let storeURL = documentsURL.URLByAppendingPathComponent(&quot;Model&quot;)
+</code></pre>
+
+<p>主要就是这两处代码。</p>
+
+<p>现在我们就来设置实体，如之前就提到的，我们应该有Warehouse和Good这两个实体，那么我就一一设置。</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/1.png" alt="alt text" /></p>
+
+<p>如上所示，我设置了一个<strong>Warehouse</strong>实体，有一个<strong>name</strong>属性，是<strong>String</strong>类型。</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/2.png" alt="alt text" /></p>
+
+<p>同样的，设置了<strong>Good</strong>这个实体，也只有<strong>name</strong>属性，<strong>String</strong>类型。</p>
+
+<p>其实在现实世界中，这些实体之间都是有关系的，比如我们仓库中可能存放着许多的商品。那么我应该在<strong>Warehouse</strong>实体中设置一个goods的属性，类型应该是数组或者集合的，但是我们发现属性类型里面根本就没有数组或者集合类型。其实这里我们不应该设置属性了，应该设置实体之间的关系。</p>
+
+<p>如下图所示，我在<strong>Warehouse</strong>实体的<strong>Relationships</strong>这一栏设置了一个叫做<strong>goods</strong>的关系，<strong>Destination</strong>设置为了<strong>Good</strong>实体。<strong>Destination</strong>就可以想象成关系的末端。</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/3.png" alt="alt text" /></p>
+
+<p>设置完成后，Xcode有一个警告，如下图，先不用管，还没设置完：</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/4.png" alt="alt text" /></p>
+
+<p>每种关系刚开始都被默认设置成了<strong>to-one</strong>(即一对一的关系)，在上面的示例中表示我们的仓库一次只能追踪一个商品，其实这是不对的，因为我们的仓库肯定不止一个商品。仓库和商品应该是一对多的关系，所以我们应该进行修改，如下所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/5.png" alt="alt text" /></p>
+
+<p>我们选择<strong>Good</strong>实体，同样也需要设置关系，设置了一个叫做<strong>warehouse</strong>的关系，<strong>Destination</strong>为<strong>Warehouse</strong>，设置<strong>Inverse</strong>为<strong>goods</strong>。如下所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/6.png" alt="alt text" /></p>
+
+<p>这里默认的<strong>to-one</strong>关系是正确的，因为一个商品不可能存在于多个仓库中。</p>
+
+<p><strong>Inverse</strong>能够让模型进行逆向的寻找。比如给定了一条Good记录，你可以根据关系找到该商品的仓库。</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/7.png" alt="alt text" /></p>
+
+<p>你可以切换Editor Style，如上图所示，你可以清晰的看出实体之间的关系。</p>
+
+<h1 id="adding-managed-object-subclasses">Adding managed object subclasses</h1>
+
+<p>之前我们已经创建过managed object subclasses了，到<strong>Editor\Create NSManagedObject Subclass&hellip;</strong>，勾选要需要创建的实体。</p>
+
+<p>如下所示：</p>
+
+<pre><code>import Foundation
+import CoreData
+
+class Warehouse: NSManagedObject {
+
+    @NSManaged var name: String
+    @NSManaged var goods: NSOrderedSet
+
+}
+</code></pre>
+
+<p>如前面一样，name使用了String类型，但是goods关系使用了集合来表示。CoreData使表示一对多的关系时使用集合，而不是数组。因为我们让goods关系有序，所以是有序的集合。</p>
+
+<p><strong>注意：NSSet</strong>看起来像是奇怪的选择。与数组不同，集合不是通过下标来访问它们的成员。事实上，集合是无序的。CoreData使用NSSet是因为集合保证了成员的唯一性。相同的对象在一对多的关系中不会存在多次。如果你想使用下标来访问独立的对象，你应该勾选上<strong>Ordered</strong>，就如我们之前已经勾选上了一样。CoreData就会使用NSOrderedSet来表示这个关系。</p>
+
+<p><strong>Good</strong>看起来如下所示：</p>
+
+<pre><code>import Foundation
+import CoreData
+
+class Good: NSManagedObject {
+
+    @NSManaged var name: String
+    @NSManaged var warehouse: Warehouse
+
+}
+</code></pre>
+
+<p>也许你的代码看起来不是这样的，而是<code>@NSManaged var warehouse: NSManagedObject</code>，你可以重新执行一遍生成操作即可。</p>
+
+<p>还要进行如下所示的设置，<strong>Good</strong>也是类似：</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/8.png" alt="alt text" /></p>
+
+<h1 id="a-good-persistence-lane">A good persistence lane</h1>
+
+<p>尽量让实例程序简单点，在<strong>ViewController</strong>的<strong>viewDidLoad</strong>方法里面，我们根据仓库name来查找是否有叫<code>L</code>的仓库，如果有就赋值给<code>currentWarehouse</code>属性，没有我们就新建一个。如下：</p>
+
+<pre><code>override func viewDidLoad() {
+    super.viewDidLoad()
+    // Do any additional setup after loading the view, typically from a nib.
+
+    let warehouseEntity = NSEntityDescription.entityForName(&quot;Warehouse&quot;, inManagedObjectContext: managedContext)!
+
+    let warehouseName = &quot;L&quot;
+    let fetchRequest = NSFetchRequest(entityName: &quot;Warehouse&quot;)
+    fetchRequest.predicate = NSPredicate(format: &quot;name == %@&quot;, warehouseName)
+
+    var error: NSError?
+    let result = managedContext.executeFetchRequest(fetchRequest, error: &amp;error) as? [Warehouse]
+    if let warehouses = result {
+        if warehouses.count == 0 {
+            currentWarehouse = Warehouse(entity: warehouseEntity, insertIntoManagedObjectContext: managedContext)
+            currentWarehouse.name = warehouseName
+
+            if !managedContext.save(&amp;error) {
+                println(&quot;Could not save: \(error)&quot;)
+            }
+        } else {
+            currentWarehouse = warehouses[0]
+        }
+    } else {
+        println(&quot;Could not fetch: \(error)&quot;)
+    }
+
+    navigationItem.title = currentWarehouse.name
+}
+</code></pre>
+
+<p>代码很简单，就不讲解了。</p>
+
+<p>和最开始的仓库管理类似，对ViewController进行了如下的设置，添加了UITableView以及UIBarButtonItem，设置了@IBOutlet和selector，这些就不详细讲解怎么弄了。</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/9.png" alt="alt text" /></p>
+
+<p>运行之后，模拟器截图如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/10.png" alt="alt text" /></p>
+
+<p>要在列表中显示这个仓库的商品，但是现在还没有商品，接下来就来添加商品。</p>
+
+<pre><code>@IBAction func add(sender: AnyObject) {
+    var alert = UIAlertController(title: &quot;添加仓库&quot;, message: &quot;输入仓库名&quot;, preferredStyle: .Alert)
+    let saveAction = UIAlertAction(title: &quot;保存&quot;, style: .Default) {
+        (action: UIAlertAction!) -&gt; Void in
+        let textField = alert.textFields![0] as! UITextField
+        self.saveName(textField.text)
+        self.tableView.reloadData()
+    }
+    let cancelAction = UIAlertAction(title: &quot;取消&quot;, style: .Default) {
+        (action: UIAlertAction!) -&gt; Void in
+    }
+
+    alert.addTextFieldWithConfigurationHandler {
+        (textField: UITextField!) -&gt; Void in
+    }
+
+    alert.addAction(saveAction)
+    alert.addAction(cancelAction)
+
+    presentViewController(alert, animated: true, completion: nil)
+}
+
+func saveName(name: String) {
+    let entity = NSEntityDescription.entityForName(&quot;Good&quot;, inManagedObjectContext: managedContext)!
+    let good = Good(entity: entity, insertIntoManagedObjectContext: managedContext)
+    good.name = name
+
+    var goods = currentWarehouse.goods.mutableCopy() as! NSMutableOrderedSet
+    goods.addObject(good)
+
+    currentWarehouse.goods = goods.copy() as! NSOrderedSet
+
+    var error: NSError?
+    if !managedContext.save(&amp;error) {
+        println(&quot;Could not save: \(error)&quot;)
+    }
+
+    tableView.reloadData()
+}
+</code></pre>
+
+<p>@IBAction方法就是之前的，没有变动。<strong>saveName()</strong>方法也很简单，主要就是<strong>NSOrderedSet</strong>的可变和不可变。</p>
+
+<p>这里看起来好像设置一对多关系时还是有些复杂。如果你的关系是没有ordered的，那么你可以在<strong>one</strong>这一端进行设置，比如<code>good.warehouse = currentWarehouse</code>。然后CoreData能够根据Inverse关系来设置goods。</p>
+
+<p>运行之后截图如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/11.png" alt="alt text" /></p>
+
+<p>你可以重启App进行检查，查看数据是否被持久化了。</p>
+
+<p>PS：这里代码并没有给全，结束时会给出完整的代码。</p>
+
+<h1 id="deleting-objects-from-core-data">Deleting objects from Core Data</h1>
+
+<p>在<strong>ViewController</strong>里面添加如下方法：</p>
+
+<pre><code>func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    if editingStyle == UITableViewCellEditingStyle.Delete {
+        let goodRemove = currentWarehouse.goods[indexPath.row] as! Good
+        let goods = currentWarehouse.goods.mutableCopy() as! NSMutableOrderedSet
+        goods.removeObjectAtIndex(indexPath.row)
+        currentWarehouse.goods = goods.copy() as! NSOrderedSet
+
+        managedContext.deleteObject(goodRemove)
+
+        var error: NSError?
+        if !managedContext.save(&amp;error) {
+            println(&quot;Could not save: \(error)&quot;)
+        }
+
+        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+    }
+}
+</code></pre>
+
+<p>运行模拟器之后向左滑动Cell就会出现删除按钮，点击删除，如下所示删除了<code>water</code>：</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataStack/12.png" alt="alt text" /></p>
+
+<p>同样你也可以重启App进行检查。</p>
+
+<p><a href="https://github.com/LynchWong/OwnCoreDataStack"> 完整源码 </a>。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/coredata/">CoreData</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/07/coredata-fetching/" data-tooltip="CoreData: Fetching">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/07/coredata-%E5%AD%90%E7%B1%BB%E5%8C%96nsmanagedobject/" data-tooltip="CoreData: 子类化NSManagedObject">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-the-core-data-stack%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-the-core-data-stack%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-the-core-data-stack%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/07/coredata-fetching/" data-tooltip="CoreData: Fetching">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/07/coredata-%E5%AD%90%E7%B1%BB%E5%8C%96nsmanagedobject/" data-tooltip="CoreData: 子类化NSManagedObject">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-the-core-data-stack%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-the-core-data-stack%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-the-core-data-stack%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-the-core-data-stack%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-the-core-data-stack%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-the-core-data-stack%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/07\/coredata-the-core-data-stack\/';
+          
+            this.page.identifier = '\/2015\/07\/coredata-the-core-data-stack\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

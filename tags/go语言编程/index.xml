@@ -1,0 +1,3406 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go语言编程 on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/go%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B/index.xml</link>
+    <description>Recent content in Go语言编程 on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/go%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Go完结</title>
+      <link>http://lynchwong.com/blog/2015/07/go%E5%AE%8C%E7%BB%93/</link>
+      <pubDate>Sat, 04 Jul 2015 19:48:15 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/go%E5%AE%8C%E7%BB%93/</guid>
+      <description>&lt;p&gt;其实这个系列到这里就完结了，需要的知识点基本都涉及了。知识点很散乱，很多都是抛砖引玉、指个门路，还需要大家自己去组织和总结。
+&lt;/p&gt;
+
+&lt;p&gt;当然Web开发里面还有很多其他的东西，需要大家自行的学习了解。&lt;a href=&#34;https://github.com/astaxie/build-web-application-with-golang&#34;&gt; 《Go Web编程》 &lt;/a&gt;，推荐给大家这本书。书中内容很全，花花时间可以学习下。&lt;/p&gt;
+
+&lt;p&gt;接下来的路还很长，博主也开始给自己的App开发Web服务了，以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go的文本处理</title>
+      <link>http://lynchwong.com/blog/2015/07/go%E7%9A%84%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86/</link>
+      <pubDate>Thu, 02 Jul 2015 12:34:11 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/go%E7%9A%84%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86/</guid>
+      <description>&lt;p&gt;应用开发中经常要处理文本信息，包括像字符串、数字、JSON、XML等。网络交互主要使用JSON和XML，现在大部分的互联网应用都是使用JSON格式的数据，所以这里我们主要讲一下JSON的处理。
+&lt;/p&gt;
+
+&lt;p&gt;JSON(JavaScript Object Notation)是一种轻量级的数据交换格式。它基于ECMAScript的一个子集。 JSON采用完全独立于语言的文本格式，但是也使用了类似于C语言家族的习惯（包括C、C++、C#、Java、JavaScript、Perl、Python等）。这些特性使JSON成为理想的数据交换语言。易于人阅读和编写，同时也易于机器解析和生成(网络传输速率)。&lt;/p&gt;
+
+&lt;p&gt;Go语言的标准库已经非常好的支持了JSON，可以很容易的对JSON数据进行编、解码的工作。&lt;/p&gt;
+
+&lt;h2 id=&#34;解析json到结构体&#34;&gt;解析JSON到结构体&lt;/h2&gt;
+
+&lt;p&gt;假设我们有这样的一个JSON串&lt;code&gt;{&amp;quot;students&amp;quot;:[{&amp;quot;name&amp;quot;:&amp;quot;Lynch&amp;quot;,&amp;quot;age&amp;quot;:&amp;quot;25&amp;quot;},{&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;,&amp;quot;age&amp;quot;:&amp;quot;26&amp;quot;}]}&lt;/code&gt;，那么我们该怎么解析JSON串呢，Go的JSON包中有如下函数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func Unmarshal(data []byte, v interface{}) error
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;详细代码例子如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+
+import (
+    &amp;quot;encoding/json&amp;quot;
+    &amp;quot;fmt&amp;quot;
+)
+
+type Student struct {
+    Name string
+    Age string
+}
+
+type Studentslice struct {
+    Students []Student
+}
+
+func main() {
+    var s Studentslice
+    str := `{&amp;quot;Students&amp;quot;:[{&amp;quot;Name&amp;quot;:&amp;quot;Lynch&amp;quot;,&amp;quot;Age&amp;quot;:&amp;quot;25&amp;quot;},
+                         {&amp;quot;Name&amp;quot;:&amp;quot;Wong&amp;quot;,&amp;quot;Age&amp;quot;:&amp;quot;26&amp;quot;}]}`
+    json.Unmarshal([]byte(str), &amp;amp;s)
+    fmt.Println(s)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出结果如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{[{Lynch 25} {Wong 26}]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先我们定义了与JSON数据对应的结构体，Student的字段名对应数组里面对象的KEY，然后Studentslice的字段对应JSON数组的KEY。&lt;/p&gt;
+
+&lt;p&gt;KEY和字段的匹配方式如下，如果KEY是&lt;code&gt;Foo&lt;/code&gt;：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;首先查找tag含有&lt;code&gt;Foo&lt;/code&gt;的可导出的struct字段(首字母大写)。&lt;/li&gt;
+&lt;li&gt;其次查找字段名是&lt;code&gt;Foo&lt;/code&gt;的导出字段。&lt;/li&gt;
+&lt;li&gt;最后查找类似&lt;code&gt;FOO&lt;/code&gt;或者&lt;code&gt;FoO&lt;/code&gt;这样的除了首字母之外其他大小写不敏感的导出字段。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;而且能够被复制的字段必须是可导出字段(即首字母大写)。同时JSON解析的时候只会解析能找得到的字段，找不到的字段会被忽略，这样的一个好处是：当你接收到了一个很大的JSON数据结构而你却只想获取其中的部分数据的时候，你只需需要将想要的数据对应的字段名大写即可。&lt;/p&gt;
+
+&lt;h2 id=&#34;解析json到interface&#34;&gt;解析JSON到interface&lt;/h2&gt;
+
+&lt;p&gt;上面的情况是因为我们知道解析的JSON数据的结构，如果不知道该怎么解析呢？&lt;/p&gt;
+
+&lt;p&gt;我们可以使用interface{}来解析未知结构的JSON数据。使用map[string]interface{}和[]interface{}来存储任意的JSON对象和数组。Go类型和JSON类型的对应关系如下：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;bool 代表 JSON booleans,&lt;/li&gt;
+&lt;li&gt;float64 代表 JSON numbers,&lt;/li&gt;
+&lt;li&gt;string 代表 JSON strings,&lt;/li&gt;
+&lt;li&gt;nil 代表 JSON null.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;假设如下的JSON字串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;b := []byte(`{&amp;quot;Name&amp;quot;:&amp;quot;Lynch&amp;quot;, &amp;quot;Books&amp;quot;:[&amp;quot;One&amp;quot;, &amp;quot;Two&amp;quot;]}`)
+var f interface{}
+json.Unmarshal(b, &amp;amp;f)
+fmt.Println(f)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输入结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;map[Books:[One Two] Name:Lynch]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如何来访问这些数据呢？通过断言的方式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;m := f.(map[string]interface{})
+for k, v := range m {
+    switch vv := v.(type) {
+        case string:
+            fmt.Println(k, &amp;quot;is string&amp;quot;, vv)
+        case int:
+            fmt.Println(k, &amp;quot;is int&amp;quot;, vv)
+        case float64:
+            fmt.Println(k, &amp;quot;is float64&amp;quot;, vv)
+        case []interface{}:
+            fmt.Println(k, &amp;quot;is an array&amp;quot;, vv)
+            for i, u := range vv {
+                fmt.Println(i, u)
+            }
+        default:
+            fmt.Println(k, &amp;quot;is of a type I don&#39;t know how to handle&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输入结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Name is string Lynch
+Books is an array [One Two]
+0 One
+1 Two
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于处理未知结构的JSON，&lt;a href=&#34;https://github.com/bitly/go-simplejson&#34;&gt; go-simplejson &lt;/a&gt;很方便，请自行了解。&lt;/p&gt;
+
+&lt;h2 id=&#34;生成json&#34;&gt;生成JSON&lt;/h2&gt;
+
+&lt;p&gt;我们可以使用JSON包里的如下函数来生成JSON数据串：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func Marshal(v interface{}) ([]byte, error)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;比如我们要生成最开始的JSON串，代码如下;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var stu Studentslice
+stu.Students = append(stu.Students, Student{Name:&amp;quot;Lynch&amp;quot;, Age:&amp;quot;25&amp;quot;})
+stu.Students = append(stu.Students, Student{Name:&amp;quot;Wong&amp;quot;, Age:&amp;quot;26&amp;quot;})
+b, err := json.Marshal(stu)
+if err != nil {
+    fmt.Println(&amp;quot;json err: &amp;quot;, err)
+}
+fmt.Println(string(b))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{&amp;quot;Students&amp;quot;:[{&amp;quot;Name&amp;quot;:&amp;quot;Lynch&amp;quot;,&amp;quot;Age&amp;quot;:&amp;quot;25&amp;quot;},{&amp;quot;Name&amp;quot;:&amp;quot;Wong&amp;quot;,&amp;quot;Age&amp;quot;:&amp;quot;26&amp;quot;}]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们发现JSON串输出的字段名都是大写，如何变成小写的，如果改成小写的，那么JSON串就不会输出该字段。这时就需要使用struct tag定义来实现；&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Student struct {
+    Name string `json:&amp;quot;name&amp;quot;`
+    Age string `json:&amp;quot;age&amp;quot;`
+}
+
+type Studentslice struct {
+    Students []Student `json:&amp;quot;students&amp;quot;`
+}   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后输出如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{&amp;quot;students&amp;quot;:[{&amp;quot;name&amp;quot;:&amp;quot;Lynch&amp;quot;,&amp;quot;age&amp;quot;:&amp;quot;25&amp;quot;},{&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;,&amp;quot;age&amp;quot;:&amp;quot;26&amp;quot;}]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;针对JSON的输出，我们在定义struct tag的时候需要注意的几点是：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;字段的tag是&lt;code&gt;&amp;quot;-&amp;quot;&lt;/code&gt;，那么这个字段不会输出到JSON&lt;/li&gt;
+&lt;li&gt;tag中带有自定义名称，那么这个自定义名称会出现在JSON的字段名中，例如上面例子中name&lt;/li&gt;
+&lt;li&gt;tag中如果带有&lt;code&gt;&amp;quot;omitempty&amp;quot;&lt;/code&gt;选项，那么如果该字段值为空，就不会输出到JSON串中&lt;/li&gt;
+&lt;li&gt;如果字段类型是bool, string, int, int64等，而tag中带有&lt;code&gt;&amp;quot;,string&amp;quot;&lt;/code&gt;选项，那么这个字段在输出到JSON的时候会把该字段对应的值转换成JSON字符串&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;Marshal&lt;/code&gt;函数只有在转换成功的时候才会返回数据，在转换的过程中我们需要注意几点：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;JSON对象只支持string作为key，所以要编码一个map，那么必须是map[string]T这种类型(T是Go语言中任意的类型)&lt;/li&gt;
+&lt;li&gt;Channel, complex和function是不能被编码成JSON的&lt;/li&gt;
+&lt;li&gt;嵌套的数据是不能编码的，不然会让JSON编码进入死循环&lt;/li&gt;
+&lt;li&gt;指针在编码的时候会输出指针指向的内容，而空指针会输出null&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go访问数据库</title>
+      <link>http://lynchwong.com/blog/2015/07/go%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+      <pubDate>Thu, 02 Jul 2015 09:16:56 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/go%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+      <description>&lt;p&gt;大部分应用程序都需要数据库的支持，用来存储和查询信息，比如用户数据，产品目录，新闻列表等。
+&lt;/p&gt;
+
+&lt;p&gt;其实访问数据库没什么难的，都有相关的数据库驱动，参照文档完全没有问题。本篇也就简单讲讲Go访问MongoDB，MongoDB是非关系型数据库。像MySQL、SQL Server等一些关系型数据库怎么访问就不涉及了，毕竟基础的增删改查这些操作很简单。&lt;/p&gt;
+
+&lt;p&gt;我们先从安装MongoDB开始。&lt;/p&gt;
+
+&lt;h1 id=&#34;mongodb&#34;&gt;MongoDB&lt;/h1&gt;
+
+&lt;p&gt;MongoDB是目前在IT行业非常流行的一种非关系型数据库(NoSql)，其灵活的数据存储方式备受当前IT从业人员的青睐。MongoDB很好的实现了面向对象的思想(OO思想)，在MongoDB中每一条记录都是一个Document对象。Mongo DB最大的优势在于所有的数据持久操作都无需开发人员手动编写SQL语句，直接调用方法就可以轻松的实现CRUD操作。&lt;/p&gt;
+
+&lt;h2 id=&#34;安装mongodb&#34;&gt;安装MongoDB&lt;/h2&gt;
+
+&lt;p&gt;我是参照官方文档&lt;a href=&#34;http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/&#34;&gt; Install MongoDB on OS X &lt;/a&gt;安装的，是手动安装的。&lt;/p&gt;
+
+&lt;p&gt;通过shell下载，敲入如下命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -O https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-3.0.4.tgz
+tar -zxvf mongodb-osx-x86_64-3.0.4.tgz
+mkdir -p mongodb
+cp -R -n mongodb-osx-x86_64-3.0.4/ mongodb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;执行完这些命令后在当前目录下生成了一个mongodb的文件夹，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后我们设置PATH变量，和之前设置GOPATH类似的，我用的shell是zsh，所以我在.zshrc中设置,如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如果你不设置这个PAHT，那么你每次执行命令都要在前面加上PATH。比如我就需要每次在执行命令前加上&lt;strong&gt;/Users/Lynch/mongodb/bin&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;运行mongodb&#34;&gt;运行MongoDB&lt;/h2&gt;
+
+&lt;p&gt;在第一次运行之前，你应该创建一个mongod进程写数据的目录，默认使用/data/db目录。如果你设置了其他的，那么你在启动mongod进程的时候在&lt;strong&gt;dbpath&lt;/strong&gt;选项指定你设置的目录。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir -p /data/db
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你使用上面的命令创建了/data/db的目录，那么这个就是默认的目录。你在启动mongod进程的时候不需要在指定&lt;strong&gt;dbpath&lt;/strong&gt;选项，直接输入下面的命令就可以启动：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mongod
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意：我这里是设置过mongod的PATH的，如之前安装的时候说明的。如果你没设置需要在前面加上PATH，请参看安装的最后一步。&lt;/p&gt;
+
+&lt;p&gt;博主使用默认的/data/db的时候有些权限问题，MongoDB官方文档也说了要确保你的账户有这个目录的读写权限。&lt;/p&gt;
+
+&lt;p&gt;博主将/data/db目录放在了我们安装好的mongodb文件夹里面了，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;所以我使用如下命令启动：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mongod --dbpath /Users/Lynch/mongodb/data/db
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以看见提示说在端口27017等待连接了，你可以在这里使用Control + C来退出。&lt;/p&gt;
+
+&lt;h2 id=&#34;使用mongodb&#34;&gt;使用MongoDB&lt;/h2&gt;
+
+&lt;p&gt;如果你退出了，先启动起来。首先我们应该连接到数据库，启动之后输入如下命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mongo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如下所示，已经连接上了：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;默认连接使用test。这里有个警告，官方说是操作系统的原因，和MongoDB无关，所以这里就不管了。&lt;/p&gt;
+
+&lt;p&gt;你可以输入&lt;code&gt;show dbs&lt;/code&gt;来查看数据库，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里有些概念需要悉知：数据库，集合，文档。这里集合就相当于我们关系型数据库里面的表，而每一条数据都是一个文档，而文档是JSON的拓展(BSON)形式。&lt;/p&gt;
+
+&lt;p&gt;这里我们创建一个&amp;rdquo;student&amp;rdquo;的集合：&lt;/p&gt;
+
+&lt;h3 id=&#34;insert操作&#34;&gt;insert操作&lt;/h3&gt;
+
+&lt;p&gt;输入如下命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;db.student.insert({&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;, &amp;quot;age&amp;quot;:25})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如下所示，返回了写入结果：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;find操作&#34;&gt;find操作&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;db.student.find({&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;返回结果如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;update操作&#34;&gt;update操作&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;db.student.update({&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;},{&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;,&amp;quot;age&amp;quot;:26})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后查看：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;db.student.find({&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;})    
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;remove操作&#34;&gt;remove操作&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;db.student.remove({&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;你可以使用&lt;code&gt;db.student.count()&lt;/code&gt;来查看数据条数。&lt;/p&gt;
+
+&lt;h3 id=&#34;关闭mongodb&#34;&gt;关闭MongoDB&lt;/h3&gt;
+
+&lt;p&gt;除了之前我们使用Control + C退出之外，你还可以使用如下命令来关闭MongoDB：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;use admin
+db.shutdownServer()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这些只是一些简单的操作，冰山一角。详细复杂高端的操作还请自行了解、学习。&lt;/p&gt;
+
+&lt;h1 id=&#34;go访问mongodb&#34;&gt;Go访问MongoDB&lt;/h1&gt;
+
+&lt;p&gt;Go的MongoDB最好的驱动就是&lt;a href=&#34;http://labix.org/mgo&#34;&gt; mgo &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;使用如下命令安装mgo：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go get gopkg.in/mgo.v2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;安装完成后在我们GOPATH的pkg目录下就有了相应的包。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+
+import (
+        &amp;quot;fmt&amp;quot;
+    &amp;quot;log&amp;quot;
+        &amp;quot;gopkg.in/mgo.v2&amp;quot;
+        &amp;quot;gopkg.in/mgo.v2/bson&amp;quot;
+)
+
+type Person struct {
+        Name string
+        Phone string
+}
+
+func main() {
+        session, err := mgo.Dial(&amp;quot;server1.example.com,server2.example.com&amp;quot;)
+        if err != nil {
+                panic(err)
+        }
+        defer session.Close()
+
+        // Optional. Switch the session to a monotonic behavior.
+        session.SetMode(mgo.Monotonic, true)
+
+        c := session.DB(&amp;quot;test&amp;quot;).C(&amp;quot;people&amp;quot;)
+        err = c.Insert(&amp;amp;Person{&amp;quot;Ale&amp;quot;, &amp;quot;+55 53 8116 9639&amp;quot;},
+                   &amp;amp;Person{&amp;quot;Cla&amp;quot;, &amp;quot;+55 53 8402 8510&amp;quot;})
+        if err != nil {
+                log.Fatal(err)
+        }
+
+        result := Person{}
+        err = c.Find(bson.M{&amp;quot;name&amp;quot;: &amp;quot;Ale&amp;quot;}).One(&amp;amp;result)
+        if err != nil {
+                log.Fatal(err)
+        }
+
+        fmt.Println(&amp;quot;Phone:&amp;quot;, result.Phone)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上代码是mgo给的示例，下面我们新建一个项目，将上面的代码添加进去，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如果你现在就Run，一段时间后就得到如下错误：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们应该把&lt;code&gt;mgo.Dial(&amp;quot;server1.example.com,server2.example.com&amp;quot;)&lt;/code&gt;修改成&lt;code&gt;mgo.Dial(&amp;quot;127.0.0.1:27017&amp;quot;)&lt;/code&gt;，然后还要打开MongoDB，最后结果如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go的Web基础</title>
+      <link>http://lynchwong.com/blog/2015/07/go%E7%9A%84web%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Wed, 01 Jul 2015 12:52:12 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/go%E7%9A%84web%E5%9F%BA%E7%A1%80/</guid>
+      <description>&lt;p&gt;基本上Go的语法以及一些基础的东西前面都讲完了，所以完全有能力使用Go开始编程了。当然还仅仅是编程而已，做桌面应用或者Web应用还是需要一些其他的知识。
+&lt;/p&gt;
+
+&lt;p&gt;博主学Go主要是在Web编程这一块，而不是桌面应用。而目前最紧急的需求就是使用Go为自己的iOS App提供Web服务。所以现阶段主要的内容就是使用Go编写Web服务，这只是Web编程的一小部分。所以之后的内容主要就涉及到Go处理数据库，数据处理等与Web服务相关的内容。应该不会涉及到Web编程里面的其他内容，比如和JS交互，AJAX，HTML等。&lt;/p&gt;
+
+&lt;p&gt;很多内容都来自 &lt;a href=&#34;https://github.com/astaxie/build-web-application-with-golang&#34;&gt;《Go Web编程》&lt;/a&gt;，包括之前博文的一些内容也都来自于此，大家可以参看原书。所以之后博文的部分内容可能会来自书中内容的精简。&lt;/p&gt;
+
+&lt;h1 id=&#34;web基础&#34;&gt;Web基础&lt;/h1&gt;
+
+&lt;p&gt;由于Go目前已经拥有了成熟的HTTP处理包，这使得编写能做任何事情的动态Web程序易如反掌。&lt;/p&gt;
+
+&lt;h2 id=&#34;go搭建一个简单的web服务&#34;&gt;Go搭建一个简单的Web服务&lt;/h2&gt;
+
+&lt;p&gt;Web是基于http协议的一个服务，Go语言里面提供了一个完善的&lt;strong&gt;net/http&lt;/strong&gt;包，通过http包可以很方便的就搭建起一个可以运行的Web服务。同时使用这个包能很简单地对Web的路由，静态文件，模板，cookie等数据进行设置和操作。&lt;/p&gt;
+
+&lt;h3 id=&#34;http包建立web服务器&#34;&gt;http包建立Web服务器&lt;/h3&gt;
+
+&lt;p&gt;打开我们的IDE，选择我们之前创建的&lt;strong&gt;MyGo&lt;/strong&gt;项目，如下所示，如果忘了请参阅&lt;a href=&#34;http://lynchwong.com/2015/06/27/Go%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B/&#34;&gt; Go完整示例 &lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;打开之后在src下创建一个webdemo目录，然后在该目录下创建webdemo.go源文件，如下图所示(请忽略其他的文件夹)：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;现在我们进行编码，修改webdemo.go源文件的代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;net/http&amp;quot;
+    &amp;quot;strings&amp;quot;
+    &amp;quot;log&amp;quot;
+)
+
+func helloWorld(w http.ResponseWriter, r *http.Request) {
+    r.ParseForm()       //解析url传递的参数，对于POST则解析响应包的主体（request body）
+    //注意:如果没有调用ParseForm方法，下面无法获取表单的数据
+    fmt.Println(r.Form) //这些信息是输出到服务器端的打印信息
+    fmt.Println(&amp;quot;path&amp;quot;, r.URL.Path)
+    fmt.Println(&amp;quot;scheme&amp;quot;, r.URL.Scheme)
+    fmt.Println(r.Form[&amp;quot;url_long&amp;quot;])
+    for k, v := range r.Form {
+        fmt.Println(&amp;quot;key:&amp;quot;, k)
+        fmt.Println(&amp;quot;val:&amp;quot;, strings.Join(v, &amp;quot;&amp;quot;))
+    }
+    fmt.Fprintf(w, &amp;quot;Hello Lynch!&amp;quot;) //这个写入到w的是输出到客户端的
+}
+
+func main() {
+    http.HandleFunc(&amp;quot;/&amp;quot;, helloWorld)       //设置访问的路由
+    err := http.ListenAndServe(&amp;quot;:8866&amp;quot;, nil) //设置监听的端口
+    if err != nil {
+        log.Fatal(&amp;quot;ListenAndServe: &amp;quot;, err)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以直接右键webdemo.go源文件来Run，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;运行后IDE如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后在浏览器里面输入&lt;a href=&#34;http://localhost:8866/&#34;&gt; http://localhost:8866/ &lt;/a&gt;，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;当然你也可以在终端里面输入&lt;strong&gt;go build webdemo&lt;/strong&gt;，然后就会生成一个可执行文件，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;双击可执行文件，然后就会监听8866端口了，在浏览器里面输入地址就可以请求了。&lt;/p&gt;
+
+&lt;h2 id=&#34;go如何使得web工作&#34;&gt;Go如何使得Web工作&lt;/h2&gt;
+
+&lt;p&gt;前面使用一个简单的&lt;strong&gt;net/http&lt;/strong&gt;包就搭建起来了一个Web服务。现在就来讲讲Go是如何实现的。&lt;/p&gt;
+
+&lt;h3 id=&#34;web工作方式的几个概念&#34;&gt;Web工作方式的几个概念&lt;/h3&gt;
+
+&lt;p&gt;以下均是服务器端的几个概念&lt;/p&gt;
+
+&lt;p&gt;Request：用户请求的信息，用来解析用户的请求信息，包括post、get、cookie、url等信息&lt;/p&gt;
+
+&lt;p&gt;Response：服务器需要反馈给客户端的信息&lt;/p&gt;
+
+&lt;p&gt;Conn：用户的每次请求链接&lt;/p&gt;
+
+&lt;p&gt;Handler：处理请求和生成返回信息的处理逻辑&lt;/p&gt;
+
+&lt;h3 id=&#34;分析http包运行机制&#34;&gt;分析http包运行机制&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;ListenAndServe&lt;/code&gt;函数会在底层使用TCP协议搭建一个服务，然后监听我们设置的端口。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func (srv *Server) Serve(l net.Listener) error {
+    defer l.Close()
+    var tempDelay time.Duration // how long to sleep on accept failure
+    for {
+        rw, e := l.Accept()
+        if e != nil {
+            if ne, ok := e.(net.Error); ok &amp;amp;&amp;amp; ne.Temporary() {
+                if tempDelay == 0 {
+                    tempDelay = 5 * time.Millisecond
+                } else {
+                    tempDelay *= 2
+                }
+                if max := 1 * time.Second; tempDelay &amp;gt; max {
+                    tempDelay = max
+                }
+                log.Printf(&amp;quot;http: Accept error: %v; retrying in %v&amp;quot;, e, tempDelay)
+                time.Sleep(tempDelay)
+                continue
+            }
+            return e
+        }
+        tempDelay = 0
+        c, err := srv.newConn(rw)
+        if err != nil {
+            continue
+        }
+        go c.serve()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面是http包的源码，来分析下源码。在函数内有一个for循环，通过Listener来接收请求，根据请求创建了一个Conn，然后单独开了一个goroutine，这里涉及到了高并发。&lt;/p&gt;
+
+&lt;p&gt;Conn首先会解析请求，然后获取相应的handler：&lt;code&gt;handler := c.server.Handler&lt;/code&gt;，也就是&lt;code&gt;ListenAndServe&lt;/code&gt;的第二个参数，我们传递的是nil，所以默认获取&lt;code&gt;handler = DefaultServeMux&lt;/code&gt;。这个变量就是一个路由器，我们通过&lt;code&gt;http.HandleFunc()&lt;/code&gt;函数设置。比如我们代码里面设置了&lt;code&gt;/&lt;/code&gt;的路由规则，当请求url为&lt;code&gt;/&lt;/code&gt;的时候就会转到函数helloWorld。然后DefaultServeMux会调用ServeHTTP方法，这个方法内部会调用helloWorld方法本身(后面会讲该方法的实现)，最后通过写入response的信息反馈给客户端。&lt;/p&gt;
+
+&lt;h2 id=&#34;go的http包详解&#34;&gt;Go的http包详解&lt;/h2&gt;
+
+&lt;p&gt;接下来我们就来讲讲DefaultServeMux。之前我们的代码时调用了http包默认的路由器，通过路由器把本次请求的信息传递到了后端的处理函数。我们应该了解这个路由器的实现。&lt;/p&gt;
+
+&lt;p&gt;它的结构如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type ServeMux struct {
+    mu sync.RWMutex   //锁，由于请求涉及到并发处理，因此这里需要一个锁机制
+    m  map[string]muxEntry  // 路由规则，一个string对应一个mux实体，这里的string就是注册的路由表达式
+    hosts bool // 是否在任意的规则中带有host信息
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;muxEntry如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type muxEntry struct {
+    explicit bool   // 是否精确匹配
+    h        Handler // 这个路由表达式对应哪个handler
+    pattern  string  //匹配字符串
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Handler接口：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Handler interface {
+    ServeHTTP(ResponseWriter, *Request)  // 路由实现器
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Handler是一个接口，但是我们的处理函数helloWorld并没有实现这个接口。那么为什么能把helloWorld函数添加为Handler呢。让我们看下&lt;code&gt;HandlerFunc&lt;/code&gt;类型：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type HandlerFunc func(ResponseWriter, *Request)
+
+// ServeHTTP calls f(w, r).
+func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) {
+    f(w, r)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上代码所示，我们将这样的函数func(ResponseWriter, *Request)定义为了&lt;code&gt;HandlerFunc&lt;/code&gt;类型，并且添加了ServeHTTP方法，并且在方法实现里面调用了该方法自己。因为&lt;code&gt;HandlerFunc&lt;/code&gt;类型实现了Handler接口，所以只要我们将我们传递的函数强转成&lt;code&gt;HandlerFunc&lt;/code&gt;类型就可以了，比如HandlerFunc(helloWorld)，然后在ServeHTTP里面调用了helloWorld函数本身。&lt;/p&gt;
+
+&lt;p&gt;路由器里面存储好了相应的路由规则之后，那么具体的请求又是怎么分发的呢？请看下面的代码，默认的路由器实现了&lt;code&gt;ServeHTTP&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func (mux *ServeMux) ServeHTTP(w ResponseWriter, r *Request) {
+    if r.RequestURI == &amp;quot;*&amp;quot; {
+        w.Header().Set(&amp;quot;Connection&amp;quot;, &amp;quot;close&amp;quot;)
+        w.WriteHeader(StatusBadRequest)
+        return
+    }
+    h, _ := mux.Handler(r)
+    h.ServeHTTP(w, r)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;mux.Handler(r)&lt;/code&gt;返回了对应设置路由的处理Handler，然后执行了&lt;code&gt;h.ServeHTTP(w, r)&lt;/code&gt;方法。也就是调用了对应路由的handler的ServerHTTP接口。那么mux.Handler&amp;reg;怎么处理的呢？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func (mux *ServeMux) Handler(r *Request) (h Handler, pattern string) {
+    if r.Method != &amp;quot;CONNECT&amp;quot; {
+        if p := cleanPath(r.URL.Path); p != r.URL.Path {
+            _, pattern = mux.handler(r.Host, p)
+            return RedirectHandler(p, StatusMovedPermanently), pattern
+        }
+    }   
+    return mux.handler(r.Host, r.URL.Path)
+}
+
+func (mux *ServeMux) handler(host, path string) (h Handler, pattern string) {
+    mux.mu.RLock()
+    defer mux.mu.RUnlock()
+
+    // Host-specific pattern takes precedence over generic ones
+    if mux.hosts {
+        h, pattern = mux.match(host + path)
+    }
+    if h == nil {
+        h, pattern = mux.match(path)
+    }
+    if h == nil {
+        h, pattern = NotFoundHandler(), &amp;quot;&amp;quot;
+    }
+    return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;原来他是根据用户请求的URL和路由器里面存储的map去匹配的，当匹配到之后返回存储的handler，调用这个handler的ServeHTTP接口就可以执行到相应的函数了。&lt;/p&gt;
+
+&lt;p&gt;通过上面这个介绍，我们了解了整个路由过程，Go其实支持外部实现的路由器 &lt;code&gt;ListenAndServe&lt;/code&gt;的第二个参数就是用以配置外部路由器的，它是一个Handler接口，即外部路由器只要实现了Handler接口就可以，我们可以在自己实现的路由器的ServeHTTP里面实现自定义路由功能。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;net/http&amp;quot;
+)
+
+type MyServerMux struct {
+}
+
+func (p *MyServerMux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    if r.URL.Path == &amp;quot;/&amp;quot; {
+        helloWorld(w, r)
+        return
+    }
+    http.NotFound(w, r)
+    return
+}
+
+func helloWorld(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, &amp;quot;Hello Lynch!&amp;quot;)
+}
+
+func main() {
+    mux := &amp;amp;MyServerMux{}
+    http.ListenAndServe(&amp;quot;:8866&amp;quot;, mux)
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go并发</title>
+      <link>http://lynchwong.com/blog/2015/06/go%E5%B9%B6%E5%8F%91/</link>
+      <pubDate>Tue, 30 Jun 2015 14:06:56 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/go%E5%B9%B6%E5%8F%91/</guid>
+      <description>&lt;p&gt;先留个坑，后面再填。&lt;/p&gt;
+
+&lt;p&gt;因为之前做iOS很少会有大并发的操作，顶多多线程操作。对并发了解的并不多，等之后有了一定了解的时候再记录。
+&lt;/p&gt;
+
+&lt;!--#并发
+
+有人把Go比作21世纪的C语言，第一是因为Go语言设计简单，第二，21世纪最重要的就是并行程序设计，而Go从语言层面就支持了并行。
+
+
+##goroutine
+
+goroutine是Go并行设计的核心。goroutine说到底其实就是线程，但是它比线程更小，十几个goroutine可能体现在底层就是五六个线程，Go语言内部帮你实现了这些goroutine之间的内存共享。执行goroutine只需极少的栈内存(大概是4~5KB)，当然会根据相应的数据伸缩。也正因为如此，可同时运行成千上万个并发任务。goroutine比thread更易用、更高效、更轻便。
+
+goroutine是通过Go的runtime管理的一个线程管理器。goroutine通过`go`关键字实现了，其实就是一个普通的函数。
+
+    go hello(a, b, c)
+    
+通过关键字go就启动了一个goroutine。我们来看一个例子：
+
+    package main
+
+    import (
+        &#34;fmt&#34;
+        &#34;runtime&#34;
+    )
+
+    func say(s string) {
+        for i := 0; i &lt; 5; i++ {
+            runtime.Gosched()
+            fmt.Println(s)
+        }
+    }
+
+    func main() {
+        go say(&#34;world&#34;) //开一个新的Goroutines执行
+        say(&#34;hello&#34;) //当前Goroutines执行
+    }
+
+    // 以上程序执行后将输出：
+    // hello
+    // world
+    // hello
+    // world
+    // hello
+    // world
+    // hello
+    // world
+    // hello
+    
+我们可以看到go关键字很方便的就实现了并发编程。
+上面的多个goroutine运行在同一个进程里面，共享内存数据，不过设计上我们要遵循：不要通过共享来通信，而要通过通信来共享。
+
+&gt; runtime.Gosched()表示让CPU把时间片让给别人，下次某个时候继续恢复执行该goroutine。
+
+&gt;默认情况下，调度器仅使用单线程，也就是说只实现了并发。想要发挥多核处理器的并行，需要在我们的程序中显式调用 runtime.GOMAXPROCS(n) 告诉调度器同时使用多个线程。GOMAXPROCS 设置了同时运行逻辑代码的系统线程的最大数量，并返回之前的设置。如果n &lt; 1，不会改变当前设置。以后Go的新版本中调度得到改进后，这将被移除。这里有一篇Rob介绍的关于并发和并行的文章：http://concur.rspace.googlecode.com/hg/talk/concur.html#landing-slide
+
+##channels
+
+goroutine运行在相同的地址空间，因此访问共享内存必须做好同步。那么goroutine之间如何进行数据的通信呢，Go提供了一个很好的通信机制channel。channel可以与Unix shell 中的双向管道做类比：可以通过它发送或者接收值。这些值只能是特定的类型：channel类型。定义一个channel时，也需要定义发送到channel的值的类型。注意，必须使用make 创建channel：
+
+    ci := make(chan int)
+    cs := make(chan string)
+    cf := make(chan interface{})
+
+channel通过操作符`&lt;-`来接收和发送数据
+
+    ch &lt;- v    // 发送v到channel ch.
+    v := &lt;-ch  // 从ch中接收数据，并赋值给v
+
+我们把这些应用到我们的例子中来：
+
+    package main
+
+    import &#34;fmt&#34;
+
+    func sum(a []int, c chan int) {
+        total := 0
+        for _, v := range a {
+            total += v
+        }
+        c &lt;- total  // send total to c
+    }
+
+    func main() {
+        a := []int{7, 2, 8, -9, 4, 0}
+
+        c := make(chan int)
+        go sum(a[:len(a)/2], c)
+        go sum(a[len(a)/2:], c)
+        x, y := &lt;-c, &lt;-c  // receive from c
+
+        fmt.Println(x, y, x + y)
+    }
+    
+默认情况下，channel接收和发送数据都是阻塞的，除非另一端已经准备好，这样就使得Goroutines同步变的更加的简单，而不需要显式的lock。所谓阻塞，也就是如果读取（value := &lt;-ch）它将会被阻塞，直到有数据接收。其次，任何发送（ch&lt;-5）将会被阻塞，直到数据被读出。无缓冲channel是在多个goroutine之间同步很棒的工具。
+
+##Buffered Channels
+
+上面我们介绍了默认的非缓存类型的channel，不过Go也允许指定channel的缓冲大小，很简单，就是channel可以存储多少元素。ch:= make(chan bool, 4)，创建了可以存储4个元素的bool 型channel。在这个channel 中，前4个元素可以无阻塞的写入。当写入第5个元素时，代码将会阻塞，直到其他goroutine从channel 中读取一些元素，腾出空间。
+
+    ch := make(chan type, value)
+
+    value == 0 ! 无缓冲（阻塞）
+    value &gt; 0 ! 缓冲（非阻塞，直到value 个元素）
+
+我们看一下下面这个例子，你可以在自己本机测试一下，修改相应的value值
+
+
+    package main
+
+    import &#34;fmt&#34;
+
+    func main() {
+        c := make(chan int, 2)//修改2为1就报错，修改2为3可以正常运行
+        c &lt;- 1
+        c &lt;- 2
+        fmt.Println(&lt;-c)
+        fmt.Println(&lt;-c)
+    }
+        //修改为1报如下的错误:
+        //fatal error: all goroutines are asleep - deadlock!
+
+##Range和Close
+
+##Select
+
+##超时
+
+##runtime goroutine--&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go的interface</title>
+      <link>http://lynchwong.com/blog/2015/06/go%E7%9A%84interface/</link>
+      <pubDate>Tue, 30 Jun 2015 12:33:11 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/go%E7%9A%84interface/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;interface&#34;&gt;interface&lt;/h1&gt;
+
+&lt;p&gt;Go语言里面设计最精妙的应该算interface，它让面向对象，内容组织实现非常的方便，当你看完这一章，你就会被interface的巧妙设计所折服。&lt;/p&gt;
+
+&lt;p&gt;看完之后还是不得不说和OBJC的协议有相似的地方。&lt;/p&gt;
+
+&lt;h2 id=&#34;什么是interface&#34;&gt;什么是interface&lt;/h2&gt;
+
+&lt;p&gt;简单的说，interface是一组method的组合，我们通过interface来定义对象的一组行为。&lt;/p&gt;
+
+&lt;p&gt;我们前面一章最后一个例子中Student和Employee都能SayHi，虽然他们的内部实现不一样，但是那不重要，重要的是他们都能&lt;code&gt;say hi&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;让我们来继续做更多的扩展，Student和Employee实现另一个方法&lt;code&gt;Sing&lt;/code&gt;，然后Student实现方法BorrowMoney而Employee实现SpendSalary。&lt;/p&gt;
+
+&lt;p&gt;这样Student实现了三个方法：SayHi、Sing、BorrowMoney；而Employee实现了SayHi、Sing、SpendSalary。&lt;/p&gt;
+
+&lt;p&gt;上面这些方法的组合称为interface(被对象Student和Employee实现)。例如Student和Employee都实现了interface：SayHi和Sing，也就是这两个对象是该interface类型。而Employee没有实现这个interface：SayHi、Sing和BorrowMoney，因为Employee没有实现BorrowMoney这个方法。&lt;/p&gt;
+
+&lt;h2 id=&#34;interface类型&#34;&gt;interface类型&lt;/h2&gt;
+
+&lt;p&gt;interface类型定义了一组方法，如果某个对象实现了某个接口的所有方法，则此对象就实现了此接口。详细的语法参考下面这个例子&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Human struct {
+    name string
+    age int
+    phone string
+}
+
+type Student struct {
+    Human //匿名字段Human
+    school string
+    loan float32
+}
+
+type Employee struct {
+    Human //匿名字段Human
+    company string
+    money float32
+}
+
+//Human对象实现Sayhi方法
+func (h *Human) SayHi() {
+    fmt.Printf(&amp;quot;Hi, I am %s you can call me on %s\n&amp;quot;, h.name, h.phone)
+}
+
+// Human对象实现Sing方法
+func (h *Human) Sing(lyrics string) {
+    fmt.Println(&amp;quot;La la, la la la, la la la la la...&amp;quot;, lyrics)
+}
+
+//Human对象实现Guzzle方法
+func (h *Human) Guzzle(beerStein string) {
+    fmt.Println(&amp;quot;Guzzle Guzzle Guzzle...&amp;quot;, beerStein)
+}
+
+// Employee重载Human的Sayhi方法
+func (e *Employee) SayHi() {
+    fmt.Printf(&amp;quot;Hi, I am %s, I work at %s. Call me on %s\n&amp;quot;, e.name,
+        e.company, e.phone) //此句可以分成多行
+}
+
+//Student实现BorrowMoney方法
+func (s *Student) BorrowMoney(amount float32) {
+    s.loan += amount // (again and again and...)
+}
+
+//Employee实现SpendSalary方法
+func (e *Employee) SpendSalary(amount float32) {
+    e.money -= amount // More vodka please!!! Get me through the day!
+}
+
+// 定义interface
+type Men interface {
+    SayHi()
+    Sing(lyrics string)
+    Guzzle(beerStein string)
+}
+
+type YoungChap interface {
+    SayHi()
+    Sing(song string)
+    BorrowMoney(amount float32)
+}
+
+type ElderlyGent interface {
+    SayHi()
+    Sing(song string)
+    SpendSalary(amount float32)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过上面的代码我们可以知道，interface可以被任意的对象实现。我们看到上面的Men interface被Human、Student和Employee实现。同理，一个对象可以实现任意多个interface，例如上面的Student实现了Men和YoungChap两个interface。&lt;/p&gt;
+
+&lt;p&gt;最后，任意的类型都实现了空interface(我们这样定义：interface{})，也就是包含0个method的interface。&lt;/p&gt;
+
+&lt;h2 id=&#34;interface值&#34;&gt;interface值&lt;/h2&gt;
+
+&lt;p&gt;那么interface里面到底能存什么值呢？如果我们定义了一个interface的变量，那么这个变量里面可以存实现这个interface的任意类型的对象。例如上面例子中，我们定义了一个Men interface类型的变量m，那么m里面可以存Human、Student或者Employee值。&lt;/p&gt;
+
+&lt;p&gt;因为m能够持有这三种类型的对象，所以我们可以定义一个包含Men类型元素的slice，这个slice可以被赋予实现了Men接口的任意结构的对象，这个和我们传统意义上面的slice有所不同。&lt;/p&gt;
+
+&lt;p&gt;让我们来看一下下面这个例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+type Human struct {
+    name string
+    age int
+    phone string
+}
+
+type Student struct {
+    Human //匿名字段
+    school string
+    loan float32
+}
+
+type Employee struct {
+    Human //匿名字段
+    company string
+    money float32
+}
+
+//Human实现SayHi方法
+func (h Human) SayHi() {
+    fmt.Printf(&amp;quot;Hi, I am %s you can call me on %s\n&amp;quot;, h.name, h.phone)
+}
+
+//Human实现Sing方法
+func (h Human) Sing(lyrics string) {
+    fmt.Println(&amp;quot;La la la la...&amp;quot;, lyrics)
+}
+
+//Employee重载Human的SayHi方法
+func (e Employee) SayHi() {
+    fmt.Printf(&amp;quot;Hi, I am %s, I work at %s. Call me on %s\n&amp;quot;, e.name,
+        e.company, e.phone)
+    }
+
+// Interface Men被Human,Student和Employee实现
+// 因为这三个类型都实现了这两个方法
+type Men interface {
+    SayHi()
+    Sing(lyrics string)
+}
+
+func main() {
+    mike := Student{Human{&amp;quot;Mike&amp;quot;, 25, &amp;quot;222-222-XXX&amp;quot;}, &amp;quot;MIT&amp;quot;, 0.00}
+    paul := Student{Human{&amp;quot;Paul&amp;quot;, 26, &amp;quot;111-222-XXX&amp;quot;}, &amp;quot;Harvard&amp;quot;, 100}
+    sam := Employee{Human{&amp;quot;Sam&amp;quot;, 36, &amp;quot;444-222-XXX&amp;quot;}, &amp;quot;Golang Inc.&amp;quot;, 1000}
+    Tom := Employee{Human{&amp;quot;Tom&amp;quot;, 37, &amp;quot;222-444-XXX&amp;quot;}, &amp;quot;Things Ltd.&amp;quot;, 5000}
+
+    //定义Men类型的变量i
+    var i Men
+
+    //i能存储Student
+    i = mike
+    fmt.Println(&amp;quot;This is Mike, a Student:&amp;quot;)
+    i.SayHi()
+    i.Sing(&amp;quot;November rain&amp;quot;)
+
+    //i也能存储Employee
+    i = Tom
+    fmt.Println(&amp;quot;This is Tom, an Employee:&amp;quot;)
+    i.SayHi()
+    i.Sing(&amp;quot;Born to be wild&amp;quot;)
+
+    //定义了slice Men
+    fmt.Println(&amp;quot;Let&#39;s use a slice of Men and see what happens&amp;quot;)
+    x := make([]Men, 3)
+    //这三个都是不同类型的元素，但是他们实现了interface同一个接口
+    x[0], x[1], x[2] = paul, sam, mike
+
+    for _, value := range x{
+        value.SayHi()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过上面的代码，你会发现interface就是一组抽象方法的集合，它必须由其他非interface类型实现，而不能自我实现， Go通过interface实现了duck-typing：即&amp;rdquo;当看到一只鸟走起来像鸭子、游泳起来像鸭子、叫起来也像鸭子，那么这只鸟就可以被称为鸭子&amp;rdquo;。&lt;/p&gt;
+
+&lt;h2 id=&#34;空interface&#34;&gt;空interface&lt;/h2&gt;
+
+&lt;p&gt;空interface(interface{})不包含任何的method，正因为如此，所有的类型都实现了空interface。空interface对于描述起不到任何的作用(因为它不包含任何的method），但是空interface在我们需要存储任意类型的数值的时候相当有用，因为它可以存储任意类型的数值。它有点类似于C语言的void*类型。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// 定义a为空接口
+var a interface{}
+var i int = 5
+s := &amp;quot;Hello world&amp;quot;
+// a可以存储任意类型的数值
+a = i
+a = s
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一个函数把interface{}作为参数，那么他可以接受任意类型的值作为参数，如果一个函数返回interface{}，那么也就可以返回任意类型的值。是不是很有用啊！&lt;/p&gt;
+
+&lt;h2 id=&#34;interface函数参数&#34;&gt;interface函数参数&lt;/h2&gt;
+
+&lt;p&gt;interface的变量可以持有任意实现该interface类型的对象，这给我们编写函数(包括method)提供了一些额外的思考，我们是不是可以通过定义interface参数，让函数接受各种类型的参数。&lt;/p&gt;
+
+&lt;p&gt;举个例子：fmt.Println是我们常用的一个函数，但是你是否注意到它可以接受任意类型的数据。打开fmt的源码文件，你会看到这样一个定义：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Stringer interface {
+     String() string
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也就是说，任何实现了String方法的类型都能作为参数被fmt.Println调用，让我们来试一试：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;strconv&amp;quot;
+)
+
+type Human struct {
+    name string
+    age int
+    phone string
+}
+
+// 通过这个方法 Human 实现了 fmt.Stringer
+func (h Human) String() string {
+    return &amp;quot;❰&amp;quot;+h.name+&amp;quot; - &amp;quot;+strconv.Itoa(h.age)+&amp;quot; years -  ✆ &amp;quot; +h.phone+&amp;quot;❱&amp;quot;
+}
+
+func main() {
+    Bob := Human{&amp;quot;Bob&amp;quot;, 39, &amp;quot;000-7777-XXX&amp;quot;}
+    fmt.Println(&amp;quot;This Human is : &amp;quot;, Bob)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们再回顾一下前面的Box示例，你会发现Color结构也定义了一个method：String。其实这也是实现了fmt.Stringer这个interface，即如果需要某个类型能被fmt包以特殊的格式输出，你就必须实现Stringer这个接口。如果没有实现这个接口，fmt将以默认的方式输出。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//实现同样的功能
+fmt.Println(&amp;quot;The biggest one is&amp;quot;, boxes.BiggestsColor().String())
+fmt.Println(&amp;quot;The biggest one is&amp;quot;, boxes.BiggestsColor())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注：实现了error接口的对象（即实现了Error() string的对象），使用fmt输出时，会调用Error()方法，因此不必再定义String()方法了。&lt;/p&gt;
+
+&lt;h2 id=&#34;interface变量存储的类型&#34;&gt;interface变量存储的类型&lt;/h2&gt;
+
+&lt;p&gt;我们知道interface的变量里面可以存储任意类型的数值(该类型实现了interface)。那么我们怎么反向知道这个变量里面实际保存了的是哪个类型的对象呢？目前常用的有两种方法：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Comma-ok断言&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Go语言里面有一个语法，可以直接判断是否是该类型的变量： value, ok = element.(T)，这里value就是变量的值，ok是一个bool类型，element是interface变量，T是断言的类型。&lt;/p&gt;
+
+&lt;p&gt;如果element里面确实存储了T类型的数值，那么ok返回true，否则返回false。&lt;/p&gt;
+
+&lt;p&gt;让我们通过一个例子来更加深入的理解：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    package main
+
+    import (
+        &amp;quot;fmt&amp;quot;
+        &amp;quot;strconv&amp;quot;
+    )
+
+    type Element interface{}
+    type List [] Element
+
+    type Person struct {
+        name string
+        age int
+    }
+
+    //定义了String方法，实现了fmt.Stringer
+    func (p Person) String() string {
+        return &amp;quot;(name: &amp;quot; + p.name + &amp;quot; - age: &amp;quot;+strconv.Itoa(p.age)+ &amp;quot; years)&amp;quot;
+    }
+
+    func main() {
+        list := make(List, 3)
+        list[0] = 1 // an int
+        list[1] = &amp;quot;Hello&amp;quot; // a string
+        list[2] = Person{&amp;quot;Dennis&amp;quot;, 70}
+
+        for index, element := range list {
+            if value, ok := element.(int); ok {
+                fmt.Printf(&amp;quot;list[%d] is an int and its value is %d\n&amp;quot;, index, value)
+            } else if value, ok := element.(string); ok {
+                fmt.Printf(&amp;quot;list[%d] is a string and its value is %s\n&amp;quot;, index, value)
+            } else if value, ok := element.(Person); ok {
+                fmt.Printf(&amp;quot;list[%d] is a Person and its value is %s\n&amp;quot;, index, value)
+            } else {
+                fmt.Println(&amp;quot;list[%d] is of a different type&amp;quot;, index)
+            }
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;是不是很简单啊，同时你是否注意到了多个if里面，还记得我前面介绍流程时讲过，if里面允许初始化变量。&lt;/p&gt;
+
+&lt;p&gt;也许你注意到了，我们断言的类型越多，那么if else也就越多，所以才引出了下面要介绍的switch。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;switch测试&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;最好的讲解就是代码例子，现在让我们重写上面的这个实现：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    package main
+
+    import (
+        &amp;quot;fmt&amp;quot;
+        &amp;quot;strconv&amp;quot;
+    )
+
+    type Element interface{}
+    type List [] Element
+
+    type Person struct {
+        name string
+        age int
+    }
+
+    //打印
+    func (p Person) String() string {
+        return &amp;quot;(name: &amp;quot; + p.name + &amp;quot; - age: &amp;quot;+strconv.Itoa(p.age)+ &amp;quot; years)&amp;quot;
+    }
+
+    func main() {
+        list := make(List, 3)
+        list[0] = 1 //an int
+        list[1] = &amp;quot;Hello&amp;quot; //a string
+        list[2] = Person{&amp;quot;Dennis&amp;quot;, 70}
+
+        for index, element := range list{
+            switch value := element.(type) {
+                case int:
+                    fmt.Printf(&amp;quot;list[%d] is an int and its value is %d\n&amp;quot;, index, value)
+                case string:
+                    fmt.Printf(&amp;quot;list[%d] is a string and its value is %s\n&amp;quot;, index, value)
+                case Person:
+                    fmt.Printf(&amp;quot;list[%d] is a Person and its value is %s\n&amp;quot;, index, value)
+                default:
+                    fmt.Println(&amp;quot;list[%d] is of a different type&amp;quot;, index)
+            }
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里有一点需要强调的是：&lt;code&gt;element.(type)&lt;/code&gt;语法不能在switch外的任何逻辑里面使用，如果你要在switch外面判断一个类型就使用&lt;code&gt;comma-ok&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;嵌入interface&#34;&gt;嵌入interface&lt;/h2&gt;
+
+&lt;p&gt;Go里面真正吸引人的是它内置的逻辑语法，就像我们在学习Struct时学习的匿名字段，多么的优雅啊，那么相同的逻辑引入到interface里面，那不是更加完美了。如果一个interface1作为interface2的一个嵌入字段，那么interface2隐式的包含了interface1里面的method。&lt;/p&gt;
+
+&lt;p&gt;我们可以看到源码包container/heap里面有这样的一个定义：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Interface interface {
+    sort.Interface //嵌入字段sort.Interface
+    Push(x interface{}) //a Push method to push elements into the heap
+    Pop() interface{} //a Pop elements that pops elements from the heap
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们看到sort.Interface其实就是嵌入字段，把sort.Interface的所有method给隐式的包含进来了。也就是下面三个方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Interface interface {
+    // Len is the number of elements in the collection.
+    Len() int
+    // Less returns whether the element with index i should sort
+    // before the element with index j.
+    Less(i, j int) bool
+    // Swap swaps the elements with indexes i and j.
+    Swap(i, j int)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另一个例子就是io包下面的 io.ReadWriter ，它包含了io包下面的Reader和Writer两个interface：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// io.ReadWriter
+type ReadWriter interface {
+    Reader
+    Writer
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;反射&#34;&gt;反射&lt;/h2&gt;
+
+&lt;p&gt;Go语言实现了反射，所谓反射就是能检查程序在运行时的状态。我们一般用到的包是reflect包。如何运用reflect包，官方的这篇文章详细的讲解了reflect包的实现原理，&lt;a href=&#34;http://golang.org/doc/articles/laws_of_reflection.html&#34;&gt;laws of reflection&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;使用reflect一般分成三步，下面简要的讲解一下：要去反射是一个类型的值(这些值都实现了空interface)，首先需要把它转化成reflect对象(reflect.Type或者reflect.Value，根据不同的情况调用不同的函数)。这两种获取方式如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;t := reflect.TypeOf(i)    //得到类型的元数据,通过t我们能获取类型定义里面的所有元素
+v := reflect.ValueOf(i)   //得到实际的值，通过v我们获取存储在里面的值，还可以去改变值
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;转化为reflect对象之后我们就可以进行一些操作了，也就是将reflect对象转化成相应的值，例如&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tag := t.Elem().Field(0).Tag  //获取定义在struct里面的标签
+name := v.Elem().Field(0).String()  //获取存储在第一个字段里面的值
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;获取反射值能返回相应的类型和数值&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var x float64 = 3.4
+v := reflect.ValueOf(x)
+fmt.Println(&amp;quot;type:&amp;quot;, v.Type())
+fmt.Println(&amp;quot;kind is float64:&amp;quot;, v.Kind() == reflect.Float64)
+fmt.Println(&amp;quot;value:&amp;quot;, v.Float())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后，反射的话，那么反射的字段必须是可修改的，我们前面学习过传值和传引用，这个里面也是一样的道理。反射的字段必须是可读写的意思是，如果下面这样写，那么会发生错误&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var x float64 = 3.4
+v := reflect.ValueOf(x)
+v.SetFloat(7.1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果要修改相应的值，必须这样写&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var x float64 = 3.4
+p := reflect.ValueOf(&amp;amp;x)
+v := p.Elem()
+v.SetFloat(7.1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面只是对反射的简单介绍，更深入的理解还需要自己在编程中不断的实践。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go面向对象</title>
+      <link>http://lynchwong.com/blog/2015/06/go%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</link>
+      <pubDate>Tue, 30 Jun 2015 10:34:28 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/go%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;面向对象&#34;&gt;面向对象&lt;/h1&gt;
+
+&lt;p&gt;函数和方法在大多数语言中的语法声明和定义是完全一样的，只是概念上的不同而已。在大多数语言中￼方法是与某些特定类型相关联的函数。而函数更像是独立存在的，C语言是面向过程的语言，很多时候我们都会说调用什么什么函数完成什么任务。而在面向对象的编程语言中，我们说的更多可能就是调用相关对象的特定方法来完成一些任务。这里大家也许能感觉到面向对象编程的一些思想。&lt;/p&gt;
+
+&lt;p&gt;在OBJC中，我们给对象发送的消息会被编译器转换成C函数，而该函数的一个参数就是方法的接收者。前面我们讲解了Go的函数，其实Go的函数还有另外一种形态，带有接收者的函数，我们称为方法。发现了没有，这里和OBJC的消息看起来就很像(如果你了解OBJC的运行时系统就深有体会)，只不过OBJC是靠运行时系统来实现面向对象的。&lt;/p&gt;
+
+&lt;p&gt;下面我们就通过实际的代码示例来讲解一下。&lt;/p&gt;
+
+&lt;h2 id=&#34;方法&#34;&gt;方法&lt;/h2&gt;
+
+&lt;p&gt;前面一张我们讲解了struct类型，我们定义一个struct来表示长方形，你现在想要计算他的面积，按照面向过程的编程方式实现思路如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+type Rectangle struct {
+    width, height float64
+}
+
+func area(r Rectangle) float64 {
+    return r.width * r.height
+}
+
+func main() {
+    r1 := Rectangle{8, 8}
+    r2 := Rectangle{88, 88}
+    fmt.Println(&amp;quot;Area of r1 is: &amp;quot;, area(r1))
+    fmt.Println(&amp;quot;Area of r2 is: &amp;quot;, area(r2))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上所示，上面的area()就是函数，而不是作为Rectangle的方法实现的。我们可以把Rectangle当做一个对象，面积完全可以当做该对象的一个属性，计算的任务应当由对象来提供。按照上面的实现思路，当我们增加了圆形以及其他多边形时，要想计算面积就需要再增加方法了。显然，这样的设计并不优雅。&lt;/p&gt;
+
+&lt;p&gt;如果使用其他的面向对象的语言来实现这个需求，相信大家都能写出优雅完美的代码。但是Go如何来实现呢？&lt;/p&gt;
+
+&lt;p&gt;前面说了Go的函数还有另外一种形态，带有接收者的函数，我们称为方法。他的语法和函数声明语法几乎是一样的，只是在&lt;code&gt;func&lt;/code&gt;后面增加了一个receiver(额就是方法所依从的主体)。&lt;/p&gt;
+
+&lt;p&gt;所以&lt;code&gt;area()&lt;/code&gt;方法应该是依赖于某个形状的，比如上面，&lt;code&gt;area()&lt;/code&gt;应该是属于Rectangle的方法，而不是一个外围函数。更具体地说，Rectangle存在字段width, height，同时存在&lt;code&gt;area()&lt;/code&gt;方法，这些方法和属性都属于Rectangle。&lt;/p&gt;
+
+&lt;p&gt;用Rob Pike的话来说就是：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;A method is a function with an implicit first argument, called a receiver.&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;看到这里就想起了OBJC的方法有两个隐藏参数，是在编译时插入到方法实现中的，这两个参数就是接收者和方法选择器。&lt;/p&gt;
+
+&lt;p&gt;方法的语法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func (r ReceiverType) funcName(parameters) (results)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;让我们改写最开始的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;math&amp;quot;
+)
+
+type Rectangle struct {
+    width, height float64
+}
+
+type Circle struct {
+    radius float64
+}
+
+func (r Rectangle) area() float64 {
+    return r.width * r.height
+}
+
+func (c Circle) area() float64 {
+    return c.radius * c.radius * math.Pi
+}
+
+
+func main() {
+    r1 := Rectangle{8, 8}
+    r2 := Rectangle{88, 88}
+    c1 := Circle{8}
+    c2 := Circle{88}
+
+    fmt.Println(&amp;quot;Area of r1 is: &amp;quot;, r1.area())
+    fmt.Println(&amp;quot;Area of r2 is: &amp;quot;, r2.area())
+    fmt.Println(&amp;quot;Area of c1 is: &amp;quot;, c1.area())
+    fmt.Println(&amp;quot;Area of c2 is: &amp;quot;, c2.area())
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在使用method的时候重要注意几点&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;虽然method的名字一模一样，但是如果接收者不一样，那么method就不一样&lt;/li&gt;
+&lt;li&gt;method里面可以访问接收者的字段&lt;/li&gt;
+&lt;li&gt;调用method通过&lt;code&gt;.&lt;/code&gt;访问，就像struct里面访问字段一样&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;方法除了可以作用在struct上，你还可以定义在任何你自定义的类型、内置类型、struct等各种类型上面。你可以通过如下形式声明自定义类型：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type typeName typeLiteral
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type ages int
+
+type money float32
+
+type months map[string]int
+
+m := months {
+    &amp;quot;January&amp;quot;:31,
+    &amp;quot;February&amp;quot;:28,
+    ...
+    &amp;quot;December&amp;quot;:31,
+}   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际上只是一个定义了一个别名，有点类似于c中的typedef，例如上面ages替代了int。&lt;/p&gt;
+
+&lt;p&gt;方法的复杂示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+const(
+    WHITE = iota
+    BLACK
+    BLUE
+    RED
+    YELLOW
+)
+
+type Color byte
+
+type Box struct {
+    width, height, depth float64
+    color Color
+}
+
+type BoxList []Box
+
+func (b Box) Volume() float64 {
+    return b.width * b.height * b.depth
+}
+
+func (b *Box) SetColor(c Color) {
+    b.color = c
+}
+
+func (bl BoxList) BiggestColor() Color {
+    v := 0.00
+    k := Color(WHITE)
+    for _, b := range bl {
+        if bv := b.Volume(); bv &amp;gt; v {
+            v = bv
+            k = b.color
+        }
+    }
+    return k
+}
+
+func (bl BoxList) PaintItBlack() {
+    for i, _ := range bl {
+        bl[i].SetColor(BLACK)
+    }
+}
+
+func (c Color) String() string {
+    strings := []string {&amp;quot;WHITE&amp;quot;, &amp;quot;BLACK&amp;quot;, &amp;quot;BLUE&amp;quot;, &amp;quot;RED&amp;quot;, &amp;quot;YELLOW&amp;quot;}
+    return strings[c]
+}
+
+func main() {
+    boxes := BoxList {
+        Box{4, 4, 4, RED},
+        Box{10, 10, 1, YELLOW},
+        Box{1, 1, 20, BLACK},
+        Box{10, 10, 1, BLUE},
+        Box{10, 30, 1, WHITE},
+        Box{20, 20, 20, YELLOW},
+    }
+
+    fmt.Printf(&amp;quot;We have %d boxes in our set\n&amp;quot;, len(boxes))
+    fmt.Println(&amp;quot;The volume of the first one is&amp;quot;, boxes[0].Volume(), &amp;quot;cm³&amp;quot;)
+    fmt.Println(&amp;quot;The color of the last one is&amp;quot;,boxes[len(boxes)-1].color.String())
+    fmt.Println(&amp;quot;The biggest one is&amp;quot;, boxes.BiggestColor().String())
+
+    fmt.Println(&amp;quot;Let&#39;s paint them all black&amp;quot;)
+    boxes.PaintItBlack()
+    fmt.Println(&amp;quot;The color of the second one is&amp;quot;, boxes[1].color.String())
+
+    fmt.Println(&amp;quot;Obviously, now, the biggest one is&amp;quot;, boxes.BiggestColor().String())
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码通过const定义了一些常量，然后定义了一些自定义类型&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Color作为byte的别名&lt;/li&gt;
+&lt;li&gt;定义了一个struct:Box，含有三个长宽高字段和一个颜色属性&lt;/li&gt;
+&lt;li&gt;定义了一个slice:BoxList，含有Box&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;然后以上面的自定义类型为接收者定义了一些method&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Volume()定义了接收者为Box，返回Box的容量&lt;/li&gt;
+&lt;li&gt;SetColor(c Color)，把Box的颜色改为c&lt;/li&gt;
+&lt;li&gt;BiggestColor()定在在BoxList上面，返回list里面容量最大的颜色&lt;/li&gt;
+&lt;li&gt;PaintItBlack()把BoxList里面所有Box的颜色全部变成黑色&lt;/li&gt;
+&lt;li&gt;String()定义在Color上面，返回Color的具体颜色(字符串格式)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;上面的代码通过文字描述出来之后是不是很简单？我们一般解决问题都是通过问题的描述，去写相应的代码实现。&lt;/p&gt;
+
+&lt;h3 id=&#34;指针作为receiver&#34;&gt;指针作为receiver&lt;/h3&gt;
+
+&lt;p&gt;现在让我们回过头来看看SetColor这个method，它的receiver是一个指向Box的指针，是的，你可以使用*Box。想想为啥要使用指针而不是Box本身呢？&lt;/p&gt;
+
+&lt;p&gt;我们定义SetColor的真正目的是想改变这个Box的颜色，如果不传Box的指针，那么SetColor接受的其实是Box的一个copy，也就是说method内对于颜色值的修改，其实只作用于Box的copy，而不是真正的Box。所以我们需要传入指针。&lt;/p&gt;
+
+&lt;p&gt;这里可以把receiver当作method的第一个参数来看，然后结合前面函数讲解的传值和传引用就不难理解&lt;/p&gt;
+
+&lt;p&gt;这里你也许会问了那SetColor函数里面应该这样定义&lt;code&gt;*b.Color=c&lt;/code&gt;,而不是&lt;code&gt;b.Color=c&lt;/code&gt;,因为我们需要读取到指针相应的值。&lt;/p&gt;
+
+&lt;p&gt;你是对的，其实Go里面这两种方式都是正确的，当你用指针去访问相应的字段时(虽然指针没有任何的字段)，Go知道你要通过指针去获取这个值，看到了吧，Go的设计是不是越来越吸引你了。&lt;/p&gt;
+
+&lt;p&gt;也许细心的读者会问这样的问题，PaintItBlack里面调用SetColor的时候是不是应该写成&lt;code&gt;(&amp;amp;bl[i]).SetColor(BLACK)&lt;/code&gt;，因为SetColor的receiver是*Box，而不是Box。&lt;/p&gt;
+
+&lt;p&gt;你又说对的，这两种方式都可以，因为Go知道receiver是指针，他自动帮你转了。&lt;/p&gt;
+
+&lt;p&gt;也就是说：
+&amp;gt;如果一个method的receiver是*T,你可以在一个T类型的实例变量V上面调用这个method，而不需要&amp;amp;V去调用这个method&lt;/p&gt;
+
+&lt;p&gt;类似的
+&amp;gt;如果一个method的receiver是T，你可以在一个*T类型的变量P上面调用这个method，而不需要 *P去调用这个method&lt;/p&gt;
+
+&lt;p&gt;所以，你不用担心你是调用的指针的method还是不是指针的method，Go知道你要做的一切，这对于有多年C/C++编程经验的同学来说，真是解决了一个很大的痛苦。&lt;/p&gt;
+
+&lt;h3 id=&#34;方法的继承&#34;&gt;方法的继承&lt;/h3&gt;
+
+&lt;p&gt;前面一章我们学习了字段的继承，那么你也会发现Go的一个神奇之处，method也是可以继承的。如果匿名字段实现了一个method，那么包含这个匿名字段的struct也能调用该method。让我们来看下面这个例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+type Human struct {
+    name string
+    age int
+    phone string
+}
+
+type Student struct {
+    Human //匿名字段
+    school string
+}
+
+type Employee struct {
+    Human //匿名字段
+    company string
+}
+
+//在human上面定义了一个method
+func (h *Human) SayHi() {
+    fmt.Printf(&amp;quot;Hi, I am %s you can call me on %s\n&amp;quot;, h.name, h.phone)
+}
+
+func main() {
+    mark := Student{Human{&amp;quot;Mark&amp;quot;, 25, &amp;quot;222-222-YYYY&amp;quot;}, &amp;quot;MIT&amp;quot;}
+    sam := Employee{Human{&amp;quot;Sam&amp;quot;, 45, &amp;quot;111-888-XXXX&amp;quot;}, &amp;quot;Golang Inc&amp;quot;}
+
+    mark.SayHi()
+    sam.SayHi()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;方法的重写&#34;&gt;方法的重写&lt;/h3&gt;
+
+&lt;p&gt;上面的例子中，如果Employee想要实现自己的SayHi,怎么办？简单，和匿名字段冲突一样的道理，我们可以在Employee上面定义一个method，重写了匿名字段的方法。请看下面的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+type Human struct {
+    name string
+    age int
+    phone string
+}
+
+type Student struct {
+    Human //匿名字段
+    school string
+}
+
+type Employee struct {
+    Human //匿名字段
+    company string
+}
+
+//Human定义method
+func (h *Human) SayHi() {
+    fmt.Printf(&amp;quot;Hi, I am %s you can call me on %s\n&amp;quot;, h.name, h.phone)
+}
+
+//Employee的method重写Human的method
+func (e *Employee) SayHi() {
+    fmt.Printf(&amp;quot;Hi, I am %s, I work at %s. Call me on %s\n&amp;quot;, e.name,
+        e.company, e.phone) //Yes you can split into 2 lines here.
+}
+
+func main() {
+    mark := Student{Human{&amp;quot;Mark&amp;quot;, 25, &amp;quot;222-222-YYYY&amp;quot;}, &amp;quot;MIT&amp;quot;}
+    sam := Employee{Human{&amp;quot;Sam&amp;quot;, 45, &amp;quot;111-888-XXXX&amp;quot;}, &amp;quot;Golang Inc&amp;quot;}
+
+    mark.SayHi()
+    sam.SayHi()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码设计的是如此的美妙，让人不自觉的为Go的设计惊叹！&lt;/p&gt;
+
+&lt;p&gt;通过这些内容，我们可以设计出基本的面向对象的程序了，但是Go里面的面向对象是如此的简单，没有任何的私有、公有关键字，通过大小写来实现(大写开头的为公有，小写开头的为私有)，方法也同样适用这个原则。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go的struct类型</title>
+      <link>http://lynchwong.com/blog/2015/06/go%E7%9A%84struct%E7%B1%BB%E5%9E%8B/</link>
+      <pubDate>Tue, 30 Jun 2015 00:32:27 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/go%E7%9A%84struct%E7%B1%BB%E5%9E%8B/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;struct&#34;&gt;struct&lt;/h1&gt;
+
+&lt;p&gt;Go语言中，也和C或者其他语言一样，我们可以声明新的类型，作为其它类型的属性或字段的容器。例如，我们可以创建一个自定义类型person代表一个人的实体。这个实体拥有属性：姓名和年龄。这样的类型我们称之struct。如下代码所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type person struct {
+    name string
+    age int
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看到了吗？声明一个struct如此简单，上面的类型包含有两个字段 - 一个string类型的字段name，用来保存用户名称这个属性 - 一个int类型的字段age，用来保存用户年龄这个属性。&lt;/p&gt;
+
+&lt;p&gt;如何使用struct呢？请看下面的代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var P person //P现在就是person类型的变量了
+
+P.name = &amp;quot;Astaxie&amp;quot; //赋值&amp;quot;Astaxie&amp;quot;给P的name属性
+P.age = 25 //赋值&amp;quot;25&amp;quot;给变量P的age属性
+fmt.Printf(&amp;quot;The person&#39;s name is %s&amp;quot;, P.name) //访问P的name属性
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;除了上面这种P的声明使用之外，还有另外几种声明使用方式：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;按照顺序提供初始化值，P := person{&amp;ldquo;Tom&amp;rdquo;, 25}。&lt;/li&gt;
+&lt;li&gt;通过field:value的方式初始化，这样可以任意顺序，P := person{age: 24, name: &amp;ldquo;Tom&amp;rdquo;}。&lt;/li&gt;
+&lt;li&gt;当然也可以通过new函数分配一个指针，此处P的类型为*person，P := new(person)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;下面我们看一个完整的使用struct的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+// 声明一个新的类型
+type person struct {
+    name string
+    age int
+}
+
+// 比较两个人的年龄，返回年龄大的那个人，并且返回年龄差
+// struct也是传值的
+func Older(p1, p2 person) (person, int) {
+    if p1.age&amp;gt;p2.age {  // 比较p1和p2这两个人的年龄
+        return p1, p1.age-p2.age
+    }
+    return p2, p2.age-p1.age
+}
+
+func main() {
+    var tom person
+
+    // 赋值初始化
+    tom.name, tom.age = &amp;quot;Tom&amp;quot;, 18
+
+    // 两个字段都写清楚的初始化
+    bob := person{age:25, name:&amp;quot;Bob&amp;quot;}
+    “// 按照struct定义顺序初始化值
+    paul := person{&amp;quot;Paul&amp;quot;, 43}
+
+    tb_Older, tb_diff := Older(tom, bob)
+    tp_Older, tp_diff := Older(tom, paul)
+    bp_Older, bp_diff := Older(bob, paul)
+
+    fmt.Printf(&amp;quot;Of %s and %s, %s is older by %d years\n&amp;quot;,
+        tom.name, bob.name, tb_Older.name, tb_diff)
+
+    fmt.Printf(&amp;quot;Of %s and %s, %s is older by %d years\n&amp;quot;,
+        tom.name, paul.name, tp_Older.name, tp_diff)
+
+    fmt.Printf(&amp;quot;Of %s and %s, %s is older by %d years\n&amp;quot;,
+        bob.name, paul.name, bp_Older.name, bp_diff)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;struct的匿名字段&#34;&gt;struct的匿名字段&lt;/h2&gt;
+
+&lt;p&gt;我们上面介绍了如何定义一个struct，定义的时候是字段名与其类型一一对应，实际上Go支持只提供类型，而不写字段名的方式，也就是匿名字段，也称为嵌入字段。&lt;/p&gt;
+
+&lt;p&gt;当匿名字段是一个struct的时候，那么这个struct所拥有的全部字段都被隐式地引入了当前定义的这个struct。&lt;/p&gt;
+
+&lt;p&gt;让我们来看一个例子，让上面说的这些更具体化：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+type Human struct {
+    name string
+    age int
+    weight int
+}
+
+type Student struct {
+    Human  // 匿名字段，那么默认Student就包含了Human的所有字段
+    speciality string
+}
+
+func main() {
+    // 我们初始化一个学生
+    mark := Student{Human{&amp;quot;Mark&amp;quot;, 25, 120}, &amp;quot;Computer Science&amp;quot;}
+
+    // 我们访问相应的字段
+    fmt.Println(&amp;quot;His name is &amp;quot;, mark.name)
+    fmt.Println(&amp;quot;His age is &amp;quot;, mark.age)
+    fmt.Println(&amp;quot;His weight is &amp;quot;, mark.weight)
+    fmt.Println(&amp;quot;His speciality is &amp;quot;, mark.speciality)
+    // 修改对应的备注信息
+    mark.speciality = &amp;quot;AI&amp;quot;
+    fmt.Println(&amp;quot;Mark changed his speciality&amp;quot;)
+    fmt.Println(&amp;quot;His speciality is &amp;quot;, mark.speciality)
+    // 修改他的年龄信息
+    fmt.Println(&amp;quot;Mark become old&amp;quot;)
+    mark.age = 46
+    fmt.Println(&amp;quot;His age is&amp;quot;, mark.age)
+    // 修改他的体重信息
+    fmt.Println(&amp;quot;Mark is not an athlet anymore&amp;quot;)
+    mark.weight += 60
+    fmt.Println(&amp;quot;His weight is&amp;quot;, mark.weight)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;图例如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoStruct/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们看到Student访问属性age和name的时候，就像访问自己所有用的字段一样，对，匿名字段就是这样，能够实现字段的继承。是不是很酷啊？还有比这个更酷的呢，那就是student还能访问Human这个字段作为字段名。请看下面的代码，是不是更酷了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mark.Human = Human{&amp;quot;Marcus&amp;quot;, 55, 220}
+mark.Human.age -= 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过匿名访问和修改字段相当的有用，但是不仅仅是struct字段哦，所有的内置类型和自定义类型都是可以作为匿名字段的。请看下面的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+type Skills []string
+
+type Human struct {
+    name string
+    age int
+    weight int
+}
+
+type Student struct {
+    Human  // 匿名字段，struct
+    Skills // 匿名字段，自定义的类型string slice
+    int    // 内置类型作为匿名字段
+    speciality string
+}
+
+func main() {
+    // 初始化学生Jane
+    jane := Student{Human:Human{&amp;quot;Jane&amp;quot;, 35, 100}, speciality:&amp;quot;Biology&amp;quot;}
+    // 现在我们来访问相应的字段
+    fmt.Println(&amp;quot;Her name is &amp;quot;, jane.name)
+    fmt.Println(&amp;quot;Her age is &amp;quot;, jane.age)
+    fmt.Println(&amp;quot;Her weight is &amp;quot;, jane.weight)
+    fmt.Println(&amp;quot;Her speciality is &amp;quot;, jane.speciality)
+    // 我们来修改他的skill技能字段
+    jane.Skills = []string{&amp;quot;anatomy&amp;quot;}
+    fmt.Println(&amp;quot;Her skills are &amp;quot;, jane.Skills)
+    fmt.Println(&amp;quot;She acquired two new ones &amp;quot;)
+    jane.Skills = append(jane.Skills, &amp;quot;physics&amp;quot;, &amp;quot;golang&amp;quot;)
+    fmt.Println(&amp;quot;Her skills now are &amp;quot;, jane.Skills)
+    // 修改匿名内置类型字段
+    jane.int = 3
+    fmt.Println(&amp;quot;Her preferred number is&amp;quot;, jane.int)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;从上面例子我们看出来struct不仅仅能够将struct作为匿名字段、自定义类型、内置类型都可以作为匿名字段，而且可以在相应的字段上面进行函数操作（如例子中的append）。&lt;/p&gt;
+
+&lt;p&gt;这里有一个问题：如果human里面有一个字段叫做phone，而student也有一个字段叫做phone，那么该怎么办呢？&lt;/p&gt;
+
+&lt;p&gt;Go里面很简单的解决了这个问题，最外层的优先访问，也就是当你通过&lt;code&gt;student.phone&lt;/code&gt;访问的时候，是访问student里面的字段，而不是human里面的字段。&lt;/p&gt;
+
+&lt;p&gt;这样就允许我们去重载通过匿名字段继承的一些字段，当然如果我们想访问重载后对应匿名类型里面的字段，可以通过匿名字段名来访问。请看下面的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+type Human struct {
+    name string
+    age int
+    phone string  // Human类型拥有的字段
+}
+
+type Employee struct {
+    Human  // 匿名字段Human
+    speciality string
+    phone string  // 雇员的phone字段
+}
+
+func main() {
+    Bob := Employee{Human{&amp;quot;Bob&amp;quot;, 34, &amp;quot;777-444-XXXX&amp;quot;}, &amp;quot;Designer&amp;quot;, &amp;quot;333-222&amp;quot;}
+    fmt.Println(&amp;quot;Bob&#39;s work phone is:&amp;quot;, Bob.phone)
+    // 如果我们要访问Human的phone字段
+    fmt.Println(&amp;quot;Bob&#39;s personal phone is:&amp;quot;, Bob.Human.phone)
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go完整示例</title>
+      <link>http://lynchwong.com/blog/2015/06/go%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B/</link>
+      <pubDate>Sat, 27 Jun 2015 11:17:45 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/go%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;在开始之前还是讲下Go编程环境以及开发工具的配置和使用。&lt;/p&gt;
+
+&lt;h1 id=&#34;安装go&#34;&gt;安装Go&lt;/h1&gt;
+
+&lt;p&gt;操作系统是Yosemite 10.10.3。&lt;/p&gt;
+
+&lt;p&gt;安装方式有很多，博主是直接使用的一键安装包。安装包这里就不提供了，大家网上自行搜索下载，安装包截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;安装成功之后在终端中输入&lt;strong&gt;go&lt;/strong&gt;命令能看到Usage信息，截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;配置开发环境&#34;&gt;配置开发环境&lt;/h1&gt;
+
+&lt;p&gt;IDE博主使用的是IntelliJ IDEA 14 CE，截图如下，即下载的是右边的这个免费的社区版。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;安装完成之后这个IDE还并不能创建Go的Project，还需要插件的支持。&lt;/p&gt;
+
+&lt;p&gt;打开IDE后&lt;strong&gt;⌘,&lt;/strong&gt;打开偏好设置，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;大家看我已经装好了。点击图中高亮的那个按钮&lt;strong&gt;Browse Repositories&lt;/strong&gt;，弹出如下界面：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如果大家直接搜索*Go*是搜索不到，点击图中高亮的按钮&lt;strong&gt;Manage Repositories&lt;/strong&gt;，界面如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;点击&lt;strong&gt;+&lt;/strong&gt;号添加这个地址&lt;strong&gt;&lt;a href=&#34;https://plugins.jetbrains.com/plugins/alpha/5047&#34;&gt;https://plugins.jetbrains.com/plugins/alpha/5047&lt;/a&gt;&lt;/strong&gt;：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;点击OK，然后就能找到插件了，点击安装，安装完成后会要求重启：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;重启完成后我们创建新项目，发现就有了&lt;strong&gt;Go&lt;/strong&gt;的选项：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;设置gopath&#34;&gt;设置GOPATH&lt;/h2&gt;
+
+&lt;p&gt;如果你这时候新建项目，如下所示IDE会提醒你没有设置&lt;strong&gt;GOPATH&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;GOPATH&lt;/strong&gt;其实就是一个目录而已，按照约定该目录下默认有三个文件夹：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;src存放源代码&lt;/li&gt;
+&lt;li&gt;pkg编译后生成的文件&lt;/li&gt;
+&lt;li&gt;bin编译后生成的可执行文件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;博主使用IntelliJ IDEA 14 CE的工作空间&lt;strong&gt;IdeaProjects&lt;/strong&gt;当做GOPATH：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;同时创建了三个子文件夹(MyGo.iml请忽略)：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;所以博主的GOPATH就是&lt;strong&gt;/Users/Lynch/IdeaProjects&lt;/strong&gt;，如下终端所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;现在我们就开始设置GOPATH，把&lt;strong&gt;export GOPATH=/Users/Lynch/IdeaProjects&lt;/strong&gt;这一行加到.bash_profile或者.zshrc中，加到哪一个里面取决于你使用的是什么Shell。OS X默认使用的是bash，而你没有修改过，那就加到.bash_profile中。博主使用的是zsh，所以加入到了.zshrc。输入&lt;strong&gt;vim .zshrc&lt;/strong&gt;命令进行编辑：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图所示，设置好后保存退出，ESC然后输入“:wq”。然后输入&lt;strong&gt;go env&lt;/strong&gt;命令查看：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图所示GOPATH已经设置好了。&lt;/p&gt;
+
+&lt;p&gt;推荐大家使用zsh，你可以使用&lt;strong&gt;cat /etc/shells&lt;/strong&gt;来查看系统支持的Shell。OS X默认是支持zsh的，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;使用&lt;strong&gt;chsh -s /bin/zsh&lt;/strong&gt;命令切换到想要使用的Shell，这里我们切换到zsh。然后安装&lt;strong&gt;oh my zsh&lt;/strong&gt;，之后进行配置。&lt;/p&gt;
+
+&lt;p&gt;你可以安装很多插件，比如&lt;strong&gt;autojump&lt;/strong&gt;这个插件，太强悍了，对于像博主这样的手残党来说真是太方便。简单来说就是在目录之间进行快速跳转，比如我经常到Hexo目录下，那么我只需要输入&lt;strong&gt;j h&lt;/strong&gt;就能跳转到这个目录，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/17.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;以及提示，自动补全，git支持等，这里值简单提一下，安装使用，大家自行了解。&lt;/p&gt;
+
+&lt;p&gt;现在我们来创建一个新项目，Project name叫做“MyGo”，Project location是我们之前设置好的GOPATH，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/18.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最后的效果图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/19.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;完整示例&#34;&gt;完整示例&lt;/h1&gt;
+
+&lt;p&gt;现在我们就来做一个简单的示例程序。根据之前设置GOPATH时的叙述，源代码应该都放在src文件夹中。所以我们在src中新建一个文件夹，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/20.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后在新建的文件夹中新建一个Go的源文件：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/21.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;代码很简单，之前就讲解过，如果有没有使用的包，编译器会报错。右键&lt;strong&gt;main.go&lt;/strong&gt;：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/22.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这是可以看到IDE输出了“Hello world”：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/23.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;你也可以使用go命令来执行这些操作，输入&lt;strong&gt;go build sampledemo&lt;/strong&gt;命令会在当前目录生成一个可执行文件，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/24.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/25.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;双击执行：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/26.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;你可以在任意的目录执行&lt;strong&gt;go build sampledemo&lt;/strong&gt;；也可以进入应用包目录，执行&lt;strong&gt;go build&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;因为这里是main包所以生成了可执行文件。如果是其他的包，不会生成任何东西。所以对于普通包，你需要在pkg下生成相应的文件，就得执行&lt;strong&gt;go install&lt;/strong&gt;文件。对于main包，你需要在bin下生成相应的文件你需要执行&lt;strong&gt;go install&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;然后我们在sampledemo下创建新的文件夹&lt;strong&gt;utils&lt;/strong&gt;，然后创建plus.go源文件，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/27.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里需要注意的就是函数名要大写，因为我们要在包外调用这个函数。这个函数简单实现了加法运算。&lt;/p&gt;
+
+&lt;p&gt;我们现在先来编译utils包，直接两条命令，貌似&lt;strong&gt;go install sampledemo/utils&lt;/strong&gt;就够了：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/28.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;编译完成之后你能看见pkg下生成了utils.a的函数包：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/29.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图所示，修改main.go文件：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/30.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;go build sampledemo&lt;/strong&gt;重新编译，双击执行：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/31.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;main函数和init函数&#34;&gt;main函数和init函数&lt;/h1&gt;
+
+&lt;p&gt;Go里面有两个保留的函数：init函数（能够应用于所有的package）和main函数（只能应用于package main）。这两个函数在定义时不能有任何的参数和返回值。虽然一个package里面可以写任意多个init函数，但这无论是对于可读性还是以后的可维护性来说，我们都强烈建议用户在一个package中每个文件只写一个init函数。&lt;/p&gt;
+
+&lt;p&gt;Go程序会自动调用init()和main()，所以你不需要在任何地方调用这两个函数。每个package中的init函数都是可选的，但package main就必须包含一个main函数。&lt;/p&gt;
+
+&lt;p&gt;程序的初始化和执行都起始于main包。如果main包还导入了其它的包，那么就会在编译时将它们依次导入。有时一个包会被多个包同时导入，那么它只会被导入一次（例如很多包可能都会用到fmt包，但它只会被导入一次，因为没有必要导入多次）。当一个包被导入时，如果该包还导入了其它的包，那么会先将其它包导入进来，然后再对这些包中的包级常量和变量进行初始化，接着执行init函数（如果有的话），依次类推。等所有被导入的包都加载完毕了，就会开始对main包中的包级常量和变量进行初始化，然后执行main包中的init函数 (如果存在的话) ，最后执行main函数。
+下图详细地解释了整个执行过程：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/32.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;import&#34;&gt;import&lt;/h1&gt;
+
+&lt;p&gt;我们在写Go代码的时候经常用到import这个命令来导入包文件，而我们经常看到的方式参考如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import(
+    &amp;quot;fmt&amp;quot;
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后我们代码里可以通过如下的方式调用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;fmt.Println(&amp;quot;hello world&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面这个fmt是Go语言的标准库，其实是去GOROOT环境变量指定目录下去加载该模块，当然Go的import还支持如下两种方式来加载自己写的模块：&lt;/p&gt;
+
+&lt;h2 id=&#34;相对路径&#34;&gt;相对路径&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;import &amp;quot;./model&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当前文件同一目录的model目录，但是不建议这种方式来import。&lt;/p&gt;
+
+&lt;h2 id=&#34;绝对路径&#34;&gt;绝对路径&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;import &amp;quot;shorturl/model&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;加载GOPATH/src/shorurl/model模块。&lt;/p&gt;
+
+&lt;p&gt;上面展示了一些import常用的几种方式，但是还有一些特殊的import，让很多新手很费解，下面我们来&amp;ndash;讲解。&lt;/p&gt;
+
+&lt;h2 id=&#34;点操作&#34;&gt;点操作&lt;/h2&gt;
+
+&lt;p&gt;我们有时候会看到如下的方式导入包：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import(
+    .&amp;quot;fmt&amp;quot;
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个点操作的含义就是这个包导入之后在你调用这个包的函数时，你可以省略前缀的包名，也就是前面你调用的fmt.Println(“hello world”)可以省略的写成Println(“hello world”)。&lt;/p&gt;
+
+&lt;h2 id=&#34;别名操作&#34;&gt;别名操作&lt;/h2&gt;
+
+&lt;p&gt;别名操作顾名思义我们可以把包命名成另一个我们用起来容易记忆的名字：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import(
+    f&amp;quot;fmt&amp;quot;
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;别名操作的话调用函数时前缀变成了我们的前缀，即f.Println(&amp;ldquo;hello world&amp;rdquo;)。&lt;/p&gt;
+
+&lt;h2 id=&#34;操作&#34;&gt;_操作&lt;/h2&gt;
+
+&lt;p&gt;这个操作经常是让很多人费解的一个操作符，请看下面这个import：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import(
+    &amp;quot;database/sql&amp;quot;
+    _&amp;quot;github.com/ziutek/mymysql/godrv&amp;quot;
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;_操作其实是引入该包，而不直接使用包里面的函数，而是调用了该包里面的init函数。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go错误处理</title>
+      <link>http://lynchwong.com/blog/2015/06/go%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</link>
+      <pubDate>Fri, 26 Jun 2015 15:49:50 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/go%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;错误处理&#34;&gt;错误处理&lt;/h1&gt;
+
+&lt;p&gt;错误处理是学习任何编程语言都需要考虑的一个重要话题。在早期的语言中，错误处理不是语言规范的一部分，通常只作为一种编程范式存在，比如C语言中的errno。但自C++语言以来，语言层面上会增加错误处理的支持，比如异常(exception)的概念和try-catch关键字的引入。Go语言在此功能上考虑得更为深远。漂亮的错误处理规范是Go语言最大的亮点之一。&lt;/p&gt;
+
+&lt;h2 id=&#34;error接口&#34;&gt;error接口&lt;/h2&gt;
+
+&lt;p&gt;Go语言引入了一个关于错误处理的标准模式，即error接口，该接口的定义如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type error interface {
+    Error() string
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于大多数函数，如果要返回错误，大致上都可以定义为如下模式，将error作为多种返回值中的最后一个，但这并非是强制要求：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func Foo(param int) (n int, err error) {
+     // ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;调用时的代码建议按如下方式处理错误情况：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;n, err := Foo(0)
+
+if err != nil {
+    // 错误处理
+} else {
+    // 使用返回值n
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面我用Go库中的实际代码来示范如何使用自定义的error类型。&lt;/p&gt;
+
+&lt;p&gt;首先，定义一个用于承载错误信息的类型。因为Go语言中接口的灵活性，你根本不需要从error接口继承或者像Java一样需要使用implements来明确指定类型和接口之间的关系，具体代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type PathError struct {
+    Op string
+    Path string
+    Err error
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果这样的话，编译器又怎能知道PathError可以当一个error来传递呢?关键在于下面的代码实现了Error()方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func (e *PathError) Error() string {
+    return e.Op + &amp;quot; &amp;quot; + e.Path + &amp;quot;: &amp;quot; + e.Err.Error()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;关于接口的更多细节，后面再介绍。之后就可以直接返回PathError变量了，比如在下面的代码中，当syscall.Stat()失败返回err时，将该err包装到一个PathError对象中返回:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func Stat(name string) (fi FileInfo, err error) {
+    var stat syscall.Stat_t
+
+    err = syscall.Stat(name, &amp;amp;stat)
+
+    if err != nil {
+        return nil, &amp;amp;PathError{&amp;quot;stat&amp;quot;, name, err}
+    }
+
+    return fileInfoFromStat(&amp;amp;stat, name), nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果在处理错误时获取详细信息，而不仅仅满足于打印一句错误信息，那就需要用到类型转换知识了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;fi, err := os.Stat(&amp;quot;a.txt&amp;quot;)
+
+if err != nil {
+    if e, ok := err.(*os.PathError); ok &amp;amp;&amp;amp; e.Err != nil {
+        // 获取PathError类型变量e中的其他信息并处理
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这就是Go中error类型的使用方法。与其他语言中的异常相比，Go的处理相对比较直观、简单。&lt;/p&gt;
+
+&lt;p&gt;关于类型转换的更多知识，在第3章中也会有更进一步的阐述。&lt;/p&gt;
+
+&lt;h2 id=&#34;defer&#34;&gt;defer&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;func CopyFile(dst, src string) (w int64, err error) { 
+    srcFile, err := os.Open(src)
+    if err != nil {
+        return
+    }
+
+    defer srcFile.Close()
+
+    dstFile, err := os.Create(dstName) 
+    if err != nil {
+        return
+    }
+
+    defer dstFile.Close()
+    return io.Copy(dstFile, srcFile) 
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;即使其中的CopyFile()函数抛出异常，Go仍然会保证dstFile和srcFile会被正常关闭。&lt;/p&gt;
+
+&lt;p&gt;如果觉得一句话干不完清理的工作，也可以使用在defer后加一个匿名函数的做法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;defer func() {
+    // 做你复杂的清理工作
+} ()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另外，一个函数中可以存在多个defer语句，因此需要注意的是，defer语句的调用是遵照￼￼先进后出的原则，即最后一个defer语句将最先被执行。只不过，当你需要为defer语句到底哪个先执行这种细节而烦恼的时候，说明你的代码架构可能需要调整一下了。&lt;/p&gt;
+
+&lt;h2 id=&#34;panic-和recover&#34;&gt;panic()和recover()&lt;/h2&gt;
+
+&lt;p&gt;Go语言引入了两个内置函数panic()和recover()以报告和处理运行时错误和程序中的错误场景：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func panic(interface{}) 
+func recover() interface{}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当在一个函数执行过程中调用panic()函数时，正常的函数执行流程将立即终止，但函数中之前使用defer关键字延迟执行的语句将正常展开执行，之后该函数将返回到调用函数，并导致逐层向上执行panic流程，直至所属的goroutine中所有正在执行的函数被终止。错误信息将被报告，包括在调用panic()函数时传入的参数，这个过程称为错误处理流程。&lt;/p&gt;
+
+&lt;p&gt;从panic()的参数类型interface{}我们可以得知，该函数接收任意类型的数据，比如整 型、字符串、对象等。调用方法很简单，下面为几个例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;panic(404)
+panic(&amp;quot;network broken&amp;quot;) 
+panic(Error(&amp;quot;file not exists&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;recover()函数用于终止错误处理流程。一般情况下，recover()应该在一个使用defer关键字的函数中执行以有效截取错误处理流程。如果没有在发生异常的goroutine中明确调用恢复过程(使用recover关键字)，会导致该goroutine所属的进程打印异常信息后直接退出。&lt;/p&gt;
+
+&lt;p&gt;以下为一个常见的场景。
+我们对于foo()函数的执行要么心里没底感觉可能会触发错误处理，或者自己在其中明确加入了按特定条件触发错误处理的语句，那么可以用如下方式在调用代码中截取recover()：
+    defer func() {
+        if r := recover(); r != nil {
+            log.Printf(&amp;ldquo;Runtime error caught: %v&amp;rdquo;, r)
+        }
+    }()&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;foo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;无论foo()中是否触发了错误处理流程，该匿名defer函数都将在函数退出时得到执行。假如foo()中触发了错误处理流程，recover()函数执行将使得该错误处理过程终止。如果错误处理流程被触发时,程序传给panic函数的参数不为nil，则该函数还会打印详细的错误信息。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go函数</title>
+      <link>http://lynchwong.com/blog/2015/06/go%E5%87%BD%E6%95%B0/</link>
+      <pubDate>Fri, 26 Jun 2015 13:56:25 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/go%E5%87%BD%E6%95%B0/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;函数&#34;&gt;函数&lt;/h1&gt;
+
+&lt;p&gt;函数构成代码执行的逻辑结构。在Go语言中，函数的基本组成为：关键字func、函数名、参数列表、返回值、函数体和返回语句。&lt;/p&gt;
+
+&lt;h2 id=&#34;函数定义&#34;&gt;函数定义&lt;/h2&gt;
+
+&lt;p&gt;前面我们已经大概介绍过函数，这里我们用一个最简单的加法函数来进行详细说明：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package mymath
+import &amp;quot;errors&amp;quot;
+
+func Add(a int, b int) (ret int, err error) {
+    if a &amp;lt; 0 || b &amp;lt; 0 {// 假设这个函数只支持两个非负数值的加法
+        err = errors.New(&amp;quot;Should be non-negative numbers!&amp;quot;)
+        return
+    }
+    return a + b, nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;如果参数列表中若干个相邻的参数类型的相同，比如上面例子中的a和b，则可以在参数列表中省略前面变量的类型声明，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func Add(a, b int) (ret int, err error) {
+    // ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果返回值列表中多个返回值的类型相同，也可以用同样的方式合并。如果函数只有一个返回值，也可以这么写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func Add(a, b int) int {
+    // ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;函数调用&#34;&gt;函数调用&lt;/h2&gt;
+
+&lt;p&gt;函数调用非常方便，只要事先导入了该函数所在的包，就可以直接按照如下所示的方式调用函数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import &amp;quot;mymath&amp;quot;// 假设Add被放在一个叫做mymath的包中
+    // ...
+c := mymath.Add(1, 2)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Go语言中，函数支持多重返回值，这在之后的内容中会介绍。利用函数的多重返回值和错误处理机制，我们可以很容易地写出优雅美观的Go代码。&lt;/p&gt;
+
+&lt;p&gt;Go语言中函数名字的大小写不仅仅是风格，更直接体现了该函数的可见性，这一点尤其需要注意。对于很多注意美感的程序员(尤其是工作在Linux平台上的C程序员)而言，这里的函数名的首字母大写可能会让他们感觉不太适应，在自己练习的时候可能会顺手改成全小写，比如写 成add_xxx这样的Linux风格。很不幸的是，如果这样做了，你可能会遇到莫名其妙的编译错误，比如你明明导入了对应的包，Go编译器还是会告诉你无法找到add_xxx函数。&lt;/p&gt;
+
+&lt;p&gt;因此需要先牢记这样的规则：小写字母开头的函数只在本包内可见，大写字母开头的函数才能被其他包使用。&lt;/p&gt;
+
+&lt;p&gt;这个规则也适用于类型和变量的可见性。&lt;/p&gt;
+
+&lt;h2 id=&#34;不定参数&#34;&gt;不定参数&lt;/h2&gt;
+
+&lt;p&gt;在C语言时代大家一般都用过printf()函数，从那个时候开始其实已经在感受不定参数的魅力和价值。如同C语言中的printf()函数，Go语言标准库中的fmt.Println()等函数的实现也严重依赖于语言的不定参数功能。&lt;/p&gt;
+
+&lt;p&gt;本节我们将介绍不定参数的用法。合适地使用不定参数,可以让代码简单易用，尤其是输入输出类函数，比如日志函数等。&lt;/p&gt;
+
+&lt;h3 id=&#34;不定参数类型&#34;&gt;不定参数类型&lt;/h3&gt;
+
+&lt;p&gt;不定参数是指函数传入的参数个数为不定数量。为了做到这点，首先需要将函数定义为接受不定参数类型：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func myfunc(args ...int) {
+    for _, arg := range args {
+        fmt.Println(arg)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这段代码的意思是，函数myfunc()接受不定数量的参数，这些参数的类型全部是int，所以它可以用如下方式调用：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;myfunc(2, 3, 4)
+myfunc(1, 3, 7, 13)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;形如&amp;hellip;type格式的类型只能作为函数的参数类型存在，并且必须是最后一个参数。它是一个语法糖(syntactic sugar)，即这种语法对语言的功能并没有影响，但是更方便程序员使用。通常来说，使用语法糖能够增加程序的可读性，从而减少程序出错的机会。&lt;/p&gt;
+
+&lt;p&gt;从内部实现机理上来说，类型&amp;hellip;type本质上是一个数组切片，也就是[]type，这也是为什么上面的参数args可以用for循环来获得每个传入的参数。&lt;/p&gt;
+
+&lt;p&gt;假如没有&amp;hellip;type这样的语法糖，开发者将不得不这么写：
+    func myfunc2(args []int) {
+        for _, arg := range args {
+            fmt.Println(arg)
+        }
+    }&lt;/p&gt;
+
+&lt;p&gt;从函数的实现角度来看，这没有任何影响，该怎么写就怎么写。但从调用方来说，情形则完全不同：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;myfunc2([]int{1, 3, 7, 13})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你会发现，我们不得不加上[]int{}来构造一个数组切片实例。但是有了&amp;hellip;type这个语法糖，我们就不用自己来处理了。&lt;/p&gt;
+
+&lt;h3 id=&#34;不定参数的传递&#34;&gt;不定参数的传递&lt;/h3&gt;
+
+&lt;p&gt;假设有另一个变参函数叫做myfunc3(args &amp;hellip;int)，下面的例子演示了如何向其传递变参：&lt;/p&gt;
+
+&lt;p&gt;func myfunc(args &amp;hellip;int) {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//按原样传递
+myfunc3(args...)
+
+//传递片段，实际上任意的int slice都可以传进去
+myfunc3(args[1:]...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;h3 id=&#34;任意类型的不定参数&#34;&gt;任意类型的不定参数&lt;/h3&gt;
+
+&lt;p&gt;之前的例子中将不定参数类型约束为int，如果你希望传任意类型，可以指定类型为interface{}。下面是Go语言标准库中fmt.Printf()的函数原型：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func Printf(format string, args ...interface{}) {
+    // ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用interface{}传递任意类型数据是Go语言的惯例用法。使用interface{}仍然是类型安全的，这和 C/C++ 不太一样。下面代码示范了如何分派传入interface{}类型的数据。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+func MyPrintf(args ...interface{}) {
+    for _, arg := range args {
+        switch arg.(type) {
+            case int:
+                fmt.Println(arg, &amp;quot;is an int value.&amp;quot;)
+            case string:
+                fmt.Println(arg, &amp;quot;is an string value.&amp;quot;)
+            case int64:
+                fmt.Println(arg, &amp;quot;is an int64 value.&amp;quot;)
+            default:
+                fmt.Println(arg, &amp;quot;is an unknown value.&amp;quot;)
+        }
+    }
+}
+
+func main() {
+    var v1 int = 1
+    var v2 int64 = 234
+    var v3 string = &amp;quot;hello&amp;quot;
+    var v4 float32 = 1.234
+    MyPrintf(v1, v2, v3, v4)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;多返回值&#34;&gt;多返回值&lt;/h2&gt;
+
+&lt;p&gt;与C、C++和Java等开发语言的一个极大不同在于，Go语言的函数或者成员的方法可以有多个返回值，这个特性能够使我们写出比其他语言更优雅、更简洁的代码，比如File.Read()函数就可以同时返回读取的字节数和错误信息。如果读取文件成功，则返回值中的n为读取的字节数，err为nil，否则err为具体的出错信息：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func (file *File) Read(b []byte) (n int, err Error)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;同样，从上面的方法原型可以看到，我们还可以给返回值命名，就像函数的输入参数一样。返回值被命名之后，它们的值在函数开始的时候被自动初始化为空。在函数中执行不带任何参数的return语句时，会返回对应的返回值变量的值。&lt;/p&gt;
+
+&lt;p&gt;Go语言并不需要强制命名返回值，但是命名后的返回值可以让代码更清晰，可读性更强，同时也可以用于文档。&lt;/p&gt;
+
+&lt;p&gt;如果调用方调用了一个具有多返回值的方法，但是却不想关心其中的某个返回值，可以简单地用一个下划线“_”来跳过这个返回值，比如下面的代码表示调用者在读文件的时候不想关心Read()函数返回的错误码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;n, _ := f.Read(buf)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;匿名函数与闭包&#34;&gt;匿名函数与闭包&lt;/h2&gt;
+
+&lt;p&gt;匿名函数是指不需要定义函数名的一种函数实现方式，它并不是一个新概念，最早可以回溯到1958年的Lisp语言。但是由于种种原因，C和C++一直都没有对匿名函数给以支持，其他的各种语言，比如JavaScript、C#和Objective-C等语言都提供了匿名函数特性，当然也包含Go语言。&lt;/p&gt;
+
+&lt;h3 id=&#34;匿名函数&#34;&gt;匿名函数&lt;/h3&gt;
+
+&lt;p&gt;在Go里面，函数可以像普通变量一样被传递或使用，这与C语言的回调函数比较类似。不同的是，Go语言支持随时在代码里定义匿名函数。&lt;/p&gt;
+
+&lt;p&gt;匿名函数由一个不带函数名的函数声明和函数体组成，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func(a, b int, z float64) bool {
+    return a * b &amp;lt; int(z)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;匿名函数可以直接赋值给一个变量或者直接执行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;f := func(x, y int) int {
+    return x + y
+}
+
+func(ch chan int) {
+    ch &amp;lt;- ACK
+} (reply_chan) //花括号后直接跟参数列表表示函数调用
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;闭包&#34;&gt;闭包&lt;/h3&gt;
+
+&lt;p&gt;Go的匿名函数是一个闭包，下面我们先来了解一下闭包的概念、价值和应用场景。&lt;/p&gt;
+
+&lt;h4 id=&#34;基本概念&#34;&gt;基本概念&lt;/h4&gt;
+
+&lt;p&gt;闭包是可以包含自由(未绑定到特定对象)变量的代码块，这些变量不在这个代码块内或者任何全局上下文中定义，而是在定义代码块的环境中定义。要执行的代码块(由于自由变量包含在代码块中，所以这些自由变量以及它们引用的对象没有被释放)为自由变量提供绑定的计算环境(作用域)。&lt;/p&gt;
+
+&lt;h4 id=&#34;闭包的价值&#34;&gt;闭包的价值&lt;/h4&gt;
+
+&lt;p&gt;闭包的价值在于可以作为函数对象或者匿名函数，对于类型系统而言，这意味着不仅要表示数据还要表示代码。支持闭包的多数语言都将函数作为第一级对象,就是说这些函数可以存储到变量中作为参数传递给其他函数，最重要的是能够被函数动态创建和返回。&lt;/p&gt;
+
+&lt;h4 id=&#34;go语言中的闭包&#34;&gt;Go语言中的闭包&lt;/h4&gt;
+
+&lt;p&gt;Go语言中的闭包同样也会引用到函数外的变量。闭包的实现确保只要闭包还被使用，那么被闭包引用的变量会一直存在，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;
+
+func main() {
+    var j int = 5
+
+    a := func() (func()) {
+        var i int = 10
+        return func() {
+            fmt.Printf(&amp;quot;i, j: %d, %d\n&amp;quot;, i, j)
+        }
+    }()
+
+    a()
+    j *= 2
+    a()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述例子的执行结果是：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;i, j: 10, 5
+i, j: 10, 10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子中，变量a指向的闭包函数引用了局部变量i和j，i的值被隔离，在闭包外不能被修改，改变j的值以后，再次调用a，发现结果是修改过的值。&lt;/p&gt;
+
+&lt;p&gt;￼在变量a指向的闭包函数中，只有内部的匿名函数才能访问变量i，而无法通过其他途径访问到，因此保证了i的安全性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go流程控制</title>
+      <link>http://lynchwong.com/blog/2015/06/go%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/</link>
+      <pubDate>Sun, 21 Jun 2015 01:23:08 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/go%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;流程控制&#34;&gt;流程控制&lt;/h1&gt;
+
+&lt;p&gt;流程控制决定了程序代码的执行路径，建立程序的逻辑结构。可以说，流程控制语句是整个程序骨架。&lt;/p&gt;
+
+&lt;p&gt;从根本上讲，流程控制只是为了控制程序语句的执行顺序，一般需要与各种条件配合，因此，在各种流程中，会加入条件判断语句。流程控制语句一般起以下3个作用：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;选择&lt;/strong&gt;，即根据条件跳转到不同的执行序列；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;循环&lt;/strong&gt;，即根据条件反复执行某个序列，当然每一次循环执行的输入输出可能会发生变化；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;跳转&lt;/strong&gt;，即根据条件返回到某执行序列。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Go语言支持如下的几种流程控制语句：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;条件语句&lt;/strong&gt;，对应的关键字为if、else和else if；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;选择语句&lt;/strong&gt;，对应的关键字为switch、case和select(将在介绍channel的时候细说)；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;循环语句&lt;/strong&gt;，对应的关键字为for和range；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;跳转语句&lt;/strong&gt;，对应的关键字为goto。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在具体的应用场景中，为了满足更丰富的控制需求，Go语言还添加了如下关键字：break、 continue和fallthrough。在实际的使用中，需要根据具体的逻辑目标、程序执行的时间和空间限制、代码的可读性、编译器的代码优化设定等多种因素，灵活组合。&lt;/p&gt;
+
+&lt;h2 id=&#34;条件语句&#34;&gt;条件语句&lt;/h2&gt;
+
+&lt;p&gt;关于条件语句的样例代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if a &amp;lt; 5 { 
+    return 0
+} else { 
+    return 1
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;关于条件语句,需要注意以下几点：
+* 条件语句不需要使用括号将条件包含起来()：
+* 无论语句体内有几条语句，花括号{}都是必须存在的：
+* 左花括号{必须与if或者else处于同一行：
+* 在if之后，条件语句之前，可以添加变量初始化语句，使用;间隔：
+* 在有返回值的函数中，不允许将“最终的”return语句包含在if&amp;hellip;else&amp;hellip;结构中，否则会编译失败：function ends without a return statement。
+失败的原因在于，Go编译器无法找到终止该函数的return语句。编译失败的案例如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func example(x int) int { 
+    if x == 0 {
+        return 5 
+    } else {
+        return x 
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;选择语句&#34;&gt;选择语句&lt;/h2&gt;
+
+&lt;p&gt;根据传入条件的不同，选择语句会执行不同的语句。下面的例子根据传入的整型变量i的不同而打印不同的内容：
+    switch i {
+        case 0:
+            fmt.Printf(&amp;ldquo;0&amp;rdquo;)
+        case 1:
+            fmt.Printf(&amp;ldquo;1&amp;rdquo;)
+        case 2:
+            fallthrough
+        case 3:
+            fmt.Printf(&amp;ldquo;3&amp;rdquo;)
+        case 4, 5, 6:
+            fmt.Printf(&amp;ldquo;4, 5, 6&amp;rdquo;)
+        default:
+            fmt.Printf(&amp;ldquo;Default&amp;rdquo;)
+    }
+运行上面的案例，将会得到如下结果：
+* i = 0时，输出0;
+* i = 1时，输出1;
+* i = 2时，输出3;
+* i = 3时，输出3;
+* i = 4时，输出4, 5, 6;
+* i = 5时，输出4, 5, 6;
+* i = 6时，输出4, 5, 6;
+* i = 其他任意值时，输出Default。
+比较有意思的是，switch后面的表达式甚至不是必需的，比如下面的例子：
+    switch {
+        case 0 &amp;lt;= Num &amp;amp;&amp;amp; Num &amp;lt;= 3:
+            fmt.Printf(&amp;ldquo;0-3&amp;rdquo;)
+        case 4 &amp;lt;= Num &amp;amp;&amp;amp; Num &amp;lt;= 6:
+            fmt.Printf(&amp;ldquo;4-6&amp;rdquo;)
+        case 7 &amp;lt;= Num &amp;amp;&amp;amp; Num &amp;lt;= 9:
+            fmt.Printf(&amp;ldquo;7-9&amp;rdquo;)
+    }
+在使用switch结构时，我们需要注意以下几点：
+* 左花括号{必须与switch处于同一行；
+* 条件表达式不限制为常量或者整数；
+* 单个case中,可以出现多个结果选项；
+* 与C语言等规则相反，Go语言不需要用break来明确退出一个case；
+* 只有在case中明确添加fallthrough关键字，才会继续执行紧跟的下一个case；
+* 可以不设定switch之后的条件表达式，在此种情况下，整个switch结构与多个if&amp;hellip;else&amp;hellip;的逻辑作用等同。&lt;/p&gt;
+
+&lt;h2 id=&#34;循环语句&#34;&gt;循环语句&lt;/h2&gt;
+
+&lt;p&gt;与多数语言不同的是，Go语言中的循环语句只支持for关键字，而不支持while和do-while结构。关键字for的基本使用方法与C和C++中非常接近：
+    sum := 0
+    for i := 0; i &amp;lt; 10; i++ {
+        sum += i
+    }&lt;/p&gt;
+
+&lt;p&gt;可以看到比较大的一个不同在于for后面的条件表达式不需要用圆括号()包含起来。Go语言还进一步考虑到无限循环的场景，让开发者不用写无聊的for (;;) {} 和 do {} while(1);，而直接简化为如下的写法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sum := 0 
+for {
+    sum++
+    if sum &amp;gt; 100 {
+        break
+    } 
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在条件表达式中也支持多重赋值，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;a := []int{1, 2, 3, 4, 5, 6}
+for i, j := 0, len(a) – 1; i &amp;lt; j; i, j = i + 1, j – 1 {
+    a[i], a[j] = a[j], a[i]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用循环语句时，需要注意的有以下几点。
+* 左花括号{必须与for处于同一行。
+* Go语言中的for循环与C语言一样，都允许在循环条件中定义和初始化变量，唯一的区别是，Go语言不支持以逗号为间隔的多个赋值语句，必须使用平行赋值的方式来初始化多个变量。
+* Go语言的for循环同样支持continue和break来控制循环，但是它提供了一个更高级的￼break，可以选择中断哪一个循环，如下例：&lt;/p&gt;
+
+&lt;p&gt;本例中，break语句终止的是JLoop标签处的外层循环。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;for j := 0; j &amp;lt; 5; j++ {
+    for i := 0; i &amp;lt; 10; i++ {
+        if i &amp;gt; 5 { 
+            break JLoop
+        }
+        fmt.Println(i)
+    } 
+}
+JLoop: 
+// ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;跳转语句&#34;&gt;跳转语句&lt;/h2&gt;
+
+&lt;p&gt;goto语句被多数语言学者所反对，谆谆告诫不要使用。但对于Go语言这样一个惜关键字如金的语言来说，居然仍然支持goto关键字，无疑让某些人跌破眼镜。但就个人一年多来的Go语言编程经验来说，goto还是会在一些场合下被证明是最合适的。
+goto语句的语义非常简单，就是跳转到本函数内的某个标签，如：
+    func myfunc() {
+        i := 0
+        HERE:
+        fmt.Println(i)
+        i++
+        if i &amp;lt; 10 {
+    ￼￼      goto HERE
+        }
+    }&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go基本语法</title>
+      <link>http://lynchwong.com/blog/2015/06/go%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</link>
+      <pubDate>Fri, 19 Jun 2015 12:30:31 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/go%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;变量&#34;&gt;变量&lt;/h1&gt;
+
+&lt;h2 id=&#34;变量声明&#34;&gt;变量声明&lt;/h2&gt;
+
+&lt;p&gt;Go语言使用关键字&lt;strong&gt;var&lt;/strong&gt;来声明变量，变量类型放在变量名之后，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var v1 int
+var v2 string 
+var v3 [10]int          // 数组
+var v4 []int            // 数组切片
+var v5 struct {
+    f int 
+}
+var v6 *int             // 指针
+var v7 map[string]int   // map,key为string类型,value为int类型
+var v8 func(a int) int 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;&lt;strong&gt;var&lt;/strong&gt;关键字可以将若干个需要声明的变量放在一起，避免重复书写&lt;strong&gt;var&lt;/strong&gt;关键字，如下所示：
+    var （
+        v1 int
+        v2 string
+    ）&lt;/p&gt;
+
+&lt;h2 id=&#34;初始化变量&#34;&gt;初始化变量&lt;/h2&gt;
+
+&lt;p&gt;你可以在声明变量的时候初始化变量，但是这时候&lt;strong&gt;var&lt;/strong&gt;关键字不是必须的，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var v1 int = 10     // 正确的使用方式1
+var v2 = 10         // 正确的使用方式2,编译器可以自动推导出v2的类型
+v3 := 10            // 正确的使用方式3,编译器可以自动推导出v3的类型
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这三种使用方式效果是完全一样的。第一种是完整的表达方式，第二种省去了类型说明，编译器会根据赋的值自动推导出v2的类型。第三种的&lt;strong&gt;:=&lt;/strong&gt;符号用于明确表达同时进行变量声明和初始化的工作。&lt;/p&gt;
+
+&lt;p&gt;指定类型已不再是必需的，Go编译器可以从初始化表达式的右值推导出该变量应该声明为哪种类型，这让Go语言看起来有点像动态类型的语言，但其实Go语言实际上是不折不扣的强类型语言(静态类型语言)。PS：Swift在这点上也是类似的。&lt;/p&gt;
+
+&lt;p&gt;出现在&lt;strong&gt;:=&lt;/strong&gt;符号左侧的变量不应该是已经被声明过的，否侧会导致编译错误，如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var i int
+i := 2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;会导致如下的编译错误：&lt;/p&gt;
+
+&lt;p&gt;no new variables on left side of :=&lt;/p&gt;
+
+&lt;h2 id=&#34;变量赋值&#34;&gt;变量赋值&lt;/h2&gt;
+
+&lt;p&gt;在Go语法中，变量初始化和变量赋值是两个不同的概念。下面为声明一个变量之后的赋值过程：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var v10 int
+v10 = 123
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;多重赋值功能，比如下面这个交换i和j变量的语句：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;i, j = j, i
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果大家学过C语言，一定知道需要一个中间变量才能完成如上操作。&lt;/p&gt;
+
+&lt;h2 id=&#34;匿名变量&#34;&gt;匿名变量&lt;/h2&gt;
+
+&lt;p&gt;我们在使用传统的强类型语言编程时，经常会出现这种情况，即在调用函数时为了获取一个值，却因为该函数返回多个值而不得不定义一堆没用的变量。在Go中这种情况可以通过结合使用多重返回和匿名变量来避免这种丑陋的写法，让代码看起来更加优雅。&lt;/p&gt;
+
+&lt;p&gt;假设GetName()函数定义如下，它返回3个值，分别为firstName、lastName和nickName：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func GetName() (firstName, lastName, nickName string) { 
+    return &amp;quot;May&amp;quot;, &amp;quot;Chan&amp;quot;, &amp;quot;Chibi Maruko&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;若指向获得nickName，则函数调用语句可以用如下方式编写：
+    _, _, nickName := GetName()&lt;/p&gt;
+
+&lt;h1 id=&#34;常量&#34;&gt;常量&lt;/h1&gt;
+
+&lt;p&gt;在Go语言中，常量是指编译期间就已知且不可改变的值。常量可以是数值类型(包括整型、浮点型和复数类型)、布尔类型、字符串类型等。&lt;/p&gt;
+
+&lt;h2 id=&#34;字面常量&#34;&gt;字面常量&lt;/h2&gt;
+
+&lt;p&gt;所谓字面常量(literal)，是指程序中硬编码的常量，如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-12
+3.14159265358979323846  // 浮点类型的常量
+3.2+12i                 // 复数类型的常量
+true                    // 布尔类型的常量
+&amp;quot;foo&amp;quot;                   // 字符串常量
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在其他语言中，常量通常有特定的类型，比如-12在C语言中会认为是一个int类型的常量。如果要指定一个值为-12的long类型常量，需要写成-12l，这有点违反人们的直观感觉。Go语言的字面常量更接近我们自然语言中的常量概念，它是无类型的。只要这个常量在相应类型的值域范围内，就可以作为该类型的常量，比如上面的常量-12，它可以赋值给int、uint、int32、 int64、float32、float64、complex64、complex128等类型的变量。&lt;/p&gt;
+
+&lt;h2 id=&#34;常量定义&#34;&gt;常量定义&lt;/h2&gt;
+
+&lt;p&gt;通过&lt;strong&gt;const&lt;/strong&gt;关键字可以给常量指定一个友好的名字：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const Pi float64 = 3.14159265358979323846
+const zero = 0.0                // 无类型浮点常量
+const (
+    size int64 = 1024
+    eof = -1                    // 无类型整型常量
+)
+const u, v float32 = 0, 3       // u = 0.0, v = 3.0, 常量多重赋值
+const a, b, c = 3, 4, &amp;quot;foo&amp;quot;     //a=3,b=4,c=&amp;quot;foo&amp;quot;, 无类型整型和字符串常量
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Go的常量定义可以限定常量类型，但不是必需的。如果定义常量时没有指定类型，那么它与字面常量一样，是无类型常量。&lt;/p&gt;
+
+&lt;p&gt;常量定义的右值也可以是一个在编译期运算的常量表达式，比如
+    const mask = 1 &amp;lt;&amp;lt; 3
+由于常量的赋值是一个编译期行为，所以右值不能出现任何需要运行期才能得出结果的表达式，比如试图以如下方式定义常量就会导致编译错误：
+    const Home = os.GetEnv(&amp;ldquo;HOME&amp;rdquo;)
+原因很简单，os.GetEnv()只有在运行期才能知道返回结果，在编译期并不能确定，所以无法作为常量定义的右值。&lt;/p&gt;
+
+&lt;h2 id=&#34;预定义常量&#34;&gt;预定义常量&lt;/h2&gt;
+
+&lt;p&gt;Go语言预定义了这些常量：true、false和iota。
+iota比较特殊，可以被认为是一个可被编译器修改的常量，在每一个const关键字出现时被重置为0，然后在下一个const出现之前，每出现一次iota，其所代表的数字会自动增1。
+从以下的例子可以基本理解iota的用法：
+    const (         // iota被重设为0
+        c0 = iota   // c0 == 0
+        c1 = iota   // c1 == 1
+        c2 = iota   // c2 == 2
+    )&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const (
+    a = 1 &amp;lt;&amp;lt; iota   // a == 1 (iota在每个const开头被重设为0)
+    b = 1 &amp;lt;&amp;lt; iota   // b == 2
+    c = 1 &amp;lt;&amp;lt; iota   // c == 4
+)
+
+const (
+    u         = iota * 42   // u == 0
+    v float64 = iota * 42   //v==42.0
+    w         = iota * 42   //w==84
+)
+const x = iota
+const y = iota
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果两个const的赋值语句的表达式是一样的，那么可以省略后一个复制表达式。因此，上面的前两个const语句可简写为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const (         // iota被重设为0
+    c0 = iota   // c0 == 0
+    c1          // c1 == 1
+    c2          // c2 == 2
+)
+
+const (
+    a = 1 &amp;lt;&amp;lt; iota   // a == 1 (iota在每个const开头被重设为0)
+    b               // b == 2
+    c               // c == 4
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;枚举&#34;&gt;枚举&lt;/h2&gt;
+
+&lt;p&gt;枚举指一系列相关的常量，比如下面关于一个星期中每天的定义。通过上一节的例子，我们看到可以用在const后跟一对圆括号的方式定义一组常量，这种定义法在Go语言中通常用于定义枚举值。Go语言并不支持众多其他语言明确支持的enum关键字。&lt;/p&gt;
+
+&lt;p&gt;下面是一个常规的枚举表示法，其中定义了一系列整型常量：
+    const (
+        Sunday = iota
+        Monday
+        Tuesday
+        Wednesday
+        Thursday
+        Friday
+        Saturday
+        numberOfDays    // 这个常量没有导出
+    ）&lt;/p&gt;
+
+&lt;p&gt;同Go语言的其他符号(symbol)一样，以大写字母开头的常量在包外可见。以上例子中numberOfDays为包内私有，其他符号则可被其他包访问。&lt;/p&gt;
+
+&lt;h1 id=&#34;类型&#34;&gt;类型&lt;/h1&gt;
+
+&lt;p&gt;Go语言内置以下这些基础类型：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;布尔类型：bool。&lt;/li&gt;
+&lt;li&gt;整型：int8、byte、int16、int、uint、uintptr等。&lt;/li&gt;
+&lt;li&gt;浮点类型：float32、float64。&lt;/li&gt;
+&lt;li&gt;复数类型：complex64、complex128。&lt;/li&gt;
+&lt;li&gt;字符串：string。&lt;/li&gt;
+&lt;li&gt;字符类型：rune。&lt;/li&gt;
+&lt;li&gt;错误类型：error。
+此外，Go语言也支持以下这些复合类型：&lt;/li&gt;
+&lt;li&gt;指针(pointer)&lt;/li&gt;
+&lt;li&gt;数组(array)&lt;/li&gt;
+&lt;li&gt;切片(slice)&lt;/li&gt;
+&lt;li&gt;字典(map)&lt;/li&gt;
+&lt;li&gt;通道(chan)&lt;/li&gt;
+&lt;li&gt;结构体(struct)&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;接口(interface)&lt;/p&gt;
+
+&lt;h2 id=&#34;布尔类型&#34;&gt;布尔类型&lt;/h2&gt;
+
+&lt;p&gt;Go语言中的布尔类型与其他语言基本一致，关键字也为bool，可赋值为预定义的true和false示例代码如下：
+var v1 bool
+v1 = true
+v2 := (1 == 2) // v2也会被推导为bool类型
+布尔类型不能接受其他类型的赋值，不支持自动或强制的类型转换。以下的示例是一些错误的用法，会导致编译错误：
+var b bool
+b=1// 编译错误
+b = bool(1) // 编译错误
+以下的用法才是正确的：
+var b bool
+b = (1!=0) // 编译正确
+fmt.Println(&amp;ldquo;Result:&amp;ldquo;, b) // 打印结果为Result: true&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;整型&#34;&gt;整型&lt;/h2&gt;
+
+&lt;p&gt;整型是所有编程语言里最基础的数据类型。Go语言支持表2-1所示的这些整型类型。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoBasicSyn/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;类型表示&#34;&gt;类型表示&lt;/h3&gt;
+
+&lt;p&gt;需要注意的是，int和int32在Go语言里被认为是两种不同的类型，编译器也不会帮你自动做类型转换，比如以下的例子会有编译错误：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var value2 int32
+value1 := 64 // value1将会被自动推导为int类型 
+value2 = value1 // 编译错误
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编译错误类似于：
+    cannot use value1 (type int) as type int32 in assignment。
+使用强制类型转换可以解决这个编译错误：
+    value2 = int32(value1) // 编译通过
+当然，开发者在做强制类型转换时，需要注意数据长度被截短而发生的数据精度损失(比如 将浮点数强制转为整数)和值溢出(值超过转换的目标类型的值范围时)问题。&lt;/p&gt;
+
+&lt;h3 id=&#34;数值运算&#34;&gt;数值运算&lt;/h3&gt;
+
+&lt;p&gt;Go语言支持下面的常规整数运算:+、-、*、/和%。加减乘除就不详细解释了，需要说下的是，% 和在C语言中一样是求余运算，比如：
+    5%3// 结果为:2&lt;/p&gt;
+
+&lt;h3 id=&#34;比较运算&#34;&gt;比较运算&lt;/h3&gt;
+
+&lt;p&gt;Go语言支持以下的几种比较运算符：&amp;gt;、&amp;lt;、==、&amp;gt;=、&amp;lt;=和!=。这一点与大多数其他语言相同，与C语言完全一致。&lt;/p&gt;
+
+&lt;p&gt;下面为条件判断语句的例子：
+    i, j := 1, 2
+    if i == j {
+        fmt.Println(&amp;ldquo;i and j are equal.&amp;rdquo;)
+    }&lt;/p&gt;
+
+&lt;p&gt;两个不同类型的整型数不能直接比较，比如int8类型的数和int类型的数不能直接比较，但各种类型的整型变量都可以直接与字面常量(literal)进行比较，比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var i int32
+var j int64
+
+i, j = 1, 2
+
+if i == j { // 编译错误
+    fmt.Println(&amp;quot;i and j are equal.&amp;quot;)
+}
+
+if i == 1 || j == 2 {// 编译通过
+    fmt.Println(&amp;quot;i and j are equal.&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;位运算&#34;&gt;位运算&lt;/h3&gt;
+
+&lt;p&gt;Go语言支持表2-2所示的位运算符。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoBasicSyn/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Go语言的大多数位运算符与C语言都比较类似，除了取反在C语言中是~x，而在Go语言中是^x。&lt;/p&gt;
+
+&lt;h2 id=&#34;浮点型&#34;&gt;浮点型&lt;/h2&gt;
+
+&lt;p&gt;浮点型用于表示包含小数点的数据，比如1.234就是一个浮点型数据。Go语言中的浮点类型采用IEEE-754标准的表达方式。&lt;/p&gt;
+
+&lt;h3 id=&#34;浮点数表示&#34;&gt;浮点数表示&lt;/h3&gt;
+
+&lt;p&gt;Go语言定义了两个类型float32和float64，其中float32等价于C语言的float类型，float64等价于C语言的double类型。
+￼在Go语言里，定义一个浮点数变量的代码如下：
+    var fvalue1 float32&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;fvalue1 = 12
+fvalue2 := 12.0 // 如果不加小数点,fvalue2会被推导为整型而不是浮点型
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于以上例子中类型被自动推导的fvalue2，需要注意的是其类型将被自动设为float64(Swift的类型推断也是推断精度更高的类型)，而不管赋给它的数字是否是用32位长度表示的。因此，对于以上的例子，下面的赋值将导致编译错误：
+    fvalue1 = fvalue2
+而必须使用这样的强制类型转换：
+    fvalue1 = float32(fvalue2)&lt;/p&gt;
+
+&lt;h3 id=&#34;浮点数比较&#34;&gt;浮点数比较&lt;/h3&gt;
+
+&lt;p&gt;因为浮点数不是一种精确的表达方式，所以像整型那样直接用==来判断两个浮点数是否相等是不可行的，这可能会导致不稳定的结果。&lt;/p&gt;
+
+&lt;p&gt;下面是一种推荐的替代方案：
+    import &amp;ldquo;math&amp;rdquo;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// p为用户自定义的比较精度,比如0.00001 
+func IsEqual(f1, f2, p float64) bool {
+    return math.Fdim(f1, f2) &amp;lt; p 
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;复数类型&#34;&gt;复数类型&lt;/h2&gt;
+
+&lt;p&gt;复数实际上由两个实数(在计算机中用浮点数表示)构成，一个表示实部(real)，一个表示 虚部(imag)。如果了解了数学上的复数是怎么回事，那么Go语言的复数就非常容易理解了。&lt;/p&gt;
+
+&lt;h3 id=&#34;复数表示&#34;&gt;复数表示&lt;/h3&gt;
+
+&lt;p&gt;复数表示的示例如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var value1 complex64            // 由2个float32构成的复数类型
+
+value1 = 3.2 + 12i
+value2 := 3.2 + 12i             // value2是complex128类型
+value3 := complex(3.2, 12)      // value3结果同 value2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;实部与虚部&#34;&gt;实部与虚部&lt;/h3&gt;
+
+&lt;p&gt;对于一个复数z = complex(x, y)，就可以通过Go语言内置函数real(z)获得该复数的实部，也就是x，通过imag(z)获得该复数的虚部，也就是y。&lt;/p&gt;
+
+&lt;p&gt;更多关于复数的函数，请查阅math/cmplx标准库的文档。&lt;/p&gt;
+
+&lt;h2 id=&#34;字符串&#34;&gt;字符串&lt;/h2&gt;
+
+&lt;p&gt;在Go语言中，字符串也是一种基本类型。相比之下，C/C++语言中并不存在原生的字符串类型，通常使用字符数组来表示，并以字符指针来传递。
+Go语言中字符串的声明和初始化非常简单，如下：
+    var str string // 声明一个字符串变量
+    str = &amp;ldquo;Hello world&amp;rdquo; // 字符串赋值
+    ch := str[0] // 取字符串的第一个字符
+    fmt.Printf(&amp;ldquo;The length of \&amp;ldquo;%s\&amp;rdquo; is %d \n&amp;rdquo;, str, len(str))
+    fmt.Printf(&amp;ldquo;The first character of \&amp;ldquo;%s\&amp;rdquo; is %c.\n&amp;rdquo;, str, ch)
+输出结果为：
+    The length of &amp;ldquo;Hello world&amp;rdquo; is 11
+    The first character of &amp;ldquo;Hello world&amp;rdquo; is H.&lt;/p&gt;
+
+&lt;p&gt;字符串的内容可以用类似于数组下标的方式获取，但与数组不同，字符串的内容不能在初始化后被修改，比如以下的例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;str := &amp;quot;Hello world&amp;quot; // 字符串也支持声明时进行初始化的做法 
+str[0] = &#39;X&#39; // 编译错误
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编译器会报类似如下的错误：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cannot assign to str[0]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在这个例子中我们使用了一个Go语言内置的函数len()来取字符串的长度。这个函数非常有用，我们在实际开发过程中处理字符串、数组和切片时将会经常用到。&lt;/p&gt;
+
+&lt;p&gt;本节中我们还顺便示范了Printf()函数的用法。有C语言基础的读者会发现，Printf()函数的用法与C语言运行库中的printf()函数如出一辙。读者在以后学习更多的Go语言特性时，可以配合使用Println()和Printf()来打印各种自己感兴趣的信息，从而让学习过程更加直观、有趣。&lt;/p&gt;
+
+&lt;p&gt;Go编译器支持UTF-8的源代码文件格式。这意味着源代码中的字符串可以包含非ANSI的字符，比如“Hello world. 你好,世界!”可以出现在Go代码中。但需要注意的是，如果你的Go代码需要包含非ANSI字符，保存源文件时请注意编码格式必须选择UTF-8。特别是在Windows下一般编辑器都默认存为本地编码，比如中国地区可能是GBK编码而不是UTF-8，如果没注意这点在编译和运行时就会出现一些意料之外的情况。&lt;/p&gt;
+
+&lt;p&gt;字符串的编码转换是处理文本文档(比如TXT、XML、HTML等)非常常见的需求，不过可惜的是Go语言仅支持UTF-8和Unicode编码。对于其他编码，Go语言标准库并没有内置的编码转换支持。不过，所幸的是我们可以很容易基于iconv库用Cgo包装一个。这里有一个开源项目: &lt;a href=&#34;https://github.com/xushiwei/go-iconv。&#34;&gt;https://github.com/xushiwei/go-iconv。&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;字符串操作&#34;&gt;字符串操作&lt;/h3&gt;
+
+&lt;p&gt;平时常用的字符串操作如表2-3所示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoBasicSyn/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;更多的字符串操作，请参考标准库strings包。&lt;/p&gt;
+
+&lt;h3 id=&#34;字符串遍历&#34;&gt;字符串遍历&lt;/h3&gt;
+
+&lt;p&gt;Go语言支持两种方式遍历字符串。一种是以字节数组的方式遍历：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;str := &amp;quot;Hello,世界&amp;quot;
+n := len(str)
+for i := 0; i &amp;lt; n; i++ {
+    ch := str[i] // 依据下标取字符串中的字符,类型为byte
+    fmt.Println(i, ch)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个例子的输出结果为：
+    0 72
+    1 101
+    2 108
+    3 108
+    4 111
+    5 44
+    6 32
+    7 228
+    8 184
+    9 150
+    10 231
+    11 149
+    12 140
+可以看出，这个字符串长度为13。尽管从直观上来说，这个字符串应该只有9个字符。这是因为每个中文字符在UTF-8中占3个字节，而不是1个字节。&lt;/p&gt;
+
+&lt;p&gt;另一种是以Unicode字符遍历：
+    str := &amp;ldquo;Hello,世界&amp;rdquo;
+    for i, ch := range str {
+        fmt.Println(i, ch)//ch的类型为rune
+    }&lt;/p&gt;
+
+&lt;p&gt;输出结果为：
+    0 72
+    1 101
+    2 108
+    3 108
+    4 111
+    5 44
+    6 32
+    7 19990
+    10 30028&lt;/p&gt;
+
+&lt;p&gt;以Unicode字符方式遍历时，每个字符的类型是rune(早期的Go语言用int类型表示Unicode 字符)，而不是byte。&lt;/p&gt;
+
+&lt;h2 id=&#34;字符类型&#34;&gt;字符类型&lt;/h2&gt;
+
+&lt;p&gt;在Go语言中支持两个字符类型，一个是byte(实际上是uint8的别名)，代表UTF-8字符串的单个字节的值；另一个是rune，代表单个Unicode字符。
+关于rune相关的操作，可查阅Go标准库的unicode包。另外unicode/utf8包也提供了UTF8和Unicode之间的转换。
+出于简化语言的考虑，Go语言的多数API都假设字符串为UTF-8编码。尽管Unicode字符在标准库中有支持，但实际上较少使用。&lt;/p&gt;
+
+&lt;h2 id=&#34;数组&#34;&gt;数组&lt;/h2&gt;
+
+&lt;p&gt;数组是Go语言编程中最常用的数据结构之一。顾名思义，数组就是指一系列同一类型数据的集合。数组中包含的每个数据被称为数组元素(element)，一个数组包含的元素个数被称为数组的长度。
+以下为一些常规的数组声明方法：
+    [32]byte                        // 长度为32的数组,每个元素为一个字节
+    [2*N] struct { x, y int32 }     // 复杂类型数组
+    [1000]*float64                  // 指针数组
+    [3][5]int                       // 二维数组
+    [2][2][2]float64                // 等同于&lt;a href=&#34;[2]([2]float64)&#34;&gt;2&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;从以上类型也可以看出，数组可以是多维的，比如[3][5]int就表达了一个3行5列的二维整 型数组，总共可以存放15个整型元素。
+在Go语言中,数组长度在定义后就不可更改，在声明时长度可以为一个常量或者一个常量表达式(常量表达式是指在编译期即可计算结果的表达式)。数组的长度是该数组类型的一个内置常量，可以用Go语言的内置函数len()来获取。下面是一个获取数组arr元素个数的写法：
+    arrLength := len(arr)&lt;/p&gt;
+
+&lt;h3 id=&#34;元素访问&#34;&gt;元素访问&lt;/h3&gt;
+
+&lt;p&gt;可以使用数组下标来访问数组中的元素。与C语言相同，数组下标从0开始，len(array)-1则表示最后一个元素的下标。下面的示例遍历整型数组并逐个打印元素内容：
+    for i := 0; i &amp;lt; len(array); i++ {
+        fmt.Println(&amp;ldquo;Element&amp;rdquo;, i, &amp;ldquo;of array is&amp;rdquo;, array[i])
+    }&lt;/p&gt;
+
+&lt;p&gt;Go语言还提供了一个关键字range，用于便捷地遍历容器中的元素。当然，数组也是range的支持范围。上面的遍历过程可以简化为如下的写法:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;for i, v := range array {
+    fmt.Println(&amp;quot;Array element[&amp;quot;, i, &amp;quot;]=&amp;quot;, v)
+￼}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的例子里可以看到，range具有两个返回值，第一个返回值是元素的数组下标，第二个返回值是元素的值。&lt;/p&gt;
+
+&lt;h3 id=&#34;值类型&#34;&gt;值类型&lt;/h3&gt;
+
+&lt;p&gt;需要特别注意的是，在Go语言中数组是一个值类型(value type)。所有的值类型变量在赋值和作为参数传递时都将产生一次复制动作。如果将数组作为函数的参数类型，则在函数调用时该参数将发生数据复制。因此，在函数体中无法修改传入的数组的内容，因为函数内操作的只是所传入数组的一个副本。
+下面用例子来说明这一特点:
+    package main&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import (
+    &amp;quot;fmt&amp;quot;
+)
+
+func modify(array [5]int) {
+    array[0] = 10   // 试图修改数组的第一个元素
+    fmt.Println(&amp;quot;In modify(), array values:&amp;quot;, array)
+}
+
+func main() {
+    array := [5]int{1,2,3,4,5}  // 定义并初始化一个数组
+    modify(array)   // 传递给一个函数,并试图在函数体内修改这个数组内容
+    fmt.Println(&amp;quot;In main(), array values:&amp;quot;, array)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;该程序的执行结果为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In modify(), array values: [10 2 3 4 5]
+In main(), array values: [1 2 3 4 5]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;从执行结果可以看出，函数modify()内操作的那个数组跟main()中传入的数组是两个不同的实例。那么，如何才能在函数内操作外部的数据结构呢?用数组切 片功能来达成这个目标。&lt;/p&gt;
+
+&lt;h2 id=&#34;数组切片&#34;&gt;数组切片&lt;/h2&gt;
+
+&lt;p&gt;在前一节里我们已经提过数组的特点：数组的长度在定义之后无法再次修改；数组是值类型，每次传递都将产生一份副本。显然这种数据结构无法完全满足开发者的真实需求。&lt;/p&gt;
+
+&lt;p&gt;不用失望，Go语言提供了数组切片(slice)这个非常酷的功能来弥补数组的不足。&lt;/p&gt;
+
+&lt;p&gt;初看起来，数组切片就像一个指向数组的指针，实际上它拥有自己的数据结构，而不仅仅是个指针。数组切片的数据结构可以抽象为以下3个变量：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个指向原生数组的指针；&lt;/li&gt;
+&lt;li&gt;数组切片中的元素个数；&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;数组切片已分配的存储空间。
+从底层实现的角度来看，数组切片实际上仍然使用数组来管理元素，因此它们之间的关系让 C++程序员们很容易联想起STL中std::vector和数组的关系。基于数组，数组切片加了一系列管理功能，可以随时动态扩充存放空间，并且可以被随意传递而不会导致所管理的元素被重复复制。&lt;/p&gt;
+
+&lt;h3 id=&#34;创建数组切片&#34;&gt;创建数组切片&lt;/h3&gt;
+
+&lt;p&gt;创建数组切片的方法主要有两种&amp;ndash;基于数组和直接创建,下面我们来简要介绍一下这两种方法。&lt;/p&gt;
+
+&lt;h4 id=&#34;基于数组&#34;&gt;基于数组&lt;/h4&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;数组切片可以基于一个已存在的数组创建。数组切片可以只使用数组的一部分元素或者整个数组来创建，甚至可以创建一个比所基于的数组还要大的数组切片。如下代码演示了如何基于一个数组的前5个元素创建一个数组切片：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+func main() {
+    // 先定义一个数组
+    var myArray [10]int = [10]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10} 
+
+    // 基于数组创建一个数组切片
+    var mySlice []int = myArray[:5]
+    fmt.Println(&amp;quot;Elements of myArray: &amp;quot;) 
+
+    for _, v := range myArray {
+        fmt.Print(v, &amp;quot; &amp;quot;)
+    }
+
+    fmt.Println(&amp;quot;\nElements of mySlice: &amp;quot;)
+
+    for _, v := range mySlice { 
+        fmt.Print(v, &amp;quot; &amp;quot;)
+    }
+    fmt.Println()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行结果为：
+    Elements of myArray:
+    1 2 3 4 5 6 7 8 9 10
+    Elements of mySlice:
+    1 2 3 4 5&lt;/p&gt;
+
+&lt;p&gt;读者应该已经注意到，Go语言支持用myArray[first:last]这样的方式来基于数组生成一个数组切片，而且这个用法还很灵活，比如下面几种都是合法的。&lt;/p&gt;
+
+&lt;p&gt;基于myArray的所有元素创建数组切片：
+    mySlice = myArray[:]
+￼基于myArray的前5个元素创建数组切片：
+    mySlice = myArray[:5]
+基于从第5个元素开始的所有元素创建数组切片：
+    mySlice = myArray[5:]&lt;/p&gt;
+
+&lt;h4 id=&#34;直接创建&#34;&gt;直接创建&lt;/h4&gt;
+
+&lt;p&gt;并非一定要事先准备一个数组才能创建数组切片。Go语言提供的内置函数make()可以用于灵活地创建数组切片。下面的例子示范了直接创建数组切片的各种方法。
+创建一个初始元素个数为5的数组切片，元素初始值为0：
+    mySlice1 := make([]int, 5)
+创建一个初始元素个数为5的数组切片，元素初始值为0，并预留10个元素的存储空间：
+    mySlice2 := make([]int, 5, 10)
+直接创建并初始化包含5个元素的数组切片：
+    mySlice3 := []int{1, 2, 3, 4, 5}
+当然，事实上还会有一个匿名数组被创建出来，只是不需要我们来操心而已。&lt;/p&gt;
+
+&lt;h3 id=&#34;元素遍历&#34;&gt;元素遍历&lt;/h3&gt;
+
+&lt;p&gt;操作数组元素的所有方法都适用于数组切片，比如数组切片也可以按下标读写元素，用len()函数获取元素个数，并支持使用range关键字来快速遍历所有元素。
+传统的元素遍历方法如下：
+    for i := 0; i &amp;lt;len(mySlice); i++ {
+        fmt.Println(&amp;ldquo;mySlice[&amp;ldquo;, i, &amp;ldquo;] =&amp;rdquo;, mySlice[i])
+    }
+使用range关键字可以让遍历代码显得更整洁。range表达式有两个返回值，第一个是索引，第二个是元素的值：
+    for i, v := range mySlice {
+        fmt.Println(&amp;ldquo;mySlice[&amp;ldquo;, i, &amp;ldquo;] =&amp;rdquo;, v)
+    }
+对比上面的两个方法，我们可以很容易地看出使用range的代码更简单易懂。&lt;/p&gt;
+
+&lt;h3 id=&#34;动态增减元素&#34;&gt;动态增减元素&lt;/h3&gt;
+
+&lt;p&gt;可动态增减元素是数组切片比数组更为强大的功能。与数组相比，数组切片多了一个存储能力(capacity)的概念，即元素个数和分配的空间可以是两个不同的值。合理地设置存储能力的值，可以大幅降低数组切片内部重新分配内存和搬送内存块的频率，从而大大提高程序性能。
+假如你明确知道当前创建的数组切片最多可能需要存储的元素个数为50，那么如果你设置的存储能力小于50，比如20，那么在元素超过20时，底层将会发生至少一次这样的动作&amp;ndash;重新分配一块“够大”的内存，并且需要把内容从原来的内存块复制到新分配的内存块，这会产生比较明显的开销。给“够大”这两个字加上引号的原因是系统并不知道多大才是够大，所以只是一个简单的猜测。比如，将原有的内存空间扩大两倍，但两倍并不一定够，所以之前提到的内存重新分配和内容复制的过程很有可能发生多次，从而明显降低系统的整体性能。但如果你知道最大是50并且一开始就设置存储能力为50,那么之后就不会发生这样非常耗费CPU的动作,从而达到空间换时间的效果。
+数组切片支持Go语言内置的cap()函数和len()函数，如下简单示范了这两个内置函数的用法。可以看出，cap()函数返回的是数组切片分配的空间大小，而len()函数返回的是数组切片中当前所存储的元素个数。
+    package main&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import &amp;quot;fmt&amp;quot; 
+
+func main() {
+    mySlice := make([]int, 5, 10)
+    fmt.Println(&amp;quot;len(mySlice):&amp;quot;, len(mySlice))
+    fmt.Println(&amp;quot;cap(mySlice):&amp;quot;, cap(mySlice))
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;该程序的输出结果为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;len(mySlice): 5
+cap(mySlice): 10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果需要往上例中mySlice已包含的5个元素后面继续新增元素，可以使用append()函数。下面的代码可以从尾端给mySlice加上3个元素，从而生成一个新的数组切片：
+    mySlice = append(mySlice, 1, 2, 3)
+函数append()的第二个参数其实是一个不定参数，我们可以按自己需求添加若干个元素，甚至直接将一个数组切片追加到另一个数组切片的末尾：
+    mySlice2 := []int{8, 9, 10}
+    // 给mySlice后面添加另一个数组切片
+    mySlice = append(mySlice, mySlice2&amp;hellip;)
+需要注意的是,我们在第二个参数mySlice2后面加了三个点，即一个省略号，如果没有这个省略号的话，会有编译错误，因为按append()的语义，从第二个参数起的所有参数都是待附加的元素。因为mySlice中的元素类型为int，所以直接传递mySlice2是行不通的。加上省略号相当于把mySlice2包含的所有元素打散后传入。
+上述调用等同于:
+    mySlice = append(mySlice, 8, 9, 10)
+数组切片会自动处理存储空间不足的问题。如果追加的内容长度超过当前已分配的存储空间(即cap()调用返回的信息)，数组切片会自动分配一块足够大的内存。&lt;/p&gt;
+
+&lt;h3 id=&#34;基于数组切片创建数组切片&#34;&gt;基于数组切片创建数组切片&lt;/h3&gt;
+
+&lt;p&gt;类似于数组切片可以基于一个数组创建，数组切片也可以基于另一个数组切片创建。下面的例子基于一个已有数组切片创建新数组切片：
+    oldSlice := []int{1, 2, 3, 4, 5}
+    newSlice := oldSlice[:3] // 基于oldSlice的前3个元素构建新数组切片
+有意思的是，选择的oldSlicef元素范围甚至可以超过所包含的元素个数，比如newSlice可以基于oldSlice的前6个元素创建，虽然oldSlice只包含5个元素。只要这个选择的范围不超过oldSlice存储能力(即cap()返回的值)，那么这个创建程序就是合法的。newSlice中超出oldSlice元素的部分都会填上0。&lt;/p&gt;
+
+&lt;h3 id=&#34;内容赋值&#34;&gt;内容赋值&lt;/h3&gt;
+
+&lt;p&gt;数组切片支持Go语言的另一个内置函数copy()，用于将内容从一个数组切片复制到另一个数组切片。如果加入的两个数组切片不一样大，就会按其中较小的那个数组切片的元素个数进行复制。下面的示例展示了copy()函数的行为：
+slice1 := []int{1, 2, 3, 4, 5}
+slice2 := []int{5, 4, 3}
+copy(slice2, slice1) // 只会复制slice1的前3个元素到slice2中
+copy(slice1, slice2) // 只会复制slice2的3个元素到slice1的前3个位置&lt;/p&gt;
+
+&lt;h2 id=&#34;map&#34;&gt;map&lt;/h2&gt;
+
+&lt;p&gt;在C++/Java中，map一般都以库的方式提供，比如在C++中是STL的std::map&amp;lt;&amp;gt;，在C#中是Dictionary&amp;lt;&amp;gt;，在Java中是Hashmap&amp;lt;&amp;gt;，在这些语言中，如果要使用map，事先要引用相应的库。而在Go中，使用map不需要引入任何库，并且用起来也更加方便。
+map是一堆键值对的未排序集合。比如以身份证号作为唯一键来标识一个人的信息，如下所示：
+    package main
+    import &amp;ldquo;fmt&amp;rdquo;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//PersonInfo是一个包含个人详细信息的类型
+type PersonInfo struct {
+    ID string
+    Name string
+    Address string
+}
+
+func main() {
+    var personDB map[string] PersonInfo
+    personDB = make(map[string] PersonInfo)
+
+    //往这个map里插入几条数据
+    personDB[&amp;quot;12345&amp;quot;] = PersonInfo{&amp;quot;12345&amp;quot;, &amp;quot;Tom&amp;quot;, &amp;quot;Room 203,...&amp;quot;}
+    personDB[&amp;quot;1&amp;quot;] = PersonInfo{&amp;quot;1&amp;quot;, &amp;quot;Jack&amp;quot;, &amp;quot;Room 101,...&amp;quot;}
+
+    //从这个map查找键为&amp;quot;1234&amp;quot;的信息
+    person, ok := personDB[&amp;quot;1234&amp;quot;]
+    //ok是一个返回的bool类型，返回true表示查找到了对应的数据
+    if ok {
+        fmt.Println(&amp;quot;Found person&amp;quot;, person.Name, &amp;quot;with ID 1234.&amp;quot;)
+    } else {
+        fmt.Println(&amp;quot;Did not find person with ID 1234.&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面这个简单的例子基本上已经覆盖了map的主要用法，下面对其中的关键点进行细述。&lt;/p&gt;
+
+&lt;h3 id=&#34;变量声明-1&#34;&gt;变量声明&lt;/h3&gt;
+
+&lt;p&gt;map的声明基本上没有多余的元素，比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var myMap map[string] PersonInfo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其中，myMap是声明的map变量名，string是键的类型，PersonInfo则是其中所存放的值类型。&lt;/p&gt;
+
+&lt;h3 id=&#34;创建&#34;&gt;创建&lt;/h3&gt;
+
+&lt;p&gt;我们可以使用Go语言内置的函数make()来创建一个新map。下面的这个例子创建了一个键类型为string、值类型为PersonInfo的map：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;myMap = make(map[string] PersonInfo)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也可以选择是否在创建时指定该map的初始存储能力，下面的例子创建了一个初始存储能力为100的map：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;myMap = make(map[string] PersonInfo, 100)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;创建并初始化map的代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;myMap = map[string] PersonInfo{
+    &amp;quot;1234&amp;quot;: PersonInfo{&amp;quot;1&amp;quot;, &amp;quot;Jack&amp;quot;, &amp;quot;Room 101,...&amp;quot;},
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;元素赋值&#34;&gt;元素赋值&lt;/h3&gt;
+
+&lt;p&gt;赋值过程非常简单明了，就是将键和值用下面的方式对应起来即可：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;myMap[&amp;quot;1234&amp;quot;] = PersonInfo{&amp;quot;1&amp;quot;, &amp;quot;Jack&amp;quot;, &amp;quot;Room 101,...&amp;quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;元素删除&#34;&gt;元素删除&lt;/h3&gt;
+
+&lt;p&gt;Go语言提供了一个内置函数delete()，用于删除容器内的元素。下面我们简单介绍一下如何用delete()函数删除map内的元素：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;delete(myMap, &amp;quot;1234&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码将从myMap中删除键为“1234”的键值对。如果“1234”这个键不存在，那么这个调用将什么都不发生，也不会有什么副作用。但是如果传入的map变量的值是nil，该调用将导致程序抛出异常(panic)。&lt;/p&gt;
+
+&lt;h3 id=&#34;元素查找&#34;&gt;元素查找&lt;/h3&gt;
+
+&lt;p&gt;在Go语言中，map的查找功能设计得比较精巧。而在其他语言中，我们要判断能否获取到一个值不是件容易的事情。判断能否从map中获取一个值的常规做法是：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;声明并初始化一个变量为空；&lt;/li&gt;
+&lt;li&gt;试图从map中获取相应键的值到该变量中；&lt;/li&gt;
+&lt;li&gt;判断该变量是否依旧为空，如果为空则表示map中没有包含该变量。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;这种用法比较啰嗦，而且判断变量是否为空这条语句并不能真正表意(是否成功取到对应的值)，从而影响代码的可读性和可维护性。有些库甚至会设计为因为一个键不存在而抛出异常，让开发者用起来胆战心惊，不得不一层层嵌套try-catch语句，这更是不人性化的设计。在Go语言中，要从map中查找一个特定的键，可以通过下面的代码来实现：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;value, ok := myMap[&amp;quot;1234&amp;quot;]
+if ok { // 找到了
+    // 处理找到的value
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;判断是否成功找到特定的键，不需要检查取到的值是否为nil，只需查看第二个返回值ok，这让表意清晰很多。配合:=操作符，让你的代码没有多余成分，看起来非常清晰易懂。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>初识Go语言</title>
+      <link>http://lynchwong.com/blog/2015/06/%E5%88%9D%E8%AF%86go%E8%AF%AD%E8%A8%80/</link>
+      <pubDate>Fri, 19 Jun 2015 10:37:31 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/%E5%88%9D%E8%AF%86go%E8%AF%AD%E8%A8%80/</guid>
+      <description>&lt;p&gt;作为一个程序员，要有一颗不断上进的心，不然就永远只能有程序员的称号。俗话说技多不压身，活到老学到老。
+&lt;/p&gt;
+
+&lt;p&gt;博主最开始就是做Web开发的，后来才转战到iOS。大学的时候培训过Java那一套东东，学过SSH开源的那些框架，毕业设计也是用Java做的。但是找工作的时候却是找了.Net的，用C#做开发。直到最近觉得有必要把Web的东西拾起来，觉得没有必要局限在一个圈子中。其实拾起Java或者.Net应该会很快，毕竟有基础，同时我也考虑过Ruby。其实前年的时候就有同事给我推荐过Go语言，那时没在意，在了解了下Go语言后觉得是更好的选择，所以就选择Go语言。&lt;/p&gt;
+
+&lt;p&gt;博主虽然用过不少语言，非常熟悉的应该算是OC了。从去年苹果发布Swift之后，博主一直在学习和使用Swift，加上之前做的Swift博文以及几个自己的项目，对Swift也是非常熟悉了。在大概浏览了下Go语言后，我到觉得Swift借鉴了不少Go的语法及特点。这两门语言有很多相似的地方，据很多Ruby开发者说Swift与Ruby也很相似。Swift真是集众家之长啊，另外在6月初的WWDC大会上宣布Swift的编译器和标准库将在年底开源，所以Swift将来也会像Go一样成为全栈式的开发语言？！&lt;/p&gt;
+
+&lt;p&gt;对于编程语言其实没有什么好说的，很多时候编程语言并不是重点，因为编程语言实在是太多了。我觉得正确的做法就应该是非常非常精通一门语言，然后学习其他语言就能很快上手了，因为很多语言都是相似的。博主那时候就花了几天的时间了解了下OC的语法，看了些实例就开始做iOS开发了。虽然那时我根本不知道他们说的发送消息是什么意思，也不知道和函数调用的区别，但是使用是完全没问题的。而且iOS开发，重点不在OC这门语言，而在于Cocoa Touch框架。&lt;/p&gt;
+
+&lt;p&gt;扯了好多蛋，让我们开始吧。最后说一句，博主学Go语言是为了Web编程，所以博主会先记录Go这门语言，然后再记录Web编程。所以你想使用Go做桌面软件，这些可能不适合你。&lt;/p&gt;
+
+&lt;p&gt;该系列博文的内容大都来自《Go语言编程》和 &lt;a href=&#34;https://github.com/astaxie/build-web-application-with-golang&#34;&gt;《Go Web编程》&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h1 id=&#34;语言简史&#34;&gt;语言简史&lt;/h1&gt;
+
+&lt;p&gt;Limbo语言被认为是Go语言的前身,不仅仅因为是同一批人设计的语言,而是Go语言确实从 Limbo语言中继承了众多优秀的特性。&lt;/p&gt;
+
+&lt;p&gt;Go语言的第一个版本在2009年11月正式对外发布，并在此后的两年内快速迭代，发展迅猛。第一个正式版本的Go语言于2012年3月28日正式发布，让Go语言迎来了第一个引人瞩目的里程碑。&lt;/p&gt;
+
+&lt;h1 id=&#34;语言特性&#34;&gt;语言特性&lt;/h1&gt;
+
+&lt;p&gt;Go语言最主要的特性：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;自动垃圾回收&lt;/li&gt;
+&lt;li&gt;更丰富的内置类型&lt;/li&gt;
+&lt;li&gt;函数多返回值&lt;/li&gt;
+&lt;li&gt;错误处理&lt;/li&gt;
+&lt;li&gt;匿名函数和闭包&lt;/li&gt;
+&lt;li&gt;类型和接口&lt;/li&gt;
+&lt;li&gt;并发编程&lt;/li&gt;
+&lt;li&gt;反射&lt;/li&gt;
+&lt;li&gt;语言交互性
+这些特性会在后面的学习中了解到。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;第一个go程序&#34;&gt;第一个Go程序&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+import &amp;quot;fmt&amp;quot;// 我们需要使用fmt包中的Println()函数
+func main() {
+    fmt.Println(&amp;quot;Hello, world. 你好,世界!&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;每个Go源代码文件的开头都是一个package声明，表示该Go代码所属的包。包是Go语言里最基本的分发单位，也是工程管理中依赖关系的体现。要生成Go可执行程序，必须建立一个名字为main的包，并且在该包中包含一个叫main()的函数(该函数是Go可执行程序的执行起点)。
+Go语言的main()函数不能带参数，也不能定义返回值。命令行传入的参数在os.Args变量中保存。如果需要支持命令行开关，可使用flag包。在本书后面我们将解释如何使用flag包来做命令行参数规范的定义，以及获取和解析命令行参数。
+￼￼在包声明之后，是一系列的import语句，用于导入该程序所依赖的包。由于本示例程序用到了Println()函数，所以需要导入该函数所属的fmt包。
+有一点需要注意，不得包含在源代码文件中没有用到的包，否则Go编译器会报编译错误、这与下面提到的强制左花括号{的放置位置以及之后会提到的函数名的大小写规则，均体现了Go语言在语言层面解决软件工程问题的设计哲学。&lt;/p&gt;
+
+&lt;p&gt;所有Go函数(包括在对象编程中会提到的类型成员函数)以关键字func开头。一个常规的函数定义包含以下部分:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func 函数名(参数列表)(返回值列表) { 
+    // 函数体
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对应的一个实例如下:
+    func Compute(value1 int, value2 float64)(result float64, err error) {
+        // 函数体
+    ￼}&lt;/p&gt;
+
+&lt;p&gt;Go支持多个返回值。以上的示例函数Compute()返回了两个值，一个叫result，另一个是err。并不是所有返回值都必须赋值。在函数返回时没有被明确赋值的返回值都会被设置为默认值，比如result会被设为0.0，err会被设为nil。&lt;/p&gt;
+
+&lt;p&gt;代码注释:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/*
+块注释
+*/
+// 行注释
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Go程序并不要求开发者在每个语句后面加上分号表示语句结束。有些读者可能会自然地把左花括号{另起一行放置，这样做的结果是Go编译器报告编译错误，这点需要特别注意：
+    syntax error: unexpected semicolon or newline before {&lt;/p&gt;
+
+&lt;h1 id=&#34;开发工具&#34;&gt;开发工具&lt;/h1&gt;
+
+&lt;p&gt;Eclipse+Goclipse、Sublime Text2、VIM、LiteIDE、Gedit、IntelliJ IDEA。开发工具的选择完全个人爱好，可自行选择。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

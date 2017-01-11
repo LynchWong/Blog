@@ -1,0 +1,1531 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Swift之协议</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="协议定义了一个蓝图,规定了用来实现某一特定工作或者功能所必需的方法和属性。类,结构体或枚举类型都可以遵循协议,并提供具体实现来完成协议定义的方法和功能。任意能够满足协议要求的类型被称为遵循(conform)这个协议。
+">
+    <meta property="og:description" content="协议定义了一个蓝图,规定了用来实现某一特定工作或者功能所必需的方法和属性。类,结构体或枚举类型都可以遵循协议,并提供具体实现来完成协议定义的方法和功能。任意能够满足协议要求的类型被称为遵循(conform)这个协议。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Swift之协议">
+    <meta property="og:url" content="/2015/03/swift%E4%B9%8B%E5%8D%8F%E8%AE%AE/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="协议定义了一个蓝图,规定了用来实现某一特定工作或者功能所必需的方法和属性。类,结构体或枚举类型都可以遵循协议,并提供具体实现来完成协议定义的方法和功能。任意能够满足协议要求的类型被称为遵循(conform)这个协议。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Swift之协议
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-03-06T14:12:12Z">
+    
+  
+  
+  
+  
+    2015-03-06 14:12:12
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>协议定义了一个蓝图,规定了用来实现某一特定工作或者功能所必需的方法和属性。类,结构体或枚举类型都可以遵循协议,并提供具体实现来完成协议定义的方法和功能。任意能够满足协议要求的类型被称为遵循(conform)这个协议。
+</p>
+
+<h2 id="协议的语法">协议的语法</h2>
+
+<p>协议的定义与类,结构体,枚举的定义非常相似,如下所示:</p>
+
+<pre><code>protocol SomeProtocol {
+    // protocol definition goes here
+}
+</code></pre>
+
+<p>要使类遵循某个协议,需要在类型名称后加上协议名称,中间以冒号 : 分隔,作为类型定义的一部分。遵循多个 协议时,各协议之间用逗号 , 分隔。</p>
+
+<pre><code>struct SomeStructure: FirstProtocol, AnotherProtocol {
+    // structure definition goes here
+}
+</code></pre>
+
+<p>如果类在遵循协议的同时拥有父类,应该将父类名放在协议名之前,以逗号分隔。</p>
+
+<pre><code>class SomeClass: SomeSuperclass, FirstProtocol, AnotherProtocol {
+    // class definition goes here
+}
+</code></pre>
+
+<h2 id="对属性的规定">对属性的规定</h2>
+
+<p>协议可以规定其遵循者提供特定名称和类型的实例属性(instance property) 或 类属性(type property) ,而不指定是存储型属性(stored property)还是计算型属性(calculate property) 。此外还必须指明是只读的还是可读可写 的。</p>
+
+<p>如果协议规定属性是可读可写的,那么这个属性不能是常量或只读的计算属性。如果协议只要求属性是只读的(ge ttable),那个属性不仅可以是只读的,如果你代码需要的话,也可以是可写的。</p>
+
+<p>协议中通常用var来声明属性,在类型声明后加上 { set get } 来表示属性是可读可写的,只读属性则用 { get } 来表示。</p>
+
+<pre><code>protocol SomeProtocol {
+    var mustBeSettable: Int { get set }
+    var doesNotNeedToBeSettable: Int { get }
+}
+</code></pre>
+
+<p>在协议中定义类属性(type property)时,总是使用 static 关键字作为前缀。当协议的遵循者是类时,可以使用 class 或 static 关键字来声明类属性,但是在协议的定义中,仍然要使用 static 关键字。</p>
+
+<pre><code>protocol AnotherProtocol {
+    static var someTypeProperty: Int { get set }
+}
+</code></pre>
+
+<p>如下所示,这是一个含有一个实例属性要求的协议。</p>
+
+<pre><code>protocol FullyNamed {
+    var fullName: String { get }
+}
+</code></pre>
+
+<p>FullyNamed 协议除了要求协议的遵循者提供fullName属性外,对协议遵循者的类型并没有特别的要求。这个协议表示,任何遵循协议的类型,都具有一个可读的   类型实例属性fullName。</p>
+
+<p>下面是一个遵循 FullyNamed 协议的简单结构体。</p>
+
+<pre><code>struct Person: FullyNamed {
+    var fullName: String
+}
+let john = Person(fullName: &quot;John Appleseed&quot;)
+// john.fullName is &quot;John Appleseed&quot;
+</code></pre>
+
+<p>这个例子中定义了一个叫做 Person 的结构体,用来表示具有名字的人。从第一行代码中可以看出,它遵循了 FullyNamed 协议。</p>
+
+<p>Person 结构体的每一个实例都会有一个叫做fullName,String类型的存储属性。这正好满足了 FullyNamed 协议的要求,也就意味着,Person 结构体完整的遵循了协议。(如果协议要求未被完全满足，在编译时会报错)</p>
+
+<p>下面是一个更为复杂的类,它采用并遵循了 FullyNamed 协议:</p>
+
+<pre><code>class Starship: FullyNamed {
+    var prefix: String?
+    var name: String
+    init(name: String, prefix: String? = nil) {
+        self.name = name
+        self.prefix = prefix
+    }
+    var fullName: String {
+        return (prefix != nil ? prefix! + &quot; &quot; : &quot;&quot;) + name
+    }
+}
+var ncc1701 = Starship(name: &quot;Enterprise&quot;, prefix: &quot;USS&quot;)
+// ncc1701.fullName is &quot;USS Enterprise&quot;
+</code></pre>
+
+<p>Starship类把 fullName 属性实现为只读的计算型属性。每一个 Starship 类的实例都有一个名为 name 的属性和一个名为 prefix 的可选属性。当 prefix 存在时,将 prefix 插入到 name 之前来为Starship构建 fullName, prefix 不存在时,则将直接用 name 构建 fullName。</p>
+
+<h2 id="对方法的规定">对方法的规定</h2>
+
+<p>协议可以要求其遵循者实现某些指定的实例方法或类方法。这些方法作为协议的一部分,像普通的方法一样放在协议的定义中,但是不需要大括号和方法体。可以在协议中定义具有可变参数的方法,和普通方法的定义方式相同。但是在协议的方法定义中,不支持参数默认值。</p>
+
+<p>正如对属性的规定中所说的,在协议中定义类方法的时候,总是使用 static 关键字作为前缀。当协议的遵循者是类的时候,虽然你可以在类的实现中使用 class 或者 static 来实现类方法,但是在协议中声明类方法,仍然要使用 static 关键字。</p>
+
+<pre><code>protocol SomeProtocol {
+    static func someTypeMethod()
+}
+</code></pre>
+
+<p>下面的例子定义了含有一个实例方法的协议。</p>
+
+<pre><code>protocol RandomNumberGenerator {
+    func random() -&gt; Double
+}
+</code></pre>
+
+<p>RandomNumberGenerator 协议要求其遵循者必须拥有一个名为 random, 返回值类型为Double 的实例方法。尽管这里并未指明，但是我们假设返回值在[0,1)区间内。</p>
+
+<p>RandomNumberGenerator 协议并不在意每一个随机数是怎样生成的,它只强调这里有一个随机数生成器。</p>
+
+<p>如下所示,下边是一个遵循了 RandomNumberGenerator 协议的类。该类实现了一个叫做线性同余生成器(linear congruential generator)的伪随机数算法。</p>
+
+<pre><code>class LinearCongruentialGenerator: RandomNumberGenerator {
+    var lastRandom = 42.0
+    let m = 139968.0
+    let a = 3877.0
+    let c = 29573.0
+    func random() -&gt; Double {
+        lastRandom = ((lastRandom * a + c) % m)
+        return lastRandom / m
+    }
+}
+let generator = LinearCongruentialGenerator()
+println(&quot;Here's a random number: \(generator.random())&quot;)
+// prints &quot;Here's a random number: 0.37464991998171&quot;
+println(&quot;And another one: \(generator.random())&quot;)
+// prints &quot;And another one: 0.729023776863283&quot;
+</code></pre>
+
+<h2 id="对mutating方法的规定">对Mutating方法的规定</h2>
+
+<p>有时需要在方法中改变它的实例。例如,值类型(结构体,枚举)的实例方法中,将 mutating 关键字作为函数的前缀,写在 func 之前,表示可以在该方法中修改它所属的实例及其实例属性的值。这一过程在在实例方法中修改值类型章节中有详细描述。</p>
+
+<p>如果你在协议中定义了一个方法旨在改变遵循该协议的实例,那么在协议定义时需要在方法前加 mutating 关键字。这使得结构和枚举遵循协议并满足此方法要求。</p>
+
+<p>注意:用类实现协议中的 mutating 方法时,不用写 mutating 关键字;用结构体,枚举实现协议中的 mutating 方法 时,必须写 mutating 关键字。</p>
+
+<p>如下所示, Togglable 协议含有名为 toggle 的实例方法。根据名称推测, toggle() 方法将通过改变实例属性,来切换遵循该协议的实例的状态。</p>
+
+<p>toggle() 方法在定义的时候,使用 mutating 关键字标记,这表明当它被调用时该方法将会改变协议遵循者实例的状态。</p>
+
+<pre><code>protocol Togglable {
+    mutating func toggle()
+}
+</code></pre>
+
+<p>当使用枚举或结构体来实现 Togglable 协议时,需要提供一个带有 mutating 前缀的 toggle 方法。
+￼
+下面定义了一个名为 OnOffSwitch 的枚举类型。这个枚举类型在两种状态之间进行切换,用枚举成员 On 和 Off 表示。枚举类型的 toggle 方法被标记为 mutating 以满足 Togglable 协议的要求。</p>
+
+<pre><code>enum OnOffSwitch: Togglable {
+    case Off, On
+    mutating func toggle() {
+        switch self {
+        case Off:
+            self = On
+        case On:
+            self = Off
+        }
+    }
+}
+var lightSwitch = OnOffSwitch.Off
+lightSwitch.toggle()
+// lightSwitch is now equal to .On
+</code></pre>
+
+<h2 id="对构造器的规定">对构造器的规定</h2>
+
+<p>协议可以要求它的遵循者实现指定的构造器。你可以像书写普通的构造器那样,在协议的定义里写下构造器的声明,但不需要写花括号和构造器的实体:</p>
+
+<pre><code>protocol SomeProtocol { 
+    init(someParameter: Int)
+}
+</code></pre>
+
+<h3 id="协议构造器规定在类中的实现">协议构造器规定在类中的实现</h3>
+
+<p>你可以在遵循该协议的类中实现构造器,并指定其为类的指定构造器(designated initializer)或者便利构造器(co nvenience initializer)。在这两种情况下,你都必须给构造器实现标上&rdquo;required&rdquo;修饰符:</p>
+
+<pre><code>class SomeClass: SomeProtocol { 
+    required init(someParameter: Int) {
+        //构造器实现 
+    }
+}
+</code></pre>
+
+<p>使用 required 修饰符可以保证:所有的遵循该协议的子类,同样能为构造器规定提供一个显式的实现或继承实现。</p>
+
+<p>关于 required 构造器的更多内容,请参考必要构造器。</p>
+
+<p>注意:如果类已经被标记为 final ,那么不需要在协议构造器的实现中使用 required 修饰符。因为final类不能有子类。关于 final 修饰符的更多内容,请参见防止重写。</p>
+
+<p>如果一个子类重写了父类的指定构造器,并且该构造器遵循了某个协议的规定,那么该构造器的实现需要被同时标示 required 和 override 修饰符</p>
+
+<pre><code>protocol SomeProtocol { 
+    init()
+}
+
+class SomeSuperClass { 
+    init() {
+        // 构造器的实现 
+    }
+}
+
+class SomeSubClass: SomeSuperClass, SomeProtocol {
+    // 因为遵循协议,需要加上&quot;required&quot;; 因为继承自父类,需要加上&quot;override&quot; 
+    required override init() {
+        // 构造器实现 
+    }
+}
+</code></pre>
+
+<h3 id="可失败构造器的规定">可失败构造器的规定</h3>
+
+<p>可以通过给协议 Protocols 中添加可失败构造器来使遵循该协议的类型必须实现该可失败构造器。</p>
+
+<p>如果在协议中定义一个可失败构造器,则在遵循该协议的类型中必须添加同名同参数的可失败构造器或非可失败构造器。如果在协议中定义一个非可失败构造器,则在遵循该协议的类型中必须添加同名同参数的非可失败构造器或隐式解析类型的可失败构造器( init! )。</p>
+
+<h2 id="协议类型">协议类型</h2>
+
+<p>尽管协议本身并不实现任何功能,但是协议可以被当做类型来使用。</p>
+
+<p>协议可以像其他普通类型一样使用,使用场景:</p>
+
+<ol>
+<li>作为函数,方法或构造器中的参数类型,返回值类型</li>
+<li>作为常量,变量,属性的类型</li>
+<li>作为数组,字典或其他容器中的元素类型</li>
+</ol>
+
+<p>注意:协议是一种类型,因此协议类型的名称应与其他类型(Int,Double,String)的写法相同,使用大写字母开头的 驼峰式写法,例如( FullyNamed 和 RandomNumberGenerator )</p>
+
+<pre><code>class Dice {
+    let sides: Int
+    let generator: RandomNumberGenerator
+    init(sides: Int, generator: RandomNumberGenerator) {
+        self.sides = sides
+        self.generator = generator
+    }
+    func roll() -&gt; Int {
+        return Int(generator.random() * Double(sides)) + 1
+    }
+}
+</code></pre>
+
+<p>例子中定义了一个 Dice 类,用来代表桌游中的拥有N个面的骰子。 Dice 的实例含有 sides 和 generator 两个属性,前者是整型,用来表示骰子有几个面,后者为骰子提供一个随机数生成器。</p>
+
+<p>generator 属性的类型为 RandomNumberGenerator ,因此任何遵循了 RandomNumberGenerator 协议的 类型的实例都可以赋值给 generator ,除此之外,无其他要求。</p>
+
+<p>Dice 类中也有一个构造器(initializer),用来进行初始化操作。构造器中含有一个名为 generator ,类型为 Ran domNumberGenerator 的形参。在调用构造方法时创建 Dice 的实例时,可以传入任何遵循 RandomNumberG enerator 协议的实例给generator。</p>
+
+<p>Dice 类也提供了一个名为 roll 的实例方法用来模拟骰子的面值。它先使用 generator 的 random() 方法来创建 一个[0,1)区间内的随机数,然后使用这个随机数生成正确的骰子面值。因为generator遵循了 RandomNumber Generator 协议,因而保证了 random 方法可以被调用。</p>
+
+<p>下面的例子展示了如何使用 LinearCongruentialGenerator 的实例作为随机数生成器创建一个六面骰子:</p>
+
+<pre><code>var d6 = Dice(sides: 6, generator: LinearCongruentialGenerator())
+for _ in 1...5 {
+    println(&quot;Random dice roll is \(d6.roll())&quot;)
+}
+// Random dice roll is 3
+// Random dice roll is 5
+// Random dice roll is 4
+// Random dice roll is 5
+// Random dice roll is 4
+</code></pre>
+
+<h2 id="委托-代理-模式">委托(代理)模式</h2>
+
+<p>委托是一种设计模式,它允许类或结构体将一些需要它们负责的功能交由(委托)给其他的类型的实例。委托模式的实现很简单: 定义协议来封装那些需要被委托的函数和方法,使其遵循者拥有这些被委托的函数和方法 。委托模式可以用来响应特定的动作或接收外部数据源提供的数据,而无需要知道外部数据源的类型信息。</p>
+
+<p>下文是两个基于骰子游戏的协议:</p>
+
+<pre><code>protocol DiceGame {
+    var dice: Dice { get }
+    func play()
+}
+protocol DiceGameDelegate {
+    func gameDidStart(game: DiceGame)
+    func game(game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int)
+    func gameDidEnd(game: DiceGame)
+}
+</code></pre>
+
+<p>DiceGame 协议可以在任意含有骰子的游戏中实现,DiceGameDelegate 协议可以用来追踪 DiceGame 的游戏过程。</p>
+
+<p>如下所示,SnakesAndLadders 是 Snakes and Ladders(控制流章节有该游戏的详细介绍)游戏的新版本。新版本使用 Dice 作为骰子,并且实现了 DiceGame 和 DiceGameDelegate 协议,后者用来记录游戏的过程:</p>
+
+<pre><code>class SnakesAndLadders: DiceGame {
+    let finalSquare = 25
+    let dice = Dice(sides: 6, generator: LinearCongruentialGenerator())
+    var square = 0
+    var board: [Int]
+    init() {
+        board = [Int](count: finalSquare + 1, repeatedValue: 0)
+        board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+        board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+    }
+    var delegate: DiceGameDelegate?
+    func play() {
+        square = 0
+        delegate?.gameDidStart(self)
+        gameLoop: while square != finalSquare {
+            let diceRoll = dice.roll()
+            delegate?.game(self, didStartNewTurnWithDiceRoll: diceRoll)
+            switch square + diceRoll {
+            case finalSquare:
+                break gameLoop
+            case let newSquare where newSquare &gt; finalSquare:
+                continue gameLoop
+            default:
+                square += diceRoll
+                square += board[square]
+            }
+        }
+        delegate?.gameDidEnd(self)
+    }
+}
+</code></pre>
+
+<p>这个版本的游戏封装到了 SnakesAndLadders 类中,该类遵循了 DiceGame 协议,并且提供了相应的可读的 dice 属性和 play 实例方法。( dice 属性在构造之后就不再改变,且协议只要求 dice 为只读的,因此将 dice 声明为常量属性。)</p>
+
+<p>游戏使用 SnakesAndLadders 类的 构造器(initializer) 初始化游戏。所有的游戏逻辑被转移到了协议中的 play 方法, play 方法使用协议规定的 dice 属性提供骰子摇出的值。</p>
+
+<p>注意: delegate 并不是游戏的必备条件,因此 delegate 被定义为遵循 DiceGameDelegate 协议的可选属性。因为 delegate 是可选值,因此在初始化的时候被自动赋值为 nil 。随后,可以在游戏中为 delegate 设置适当的 值。</p>
+
+<p>DicegameDelegate 协议提供了三个方法用来追踪游戏过程。被放置于游戏的逻辑中,即 play() 方法内。分别在游戏开始时,新一轮开始时,游戏结束时被调用。</p>
+
+<p>因为 delegate 是一个遵循 DiceGameDelegate 的可选属性,因此在 play() 方法中使用了 可选链 来调用委托方 法。 若 delegate 属性为 nil , 则delegate所调用的方法失效,并不会产生错误。若 delegate 不为 nil ,则方 法能够被调用。</p>
+
+<p>如下所示,DiceGameTracker 遵循了 DiceGameDelegate 协议</p>
+
+<pre><code>class DiceGameTracker: DiceGameDelegate {
+    var numberOfTurns = 0
+    func gameDidStart(game: DiceGame) {
+        numberOfTurns = 0
+        if game is SnakesAndLadders {
+            println(&quot;Started a new game of Snakes and Ladders&quot;)
+        }
+        println(&quot;The game is using a \(game.dice.sides)-sided dice&quot;)
+    }
+    func game(game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int) {
+        ++numberOfTurns
+        println(&quot;Rolled a \(diceRoll)&quot;)
+    }
+    func gameDidEnd(game: DiceGame) {
+        println(&quot;The game lasted for \(numberOfTurns) turns&quot;)
+    }
+}
+</code></pre>
+
+<p>DiceGameTracker 实现了 DiceGameDelegate 协议的方法要求,用来记录游戏已经进行的轮数。当游戏开始时,numberOfTurns 属性被赋值为 0;在每新一轮中递加;游戏结束后, 输出打印游戏的总轮数。</p>
+
+<p>gameDidStart 方法从 game 参数获取游戏信息并输出。game 在方法中被当做 DiceGame 类型而不是 SnakeAndLadders 类型,所以方法中只能访问 DiceGame 协议中的成员。当然了,这些方法也可以在类型转换之后调用。在上例代码中,通过 is 操作符检查 game 是否为 SnakesAndLadders 类型的实例,如果是,则打印出相应的内容。</p>
+
+<p>DiceGameTracker 的运行情况,如下所示:</p>
+
+<pre><code>let tracker = DiceGameTracker()
+let game = SnakesAndLadders()
+game.delegate = tracker
+game.play()
+// Started a new game of Snakes and Ladders
+// The game is using a 6-sided dice
+// Rolled a 3
+// Rolled a 5
+// Rolled a 4
+// Rolled a 5
+// The game lasted for 4 turns
+</code></pre>
+
+<h2 id="在扩展中添加协议成员">在扩展中添加协议成员</h2>
+
+<p>即便无法修改源代码,依然可以通过扩展(Extension)来扩充已存在类型(译者注: 类,结构体,枚举等)。扩展可以为已存在的类型添加属性,方法,下标脚本,协议等成员。详情请在扩展章节中查看。</p>
+
+<p>注意:通过扩展为已存在的类型遵循协议时,该类型的所有实例也会随之添加协议中的方法。</p>
+
+<p>例如 TextRepresentable 协议,任何想要表示一些文本内容的类型都可以遵循该协议。这些想要表示的内容可以是类型本身的描述,也可以是当前内容的版本:</p>
+
+<pre><code>protocol TextRepresentable {
+    func asText() -&gt; String
+}
+</code></pre>
+
+<p>可以通过扩展,为上一节中提到的 Dice 增加类遵循 TextRepresentable 协议的功能</p>
+
+<pre><code>extension Dice: TextRepresentable {
+    func asText() -&gt; String {
+        return &quot;A \(sides)-sided dice&quot;
+    }
+}
+</code></pre>
+
+<p>现在,通过扩展使得 Dice 类型遵循了一个新的协议,这和 Dice 类型在定义的时候声明为遵循 TextRepresentable 协议的效果相同。在扩展的时候,协议名称写在类型名之后,以冒号隔开,在大括号内写明新添加的协议内容。</p>
+
+<p>现在所有 Dice 的实例都遵循了 TextRepresentable 协议:</p>
+
+<pre><code>let d12 = Dice(sides: 12, generator: LinearCongruentialGenerator())
+println(d12.asText())
+// prints &quot;A 12-sided dice&quot;
+</code></pre>
+
+<p>同样 SnakesAndLadders 类也可以通过 扩展 的方式来遵循 TextRepresentable 协议:</p>
+
+<pre><code>extension SnakesAndLadders: TextRepresentable {
+    func asText() -&gt; String {
+        return &quot;A game of Snakes and Ladders with \(finalSquare) squares&quot;
+    }
+}
+println(game.asText())
+// prints &quot;A game of Snakes and Ladders with 25 squares&quot;
+</code></pre>
+
+<h2 id="通过扩展补充协议声明">通过扩展补充协议声明</h2>
+
+<p>当一个类型已经实现了协议中的所有要求,却没有声明为遵循该协议时,可以通过扩展(空的扩展体)来补充协议声明:</p>
+
+<pre><code>struct Hamster {
+    var name: String
+    func asText() -&gt; String {
+        return &quot;A hamster named \(name)&quot;
+    }
+}
+extension Hamster: TextRepresentable {}
+</code></pre>
+
+<p>从现在起, Hamster 的实例可以作为 TextRepresentable 类型使用</p>
+
+<pre><code>let simonTheHamster = Hamster(name: &quot;Simon&quot;)
+let somethingTextRepresentable: TextRepresentable = simonTheHamster
+println(somethingTextRepresentable.asText())
+// prints &quot;A hamster named Simon&quot;
+</code></pre>
+
+<p>注意:即使满足了协议的所有要求,类型也不会自动转变,因此你必须为它做出显式的协议声明。</p>
+
+<h2 id="集合中的协议类型">集合中的协议类型</h2>
+
+<p>协议类型可以在集合使用,表示集合中的元素均为协议类型,下面的例子创建了一个类型为 TextRepresentable 的数组:</p>
+
+<pre><code>let things: [TextRepresentable] = [game, d12, simonTheHamster]
+</code></pre>
+
+<p>如下所示, things 数组可以被直接遍历,并打印每个元素的文本表示:</p>
+
+<pre><code>for thing in things {
+    println(thing.asText())
+}
+// A game of Snakes and Ladders with 25 squares
+// A 12-sided dice
+// A hamster named Simon
+</code></pre>
+
+<p>￼thing 被当做是 TextRepresentable 类型而不是 Dice,DiceGame,Hamster 等类型。因此 能且仅能调用 asText 方法</p>
+
+<h2 id="协议的继承">协议的继承</h2>
+
+<p>协议能够继承一个或多个其他协议,可以在继承的协议基础上增加新的内容要求。协议的继承语法与类的继承相似,多个被继承的协议间用逗号分隔:</p>
+
+<pre><code>protocol InheritingProtocol: SomeProtocol, AnotherProtocol {
+    // protocol definition goes here
+}
+</code></pre>
+
+<p>如下所示, PrettyTextRepresentable 协议继承了 TextRepresentable 协议</p>
+
+<pre><code>protocol PrettyTextRepresentable: TextRepresentable {
+    func asPrettyText() -&gt; String
+}
+</code></pre>
+
+<p>例子中定义了一个新的协议 PrettyTextRepresentable ,它继承自 TextRepresentable 协议。任何遵循 TextRepresentable 协议的类型在满足该协议的要求时,也必须满足 TextRepresentable 协议的要求。在这个 例子中, PrettyTextRepresentable 协议要求其遵循者提供一个返回值为 String 类型的 asPrettyText 方法。</p>
+
+<p>如下所示,用扩展为 SnakesAndLadders 遵循 PrettyTextRepresentable 协议:</p>
+
+<pre><code>extension SnakesAndLadders: PrettyTextRepresentable {
+    func asPrettyText() -&gt; String {
+        var output = asText() + &quot;:\n&quot;
+        for index in 1...finalSquare {
+            switch board[index] {
+            case let ladder where ladder &gt; 0:
+                output += &quot;▲ &quot;
+            case let snake where snake &lt; 0:
+                output += &quot;▼ &quot;
+            default:
+                output += &quot;○ &quot;
+            }
+        }
+        return output
+    }
+}
+</code></pre>
+
+<p>上述扩展使得 SnakesAndLadders 遵循了 PrettyTextRepresentable 协议，并为每个 SnakesAndLadders 类型提供了协议要求的 asPrettyText() 方法。每个 PrettyTextRepresentable 类型同时也是 TextRepresentable 类型，所以在 asPrettyText 的实现中，可以调用 asText() 方法。之后在每一行加上换行符，作为输出的开始。然后遍历数组中的元素，输出一个几何图形来表示遍历的结果：</p>
+
+<ul>
+<li>当从数组中迭代出的元素的值大于 0 时,用▲表示。</li>
+<li>当从数组中迭代出的元素的值小于 0 时,用▼表示。</li>
+<li>当从数组中迭代出的元素的值等于 0 时,用○表示。</li>
+</ul>
+
+<p>任意 SankesAndLadders 的实例都可以使用 asPrettyText()方法。</p>
+
+<pre><code>println(game.asPrettyText())
+// A game of Snakes and Ladders with 25 squares:
+// ○ ○ ▲ ○ ○ ▲ ○ ○ ▲ ▲ ○ ○ ○ ▼ ○ ○ ○ ○ ▼ ○ ○ ▼ ○ ▼ ○
+</code></pre>
+
+<h2 id="类专属协议">类专属协议</h2>
+
+<p>你可以在协议的继承列表中,通过添加 class 关键字,限制协议只能适配到类(class)类型。(结构体或枚举不能遵循该协议)。该 class 关键字必须是第一个出现在协议的继承列表中,其后才是其他继承协议。</p>
+
+<pre><code>protocol SomeClassOnlyProtocol: class, SomeInheritedProtocol { 
+    // class-only protocol definition goes here
+}
+</code></pre>
+
+<p>在以上例子中,协议 SomeClassOnlyProtocol 只能被类(class)类型适配。如果尝试让结构体或枚举类型适配该协议,则会出现编译错误。</p>
+
+<p>注意:当协议想要定义的行为,要求(或假设)它的遵循类型必须是引用语义而非值语义时,应该采用类专属协议。关于引用语义,值语义的更多内容,请查看结构体和枚举是值类型和类是引用类型。</p>
+
+<h2 id="协议合成">协议合成</h2>
+
+<p>有时候需要同时遵循多个协议。你可以将多个协议采用 protocol<SomeProtocol, AnotherProtocol> 这样的格式进行组合,称为协议合成(protocol composition) 。你可以在 &lt;&gt; 中罗列任意多个你想要遵循的协议,以逗号分隔。</p>
+
+<p>下面的例子中,将 Named 和 Aged 两个协议按照上述的语法组合成一个协议:</p>
+
+<pre><code>protocol Named {
+    var name: String { get }
+}
+protocol Aged {
+    var age: Int { get }
+}
+struct Person: Named, Aged {
+    var name: String
+    var age: Int
+}
+func wishHappyBirthday(celebrator: protocol&lt;Named, Aged&gt;) {
+    println(&quot;Happy birthday \(celebrator.name) - you're \(celebrator.age)!&quot;)
+}
+let birthdayPerson = Person(name: &quot;Malcolm&quot;, age: 21)
+wishHappyBirthday(birthdayPerson)
+// prints &quot;Happy birthday Malcolm - you're 21!&quot;
+</code></pre>
+
+<p>Named 协议包含 String 类型的 name 属性;Aged 协议包含 Int 类型的 age 属性。Person 结构体遵循了这两个协议。</p>
+
+<p>wishHappyBirthday 函数的形参 celebrator 的类型为 protocol<Named,Aged>。可以传入任意遵循这两个协议的类型的实例。</p>
+
+<p>注意:协议合成并不会生成一个新协议类型,而是将多个协议合成为一个临时的协议,超出范围后立即失效。</p>
+
+<h2 id="检验协议的一致性">检验协议的一致性</h2>
+
+<p>你可以使用 is 和 as 操作符来检查是否遵循某一协议或强制转化为某一类型。检查和转化的语法和之前相同(详情查看类型转换):</p>
+
+<ol>
+<li>is 操作符用来检查实例是否遵循了某个协议</li>
+<li>as? 返回一个可选值,当实例遵循协议时,返回该协议类型;否则返回nil</li>
+<li>as 用以强制向下转型,如果强转失败,会引起运行时错误。</li>
+</ol>
+
+<p>下面的例子定义了一个 HasArea 的协议,要求有一个 Double 类型可读的 area :</p>
+
+<pre><code>protocol HasArea {
+    var area: Double { get }
+}
+</code></pre>
+
+<p>如下所示,定义了 Circle 和 Country 类,它们都遵循了 HasArea 协议</p>
+
+<pre><code>class Circle: HasArea {
+    let pi = 3.1415927
+    var radius: Double
+    var area: Double { return pi * radius * radius }
+    init(radius: Double) { self.radius = radius }
+}
+class Country: HasArea {
+    var area: Double
+    init(area: Double) { self.area = area }
+}
+</code></pre>
+
+<p>Circle 类把 area 实现为基于存储型属性 radius 的计算型属性,Country 类则把 area 实现为存储型属性。这两个类都遵循了 HasArea 协议。</p>
+
+<p>如下所示,Animal是一个没有实现 HasArea 协议的类</p>
+
+<pre><code>class Animal {
+    var legs: Int
+    init(legs: Int) { self.legs = legs }
+}
+</code></pre>
+
+<p>Circle,Country,Animal 并没有一个相同的基类,然而,它们都是类,它们的实例都可以作为 AnyObject 类型的变量，存储在同一个数组中:</p>
+
+<pre><code>let objects: [AnyObject] = [
+    Circle(radius: 2.0),
+    Country(area: 243_610),
+    Animal(legs: 4)
+]
+</code></pre>
+
+<p>objects 数组使用字面量初始化,数组包含一个 radius 为2的 Circle 的实例,一个保存了英国面积的 Country 实例和一个 legs 为4的 Animal 实例。</p>
+
+<p>如下所示,objects数组可以被迭代,对迭代出的每一个元素进行检查,看它是否遵循了 HasArea 协议:</p>
+
+<pre><code>for object in objects {
+    if let objectWithArea = object as? HasArea {
+        println(&quot;Area is \(objectWithArea.area)&quot;)
+    } else {
+        println(&quot;Something that doesn't have an area&quot;)
+    }
+}
+// Area is 12.5663708
+// Area is 243610.0
+// Something that doesn't have an area
+</code></pre>
+
+<p>当数组中的元素遵循 HasArea 协议时,通过 as?操作符将其可选绑定(optional binding)到 objectWithArea 常量上。objectWithArea 是 HasArea 协议类型的实例，因此 area 属性是可以被访问和打印的。</p>
+
+<p>objects 数组中元素的类型并不会因为强转而丢失类型信息,它们仍然是Circle,Country,Animal类型。然而,当它们被赋值给 objectWithArea 常量时,则只被视为 HasArea 类型,因此只有 area 属性能够被访问。</p>
+
+<h2 id="对可选协议的规定">对可选协议的规定</h2>
+
+<p>协议可以含有可选成员,其遵循者可以选择是否实现这些成员。在协议中使用 optional 关键字作为前缀来定义可选成员。</p>
+
+<p>可选协议在调用时使用可选链,因为协议的遵循者可能没有实现可选内容,详细内容在可选链章节中查看。</p>
+
+<p>像 someOptionalMethod?(someArgument) 这样,你可以在可选方法名称后加上 ? 来检查该方法是否被实现。可选方法和可选属性都会返回一个 可选值(optional value),当其不可访问时, ? 之后语句不会执行,并整体返回 nil。</p>
+
+<p>注意:可选协议只能在含有 @objc 前缀的协议中生效。且 @objc 的协议只能被类遵循,这个前缀表示协议将暴露给Objective-C代码,详情参见 Using Swift with Cocoa and Objective-C 。即使你不打算和Objective-C有什么交互,如果你想要指明协议包含可选属性,那么还是要加上 @objc 前缀。</p>
+
+<p>下面的例子定义了一个叫 Counter 的整数加法类,它使用外部的数据源来实现每次的增量。数据源是两个可选属性,在 CounterDataSource 协议中定义:</p>
+
+<pre><code>@objc protocol CounterDataSource {
+    optional func incrementForCount(count: Int) -&gt; Int
+    optional var fixedIncrement: Int { get }
+}
+</code></pre>
+
+<p>CounterDataSource 含有 incrementForCount 可选方法和 fiexdIncrement 可选属性,它们使用了不同的方法 来从数据源中获取合适的增量值。</p>
+
+<p>注意:CounterDataSource 中的属性和方法都是可选的,因此可以在类中声明都不实现这些成员,尽管技术上允许
+ 这样做,不过最好不要这样写。</p>
+
+<p>Counter 类含有 CounterDataSource?类型的可选属性 dataSource,如下所示:</p>
+
+<pre><code>@objc class Counter {
+    var count = 0
+    var dataSource: CounterDataSource?
+    func increment() {
+        if let amount = dataSource?.incrementForCount?(count) {
+            count += amount
+        } else if let amount = dataSource?.fixedIncrement {
+            count += amount
+        }
+    }
+}
+</code></pre>
+
+<p>类 Counter 使用 count 来存储当前的值。该类同时定义了一个 increment 方法,每次调用该方法的时候,将会 增加 count 的值。</p>
+
+<p>increment() 方法首先试图使用 incrementForCount(<em>:) 方法来得到每次的增量。 increment() 方法使用可选链 来尝试调用 incrementForCount(</em>:) ,并将当前的 count 值作为参数传入。</p>
+
+<p>这里使用了两种可选链方法。由于 dataSource 可能为 nil ,因此在 dataSource 后边加上了 ? 标记来表明只在 dataSource 非空时才去调用 incrementForCount 方法。即使 dataSource 存在,但是也无法保证其是否实现了 incrementForCount 方法,因此在 incrementForCount 方法后边也加有 ? 标记。</p>
+
+<p>调用 incrementForCount 方法在上述两种情形都有可能失败,所以返回值为可选 Int 类型。虽然在 CounterDat aSource 中,incrementForCount 被定义为一个非可选 Int (non-optional),但是这里我们仍然需要返回可选 Int 类型。</p>
+
+<p>在调用 incrementForCount 方法后, Int 型可选值通过可选绑定(optional binding)自动拆包并赋值给常量 amount。如果可选值确实包含一个数值,这表示 delegate 和方法都存在,之后便将 amount 加到 count 上,增加操作完成。</p>
+
+<p>如果没有从 incrementForCount(_:) 获取到值,可能是 dataSource 为nil,或者它并没有实现 incrementForCount 方法——那么 increment() 方法将试图从数据源的 fixedIncrement 属性中获取增量。 fixedIncrement 也是一个可选型,所以在属性名的后面添加 ? 来试图取回可选属性的值。和之前一样,返回值为可选型。</p>
+
+<p>ThreeSource 实现了 CounterDataSource 协议,它实现来可选属性 fixedIncrement ,每次返回值 3 :</p>
+
+<pre><code>class ThreeSource: CounterDataSource {
+    let fixedIncrement = 3
+}
+</code></pre>
+
+<p>可以使用 ThreeSource 的实例作为 Counter 实例的数据源:</p>
+
+<pre><code>var counter = Counter()
+counter.dataSource = ThreeSource()
+for _ in 1...4 {
+    counter.increment()
+    println(counter.count)
+}
+// 3
+// 6
+// 9
+// 12
+</code></pre>
+
+<p>上述代码新建了一个 Counter 实例;将它的数据源设置为 TreeSource 实例;调用 increment() 4次。和你预想的一样,每次在调用的时候,count 的值增加3.</p>
+
+<p>下面是一个更为复杂的数据源 TowardsZeroSource ,它将使得最后的值变为0:</p>
+
+<pre><code>class TowardsZeroSource: CounterDataSource {
+    func incrementForCount(count: Int) -&gt; Int {
+        if count == 0 {
+            return 0
+        } else if count &lt; 0 {
+            return 1
+        } else {
+            return -1
+        }
+    }
+}
+</code></pre>
+
+<p>TowardsZeroSource 实现了 CounterDataSource 协议中的 incrementForCount(_:) 方法,以 count 参数为依据,计算出每次的增量。如果 count 已经为0,方法返回0,这表示之后不会再有增量。</p>
+
+<p>你可以配合使用 TowardsZeroSource 实例和 Counter 实例来从 -4 增加到 0 .一旦增加到 0 ,数值便不会再 有变动。</p>
+
+<p>在下面的例子中,将从 -4 增加到 0 。一旦结果为 0 ,便不在增加:</p>
+
+<pre><code>counter.count = -4
+counter.dataSource = TowardsZeroSource()
+for _ in 1...5 {
+    counter.increment()
+    println(counter.count)
+}
+// -3
+// -2
+// -1
+// 0
+// 0
+</code></pre>
+
+<h2 id="协议扩展">协议扩展</h2>
+
+<p>使用扩展协议的方式可以为遵循者提供方法或属性的实现。通过这种方式,可以让你无需在每个遵循者中都实现一次,无需使用全局函数,你可以通过扩展协议的方式进行定义。</p>
+
+<p>例如,可以扩展 RandomNumberGenerator 协议,让其提供 randomBool() 方法。该方法使用协议中要求的 random() 方法来实现:</p>
+
+<pre><code>extension RandomNumberGenerator { 
+    func randomBool() -&gt; Bool {
+        return random() &gt; 0.5 
+    }
+}
+</code></pre>
+
+<p>通过扩展协议,所有协议的遵循者,在不用任何修改的情况下,都自动得到了这个扩展所增加的方法。</p>
+
+<pre><code>let generator = LinearCongruentialGenerator()
+print(&quot;Here's a random number: \(generator.random())&quot;)
+// 输出 &quot;Here's a random number: 0.37464991998171&quot;
+print(&quot;And here's a random Boolean: \(generator.randomBool())&quot;) 
+// 输出 &quot;And here's a random Boolean: true&quot;
+</code></pre>
+
+<h3 id="提供默认实现">提供默认实现</h3>
+
+<p>可以通过协议扩展的方式来为协议规定的属性和方法提供默认的实现。如果协议的遵循者对规定的属性和方法提供了自己的实现,那么遵循者提供的实现将被使用。</p>
+
+<p>注意:通过扩展协议提供的协议实现和可选协议规定有区别。虽然协议遵循者无需自己实现,通过扩展提供的默认实现,可以不是用可选链调用。</p>
+
+<p>例如, PrettyTextRepresentable 协议,继承了 TextRepresentable 协议,可以为其提供一个默认的 asPrettyText() 方法来简化返回值:</p>
+
+<pre><code>extension PrettyTextRepresentable { 
+    func asPrettyText() -&gt; String {
+        return asText() 
+    }
+}
+</code></pre>
+
+<h3 id="为协议扩展添加限制条件">为协议扩展添加限制条件</h3>
+
+<p>在扩展协议的时候,可以指定一些限制,只有满足这些限制的协议遵循者,才能获得协议扩展提供的属性和方法。这些限制写在协议名之后,使用 where 关键字来描述限制情况:</p>
+
+<p>例如,你可以扩展 CollectionType 协议,只适用于元素遵循 TextRepresentable 的情况:</p>
+
+<pre><code>extension CollectionType where Generator.Element : TextRepresentable { 
+    func asList() -&gt; String {
+        return &quot;(&quot; + &quot;, &quot;.join(map({$0.asText()})) + &quot;)&quot; 
+    }
+ }
+</code></pre>
+
+<p>asList() 方法将每个元素以 asText() 的方式表示，最后以逗号分隔链接起来。</p>
+
+<p>现在我们来看 Hamster,它遵循 TextRepresentable：</p>
+
+<pre><code>let murrayTheHamster = Hamster(name: &quot;Murray&quot;)
+let morganTheHamster = Hamster(name: &quot;Morgan&quot;)
+let mauriceTheHamster = Hamster(name: &quot;Maurice&quot;)
+let hamsters = [murrayTheHamster, morganTheHamster, mauriceTheHamster]
+</code></pre>
+
+<p>因为 Array 遵循 CollectionType 协议,数组的元素又遵循 TextRepresentable 协议,所以数组可以使用 asList() 方法得到数组内容的文本表示:</p>
+
+<pre><code>print(hamsters.asList())
+// 输出 &quot;(A hamster named Murray, A hamster named Morgan, A hamster named Maurice)&quot;
+</code></pre>
+
+<p>注意:如果有多个协议扩展,而一个协议的遵循者又同时满足它们的限制,那么将会使用所满足限制最多的那个扩展。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%B3%9B%E5%9E%8B/" data-tooltip="Swift之泛型">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%89%A9%E5%B1%95/" data-tooltip="Swift之扩展">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E5%258D%258F%25E8%25AE%25AE%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E5%258D%258F%25E8%25AE%25AE%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E5%258D%258F%25E8%25AE%25AE%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%B3%9B%E5%9E%8B/" data-tooltip="Swift之泛型">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%89%A9%E5%B1%95/" data-tooltip="Swift之扩展">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E5%258D%258F%25E8%25AE%25AE%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E5%258D%258F%25E8%25AE%25AE%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E5%258D%258F%25E8%25AE%25AE%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E5%258D%258F%25E8%25AE%25AE%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E5%258D%258F%25E8%25AE%25AE%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E5%258D%258F%25E8%25AE%25AE%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/03\/swift%E4%B9%8B%E5%8D%8F%E8%AE%AE\/';
+          
+            this.page.identifier = '\/2015\/03\/swift%E4%B9%8B%E5%8D%8F%E8%AE%AE\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

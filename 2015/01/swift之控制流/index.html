@@ -1,0 +1,1429 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Swift之控制流</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="Swift提供了类似 C 语言的流程控制结构,包括可以多次执行任务的 for 和 while 循环,基于特定条件选择执行不同代码分支的 if 、 guard 和 switch 语句,还有控制流程跳转到其他代码的 break 和 continue 语句。
+">
+    <meta property="og:description" content="Swift提供了类似 C 语言的流程控制结构,包括可以多次执行任务的 for 和 while 循环,基于特定条件选择执行不同代码分支的 if 、 guard 和 switch 语句,还有控制流程跳转到其他代码的 break 和 continue 语句。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Swift之控制流">
+    <meta property="og:url" content="/2015/01/swift%E4%B9%8B%E6%8E%A7%E5%88%B6%E6%B5%81/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="Swift提供了类似 C 语言的流程控制结构,包括可以多次执行任务的 for 和 while 循环,基于特定条件选择执行不同代码分支的 if 、 guard 和 switch 语句,还有控制流程跳转到其他代码的 break 和 continue 语句。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Swift之控制流
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-01-27T14:09:33Z">
+    
+  
+  
+  
+  
+    2015-01-27 14:09:33
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>Swift提供了类似 C 语言的流程控制结构,包括可以多次执行任务的 for 和 while 循环,基于特定条件选择执行不同代码分支的 if 、 guard 和 switch 语句,还有控制流程跳转到其他代码的 break 和 continue 语句。
+</p>
+
+<p>除了 C 语言里面传统的 for 循环,Swift 还增加了 for-in 循环,用来更简单地遍历数组(array),字典(dictionary),区间(range),字符串(string)和其他序列类型。</p>
+
+<p>Swift 的 switch 语句比 C 语言中更加强大。在 C 语言中,如果某个 case 不小心漏写了 break ,这个 case 就会贯穿至下一个 case,Swift 无需写 break ,所以不会发生这种贯穿的情况。case 还可以匹配更多的类型模式,包括区间匹配(range matching),元组(tuple)和特定类型的描述。 switch 的 case 语句中匹配的值可以是由 case 体内部临时的常量或者变量决定,也可以由 where 分句描述更复杂的匹配条件。</p>
+
+<h2 id="for-循环">For 循环</h2>
+
+<p>Swift 提供两种 for 循环形式以来按照指定的次数多次执行一系列语句:</p>
+
+<ul>
+<li>for-in 循环对一个集合里面的每个元素执行一系列语句。</li>
+<li>for循环,用来重复执行一系列语句直到达成特定条件达成,一般通过在每次循环完成后增加计数器的值来实现。</li>
+</ul>
+
+<h3 id="for-in">For-In</h3>
+
+<p>你可以使用 for-in 循环来遍历一个集合里面的所有元素,例如由数字表示的区间、数组中的元素、字符串中的字符。</p>
+
+<p>下面的例子用来输出乘 5 乘法表前面一部分内容:</p>
+
+<pre><code>for index in 1...5 {
+    println(&quot;\(index) times 5 is \(index * 5)&quot;)
+}
+//1times5is5
+//2times5is10
+//3times5is15
+//4times5is20
+//5times5is25
+</code></pre>
+
+<p>例子中用来进行遍历的元素是一组使用闭区间操作符( &hellip; )表示的从 1 到 5 的数字。index 被赋值为闭区间中的第一个数字( 1 ),然后循环中的语句被执行一次。在本例中,这个循环只包含一个语句,用来输出当前 index 值所对应的乘 5 乘法表结果。该语句执行后, index 的值被更新为闭区间中的第二个数字( 2 ),之后 print(_:) 函数会再执行一次。整个过程会进行到闭区间结尾为止。</p>
+
+<p>上面的例子中, index 是一个每次循环遍历开始时被自动赋值的常量。这种情况下, index 在使用前不需要声明,只需要将它包含在循环的声明中,就可以对其进行隐式声明,而无需使用 let 关键字声明。</p>
+
+<p>如果你不需要知道区间内每一项的值,你可以使用下划线( _ )替代变量名来忽略对值的访问:</p>
+
+<pre><code>let base = 3 
+let power = 10
+var answer = 1
+for _ in 1...power { 
+    answer *= base
+}
+println(&quot;\(base) to the power of \(power) is \(answer)&quot;) 
+// prints &quot;3 to the power of 10 is 59049
+</code></pre>
+
+<p>这个例子计算 base 这个数的 power 次幂(本例中,是 3 的 10 次幂),从 1 ( 3 的 0 次幂)开始做 3 的乘法, 进行 10 次,使用 1 到 10 的闭区间循环。这个计算并不需要知道每一次循环中计数器具体的值,只需要执行了正确的循环次数即可。下划线符号 _ (替代循环中的变量)能够忽略具体的值,并且不提供循环遍历时对值的访问。</p>
+
+<p>使用 for-in 遍历一个数组所有元素:</p>
+
+<pre><code>let names = [&quot;Anna&quot;, &quot;Alex&quot;, &quot;Brian&quot;, &quot;Jack&quot;]
+for name in names {
+    println(&quot;Hello, \(name)!&quot;)
+}
+// Hello, Anna!
+// Hello, Alex! 
+// Hello, Brian!
+// Hello, Jack!
+</code></pre>
+
+<p>你也可以通过遍历一个字典来访问它的键值对。遍历字典时,字典的每项元素会以 (key, value) 元组的形式返回,你可以在 for-in 循环中使用显式的常量名称来解读 (key, value) 元组。下面的例子中,字典的键(key)解读为常量 animalName ,字典的值会被解读为常量 legCount :</p>
+
+<pre><code>let numberOfLegs = [&quot;spider&quot;: 8, &quot;ant&quot;: 6, &quot;cat&quot;: 4] 
+for (animalName, legCount) in numberOfLegs {
+    println(&quot;\(animalName)s have \(legCount) legs&quot;)
+}
+// spiders have 8 legs 
+// ants have 6 legs
+// cats have 4 legs
+</code></pre>
+
+<p>字典元素的遍历顺序和插入顺序可能不同,字典的内容在内部是无序的,所以遍历元素时不能保证顺序。关于数组和字典,详情参见集合类型。</p>
+
+<p>除了 for-in 循环,Swift 提供使用条件判断和递增方法的标准 C 样式 for 循环:</p>
+
+<pre><code>for var index = 0; index &lt; 3; ++index {
+    print(&quot;index is \(index)&quot;)
+}
+// index is 0 // index is 1 // index is 2
+</code></pre>
+
+<p>下面是一般情况下这种循环方式的格式:</p>
+
+<pre><code>for initialization ; condition ; increment { statements }
+</code></pre>
+
+<p>和 C 语言中一样,分号将循环的定义分为 3 个部分,不同的是,Swift 不需要使用圆括号将“initialization; condition; increment”包括起来。</p>
+
+<p>这个循环执行流程如下:</p>
+
+<ol>
+<li>循环首次启动时,初始化表达式被调用一次,用来初始化循环所需的所有常量和变量。</li>
+<li>条件表达式被调用,如果表达式调用结果为 false ,循环结束,继续执行 for 循环关闭大括号 ( } )之后的代码。如果表达式调用结果为 true ,则会执行大括号内部的代码。</li>
+<li>执行所有语句之后,执行递增表达式。通常会增加或减少计数器的值,或者根据语句输出来修改某一个初始化的变量。当递增表达式运行完成后,重复执行第 2 步,条件表达式会再次执行。</li>
+</ol>
+
+<p>在初始化表达式中声明的常量和变量(比如 var index = 0 )只在 for 循环的生命周期里有效。如果想在循环结束后访问 index 的值,你必须要在循环生命周期开始前声明 index 。</p>
+
+<pre><code>var index: Int
+for index = 0; index &lt; 3; ++index {
+    print(&quot;index is \(index)&quot;)
+}
+// index is 0
+// index is 1
+// index is 2
+print(&quot;The loop statements were executed \(index) times&quot;)
+// 输出 &quot;The loop statements were executed 3 times
+</code></pre>
+
+<p>注意 index 在循环结束后最终的值是 3 而不是 2。最后一次调用递增表达式 ++index 会将 index 设置为 3 ,从而导致 index &lt; 3 条件为 false ,并终止循环。</p>
+
+<h2 id="while-循环">While 循环</h2>
+
+<p>While 循环运行一系列语句直到条件变成 false。这类循环适合使用在第一次迭代前迭代次数未知的情况下。Swift 提供两种 while 循环形式:</p>
+
+<ul>
+<li>while 循环,每次在循环开始时计算条件是否符合;</li>
+<li>repeat-while 循环,每次在循环结束时计算条件是否符合。</li>
+</ul>
+
+<h3 id="while">While</h3>
+
+<p>While 循环从计算单一条件开始。如果条件为 true,会重复运行一系列语句,直到条件变为false。</p>
+
+<p>下面是一般情况下 while 循环格式:</p>
+
+<pre><code>while condition { statements }
+</code></pre>
+
+<p>下面的例子来玩一个叫做蛇和梯子的小游戏,也叫做滑道和梯子:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSControlFlow/1.png" alt="alt text" /></p>
+
+<p>游戏的规则如下:</p>
+
+<ul>
+<li>游戏盘面包括 25 个方格,游戏目标是达到或者超过第 25 个方格;</li>
+<li>每一轮,你通过掷一个 6 边的骰子来确定你移动方块的步数,移动的路线由上图中横向的虚线所示;</li>
+<li>如果在某轮结束,你移动到了梯子的底部,可以顺着梯子爬上去;</li>
+<li>如果在某轮结束,你移动到了蛇的头部,你会顺着蛇的身体滑下去。</li>
+</ul>
+
+<p>游戏盘面可以使用一个 Int 数组来表达。数组的长度由一个 finalSquare 常量储存,用来初始化数组和检测最终胜利条件。游戏盘面由 26 个 Int 0 值初始化,而不是 25 个(由 0 到 25 ,一共 26 个):</p>
+
+<pre><code>let finalSquare = 25
+var board = [Int](count: finalSquare + 1, repeatedValue: 0)
+</code></pre>
+
+<p>一些方块被设置成有蛇或者梯子的指定值。梯子底部的方块是一个正值,使你可以向上移动,蛇头处的方块是一个负值,会让你向下移动:</p>
+
+<pre><code>board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+</code></pre>
+
+<p>3 号方块是梯子的底部,会让你向上移动到 11 号方格,我们使用 board[03] 等于 +08 (来表示 11 和 3 之间的差值)。使用一元加运算符( +i )是为了和一元减运算符( -i )对称,为了让盘面代码整齐,小于 10 的数字都使用 0 补齐(这些风格上的调整都不是必须的,只是为了让代码看起来更加整洁)。</p>
+
+<p>玩家由左下角编号为 0 的方格开始游戏。一般来说玩家第一次掷骰子后才会进入游戏盘面:</p>
+
+<pre><code>var square = 0
+var diceRoll = 0
+while square &lt; finalSquare {
+    // 掷骰子
+    if ++diceRoll == 7 { diceRoll = 1 } // 根据点数移动
+    square += diceRoll
+    if square &lt; board.count {
+        // 如果玩家还在棋盘上,顺着梯子爬上去或者顺着蛇滑下去
+        square += board[square]
+    }
+}
+print(&quot;Game over!&quot;)
+</code></pre>
+
+<p>本例中使用了最简单的方法来模拟掷骰子。diceRoll 的值并不是一个随机数,而是以 0 为初始值,之后每一次 while 循环, diceRoll 的值使用前置自增操作符( ++i )来自增 1 ,然后检测是否超出了最大值。++diceRoll 调用完成后,返回值等于 diceRoll 自增后的值。任何时候如果 diceRoll 的值等于7时,就超过了骰子的最大值,会被重置为 1 。所以 diceRoll 的取值顺序会一直是 1 , 2 , 3 , 4 , 5 , 6 , 1 , 2 。</p>
+
+<p>掷完骰子后,玩家向前移动 diceRoll 个方格,如果玩家移动超过了第 25 个方格,这个时候游戏结束,相应地,代码会在 square 增加 board[square] 的值向前或向后移动(遇到了梯子或者蛇)之前,检测 square 的值是否小于 board 的 count 属性。</p>
+
+<p>如果没有这个检测( square &lt; board.count ), board[square] 可能会越界访问 board 数组,导致错误。例如如果 square 等于 26 , 代码会去尝试访问 board[26] ,超过数组的长度。</p>
+
+<p>当本轮 while 循环运行完毕,会再检测循环条件是否需要再运行一次循环。如果玩家移动到或者超过第 25 个方格,循环条件结果为 false ,此时游戏结束。</p>
+
+<p>while 循环比较适合本例中的这种情况,因为在 while 循环开始时,我们并不知道游戏的长度或者循环的次数,只有在达成指定条件时循环才会结束。</p>
+
+<h3 id="repeat-while">Repeat-While</h3>
+
+<p>while 循环的另外一种形式是 repeat-while ,它和 while 的区别是在判断循环条件之前,先执行一次循环的代码块,然后重复循环直到条件为 false 。</p>
+
+<p>注意: Swift语言的 repeat-while 循环合其他语言中的 do-while 循环是类似的。</p>
+
+<p>下面是一般情况下 repeat-while 循环的格式:</p>
+
+<pre><code>repeat { statements } while condition
+</code></pre>
+
+<p>还是蛇和梯子的游戏,使用 repeat-while 循环来替代 while 循环。 finalSquare 、 board 、 square 和 diceR oll 的值初始化同 while 循环一样:</p>
+
+<pre><code>let finalSquare = 25
+var board = [Int](count: finalSquare + 1, repeatedValue: 0)
+board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+var square = 0
+var diceRoll = 0
+</code></pre>
+
+<p>repeat-while 的循环版本,循环中第一步就需要去检测是否在梯子或者蛇的方块上。没有梯子会让玩家直接上到第 25 个方格,所以玩家不会通过梯子直接赢得游戏。这样在循环开始时先检测是否踩在梯子或者蛇上是安全的。</p>
+
+<p>游戏开始时,玩家在第 0 个方格上, board[0] 一直等于 0, 不会有什么影响:</p>
+
+<pre><code>repeat {
+    // 顺着梯子爬上去或者顺着蛇滑下去
+    square += board[square]
+    // 掷骰子
+    if ++diceRoll == 7 { diceRoll = 1 }
+    // 根据点数移动
+    square += diceRoll
+} while square &lt; finalSquare
+print(&quot;Game over!&quot;)
+</code></pre>
+
+<p>检测完玩家是否踩在梯子或者蛇上之后,开始掷骰子,然后玩家向前移动 diceRoll 个方格,本轮循环结束。</p>
+
+<p>循环条件( while square &lt; finalSquare )和 while 方式相同,但是只会在循环结束后进行计算。在这个游戏中, repeat-while 表现得比 while 循环更好。 repeat-while 方式会在条件判断 square 没有超出后直接运行 square += board[square] ,这种方式可以去掉 while 版本中的数组越界判断。</p>
+
+<h2 id="条件语句">条件语句</h2>
+
+<p>根据特定的条件执行特定的代码通常是十分有用的,例如:当错误发生时,你可能想运行额外的代码;或者,当输入的值太大或太小时,向用户显示一条消息等。要实现这些功能,你就需要使用条件语句。</p>
+
+<p>Swift 提供两种类型的条件语句: if 语句和 switch 语句。通常,当条件较为简单且可能的情况很少时,使用 if 语句。而 switch 语句更适用于条件较复杂、可能情况较多且需要用到模式匹配(pattern-matching)的情境。</p>
+
+<h3 id="if">if</h3>
+
+<p>if 语句最简单的形式就是只包含一个条件,当且仅当该条件为 true 时,才执行相关代码:</p>
+
+<pre><code>var temperatureInFahrenheit = 30
+if temperatureInFahrenheit &lt;= 32 {
+    print(&quot;It's very cold. Consider wearing a scarf.&quot;)
+}
+// 输出 &quot;It's very cold. Consider wearing a scarf.&quot;
+</code></pre>
+
+<p>上面的例子会判断温度是否小于等于 32 华氏度(水的冰点)。如果是,则打印一条消息;否则,不打印任何消息,继续执行 if 块后面的代码。</p>
+
+<p>当然, if 语句允许二选一,也就是当条件为 false 时,执行 else 语句:</p>
+
+<pre><code>temperatureInFahrenheit = 40
+if temperatureInFahrenheit &lt;= 32 {
+    print(&quot;It's very cold. Consider wearing a scarf.&quot;)
+} else {
+    print(&quot;It's not that cold. Wear a t-shirt.&quot;)
+}
+// 输出 &quot;It's not that cold. Wear a t-shirt.&quot;
+</code></pre>
+
+<p>显然,这两条分支中总有一条会被执行。由于温度已升至 40 华氏度,不算太冷,没必要再围围巾——因此,else 分支就被触发了。</p>
+
+<p>你可以把多个 if 语句链接在一起,像下面这样:</p>
+
+<pre><code>temperatureInFahrenheit = 90
+if temperatureInFahrenheit &lt;= 32 {
+    print(&quot;It's very cold. Consider wearing a scarf.&quot;)
+} else if temperatureInFahrenheit &gt;= 86 {
+    print(&quot;It's really warm. Don't forget to wear sunscreen.&quot;)
+} else {
+    print(&quot;It's not that cold. Wear a t-shirt.&quot;)
+}
+// 输出 &quot;It's really warm. Don't forget to wear sunscreen.&quot;
+</code></pre>
+
+<p>在上面的例子中,额外的 if 语句用于判断是不是特别热。而最后的 else 语句被保留了下来,用于打印既不冷也不热时的消息。</p>
+
+<p>实际上,最后的 else 语句是可选的:</p>
+
+<pre><code>temperatureInFahrenheit = 90
+if temperatureInFahrenheit &lt;= 32 {
+    print(&quot;It's very cold. Consider wearing a scarf.&quot;)
+} else if temperatureInFahrenheit &gt;= 86 {
+    print(&quot;It's really warm. Don't forget to wear sunscreen.&quot;)
+}
+</code></pre>
+
+<p>在这个例子中,由于既不冷也不热,所以不会触发 if 或 else if 分支,也就不会打印任何消息。</p>
+
+<h3 id="switch">Switch</h3>
+
+<p>switch 语句会尝试把某个值与若干个模式(pattern)进行匹配。根据第一个匹配成功的模式, switch 语句会执行对应的代码。当有可能的情况较多时,通常用 switch 语句替换 if 语句。</p>
+
+<p>switch 语句最简单的形式就是把某个值与一个或若干个相同类型的值作比较:</p>
+
+<pre><code>switch some value to consider {
+    case value 1 : respond to value 1
+    case value 2 ,
+    case value 3 : respond to value 2 or 3
+    default: otherwise, do something else
+}
+</code></pre>
+
+<p>switch 语句都由多个 case 构成。为了匹配某些更特定的值,Swift 提供了几种更复杂的匹配模式,这些模式将在本节的稍后部分提到。</p>
+
+<p>每一个 case 都是代码执行的一条分支,这与 if 语句类似。与之不同的是, switch 语句会决定哪一条分支应该被执行。</p>
+
+<p>switch 语句必须是完备的。这就是说,每一个可能的值都必须至少有一个 case 分支与之对应。在某些不可能涵盖所有值的情况下,你可以使用默认( default )分支满足该要求,这个默认分支必须在 switch 语句的最后面。</p>
+
+<p>下面的例子使用 switch 语句来匹配一个名为 someCharacter 的小写字符:</p>
+
+<pre><code>let someCharacter: Character = &quot;e&quot;
+switch someCharacter {
+    case &quot;a&quot;, &quot;e&quot;, &quot;i&quot;, &quot;o&quot;, &quot;u&quot;:
+        print(&quot;\(someCharacter) is a vowel&quot;)
+    case &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;f&quot;, &quot;g&quot;, &quot;h&quot;, &quot;j&quot;, &quot;k&quot;, &quot;l&quot;, &quot;m&quot;, &quot;n&quot;, &quot;p&quot;, &quot;q&quot;, &quot;r&quot;, &quot;s&quot;, &quot;t&quot;, &quot;v&quot;, &quot;w&quot;, &quot;x&quot;, &quot;y&quot;, &quot;z&quot;:
+        print(&quot;\(someCharacter) is a consonant&quot;)
+    default:
+    print(&quot;\(someCharacter) is not a vowel or a consonant&quot;)
+}
+// 输出 &quot;e is a vowel&quot;
+</code></pre>
+
+<p>在这个例子中,第一个 case 分支用于匹配五个元音,第二个 case 分支用于匹配所有的辅音。</p>
+
+<p>由于为其它可能的字符写 case 分支没有实际的意义,因此在这个例子中使用了默认分支来处理剩下的既不是元音也不是辅音的字符——这就保证了 switch 语句的完备性。</p>
+
+<h4 id="不存在隐式的贯穿-fallthrough">不存在隐式的贯穿(Fallthrough)</h4>
+
+<p>与 C 语言和 Objective-C 中的 switch 语句不同,在 Swift 中,当匹配的 case 分支中的代码执行完毕后,程序会终止 switch 语句,而不会继续执行下一个 case 分支。这也就是说,不需要在 case 分支中显式地使用 break 语句。这使得 switch 语句更安全、更易用,也避免了因忘记写 break 语句而产生的错误。</p>
+
+<p>注意: 虽然在Swift中 break 不是必须的,但你依然可以在 case 分支中的代码执行完毕前使用 break 跳出,详情请参见Switch 语句中的 break。</p>
+
+<p>每一个 case 分支都必须包含至少一条语句。像下面这样书写代码是无效的,因为第一个 case 分支是空的:</p>
+
+<pre><code>let anotherCharacter: Character = &quot;a&quot;
+switch anotherCharacter {
+    case &quot;a&quot;:
+    case &quot;A&quot;:
+        print(&quot;The letter A&quot;)
+    default:
+        print(&quot;Not the letter A&quot;)
+}
+// this will report a compile-time error
+</code></pre>
+
+<p>不像 C 语言里的 switch 语句,在 Swift 中, switch 语句不会同时匹配 &ldquo;a&rdquo; 和 &ldquo;A&rdquo; 。相反的,上面的代码会引起编译期错误: case &ldquo;a&rdquo;: does not contain any executable statements ——这就避免了意外地从一个 case 分支贯穿到另外一个,使得代码更安全、也更直观。</p>
+
+<p>一个 case 也可以包含多个模式,用逗号把它们分开(如果太长了也可以分行写):</p>
+
+<pre><code>switch some value to consider { case value 1 , value 2 : statements }
+</code></pre>
+
+<p>注意: 如果想要贯穿至特定的 case 分支中,请使用 fallthrough 语句,详情请参考贯穿(Fallthrough)。</p>
+
+<h4 id="区间匹配">区间匹配</h4>
+
+<p>case 分支的模式也可以是一个值的区间。下面的例子展示了如何使用区间匹配来输出任意数字对应的自然语言格式:</p>
+
+<pre><code>let approximateCount = 62
+let countedThings = &quot;moons orbiting Saturn&quot;
+var naturalCount: String
+switch approximateCount {
+    case 0:
+        naturalCount = &quot;no&quot;
+    case 1..&lt;5:
+        naturalCount = &quot;a few&quot;
+    case 5..&lt;12:
+        naturalCount = &quot;several&quot;
+    case 12..&lt;100:
+        naturalCount = &quot;dozens of&quot;
+    case 100..&lt;1000:
+        naturalCount = &quot;hundreds of&quot;
+    default:
+        naturalCount = &quot;many&quot;
+}
+print(&quot;There are \(naturalCount) \(countedThings).&quot;)
+// 输出 &quot;There are dozens of moons orbiting Saturn.&quot;
+</code></pre>
+
+<p>在上例中, approximateCount 在一个 switch 声明中被估值。每一个 case 都与之进行比较。因为 approximateCount 落在了12到100的区间,所以 naturalCount 等于 &ldquo;dozens of&rdquo; 值,并且此后这段执行跳出了 switch 声明。</p>
+
+<p>注意: 闭区间操作符( &hellip; )以及半开区间操作符( ..&lt; )功能被重载去返回 IntervalType 或 Range 。一个区间可以决定他是否包含特定的元素,就像当匹配一个 switch 声明的 case 一样。区间是一个连续值的集合,可以用 for-in 语句遍历它。</p>
+
+<h4 id="元组-tuple">元组(Tuple)</h4>
+
+<p>我们可以使用元组在同一个 switch 语句中测试多个值。元组中的元素可以是值,也可以是区间。另外,使用下划 线( _ )来匹配所有可能的值。</p>
+
+<p>下面的例子展示了如何使用一个 (Int, Int) 类型的元组来分类下图中的点(x, y):</p>
+
+<pre><code>let somePoint = (1, 1)
+switch somePoint {
+case (0, 0):
+    println(&quot;(0, 0) is at the origin&quot;)
+case (_, 0):
+    println(&quot;(\(somePoint.0), 0) is on the x-axis&quot;)
+case (0, _):
+    println(&quot;(0, \(somePoint.1)) is on the y-axis&quot;)
+case (-2...2, -2...2):
+    println(&quot;(\(somePoint.0), \(somePoint.1)) is inside the box&quot;)
+default:
+    println(&quot;(\(somePoint.0), \(somePoint.1)) is outside of the box&quot;)
+}
+// prints &quot;(1, 1) is inside the box&quot;
+</code></pre>
+
+<p><img src="http://lynchwong.com/blog/img/iOSControlFlow/2.png" alt="alt text" /></p>
+
+<p>在上面的例子中, switch 语句会判断某个点是否是原点(0, 0),是否在红色的x轴上,是否在黄色y轴上,是否在 一个以原点为中心的4x4的矩形里,或者在这个矩形外面。</p>
+
+<p>不像 C 语言,Swift 允许多个 case 匹配同一个值。实际上,在这个例子中,点(0, 0)可以匹配所有四个 case。但是,如果存在多个匹配,那么只会执行第一个被匹配到的 case 分支。考虑点(0, 0)会首先匹配 case (0, 0) ,因此剩下的能够匹配(0, 0)的 case 分支都会被忽视掉。</p>
+
+<h4 id="值绑定-value-bindings">值绑定(Value Bindings)</h4>
+
+<p>case 分支的模式允许将匹配的值绑定到一个临时的常量或变量,这些常量或变量在该 case 分支里就可以被引用了——这种行为被称为值绑定(value binding)。</p>
+
+<p>下面的例子展示了如何在一个 (Int, Int) 类型的元组中使用值绑定来分类下图中的点(x, y):</p>
+
+<pre><code>let anotherPoint = (2, 0)
+switch anotherPoint {
+    case (let x, 0):
+        println(&quot;on the x-axis with an x value of \(x)&quot;)
+    case (0, let y):
+        println(&quot;on the y-axis with a y value of \(y)&quot;)
+    case let (x, y):
+        println(&quot;somewhere else at (\(x), \(y))&quot;)
+}
+// prints &quot;on the x-axis with an x value of 2&quot;
+</code></pre>
+
+<p><img src="http://lynchwong.com/blog/img/iOSControlFlow/3.png" alt="alt text" /></p>
+
+<p>在上面的例子中, switch 语句会判断某个点是否在红色的x轴上,是否在黄色y轴上,或者不在坐标轴上。</p>
+
+<p>这三个 case 都声明了常量 x 和 y 的占位符,用于临时获取元组 anotherPoint 的一个或两个值。第一个 case —— case (let x, 0) 将匹配一个纵坐标为 0 的点,并把这个点的横坐标赋给临时的常量 x 。类似的,第二个 case —— case (0, let y) 将匹配一个横坐标为 0 的点,并把这个点的纵坐标赋给临时的常量 y 。</p>
+
+<p>一旦声明了这些临时的常量,它们就可以在其对应的 case 分支里引用。在这个例子中,它们用于简化 print(_:) 的书写。</p>
+
+<p>请注意,这个 switch 语句不包含默认分支。这是因为最后一个 case —— case let(x, y) 声明了一个可以匹配余下所有值的元组。这使得 switch 语句已经完备了,因此不需要再书写默认分支。</p>
+
+<p>在上面的例子中, x 和 y 是常量,这是因为没有必要在其对应的 case 分支中修改它们的值。然而,它们也可以是变量——程序将会创建临时变量,并用相应的值初始化它。修改这些变量只会影响其对应的 case 分支。</p>
+
+<h4 id="where">Where</h4>
+
+<p>case 分支的模式可以使用 where 语句来判断额外的条件。</p>
+
+<p>下面的例子把下图中的点(x, y)进行了分类:</p>
+
+<pre><code>let yetAnotherPoint = (1, -1)
+switch yetAnotherPoint {
+    case let (x, y) where x == y:
+        print(&quot;(\(x), \(y)) is on the line x == y&quot;)
+    case let (x, y) where x == -y:
+        print(&quot;(\(x), \(y)) is on the line x == -y&quot;)
+    case let (x, y):
+        print(&quot;(\(x), \(y)) is just some arbitrary point&quot;)
+}
+// 输出 &quot;(1, -1) is on the line x == -y&quot;
+</code></pre>
+
+<p><img src="http://lynchwong.com/blog/img/iOSControlFlow/4.png" alt="alt text" /></p>
+
+<p>在上面的例子中, switch 语句会判断某个点是否在绿色的对角线 x == y 上,是否在紫色的对角线 x == -y 上,或者不在对角线上。</p>
+
+<p>这三个 case 都声明了常量 x 和 y 的占位符,用于临时获取元组 yetAnotherPoint 的两个值。这些常量被用作 where 语句的一部分,从而创建一个动态的过滤器(filter)。当且仅当 where 语句的条件为 true 时,匹配到的 case 分支才会被执行。</p>
+
+<p>就像是值绑定中的例子,由于最后一个 case 分支匹配了余下所有可能的值, switch 语句就已经完备了,因此不需要再书写默认分支。</p>
+
+<h2 id="控制转移语句">控制转移语句</h2>
+
+<p>控制转移语句改变你代码的执行顺序,通过它你可以实现代码的跳转。Swift有四种控制转移语句。</p>
+
+<ul>
+<li>continue</li>
+<li>break</li>
+<li>fallthrough</li>
+<li>return</li>
+<li>throw</li>
+</ul>
+
+<p>我们将会在下面讨论 continue 、 break 和 fallthrough 语句。 return 语句将会在函数章节讨论, throw 语句会在错误抛出。</p>
+
+<h3 id="continue">Continue</h3>
+
+<p>continue 语句告诉一个循环体立刻停止本次循环迭代,重新开始下次循环迭代。就好像在说“本次循环迭代我已经执行完了”,但是并不会离开整个循环体。</p>
+
+<p>注意: 在一个带有条件和递增的for循环体中,调用 continue 语句后,迭代增量仍然会被计算求值。循环体继续像往常一样工作,仅仅只是循环体中的执行代码会被跳过。</p>
+
+<p>下面的例子把一个小写字符串中的元音字母和空格字符移除,生成了一个含义模糊的短句:</p>
+
+<pre><code>let puzzleInput = &quot;great minds think alike&quot;
+var puzzleOutput = &quot;&quot;
+for character in puzzleInput {
+    switch character {
+        case &quot;a&quot;, &quot;e&quot;, &quot;i&quot;, &quot;o&quot;, &quot;u&quot;, &quot; &quot;:
+            continue
+        default:
+            puzzleOutput.append(character)
+    }
+}
+println(puzzleOutput)
+// prints &quot;grtmndsthnklk&quot;
+</code></pre>
+
+<p>在上面的代码中,只要匹配到元音字母或者空格字符,就调用 continue 语句,使本次循环迭代结束,从新开始下次循环迭代。这种行为使 switch 匹配到元音字母和空格字符时不做处理,而不是让每一个匹配到的字符都被打印。</p>
+
+<h3 id="break">Break</h3>
+
+<p>break 语句会立刻结束整个控制流的执行。当你想要更早的结束一个 switch 代码块或者一个循环体时,你都可以使用 break 语句。</p>
+
+<h4 id="在循环体中使用-break">在循环体中使用 Break</h4>
+
+<p>当在一个循环体中使用 break 时,会立刻中断该循环体的执行,然后跳转到表示循环体结束的大括号( } )后的第一行代码。不会再有本次循环迭代的代码被执行,也不会再有下次的循环迭代产生。</p>
+
+<h4 id="switch-语句中的-break">Switch 语句中的 break</h4>
+
+<p>当在一个 switch 代码块中使用 break 时,会立即中断该 switch 代码块的执行,并且跳转到表示 switch 代码块结束的大括号( } )后的第一行代码。</p>
+
+<p>这种特性可以被用来匹配或者忽略一个或多个分支。因为 Swift 的 switch 需要包含所有的分支而且不允许有为空的分支,有时为了使你的意图更明显,需要特意匹配或者忽略某个分支。那么当你想忽略某个分支时,可以在该分支内写上 break 语句。当那个分支被匹配到时,分支内的 break 语句立即结束 switch 代码块。</p>
+
+<p>注意: 当一个 switch 分支仅仅包含注释时,会被报编译时错误。注释不是代码语句而且也不能让 switch 分支达到被忽略的效果。你总是可以使用 break 来忽略某个分支。</p>
+
+<p>下面的例子通过 switch 来判断一个 Character 值是否代表下面四种语言之一。为了简洁,多个值被包含在了同一个分支情况中。</p>
+
+<pre><code>let numberSymbol: Character = &quot;三&quot;  // Simplified Chinese for the number 3
+var possibleIntegerValue: Int?
+switch numberSymbol {
+case &quot;1&quot;, &quot;١&quot;, &quot;一&quot;, &quot;๑&quot;:
+    possibleIntegerValue = 1
+case &quot;2&quot;, &quot;٢&quot;, &quot;二&quot;, &quot;๒&quot;:
+    possibleIntegerValue = 2
+case &quot;3&quot;, &quot;٣&quot;, &quot;三&quot;, &quot;๓&quot;:
+    possibleIntegerValue = 3
+case &quot;4&quot;, &quot;٤&quot;, &quot;四&quot;, &quot;๔&quot;:
+    possibleIntegerValue = 4
+default:
+    break
+}
+if let integerValue = possibleIntegerValue {
+    println(&quot;The integer value of \(numberSymbol) is \(integerValue).&quot;)
+} else {
+    println(&quot;An integer value could not be found for \(numberSymbol).&quot;)
+}
+// prints &quot;The integer value of 三 is 3.&quot;
+</code></pre>
+
+<p>这个例子检查 numberSymbol 是否是拉丁,阿拉伯,中文或者泰语中的 1 到 4 之一。如果被匹配到,该 switch 分支语句给 Int? 类型变量 possibleIntegerValue 设置一个整数值。</p>
+
+<p>当 switch 代码块执行完后,接下来的代码通过使用可选绑定来判断 possibleIntegerValue 是否曾经被设置过值。因为是可选类型的缘故, possibleIntegerValue 有一个隐式的初始值 nil ,所以仅仅当 possibleIntegerValue 曾被 switch 代码块的前四个分支中的某个设置过一个值时,可选的绑定将会被判定为成功。</p>
+
+<p>在上面的例子中,想要把 Character 所有的的可能性都枚举出来是不现实的,所以使用 default 分支来包含所有上面没有匹配到字符的情况。由于这个 default 分支不需要执行任何动作,所以它只写了一条 break 语句。一旦落入到 default 分支中后, break 语句就完成了该分支的所有代码操作,代码继续向下,开始执行 if let 语句。</p>
+
+<h3 id="贯穿-fallthrough">贯穿(Fallthrough)</h3>
+
+<p>Swift 中的 switch 不会从上一个 case 分支落入到下一个 case 分支中。相反,只要第一个匹配到的 case 分支完成了它需要执行的语句,整个 switch 代码块完成了它的执行。相比之下,C 语言要求你显示的插入 break 语句到每个 switch 分支的末尾来阻止自动落入到下一个 case 分支中。Swift 的这种避免默认落入到下一个分支中的特性意味着它的 switch 功能要比 C 语言的更加清晰和可预测,可以避免无意识地执行多个 case 分支从而引发的错误。</p>
+
+<p>如果你确实需要 C 风格的贯穿的特性,你可以在每个需要该特性的 case 分支中使用 fallthrough 关键字。下面的例子使用 fallthrough 来创建一个数字的描述语句。</p>
+
+<pre><code>let integerToDescribe = 5
+var description = &quot;The number \(integerToDescribe) is&quot;
+switch integerToDescribe {
+case 2, 3, 5, 7, 11, 13, 17, 19:
+    description += &quot; a prime number, and also&quot;
+    fallthrough
+default:
+    description += &quot; an integer.&quot;
+}
+println(description)
+// prints &quot;The number 5 is a prime number, and also an integer.&quot;
+</code></pre>
+
+<p>这个例子定义了一个 String 类型的变量 description 并且给它设置了一个初始值。函数使用 switch 逻辑来判断 integerToDescribe 变量的值。当 integerToDescribe 的值属于列表中的质数之一时,该函数添加一段文字在 description 后,来表明这个是数字是一个质数。然后它使用 fallthrough 关键字来“贯穿”到 default 分支中。 default 分支添加一段额外的文字在 description 的最后,至此 switch 代码块执行完了。</p>
+
+<p>如果 integerToDescribe 的值不属于列表中的任何质数,那么它不会匹配到第一个 switch 分支。而这里没有其他特别的分支情况,所以 integerToDescribe 匹配到包含所有的 default 分支中。</p>
+
+<p>当 switch 代码块执行完后,使用 print 函数打印该数字的描述。在这个例子中,数字 5 被准确的识别为了一个质数。</p>
+
+<p>注意: fallthrough 关键字不会检查它下一个将会落入执行的 case 中的匹配条件。 fallthrough 简单地使代码执行继续连接到下一个 case 中的执行代码,这和 C 语言标准中的 switch 语句特性是一样的。</p>
+
+<h3 id="带标签的语句">带标签的语句</h3>
+
+<p>在 Swift 中,你可以在循环体和 switch 代码块中嵌套循环体和 switch 代码块来创造复杂的控制流结构。然而,循环体和 switch 代码块两者都可以使用 break 语句来提前结束整个方法体。因此,显示地指明 break 语句想要终止的是哪个循环体或者 switch 代码块,会很有用。类似地,如果你有许多嵌套的循环体,显示指明 continue 语句想要影响哪一个循环体也会非常有用。</p>
+
+<p>为了实现这个目的,你可以使用标签来标记一个循环体或者 switch 代码块,当使用 break 或者 continue 时,带上这个标签,可以控制该标签代表对象的中断或者执行。</p>
+
+<p>产生一个带标签的语句是通过在该语句的关键词的同一行前面放置一个标签,并且该标签后面还需带着一个冒号。下面是一个 while 循环体的语法,同样的规则适用于所有的循环体和 switch 代码块。</p>
+
+<p>label name : while condition { statements }</p>
+
+<p>下面的例子是在一个带有标签的 while 循环体中调用 break 和 continue 语句,该循环体是前面章节中蛇和梯子的改编版本。这次,游戏增加了一条额外的规则:</p>
+
+<p>为了获胜,你必须刚好落在第 25 个方块中。</p>
+
+<p>如果某次掷骰子使你的移动超出第 25 个方块,你必须重新掷骰子,直到你掷出的骰子数刚好使你能落在第 25 个方块中。</p>
+
+<p>游戏的棋盘和之前一样:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSControlFlow/1.png" alt="alt text" /></p>
+
+<p>finalSquare 、 board 、 square 和 diceRoll 值被和之前一样的方式初始化:</p>
+
+<pre><code>let finalSquare = 25
+var board = [Int](count: finalSquare + 1, repeatedValue: 0)
+board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08 var square = 0
+var diceRoll = 0
+</code></pre>
+
+<p>这个版本的游戏使用 while 循环体和 switch 方法块来实现游戏的逻辑。 while 循环体有一个标签名 gameLoop ,来表明它是蛇与梯子的主循环。</p>
+
+<p>该 while 循环体的条件判断语句是 while square != finalSquare ,这表明你必须刚好落在方格25中。</p>
+
+<pre><code>gameLoop: while square != finalSquare {
+    if ++diceRoll == 7 { diceRoll = 1 }
+    switch square + diceRoll {
+        case finalSquare:
+            // 到达最后一个方块,游戏结束
+            break gameLoop
+        case let newSquare where newSquare &gt; finalSquare:
+            // 超出最后一个方块,再掷一次骰子
+            continue gameLoop
+        default:
+            // 本次移动有效
+            square += diceRoll
+            square += board[square]
+    }
+}
+print(&quot;Game over!&quot;)
+</code></pre>
+
+<p>每次循环迭代开始时掷骰子。与之前玩家掷完骰子就立即移动不同,这里使用了 switch 来考虑每次移动可能产生的结果,从而决定玩家本次是否能够移动。</p>
+
+<ol>
+<li>如果骰子数刚好使玩家移动到最终的方格里,游戏结束。 break gameLoop 语句跳转控制去执行 while 循环体后的第一行代码,游戏结束。</li>
+<li>如果骰子数将会使玩家的移动超出最后的方格,那么这种移动是不合法的,玩家需要重新掷骰子。 continue gameLoop 语句结束本次 while 循环的迭代,开始下一次循环迭代。</li>
+<li>在剩余的所有情况中,骰子数产生的都是合法的移动。玩家向前移动骰子数个方格,然后游戏逻辑再处理玩家当前是否处于蛇头或者梯子的底部。本次循环迭代结束,控制跳转到 while 循环体的条件判断语句处,再决定是否能够继续执行下次循环迭代。</li>
+</ol>
+
+<p>注意: 如果上述的 break 语句没有使用 gameLoop 标签,那么它将会中断 switch 代码块而不是 while 循环体。使用 gameLoop 标签清晰的表明了 break 想要中断的是哪个代码块。 同时请注意,当调用 continue gameLoop 去跳转到下一次循环迭代时,这里使用 gameLoop 标签并不是严格必须的。因为在这个游戏中,只有一个循环体,所以 continue 语句会影响到哪个循环体是没有歧义的。然而, continue 语句使用 gameLoop 标签也是没有危害的。这样做符合标签的使用规则,同时参照旁边的 break gameLoop ,能够使游戏的逻辑更加清晰和易于理解。</p>
+
+<h3 id="提前退出">提前退出</h3>
+
+<p>像 if 语句一样, guard 的执行取决于一个表达式的布尔值。我们可以使用 guard 语句来要求条件必须为真时,以执行 guard 语句后的代码。不同于 if 语句,一个 guard 语句总是有一个 else 分句,如果条件不为真则执行 else 分局中的代码。</p>
+
+<pre><code>func greet(person: [String: String]) {
+    guard let name = person[&quot;name&quot;] else {
+        return
+    }
+    print(&quot;Hello \(name)&quot;)
+
+    guard let location = person[&quot;location&quot;] else {
+        print(&quot;I hope the weather is nice near you.&quot;)
+        return
+    }
+    print(&quot;I hope the weather is nice in \(location).&quot;)
+}
+
+greet([&quot;name&quot;: &quot;John&quot;])
+// prints &quot;Hello John!&quot;
+// prints &quot;I hope the weather is nice near you.&quot;
+
+greet([&quot;name&quot;: &quot;Jane&quot;, &quot;location&quot;: &quot;Cupertino&quot;])
+// prints &quot;Hello Jane!&quot;
+// prints &quot;I hope the weather is nice in Cupertino.&quot;
+</code></pre>
+
+<p>如果 guard 语句的条件被满足,则在保护语句的封闭大括号结束后继续执行代码。任何使用了可选绑定作为条件的一部分并被分配了值的变量或常量对于剩下的保护语句出现的代码段是可用的。</p>
+
+<p>如果条件不被满足,在 else 分支上的代码就会被执行。这个分支必须转移控制以退出 guard 语句出现的代码段。它可以用控制转移语句如 return , break 或 continue 做这件事,或者它调用了一个不返回的方法或函数,例如 fatalError() 。</p>
+
+<p>相比于可以实现同样功能的 if 语句,按需使用 guard 语句会提升我们代码的可靠性。 它可以使你的代码连贯的被执行而不需要将它包在 else 块中,它可以使你处理违反要求的代码接近要求。</p>
+
+<h3 id="检测api是否可用">检测API是否可用</h3>
+
+<p>Swift 有内置支持去检查接口的可用性的,这可以确保我们不会不小心地使用对于当前部署目标不可用的API。</p>
+
+<p>编译器使用SDK中的可用信息来验证在我们在可用部署目标指定项目的代码中所有的API调用。如果我们尝试使用一个不可用的API,Swift会在编译期报错。</p>
+
+<p>我们使用一个可用性条件在一个 if 或 guard 语句中去有条件的执行一段代码,这取决于我们想要使用的API是否在运行时是可用的。编译器使用从可用性条件语句中获取的信息,这时它会去验证在代码块中调用的API是否都可用。</p>
+
+<pre><code>if #available(iOS 9, OSX 10.10, *) {
+    // 在 iOS 使用 iOS 9 APIs , 并且在 OS X 使用 OS X v10.10 APIs
+} else {
+    // 回滚至早前 iOS and OS X 的API
+}
+</code></pre>
+
+<p>以上可用性条件指定在iOS, if 段的代码仅仅在iOS9及更高可运行;在OS X,仅在OS X v10.10及更高可运行。最后一个参数, * ,是必须的并且指定在任何其他平台上, if 段的代码在最小可用部署目标指定项目中执行。</p>
+
+<p>在它普遍的形式中,可用性条件获取了平台名字和版本的清单。平台名字可以是 iOS , OSX 或 watchOS 。除了特定的主板本号像iOS 8,我们可以指定较小的版本号像iOS 8.3以及 OS X v10.10.3。</p>
+
+<pre><code>if #available(`platform name` `version`, `...`, *) {
+    `statements to execute if the APIs are available`
+} else {
+    `fallback statements to execute if the APIs are unavailable`
+}
+</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%87%BD%E6%95%B0/" data-tooltip="Swift之函数">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B/" data-tooltip="Swift之集合类型">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E6%258E%25A7%25E5%2588%25B6%25E6%25B5%2581%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E6%258E%25A7%25E5%2588%25B6%25E6%25B5%2581%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E6%258E%25A7%25E5%2588%25B6%25E6%25B5%2581%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%87%BD%E6%95%B0/" data-tooltip="Swift之函数">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B/" data-tooltip="Swift之集合类型">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E6%258E%25A7%25E5%2588%25B6%25E6%25B5%2581%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E6%258E%25A7%25E5%2588%25B6%25E6%25B5%2581%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E6%258E%25A7%25E5%2588%25B6%25E6%25B5%2581%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E6%258E%25A7%25E5%2588%25B6%25E6%25B5%2581%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E6%258E%25A7%25E5%2588%25B6%25E6%25B5%2581%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E6%258E%25A7%25E5%2588%25B6%25E6%25B5%2581%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/01\/swift%E4%B9%8B%E6%8E%A7%E5%88%B6%E6%B5%81\/';
+          
+            this.page.identifier = '\/2015\/01\/swift%E4%B9%8B%E6%8E%A7%E5%88%B6%E6%B5%81\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

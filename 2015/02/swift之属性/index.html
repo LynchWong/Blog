@@ -1,0 +1,1110 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Swift之属性</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="属性将值跟特定的类、结构或枚举关联。存储属性存储常量或变量作为实例的一部分,而计算属性计算(不是存储)一个值。计算属性可以用于类、结构体和枚举,存储属性只能用于类和结构体。
+">
+    <meta property="og:description" content="属性将值跟特定的类、结构或枚举关联。存储属性存储常量或变量作为实例的一部分,而计算属性计算(不是存储)一个值。计算属性可以用于类、结构体和枚举,存储属性只能用于类和结构体。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Swift之属性">
+    <meta property="og:url" content="/2015/02/swift%E4%B9%8B%E5%B1%9E%E6%80%A7/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="属性将值跟特定的类、结构或枚举关联。存储属性存储常量或变量作为实例的一部分,而计算属性计算(不是存储)一个值。计算属性可以用于类、结构体和枚举,存储属性只能用于类和结构体。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Swift之属性
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-02-02T12:53:34Z">
+    
+  
+  
+  
+  
+    2015-02-02 12:53:34
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>属性将值跟特定的类、结构或枚举关联。存储属性存储常量或变量作为实例的一部分,而计算属性计算(不是存储)一个值。计算属性可以用于类、结构体和枚举,存储属性只能用于类和结构体。
+</p>
+
+<p>存储属性和计算属性通常与特定类型的实例关联。但是,属性也可以直接作用于类型本身,这种属性称为类型属性。</p>
+
+<p>另外,还可以定义属性观察器来监控属性值的变化,以此来触发一个自定义的操作。属性观察器可以添加到自己定义的存储属性上,也可以添加到从父类继承的属性上。</p>
+
+<h2 id="存储属性">存储属性</h2>
+
+<p>简单来说,一个存储属性就是存储在特定类或结构体的实例里的一个常量或变量。存储属性可以是变量存储属性(用关键字 var 定义),也可以是常量存储属性(用关键字 let 定义)。</p>
+
+<p>可以在定义存储属性的时候指定默认值,请参考默认属性值一节。也可以在构造过程中设置或修改存储属
+性的值,甚至修改常量存储属性的值,请参考在初始化阶段修改常量存储属性一节。</p>
+
+<p>下面的例子定义了一个名为 FixedLengthRange 的结构体,它描述了一个在创建后无法修改值域宽度的区间:</p>
+
+<pre><code>struct FixedLengthRange {
+    var firstValue: Int
+    let length: Int
+}
+var rangeOfThreeItems = FixedLengthRange(firstValue: 0, length: 3)
+// the range represents integer values 0, 1, and 2
+rangeOfThreeItems.firstValue = 6
+// the range now represents integer values 6, 7, and 8
+</code></pre>
+
+<p>FixedLengthRange 的实例包含一个名为 firstValue 的变量存储属性和一个名为 length 的常量存储属性。在上面的例子中, length 在创建实例的时候被初始化,因为它是一个常量存储属性,所以之后无法修改它的值。</p>
+
+<h3 id="常量结构体的存储属性">常量结构体的存储属性</h3>
+
+<p>如果创建了一个结构体的实例并将其赋值给一个常量,则无法修改该实例的任何属性,即使定义了变量存储属性:</p>
+
+<pre><code>let rangeOfFourItems = FixedLengthRange(firstValue: 0, length: 4)
+// this range represents integer values 0, 1, 2, and 3
+rangeOfFourItems.firstValue = 6
+// this will report an error, even though firstValue is a variable property
+</code></pre>
+
+<p>因为 rangeOfFourItems 被声明成了常量(用 let 关键字),即使 firstValue 是一个变量属性,也无法再修改它了。</p>
+
+<p>这种行为是由于结构体(struct)属于值类型。当值类型的实例被声明为常量的时候,它的所有属性也就成了常量。</p>
+
+<p>属于引用类型的类(class)则不一样。把一个引用类型的实例赋给一个常量后,仍然可以修改该实例的变量属 性。</p>
+
+<h3 id="延迟存储属性">延迟存储属性</h3>
+
+<p>延迟存储属性是指当第一次被调用的时候才会计算其初始值的属性。在属性声明前使用 lazy 来标示一个延迟存储属性。</p>
+
+<p>注意:必须将延迟存储属性声明成变量(使用 var 关键字),因为属性的初始值可能在实例构造完成之后才会得到。而常量属性在构造过程完成之前必须要有初始值,因此无法声明成延迟属性。</p>
+
+<p>延迟属性很有用,当属性的值依赖于在实例的构造过程结束后才会知道具体值的外部因素时,或者当获得属性的初始值需要复杂或大量计算时,可以只在需要的时候计算它。</p>
+
+<p>下面的例子使用了延迟存储属性来避免复杂类中不必要的初始化。例子中定义了 DataImporter 和 DataManager 两个类,下面是部分代码:</p>
+
+<pre><code>class DataImporter {
+    /*
+    DataImporter is a class to import data from an external file.
+    The class is assumed to take a non-trivial amount of time to initialize.
+    */
+    var fileName = &quot;data.txt&quot;
+    // the DataImporter class would provide data importing functionality here
+}
+
+class DataManager {
+    lazy var importer = DataImporter()
+    var data = [String]()
+    // the DataManager class would provide data management functionality here
+}
+
+let manager = DataManager()
+manager.data.append(&quot;Some data&quot;)
+manager.data.append(&quot;Some more data&quot;)
+// the DataImporter instance for the importer property has not yet been created
+</code></pre>
+
+<p>DataManager 类包含一个名为 data 的存储属性,初始值是一个空的字符串( String )数组。虽然没有写出全部代码, DataManager 类的目的是管理和提供对这个字符串数组的访问。</p>
+
+<p>DataManager 的一个功能是从文件导入数据。该功能由 DataImporter 类提供, DataImporter 完成初始化需要消耗不少时间:因为它的实例在初始化时可能要打开文件,还要读取文件内容到内存。</p>
+
+<p>DataManager 也可能不从文件中导入数据就完成了管理数据的功能。所以当 DataManager 的实例被创建时,没必要创建一个 DataImporter 的实例,更明智的是当第一次用到 DataImporter 的时候才去创建它。</p>
+
+<p>由于使用了 lazy , importer 属性只有在第一次被访问的时候才被创建。比如访问它的属性 fileName时:</p>
+
+<pre><code>println(manager.importer.fileName)
+// the DataImporter instance for the importer property has now been created
+// prints &quot;data.txt&quot;
+</code></pre>
+
+<p>注意:如果一个被标记为 lazy 的属性在没有初始化时就同时被多个线程访问,则无法保证该属性只会被初始化一次。</p>
+
+<h3 id="存储属性和实例变量">存储属性和实例变量</h3>
+
+<p>如果您有过 Objective-C 经验,应该知道 Objective-C 为类实例存储值和引用提供两种方法。对于属性来说,也可以使用实例变量作为属性值的后端存储。</p>
+
+<p>Swift 编程语言中把这些理论统一用属性来实现。Swift 中的属性没有对应的实例变量,属性的后端存储也无法直接访问。这就避免了不同场景下访问方式的困扰,同时也将属性的定义简化成一个语句。一个类型中属性的全部信息——包括命名、类型和内存管理特征——都在唯一一个地方(类型定义中)定义。</p>
+
+<h2 id="计算属性">计算属性</h2>
+
+<p>除存储属性外,类、结构体和枚举可以定义计算属性。计算属性不直接存储值,而是提供一个 getter 和一个可选 的 setter,来间接获取和设置其他属性或变量的值。</p>
+
+<pre><code>struct Point {
+    var x = 0.0, y = 0.0
+}
+struct Size {
+    var width = 0.0, height = 0.0
+}
+struct Rect {
+    var origin = Point()
+    var size = Size()
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            let centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set(newCenter) {
+            origin.x = newCenter.x - (size.width / 2)
+            origin.y = newCenter.y - (size.height / 2)
+        }
+    }
+}
+var square = Rect(origin: Point(x: 0.0, y: 0.0),
+    size: Size(width: 10.0, height: 10.0))
+let initialSquareCenter = square.center
+square.center = Point(x: 15.0, y: 15.0)
+println(&quot;square.origin is now at (\(square.origin.x), \(square.origin.y))&quot;)
+// prints &quot;square.origin is now at (10.0, 10.0)&quot;
+</code></pre>
+
+<p>这个例子定义了 3 个结构体来描述几何形状:</p>
+
+<ul>
+<li>Point 封装了一个(x, y)的坐标</li>
+<li>Size 封装了一个 width 和 height</li>
+<li>Rect 表示一个有原点和尺寸的矩形</li>
+</ul>
+
+<p>Rect 也提供了一个名为 center 的计算属性。一个矩形的中心点可以从原点和尺寸来算出,所以不需要将它以显式声明的Point来保存。Rect的计算属性center提供了自定义的 getter 和 setter 来获取和设置矩形的中心点,就像它有一个存储属性一样。</p>
+
+<p>上述例子中创建了一个名为 square 的 Rect 实例,初始值原点是 (0, 0),宽度高度都是 10。如下图中蓝色正方形所示。</p>
+
+<p>square 的 center 属性可以通过点运算符( square.center )来访问,这会调用该属性的 getter 来获取它的 值。跟直接返回已经存在的值不同,getter 实际上通过计算然后返回一个新的 Point 来表示 square 的中心 点。如代码所示,它正确返回了中心点 (5, 5) 。</p>
+
+<p>center 属性之后被设置了一个新的值 (15, 15) ,表示向右上方移动正方形到如下图橙色正方形所示的位置。设 置属性 center 的值会调用它的 setter 来修改属性 origin 的 x 和 y 的值,从而实现移动正方形到新的位置。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSProperties/1.png" alt="alt text" /></p>
+
+<h3 id="便捷-setter-声明">便捷 setter 声明</h3>
+
+<p>如果计算属性的 setter 没有定义表示新值的参数名,则可以使用默认名称 newValue 。下面是使用了便捷 setter 声明的 Rect 结构体代码:</p>
+
+<pre><code>struct AlternativeRect {
+    var origin = Point()
+    var size = Size()
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            let centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set {
+            origin.x = newValue.x - (size.width / 2)
+            origin.y = newValue.y - (size.height / 2)
+        }
+    }
+}
+</code></pre>
+
+<h3 id="只读计算属性">只读计算属性</h3>
+
+<p>只有 getter 没有 setter 的计算属性就是只读计算属性。只读计算属性总是返回一个值,可以通过点运算符访问,但不能设置新的值。</p>
+
+<p>注意:必须使用 var 关键字定义计算属性,包括只读计算属性,因为它们的值不是固定的。 let 关键字只用来声明常量属性,表示初始化后再也无法修改的值。</p>
+
+<pre><code>struct Cuboid {
+    var width = 0.0, height = 0.0, depth = 0.0
+    var volume: Double {
+        return width * height * depth
+    }
+}
+let fourByFiveByTwo = Cuboid(width: 4.0, height: 5.0, depth: 2.0)
+println(&quot;the volume of fourByFiveByTwo is \(fourByFiveByTwo.volume)&quot;)
+// prints &quot;the volume of fourByFiveByTwo is 40.0&quot;
+</code></pre>
+
+<p>这个例子定义了一个名为 Cuboid 的结构体,表示三维空间的立方体,包含 width 、 height 和 depth 属性。结构体还有一个名为 volume 的只读计算属性用来返回立方体的体积。设置 volume 的值毫无意义,因为无法确定修改 width 、 height 和 depth 三者中的哪些值来匹配新的 volume ,从而造成歧义。然而, Cuboid 提供一个只读计算属性来让外部用户直接获取体积是很有用的。</p>
+
+<h2 id="属性观察器">属性观察器</h2>
+
+<p>属性观察器监控和响应属性值的变化,每次属性被设置值的时候都会调用属性观察器,甚至新的值和现在的值相同的时候也不例外。</p>
+
+<p>可以为除了延迟存储属性之外的其他存储属性添加属性观察器,也可以通过重载属性的方式为继承的属性(包括存储属性和计算属性)添加属性观察器。属性重载请参考重载。</p>
+
+<p>注意:不需要为非重载的计算属性添加属性观察器,因为可以通过它的 setter 直接监控和响应值的变化。</p>
+
+<p>可以为属性添加如下的一个或全部观察器:</p>
+
+<ul>
+<li>willSet 在设置新的值之前调用</li>
+<li>didSet 在新的值被设置之后立即调用</li>
+</ul>
+
+<p>willSet 观察器会将新的属性值作为常量参数传入,在 willSet 的实现代码中可以为这个参数指定一个名称,如果不指定则参数仍然可用,这时使用默认名称 newValue 表示。</p>
+
+<p>类似地, didSet 观察器会将旧的属性值作为参数传入,可以为该参数命名或者使用默认参数名 oldValue 。</p>
+
+<p>注意:父类的属性在子类的构造器中被赋值时,它在父类中的 willSet 和 didSet 观察器会被调用。 有关构造器代理的更多信息,请参考值类型的构造器代理和类的构造器代理规则。</p>
+
+<p>这里是一个 willSet 和 didSet 的实际例子,其中定义了一个名为 StepCounter 的类,用来统计当人步行时的总步数,可以跟计步器或其他日常锻炼的统计装置的输入数据配合使用。</p>
+
+<pre><code>class StepCounter {
+    var totalSteps: Int = 0 {
+        willSet(newTotalSteps) {
+            println(&quot;About to set totalSteps to \(newTotalSteps)&quot;)
+        }
+        didSet {
+            if totalSteps &gt; oldValue  {
+                println(&quot;Added \(totalSteps - oldValue) steps&quot;)
+            }
+        }
+    }
+}
+let stepCounter = StepCounter()
+stepCounter.totalSteps = 200
+// About to set totalSteps to 200
+// Added 200 steps
+stepCounter.totalSteps = 360
+// About to set totalSteps to 360
+// Added 160 steps
+stepCounter.totalSteps = 896
+// About to set totalSteps to 896
+// Added 536 steps
+</code></pre>
+
+<p>StepCounter 类定义了一个 Int 类型的属性 totalSteps,它是一个存储属性,包含 willSet 和 didSet 监视器。</p>
+
+<p>当 totalSteps 设置新值的时候,它的 willSet 和 didSet 监视器都会被调用,甚至当新的值和现在的值完全相同也会调用。</p>
+
+<p>例子中的 willSet 监视器将表示新值的参数自定义为 newTotalSteps,这个监视器只是简单的将新的值输出。</p>
+
+<p>didSet 监视器在 totalSteps 的值改变后被调用,它把新的值和旧的值进行对比,如果总的步数增加了,就输出一个消息表示增加了多少步。didSet 没有为旧的值提供自定义名称,所以默认值 oldValue 表示旧值的参数名。</p>
+
+<p>注意:如果在 didSet 监视器里为属性赋值,这个值会替换监视器之前设置的值。</p>
+
+<h2 id="全局变量和局部变量">全局变量和局部变量</h2>
+
+<p>计算属性和属性观察器所描述的模式也可以用于全局变量和局部变量。全局变量是在函数、方法、闭包或任何类型之外定义的变量。局部变量是在函数、方法或闭包内部定义的变量。</p>
+
+<p>前面章节提到的全局或局部变量都属于存储型变量,跟存储属性类似,它提供特定类型的存储空间,并允许读取和写入。</p>
+
+<p>另外,在全局或局部范围都可以定义计算型变量和为存储型变量定义观察器。计算型变量跟计算属性一样,返回一个计算的值而不是存储值,声明格式也完全一样。</p>
+
+<p>注意:全局的常量或变量都是延迟计算的,跟延迟存储属性相似,不同的地方在于,全局的常量或变量不需要标记 lazy 特性。局部范围的常量或变量不会延迟计算。</p>
+
+<h2 id="类型属性">类型属性</h2>
+
+<p>实例的属性属于一个特定类型实例,每次类型实例化后都拥有自己的一套属性值,实例之间的属性相互独立。</p>
+
+<p>也可以为类型本身定义属性,不管类型有多少个实例,这些属性都只有唯一一份。这种属性就是类型属性。</p>
+
+<p>类型属性用于定义特定类型所有实例共享的数据,比如所有实例都能用的一个常量(就像 C 语言中的静态常量),或者所有实例都能访问的一个变量(就像 C 语言中的静态变量)。</p>
+
+<p>值类型的存储型类型属性可以是变量或常量,计算型类型属性跟实例的计算属性一样只能定义成变量属性。</p>
+
+<p>注意:跟实例的存储属性不同,必须给存储型类型属性指定默认值,因为类型本身无法在初始化过程中使用构造器给类型属性赋值。</p>
+
+<h3 id="类型属性语法">类型属性语法</h3>
+
+<p>在 C 或 Objective-C 中,与某个类型关联的静态常量和静态变量,是作为全局(global)静态变量定义的。但是在 Swift 编程语言中,类型属性是作为类型定义的一部分写在类型最外层的花括号内,因此它的作用范围也就在类型支持的范围内。</p>
+
+<p>使用关键字 static 来定义类型属性。在为类(class)定义计算型类型属性时,可以使用关键字 class 来支持子类对父类的实现进行重写。下面的例子演示了存储型和计算型类型属性的语法:</p>
+
+<pre><code>struct SomeStructure {
+    static var storedTypeProperty = &quot;Some value.&quot;
+    static var computedTypeProperty: Int {
+        // return an Int value here
+    }
+}
+enum SomeEnumeration {
+    static var storedTypeProperty = &quot;Some value.&quot;
+    static var computedTypeProperty: Int {
+        // return an Int value here
+    }
+}
+class SomeClass {
+    class var computedTypeProperty: Int {
+        // return an Int value here
+    }
+}
+</code></pre>
+
+<p>注意:例子中的计算型类型属性是只读的,但也可以定义可读可写的计算型类型属性,跟实例计算属性的语法类似。</p>
+
+<h3 id="获取和设置类型属性的值">获取和设置类型属性的值</h3>
+
+<p>跟实例的属性一样,类型属性的访问也是通过点运算符来进行。但是,类型属性是通过类型本身来获取和设
+置,而不是通过实例。比如:</p>
+
+<pre><code>println(SomeClass.computedTypeProperty)
+// prints &quot;42&quot;
+
+println(SomeStructure.storedTypeProperty)
+// prints &quot;Some value.&quot;
+SomeStructure.storedTypeProperty = &quot;Another value.&quot;
+println(SomeStructure.storedTypeProperty)
+// prints &quot;Another value.&quot;
+</code></pre>
+
+<p>下面的例子定义了一个结构体,使用两个存储型类型属性来表示多个声道的声音电平值,每个声道有一个 0 到 10 之间的整数表示声音电平值。</p>
+
+<p>后面的图表展示了如何联合使用两个声道来表示一个立体声的声音电平值。当声道的电平值是 0,没有一个灯会亮;当声道的电平值是 10,所有灯点亮。本图中,左声道的电平是 9,右声道的电平是 7。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSProperties/2.png" alt="alt text" /></p>
+
+<p>上面所描述的声道模型使用 AudioChannel 结构体的实例来表示:</p>
+
+<pre><code>struct AudioChannel {
+    static let thresholdLevel = 10
+    static var maxInputLevelForAllChannels = 0
+    var currentLevel: Int = 0 {
+        didSet {
+            if currentLevel &gt; AudioChannel.thresholdLevel {
+                // cap the new audio level to the threshold level
+                currentLevel = AudioChannel.thresholdLevel
+            }
+            if currentLevel &gt; AudioChannel.maxInputLevelForAllChannels {
+                // store this as the new overall maximum input level
+                AudioChannel.maxInputLevelForAllChannels = currentLevel
+            }
+        }
+    }
+}
+</code></pre>
+
+<p>结构 AudioChannel 定义了 2 个存储型类型属性来实现上述功能。第一个是 thresholdLevel ,表示声音电平的最大上限阈值,它是一个取值为 10 的常量,对所有实例都可见,如果声音电平高于 10,则取最大上限值 10。</p>
+
+<p>第二个类型属性是变量存储型属性 maxInputLevelForAllChannels ,它用来表示所有 AudioChannel 实例的电平值的最大值,初始值是 0。</p>
+
+<p>AudioChannel 也定义了一个名为 currentLevel 的实例存储属性,表示当前声道现在的电平值,取值为 0 到 10。</p>
+
+<p>属性 currentLevel 包含 didSet 属性观察器来检查每次新设置后的属性值,它有如下两个检查:</p>
+
+<ol>
+<li>如果 currentLevel 的新值大于允许的阈值 thresholdLevel ,属性观察器将 currentLevel 的值限定为阈值 t hresholdLevel 。</li>
+<li>如果前一个修正后的 currentLevel 值大于任何之前任意 AudioChannel 实例中的值,属性观察器将新值保存在静态类型属性 maxInputLevelForAllChannels 中。</li>
+</ol>
+
+<p>注意:在第一个检查过程中, didSet 属性观察器将 currentLevel 设置成了不同的值,但这时不会再次调用属性观察器。</p>
+
+<p>可以使用结构体 AudioChannel 来创建表示立体声系统的两个声道 leftChannel 和 rightChannel :</p>
+
+<pre><code>var leftChannel = AudioChannel()
+var rightChannel = AudioChannel()
+</code></pre>
+
+<p>如果将左声道的电平设置成 7,类型属性 maxInputLevelForAllChannels 也会更新成 7:</p>
+
+<pre><code>leftChannel.currentLevel = 7
+println(leftChannel.currentLevel)
+// prints &quot;7&quot;
+println(AudioChannel.maxInputLevelForAllChannels)
+// prints &quot;7&quot;
+</code></pre>
+
+<p>如果试图将右声道的电平设置成 11,则会将右声道的 currentLevel 修正到最大值 10,同时 maxInputLevelForAllChannels 的值也会更新到 10:</p>
+
+<pre><code>rightChannel.currentLevel = 11
+println(rightChannel.currentLevel)
+// prints &quot;10&quot;
+println(AudioChannel.maxInputLevelForAllChannels)
+// prints &quot;10&quot;
+</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/02/swift%E4%B9%8B%E6%96%B9%E6%B3%95/" data-tooltip="Swift之方法">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/02/swift%E4%B9%8B%E7%B1%BB%E5%92%8C%E7%BB%93%E6%9E%84%E4%BD%93/" data-tooltip="Swift之类和结构体">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f02%2fswift%25E4%25B9%258B%25E5%25B1%259E%25E6%2580%25A7%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f02%2fswift%25E4%25B9%258B%25E5%25B1%259E%25E6%2580%25A7%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f02%2fswift%25E4%25B9%258B%25E5%25B1%259E%25E6%2580%25A7%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/02/swift%E4%B9%8B%E6%96%B9%E6%B3%95/" data-tooltip="Swift之方法">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/02/swift%E4%B9%8B%E7%B1%BB%E5%92%8C%E7%BB%93%E6%9E%84%E4%BD%93/" data-tooltip="Swift之类和结构体">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f02%2fswift%25E4%25B9%258B%25E5%25B1%259E%25E6%2580%25A7%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f02%2fswift%25E4%25B9%258B%25E5%25B1%259E%25E6%2580%25A7%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f02%2fswift%25E4%25B9%258B%25E5%25B1%259E%25E6%2580%25A7%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f02%2fswift%25E4%25B9%258B%25E5%25B1%259E%25E6%2580%25A7%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f02%2fswift%25E4%25B9%258B%25E5%25B1%259E%25E6%2580%25A7%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f02%2fswift%25E4%25B9%258B%25E5%25B1%259E%25E6%2580%25A7%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/02\/swift%E4%B9%8B%E5%B1%9E%E6%80%A7\/';
+          
+            this.page.identifier = '\/2015\/02\/swift%E4%B9%8B%E5%B1%9E%E6%80%A7\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

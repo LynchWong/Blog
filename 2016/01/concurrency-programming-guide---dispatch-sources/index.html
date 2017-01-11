@@ -1,0 +1,1195 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Concurrency Programming Guide - Dispatch Sources</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="官方文档
+">
+    <meta property="og:description" content="官方文档
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Concurrency Programming Guide - Dispatch Sources">
+    <meta property="og:url" content="/2016/01/concurrency-programming-guide---dispatch-sources/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="官方文档
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Concurrency Programming Guide - Dispatch Sources
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2016-01-14T13:51:58Z">
+    
+  
+  
+  
+  
+    2016-01-14 13:51:58
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/%e7%bc%96%e7%a8%8b%e6%8c%87%e5%8d%97">编程指南</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1">官方文档</a>
+</p>
+
+<h1 id="dispatch-sources">Dispatch Sources</h1>
+
+<p>(调度源)</p>
+
+<p>每当你与底层系统交互，你必须为这项任务准备足够长的时间。调用内核或者其它系统层级与你自己的处理比起来代价更昂贵。因此，许多系统库都提供了异步接口允许你的代码提交请求到系统，在请求处理的时候继续执行其它的工作。Grand Central Dispatch构建在允许你提交请求并通过Block和调度队列将结果返回给你的代码的这一通用行为上。</p>
+
+<h2 id="about-dispatch-sources">About Dispatch Sources</h2>
+
+<p>(关于调度源)</p>
+
+<p>一个调度源是一种基础的数据类型，用来协调处理特定的低等级的系统事件。Grand Central Dispatch支持如下几种调度源：</p>
+
+<ul>
+<li>定时器调度源，定期产生通知。</li>
+<li>信号调度源，当<strong>UNIX</strong>信号到达时会通知你。</li>
+<li>描述源，当文件和套接字变化时通知你，比如：
+
+<ul>
+<li>当数据可读。</li>
+<li>当数据可写。</li>
+<li>当文件系统中的文件删除、移动、或者重命名。</li>
+<li>文件源数据信息改变。</li>
+</ul></li>
+<li>进程调度源，通知你进程相关的事件，比如：
+
+<ul>
+<li>当进程退出。</li>
+<li>当进程发起<strong>fork</strong>和<strong>exec</strong>等调用。</li>
+<li>当信号传递给进程。</li>
+</ul></li>
+<li>Mach相关的事件通知。</li>
+<li>你自定义的自己触发的自定义调度源。</li>
+</ul>
+
+<p>调度源替代了异步回调函数来处理系统进程相关的事件。当你配置调度源的时候，你指定想要监控的事件，以及调度队列和处理事件的代码。你可以使用Block对象或者函数来指定你的代码。当你感兴趣的事件到达时，调度源会提交你的Block或者函数到指定的队列进行执行。</p>
+
+<p>不像你手动提交到队列的任务，调度源为你的应用程序持续的提供事件源。一个调度源会保持与调度队列的连接知道你显式的取消。在连接的这段时间，每当对应的事件发生时，就会提交相关的任务代码到调度队列。有些事件，比如定时器事件，都以固定间隔的时间发生，但是大部分都以特定条件零星出现。出于这个原因，调度源会保留与它们关联的调度队列，防止事件在执行的时候队列被过早的释放掉了。</p>
+
+<p>为了防止事件在调度队列上积压，调度源实现了事件合并机制。如果一个新的事件到达时之前的事件已出列在执行，调度源会将新旧事件的数据合并。根据事件类型的不同，合并可能会替换旧事件或者更新旧事件的信息。比如，基于信号的调度源只提供了最近信号的信息，但是也会报道从上次事件处理调用后总共有多少个信号被传递了。</p>
+
+<h2 id="creating-dispatch-sources">Creating Dispatch Sources</h2>
+
+<p>(创建调度源)</p>
+
+<p>创建一个调度源需要同时创建事件源和调度队列本身。事件源是处理事件所需要的本地数据结构。比如，基于描述符的调度源，你需要打开描述符：基于进程的事件，你需要获得目标程序的进程ID。当你有事件源的时候，你可以使用如下步骤创建对应的调度源：</p>
+
+<ol>
+<li>使用<strong>dispatch_source_create</strong>函数创建调度源。</li>
+<li>配置调度源：
+
+<ul>
+<li>给调度源设置一个事件处理器；参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW13"> Writing and Installing an Event Handler </a>。</li>
+<li>对于定时器调度源，关于设置定时器信息使用<a href="https://developer.apple.com/library/prerelease/mac/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html#//apple_ref/c/func/dispatch_source_set_timer"> dispatch_source_set_timer </a>函数；参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW2"> Creating a Timer </a>。</li>
+</ul></li>
+<li>给调度源赋予一个取消处理器，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW14"> Installing a Cancellation Handler </a>(可选)。</li>
+<li>调用<strong>dispatch_resume</strong>函数开始处理事件，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW8"> Suspending and Resuming Dispatch Sources </a>。</li>
+</ol>
+
+<p>因为调度源在使用之前必须进行额外的配置才能被使用，<strong>dispatch_source_create</strong>函数返回一个挂起状态的调度源。在挂起的时候，调度源会接收事件，但是不会处理它们。这时你可以安装事件处理器并执行额外的配置。</p>
+
+<p>接下来的部分将想你展示如何配置调度源的各方面。关于如何配置具体类型的调度源，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW22"> Dispatch Source Examples </a>。关于创建和配置调度源的额外的函数，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html#//apple_ref/doc/uid/TP40008079"> Grand Central Dispatch (GCD) Reference </a>。</p>
+
+<h3 id="writing-and-installing-an-event-handler">Writing and Installing an Event Handler</h3>
+
+<p>(编写和安装一个事件处理器)</p>
+
+<p>为了处理调度源产生的事件，你必须定义一个处理这些事件的事件处理器。一个事件处理器是一个函数或者Block对象，使用<strong>dispatch_source_set_event_handler</strong> 和 <strong>dispatch_source_set_event_handler_f</strong>函数安装是调度源上。当事件到达时，调度源提交你的事件处理器到指定的队列进行处理。</p>
+
+<p>事件处理器的主体负责处理所有到达的事件。如果事件处理器已经在队列中并等待处理已经到达的事件，如果此时又来了一个新事件，调度源会合并这两个事件。事件处理器通常只能看到最新事件的信息，但是取决于调度源的类型，它也可能获得已经合并的事件的信息。如果事件处理器已经开始执行后，又有一个或者多个新的事件到达，调度源会保存这些事件直到当前时间处理器执行完成。在那时，它会使用新的事件将事件处理器再次提交到队列。</p>
+
+<p>基于函数的事件处理器有一个单一的上下文指针，包含调度源对象，没有返回值。基于Block的事件处理器没有参数也没有返回值。</p>
+
+<pre><code>// Block-based event handler
+void (^dispatch_block_t)(void)
+
+// Function-based event handler
+void (*dispatch_function_t)(void *)
+</code></pre>
+
+<p>在事件处理器的内部，你可以从调度源本身获取给定事件的信息。虽然基于函数的事件处理器可以传递指针给调度源当作参数，基于Block的事件处理器必须自己捕获那些指针。一般Block定义时会自动捕获外部定义的变量。比如，如下的代码片段捕获了<strong>source</strong>变量，定义在Block范围之外。</p>
+
+<pre><code>dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ,
+                                                  myDescriptor, 0, myQueue);
+dispatch_source_set_event_handler(source, ^{
+    // Get some data from the source variable, which is captured
+    // from the parent context.
+    size_t estimated = dispatch_source_get_data(source);
+
+    // Continue reading the descriptor...
+});
+dispatch_resume(source);
+</code></pre>
+
+<p>Block内捕获变量通常允许更大的灵活性和动态性。当然，默认捕获的变量是只读的。尽管在一些指定的情形下，Block提供了支持修改捕获变量的功能，但是你不应该在与调度源关联的事件处理器里面这样做。调度源总是异步的执行它们的事件处理器，所以你捕获的变量的定义的范围，在事件处理器执行时已经不存在了。关于Block捕获和使用变量的更多信息，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/Cocoa/Conceptual/Blocks/Articles/00_Introduction.html#//apple_ref/doc/uid/TP40007502"> Blocks Programming Topics </a>。</p>
+
+<p>Table 4-1列出了你可以在事件处理器代码中获取事件信息的函数。</p>
+
+<p>Table 4-1  Getting data from a dispatch source</p>
+
+<p><img src="http://lynchwong.com/blog/img/ConcurrencyProgrammingGuideOperationQueues/1.png" alt="alt text" /></p>
+
+<ul>
+<li><strong>dispatch_source_get_handle</strong>：这个函数返回调度源管理的底层系统的数据类型；对于一个描述符的调度队列，这个函数返回一个<strong>int</strong>类型的值，表示调度源关联的描述符；对于信号调度源，这个函数返回一个<strong>int</strong>类型，表示最新事件的信号数量；对于进程调度源，这个函数会返回一个<strong>pid_t</strong>数据结构，表示被监控的进程；对于一个March端口的调度源，这个函数返回一个<strong>mach_port_t</strong>的数据结构；对于其它的调度源，这个函数的返回值是未定义的。</li>
+<li><strong>dispatch_source_get_data</strong>：这个函数返回与事件相关的所有未决数据；对于一个描述符的调度源，从文件读取数据，这个函数返回可读的字节数量；对于一个描述符的调度源，将数据写入文件，这个函数会返回一个正的整型值表示有空间可以写入；对于一个描述符的调度源，监控文件系统的活动，这个函数会返回一个常量表示发生的事件的类型。关于更多的常量，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html#//apple_ref/doc/constant_group/dispatch_source_vnode_flags_t"> dispatch_source_vnode_flags_t </a>枚举类型；对于一个进程调度源，这个函数返一个常量指示发生的事件的类型。参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html#//apple_ref/doc/constant_group/dispatch_source_proc_flags_t"> dispatch_source_proc_flags_t </a>枚举类型；对于Mach端口调度源，这个函数返回一个常量指示发生的事件的类型，参见<strong>dispatch_source_machport_flags_t</strong>枚举类型；对于一个自定义的调度源，这个函数返回从现有数据创建的新数据，以及传递给<a href="https://developer.apple.com/library/prerelease/mac/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html#//apple_ref/c/func/dispatch_source_merge_data"> dispatch_source_merge_data </a>函数的新数据。</li>
+<li><strong>dispatch_source_get_mask</strong>：这个函数返回我们用来创建调度源的事件标志；对于进程调度源，这个函数返回调度源接收到的事件掩码，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html#//apple_ref/doc/constant_group/dispatch_source_proc_flags_t"> dispatch_source_proc_flags_t </a>枚举类型；对于发送权利的Mach端口调度源，这个函数返回了一个期望事件的掩码，参见<strong>dispatch_source_mach_send_flags_t</strong>枚举类型；对于自定义的OR调度源，这个函数返回用来合并数据值的掩码。</li>
+</ul>
+
+<p>关于如何为指定类型的调度源编写和安装事件处理器的一些例子，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW22"> Dispatch Source Examples </a>。</p>
+
+<h3 id="installing-a-cancellation-handler">Installing a Cancellation Handler</h3>
+
+<p>(安装一个取消处理器)</p>
+
+<p>取消处理器用来在调度源释放之前执行清理操作。对于大多数调度源类型，取消处理器是可选的，除非你对调度源绑定了自定义行为需要在释放时执行。对于描述符和Mach端口调度源必须设置取消处理器，用来关闭描述符或者Mach端口。否则会导致微妙的BUG，这些结构体系被系统其它部分或你的应用在不经意间重用。</p>
+
+<p>你可以在任何时候安装取消处理器，但通常我们在创建调度源的时候就会安装取消处理器。你可以使用<strong>dispatch_source_set_cancel_handler</strong> 或者 <strong>dispatch_source_set_cancel_handler_f</strong>函数来安装取消处理器，取决于你是否想要使用Block对象或者函数来实现。下面的例子展示了一个简单的取消处理器，关闭了一个描述符。这个<strong>fd</strong>变量被描述符捕获。</p>
+
+<pre><code>dispatch_source_set_cancel_handler(mySource, ^{
+    close(fd); // Close a file descriptor opened earlier.
+});
+</code></pre>
+
+<p>参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW6"> Reading Data from a Descriptor </a>获取完整的代码事例。</p>
+
+<h3 id="changing-the-target-queue">Changing the Target Queue</h3>
+
+<p>(修改目标队列)</p>
+
+<p>尽管你在创建调度源时指定了事件和取消处理器运行的队列，你可以在任何时间使用<strong>dispatch_set_target_queue</strong>函数来修改这个队列。当你需要改变调度源事件优先级的时候你可能会这样做。</p>
+
+<p>改变调度源的队列是一个异步操作而且调度源会竭尽所能的快速的改变。如果一个事件处理器已经在队列中并且等待处理，它会在之前的队列上执行。随后到达的所有事件的处理器都会在后面修改的队列中执行。</p>
+
+<h3 id="associating-custom-data-with-a-dispatch-source">Associating Custom Data with a Dispatch Source</h3>
+
+<p>(关联自定义数据到调度源)</p>
+
+<p>类似于Grand Central Dispatch中的其它数据类型，你可以使用<strong>dispatch_set_context</strong>函数给调度源关联自定义数据。你可以使用上下文指针存储任意你事件处理器需要的数据。如果你在上下文指针存储了任何自定义的数据，你也应该安装一个取消处理器，当调度源不再需要这些数据的时候释放这些数据。</p>
+
+<p>如果你使用Block来处理事件处理器，你也可以捕获本地变量然后在基于Block的代码里面使用。这可能会减少你使用上下文指针来给你的调度源存储数据，但是你应该明智的使用Block捕获变量。因为调度源会在你的应用程序中长时间存在，当捕获了包含指针的变量时要特别小心。因为指针指向的数据可能随时被释放，因此你需要复制或者保留防止这种情况发生。不管你用哪种方法，你都应该提供一个取消处理器释放这些数据。</p>
+
+<h3 id="memory-management-for-dispatch-sources">Memory Management for Dispatch Sources</h3>
+
+<p>(调度源的内存管理)</p>
+
+<p>类似于其它的调度对象，调度源也是引用计数的数据类型。初始计数为1，可以使用<strong>dispatch_retain</strong> 和 <strong>dispatch_release</strong>函数来增加和减少引用计数。当引用计数为0时，系统自动释放调度源数据结构。</p>
+
+<p>因为调度源的使用方式，调度源的所有权可以由它自身在内部或者外部进行管理。外部所有权时，另一个对象拥有这个调度源，并负责在不需要时释放它。内部所有权时，调度源自己拥有自己，并负责在合适的时候释放自己。虽然外部所有权很常用，当你想自己创建调度源，并让它自己管理自己的行为时，可以使用内部所有权。比如，一个调度源被设计成为处理单一全局事件，你可以让它自己处理该事件然后立即退出。</p>
+
+<h2 id="dispatch-source-examples">Dispatch Source Examples</h2>
+
+<p>(调度源例子)</p>
+
+<p>接下来的部分展示了如何创建和配置一些常用的调度源。更多关于特定类型的调度源，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html#//apple_ref/doc/uid/TP40008079"> Grand Central Dispatch (GCD) Reference </a>。</p>
+
+<h3 id="creating-a-timer">Creating a Timer</h3>
+
+<p>(创建一个定时器)</p>
+
+<p>定时器调度源定时产生事件。你可以发起定时执行的任务。比如，游戏和其它的图形应用程序，可以使用定时器来更新屏幕或动画。你也可以设置定时器，并在固定间隔事件中检查服务器的新信息。</p>
+
+<p>所有的调度源定时器都是间隔定时器，一旦创建，会按你指定的间隔定期的传递事件。当你创建了定时器调度源，你必须为调度源指定一个期望的定时器事件精度，也就是<strong>leeway</strong>值。这个值让系统能够灵活的管理电源并唤醒内核。比如，系统可以使用这个值提前或者延迟触发定时器，以及更好的与其它系统事件结合。创建自己的定时器时，你应该尽量指定一个<strong>leeway</strong>值。</p>
+
+<p><strong>注意</strong>：就算你指定<strong>leeway</strong>值为0，也不要期望定时器能够按照精确的纳秒来触发事件。系统会尽可能地满足你的需求，但是无法保证完全精确的触发时间。</p>
+
+<p>当计算机休眠的时候，所有的定时器调度源都会挂起。当计算机唤醒的时候，这些调度源定时器也会自动唤醒。取决于定时器的配置，暂停定时器可能会影响下一次触发。如果你使用<strong>dispatch_time</strong>函数或者<strong>DISPATCH_TIME_NOW</strong>常量来设置你的调度源定时器，这个调度源定时器会使用默认的系统时钟来决定何时触发。但是，默认的时钟在计算机休眠的时候不会继续。相反，当你使用<strong>dispatch_walltime</strong>函数来设置定时器调度源，定时器调度源追踪其触发时间的挂钟时间。这后一种选择通常适合触发时间间隔比较大的定时器，因为可以防止事件之间的时间出现大多的浮动。</p>
+
+<p>Listing 4-1展示了一个每30秒触发一次，<strong>leeway</strong>值为1秒的例子。因为间隔相对较大，这个调度源使用<strong>dispatch_walltime</strong>函数创建。定时器会立即触发第一次，之后的事件每30秒触发一次。<strong>MyPeriodicTask</strong> 和 <strong>MyStoreTimer</strong>是自定义函数，你用来重写实现定时器的行为，并将定时器存储高你应用程序的数据结构。</p>
+
+<p>Listing 4-1  Creating a timer dispatch source</p>
+
+<pre><code>dispatch_source_t CreateDispatchTimer(uint64_t interval,
+                                      uint64_t leeway,
+                                      dispatch_queue_t queue,
+                                      dispatch_block_t block)
+{
+    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,
+                                                     0, 0, queue);
+    if (timer)
+    {
+        dispatch_source_set_timer(timer, dispatch_walltime(NULL, 0), interval, leeway);
+        dispatch_source_set_event_handler(timer, block);
+        dispatch_resume(timer);
+    }
+    return timer;
+}
+
+void MyCreateTimer()
+{
+    dispatch_source_t aTimer = CreateDispatchTimer(30ull * NSEC_PER_SEC,
+                                                   1ull * NSEC_PER_SEC,
+                                                   dispatch_get_main_queue(),
+                                                   ^{ MyPeriodicTask(); });
+
+    // Store it somewhere for later use.
+    if (aTimer)
+    {
+        MyStoreTimer(aTimer);
+    }
+}
+</code></pre>
+
+<p>尽管创建一个定时器调度源是接收基于时间的事件的最主要的方式，当然也有其它可选的选项。如果你想在指定的一个时间间隔后执行一个Block，你可以使用<strong>dispatch_after</strong> 和 <strong>dispatch_after_f</strong>。这个函数的行为和<strong>dispatch_async</strong>函数很像，除了允许你指定一个时间值(时间一到就提交Block到队列中执行)。时间值可以指定为相对或者绝对时间。</p>
+
+<h3 id="reading-data-from-a-descriptor">Reading Data from a Descriptor</h3>
+
+<p>(从描述符读取数据)</p>
+
+<p>为了从文件或者套接字读取数据，你必须打开文件或者套接字，然后创建一个<strong>DISPATCH_SOURCE_TYPE_READ</strong>类型的调度源。你指定的事件处理器应该能够读取、处理文件描述符的内容。对于文件，需要读取文件数据，并为应用创建适当的数据结构；对于套接字，需要处理最新接收到的网络数据。</p>
+
+<p>读取数据时，你应该配置描述符使用非阻塞的操作。虽然你可以使用<strong>ispatch_source_get_data</strong>函数查看当前有多少数据可读，这个函数返回的数值在函数调用与真实读取时会发生变化。如果底层文件被截断，或者发生了网络错误，从描述符中读取数据会阻塞当前线程，停止在事件处理器中并阻止调度队列去执行其它任务。对于一个串行队列，这可能会死锁你的队列，即使是并发队列，也会减少能够执行的任务数量。</p>
+
+<p>Listing 4-2展示配置一个调度源读取文件数据的例子。在这个例子中，事件处理器读取了指定文件的所有内容到缓冲区，并调用一个自定义函数(定义在你自己的代码中)来处理这些数据。(这个函数的调用者可能会使用返回的调度源来取消，当读取操作完成时。)为了确保调度队列在没有可读数据时发生不必要的阻塞，这个例子使用了<strong>fcntl</strong>函数来配置文件描述符来执行非阻塞的操作。安装给调度源的取消处理器确保文件描述符在数据读取完成后关闭文件描述符。</p>
+
+<p>Listing 4-2  Reading data from a file</p>
+
+<pre><code>dispatch_source_t ProcessContentsOfFile(const char* filename)
+{
+    // Prepare the file for reading.
+    int fd = open(filename, O_RDONLY);
+    if (fd == -1)
+        return NULL;
+    fcntl(fd, F_SETFL, O_NONBLOCK);  // Avoid blocking the read operation
+
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_source_t readSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ,
+                                                          fd, 0, queue);
+    if (!readSource)
+    {
+        close(fd);
+        return NULL;
+    }
+
+    // Install the event handler
+    dispatch_source_set_event_handler(readSource, ^{
+        size_t estimated = dispatch_source_get_data(readSource) + 1;
+        // Read the data into a text buffer.
+        char* buffer = (char*)malloc(estimated);
+        if (buffer)
+        {
+            ssize_t actual = read(fd, buffer, (estimated));
+            Boolean done = MyProcessFileData(buffer, actual);  // Process the data.
+
+            // Release the buffer when done.
+            free(buffer);
+
+            // If there is no more data, cancel the source.
+            if (done)
+                dispatch_source_cancel(readSource);
+        }
+    });
+
+    // Install the cancellation handler
+    dispatch_source_set_cancel_handler(readSource, ^{close(fd);});
+
+    // Start reading the file.
+    dispatch_resume(readSource);
+    return readSource;
+}
+</code></pre>
+
+<p>在上面的例子中，自定义的函数<strong>MyProcessFileData</strong>确定读取到足够的数据，调度源可以取消。默认情况下，一个调度源配置的是还有数据可读时，会重复调度事件处理器。如果套接字关闭或者到达文件末尾，调度源自动停止调度事件处理器。如果你自己确定不再需要调度源，也可以手动取消它。</p>
+
+<h3 id="writing-data-to-a-descriptor">Writing Data to a Descriptor</h3>
+
+<p>(向描述符写入数据)</p>
+
+<p>向文件和套接字写入数据的过程和读取数据的过程非常相似。为写入操作配置了描述符后，你可以创建一个<strong>DISPATCH_SOURCE_TYPE_WRITE</strong>类型的调度源。一旦调度源创建，系统就会调用你的事件处理器，让它有机会开始向文件或者套接字写入数据。当你完成了写入数据，使用<strong>dispatch_source_cancel</strong>函数取消调度源。</p>
+
+<p>写入数据时，你应该总是配置你的描述符是非阻塞操作的。尽管你可以使用<strong>dispatch_source_get_data</strong>函数查看还有多少空间可以写入，这函数的返回值仅供参考，在函数调用与实际写入之间可能会改变。如果发生了错误，写入数据到阻塞的文件描述符会使事件处理器停止在执行中途，并且会阻止调度队列执行其它的任务。对于串行队列，这可能会死锁队列，即使是并发队列，也会减少能够执行的任务数量。</p>
+
+<p>Listing 4-3展示了使用调度源将数据写入文件的基本方法。在创建了新文件后，这个函数传递文件描述符给事件处理器。写入文件的数据由<strong>MyGetData</strong>函数提供，你可以使用自己的代码替换。在写入数据到文件之后，事件处理器取消了调度源防止再次调用。调度源的拥有者负责之后释放调度源。</p>
+
+<p>Listing 4-3  Writing data to a file</p>
+
+<pre><code>dispatch_source_t WriteDataToFile(const char* filename)
+{
+    int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC,
+                  (S_IRUSR | S_IWUSR | S_ISUID | S_ISGID));
+    if (fd == -1)
+        return NULL;
+    fcntl(fd, F_SETFL); // Block during the write.
+
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_source_t writeSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_WRITE,
+                                                           fd, 0, queue);
+    if (!writeSource)
+    {
+        close(fd);
+        return NULL;
+    }
+
+    dispatch_source_set_event_handler(writeSource, ^{
+        size_t bufferSize = MyGetDataSize();
+        void* buffer = malloc(bufferSize);
+
+        size_t actual = MyGetData(buffer, bufferSize);
+        write(fd, buffer, actual);
+
+        free(buffer);
+
+        // Cancel and release the dispatch source when done.
+        dispatch_source_cancel(writeSource);
+    });
+
+    dispatch_source_set_cancel_handler(writeSource, ^{close(fd);});
+    dispatch_resume(writeSource);
+    return (writeSource);
+}
+</code></pre>
+
+<h3 id="monitoring-a-file-system-object">Monitoring a File-System Object</h3>
+
+<p>(监控文件系统对象)</p>
+
+<p>如果你想监控文件系统对象的改变，你可以设置一个<strong>DISPATCH_SOURCE_TYPE_VNODE</strong>类型的调度源。当一个文件删除、写入、重命名的时候你可以使用这个调度源接收通知。当文件指定类型的源数据改变时你也能收到提醒。</p>
+
+<p><strong>注意</strong>：当调度源正在处理事件时，指定给调度源的文件描述符必须保持打开状态。</p>
+
+<p>Listing 4-4展示了一个监控文件名字，当改变时执行了一些自定义行为的例子。(你应该提供你自己的行为，替换例子中<strong>MyUpdateFileName</strong>函数。)因为一个文件描述符专门为调度源打开，调度源安装了取消处理器来关闭文件描述符。这个例子中的文件描述符关联了底层文件系统对象，同一个调度源可以用来检测多次文件名变化。</p>
+
+<p>Listing 4-4  Watching for filename changes</p>
+
+<pre><code>dispatch_source_t MonitorNameChangesToFile(const char* filename)
+{
+    int fd = open(filename, O_EVTONLY);
+    if (fd == -1)
+        return NULL;
+
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
+                                                      fd, DISPATCH_VNODE_RENAME, queue);
+    if (source)
+    {
+        // Copy the filename for later use.
+        int length = strlen(filename);
+        char* newString = (char*)malloc(length + 1);
+        newString = strcpy(newString, filename);
+        dispatch_set_context(source, newString);
+
+        // Install the event handler to process the name change
+        dispatch_source_set_event_handler(source, ^{
+            const char*  oldFilename = (char*)dispatch_get_context(source);
+            MyUpdateFileName(oldFilename, fd);
+        });
+
+        // Install a cancellation handler to free the descriptor
+        // and the stored string.
+        dispatch_source_set_cancel_handler(source, ^{
+            char* fileStr = (char*)dispatch_get_context(source);
+            free(fileStr);
+            close(fd);
+        });
+
+        // Start processing events.
+        dispatch_resume(source);
+    }
+    else
+        close(fd);
+
+    return source;
+}
+</code></pre>
+
+<h3 id="monitoring-signals">Monitoring Signals</h3>
+
+<p>(监测信号)</p>
+
+<p>UNIX信号允许来自应用程序域外的操作。一个应用程序可以接受许多不同类型的信号，比如不可恢复的错误(非法指令)，或重要信息的通知(比如子进程退出)。传统编程中，应用程序使用<strong>sigaction</strong>函数安装信号处理器函数，当信号到达时尽可能快的同步处理信号。如果你只是想信号到达时得到通知，并不想实际的处理该信号，你可以使用信号调度源来异步的处理信号。</p>
+
+<p>信号调度源不能替代<strong>sigaction</strong>函数安装的同步信号处理器。同步信号处理器能够捕获一个信号，并阻止它中止应用程序。而信号调度源只允许你监测信号的到达。此外，你不能使用信号调度源获取所有类型的信号。你不能使用信号调度源监测<strong>SIGILL</strong>, <strong>SIGBUS</strong>, 和 <strong>SIGSEGV</strong>信号。</p>
+
+<p>因为信号调度源在队列上是异步执行的，它没有同步信号处理器的一些限制。比如，信号调度源的事件处理器可以调用任何函数。灵活性增大的代价是，信号到达和调度源事件处理器调用的延迟可能会增大。</p>
+
+<p>Listing 4-5向你展示了如何配置一个信号调度源来处理<strong>SIGHUP</strong>信号。这个调度源事件处理器调用<strong>MyProcessSIGHUP</strong>函数，你应该替换为你自己处理信号的代码。</p>
+
+<p>Listing 4-5  Installing a block to monitor signals</p>
+
+<pre><code>void InstallSignalHandler()
+{
+    // Make sure the signal does not terminate the application.
+    signal(SIGHUP, SIG_IGN);
+
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGHUP, 0, queue);
+
+    if (source)
+    {
+        dispatch_source_set_event_handler(source, ^{
+            MyProcessSIGHUP();
+        });
+
+        // Start processing signals
+        dispatch_resume(source);
+    }
+}
+</code></pre>
+
+<p>如果你在开发一个自定义的框架，信号调度源的一种高级用法就是可以监控任何链接的应用程序的信号。信号调度源不是其它调度源的接口或者应用程序安装的同步信号处理器。</p>
+
+<p>更多关于实现同步信号处理器的信息，以及信号名称，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man3/signal.3.html#//apple_ref/doc/man/3/signal"> signal </a>。</p>
+
+<h3 id="monitoring-a-process">Monitoring a Process</h3>
+
+<p>(监控进程)</p>
+
+<p>进程调度源可以监控特定进程的行为，并适当的响应。父进程可以使用这种调度源监控所有子进程的创建。比如，监控子进程的死亡。类似的，子进程也可以使用这种调度源监控父进程，在父进程退出时自己也退出。</p>
+
+<p>Listing 4-6展示了安装一个监控父进程终结的调度源的步骤。当父进程退出时，调度源设置一些内部状态的信息，告知子进程应该退出了。(你自己的应用程序应该实现*8MySetAppExitFlag**函数，设置合适终结的标识。)因为调度源是自主运行的，因此自己拥有自己，在程序关闭时会取消并释放自己。</p>
+
+<p>Listing 4-6  Monitoring the death of a parent process</p>
+
+<pre><code>void MonitorParentProcess()
+{
+    pid_t parentPID = getppid();
+
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC,
+                                                      parentPID, DISPATCH_PROC_EXIT, queue);
+    if (source)
+    {
+        dispatch_source_set_event_handler(source, ^{
+            MySetAppExitFlag();
+            dispatch_source_cancel(source);
+            dispatch_release(source);
+        });
+        dispatch_resume(source);
+    }
+    }
+</code></pre>
+
+<h2 id="canceling-a-dispatch-source">Canceling a Dispatch Source</h2>
+
+<p>(取消一个调度源)</p>
+
+<p>调度源会一直保持活动，直到你显式的使用<strong>dispatch_source_cancel</strong>函数。取消一个调度源会停止递送新事件，并且不能撤销。因此，通常你在取消后就立即释放它，如下所示：</p>
+
+<pre><code>void RemoveDispatchSource(dispatch_source_t mySource)
+{
+    dispatch_source_cancel(mySource);
+    dispatch_release(mySource);
+}
+</code></pre>
+
+<p>取消一个调度源是异步操作。调用<strong>dispatch_source_cancel</strong>函数后不会再有新的事件被处理，但是正在被处理的事件会继续被处理完成。在处理完最后的事件之后，调度源会执行自己的取消处理器。</p>
+
+<p>取消处理器是你最后的机会，在那里执行内存或资源的释放工作。如果你的调度源使用了文件描述符或者mach端口，你必须提供取消处理器在取消发生的时候关闭文件描述符或者摧毁端口。其它类型的调度源并不要求取消处理器，尽管如此，你仍然应该提供一个，如果你的调度源关联了内存或者数据。比如，你的调度源上下文指针存储了数据，你就应该提供一个。更多关于取消处理器的信息，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW14"> Installing a Cancellation Handler </a>。</p>
+
+<h2 id="suspending-and-resuming-dispatch-sources">Suspending and Resuming Dispatch Sources</h2>
+
+<p>(挂起和恢复调度源)</p>
+
+<p>你可以使用<strong>dispatch_suspend</strong> 和 <strong>dispatch_resume</strong>函数临时的挂起和继续调度源的事件传递。这个函数分别增加和减少调度对象的挂起计数。因此，你必须每次<strong>dispatch_suspend</strong>调用之后，都需要<strong>dispatch_resume</strong>才能继续事件的传递。</p>
+
+<p>当调度源挂起，在挂的时发生的所有事件都会被积压直到调度源恢复。当队列恢复时，不是传递所有的事件，而是传递一个合并的单一事件。比如，如果你在监控文件名的变化，传递的事件只包括最后一次名字的改变。以这种方式合并事件，防止它们建立在队列中，当工作恢复时压倒你的应用程序。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/concurrency-programming-guide---migrating-away-from-threads/" data-tooltip="Concurrency Programming Guide - Migrating Away from Threads">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/concurrency-programming-guide---dispatch-queues/" data-tooltip="Concurrency Programming Guide - Dispatch Queues">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---dispatch-sources%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---dispatch-sources%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---dispatch-sources%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/concurrency-programming-guide---migrating-away-from-threads/" data-tooltip="Concurrency Programming Guide - Migrating Away from Threads">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/concurrency-programming-guide---dispatch-queues/" data-tooltip="Concurrency Programming Guide - Dispatch Queues">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---dispatch-sources%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---dispatch-sources%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---dispatch-sources%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---dispatch-sources%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---dispatch-sources%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---dispatch-sources%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2016\/01\/concurrency-programming-guide---dispatch-sources\/';
+          
+            this.page.identifier = '\/2016\/01\/concurrency-programming-guide---dispatch-sources\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

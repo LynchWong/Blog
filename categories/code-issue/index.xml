@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Code Issue on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/categories/code-issue/index.xml</link>
+    <description>Recent content in Code Issue on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/categories/code-issue/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>关于使用Dispatch Sources的一个BUG</title>
+      <link>http://lynchwong.com/blog/2016/03/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8dispatch-sources%E7%9A%84%E4%B8%80%E4%B8%AAbug/</link>
+      <pubDate>Thu, 03 Mar 2016 09:26:11 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/03/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8dispatch-sources%E7%9A%84%E4%B8%80%E4%B8%AAbug/</guid>
+      <description>&lt;p&gt;之前有在这篇博客&lt;a href=&#34;http://lynchwong.com/2016/01/29/URL-Session-Programming-Guide-Introduction/&#34;&gt; URL Session Programming Guide - Introduction &lt;/a&gt;提到在翻译完&lt;a href=&#34;http://lynchwong.com/2016/01/14/Concurrency-Programming-Guide-Introduction/&#34;&gt; 并发变成指南 &lt;/a&gt;后有要做一个图片轮播的需求，是使用的&lt;strong&gt;DISPATCH_SOURCE_TYPE_TIMER&lt;/strong&gt;类型的Dispatch Sources来做时间控制进行轮播的而没有使用NSTimer。这个在后来引起了一个BUG，实在是无心之过。
+&lt;/p&gt;
+
+&lt;h1 id=&#34;源码&#34;&gt;源码&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;import UIKit
+
+public class RollingPlayPicture: UIView {
+
+    private let playTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue())
+
+    ....
+    ....
+
+    private func setupData() {
+        if imageNumbers &amp;gt; 1 {
+            dispatch_source_set_timer(playTimer, dispatch_walltime(nil, 0), UInt64(interval) * NSEC_PER_SEC, 0 * NSEC_PER_SEC)
+            dispatch_source_set_event_handler(playTimer, task)
+            dispatch_resume(playTimer)
+        }
+    }
+
+    private func task() {
+        if currentIndex == imageNumbers - 1 {
+            currentIndex = 0
+        } else {
+            currentIndex += 1;
+        }
+        let offsetX = bounds.width * CGFloat(currentIndex)
+        UIView.animateWithDuration(0.2) { () -&amp;gt; Void in
+            self.pageControl.currentPage = self.currentIndex
+            self.scrollView.contentOffset = CGPoint(x: offsetX, y: self.scrollView.contentOffset.y)
+        }
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码大概是这样子的，由于使用的Swift，所以我直接声明初始化了常量属性playTimer。然后在imageNumbers即图片数量大于1的时候就对playTimer进行相关的设置，当时我觉得这个判断真TMD机智。其实后来才发现，不加这个判断就不会有BUG，不会崩溃。每隔interval秒都会执行task，task就是轮播的简单动画。&lt;/p&gt;
+
+&lt;h1 id=&#34;定位bug&#34;&gt;定位BUG&lt;/h1&gt;
+
+&lt;p&gt;当时出现BUG的时候定位了很久，首先崩溃的时候没有任何信息，没有定位到具体的哪一行代码。一开始我是在测试环境下测试的，那时候没有任何问题。但是崩溃是出现在线上环境，所以我们一直以为是环境的问题。但是也找不到具体问题是在哪。&lt;/p&gt;
+
+&lt;p&gt;后来才发现跟图片数量有关，而测试环境返回的图片数量是2，线上环境返回的1。&lt;/p&gt;
+
+&lt;p&gt;按照上面的源码，当图片的数量等于0的时候我在ViewController里面是不会创建轮播视图的，这时候是没有什么问题的。当图片数量大于1的时候，图片是会正常轮播的，没有任何问题。问题恰好就是当图片数量等于1的时候才会出现问题，BUG现象就是离开轮播的ViewController的时候会崩溃。所以产生BUG的条件就是图片的数量是等于1的时候。&lt;/p&gt;
+
+&lt;h1 id=&#34;解决bug&#34;&gt;解决BUG&lt;/h1&gt;
+
+&lt;p&gt;跟图片数量有关，而正好是1的时候才会崩溃。根据之前的图片数量大于1的判断，当图片数量等于1时if里面的代码是没有执行的，其它情况都是正常的(等于1和大于1)。所以崩溃肯定是跟Dispatch Sources有关了。当我取消了图片大于1的时候崩溃就没有了，我做这个判断就是规避图片等于1时不需要轮播，因为一张图片没什么好轮播的。&lt;/p&gt;
+
+&lt;p&gt;做了其它测试发现只要&lt;strong&gt;dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue())&lt;/strong&gt;和设置playTimer的代码(即if里面的代码)没有一起执行就会崩溃。&lt;/p&gt;
+
+&lt;p&gt;当时BUG出现的时候我已经回家了，是同事解决的，他直接使用了NSTimer，删除了Dispatch Sources相关的代码。&lt;/p&gt;
+
+&lt;p&gt;当然你也可以把这些代码放到一起执行也不会有BUG，即把playTimer的初始化方法图片数量判断的if里面去就行了。&lt;/p&gt;
+
+&lt;h1 id=&#34;产生bug的原因&#34;&gt;产生BUG的原因&lt;/h1&gt;
+
+&lt;p&gt;那是只知道只要这些代码没有一起执行就会引发崩溃，不知道真正的原因。所以我就先回头看了之前翻译的&lt;a href=&#34;http://lynchwong.com/2016/01/14/Concurrency-Programming-Guide-Dispatch-Sources/&#34;&gt; Concurrency Programming Guide - Dispatch Sources &lt;/a&gt;，还是不明白什么原因引起的。后来经同事提醒可能是因为挂起和恢复状态引起的崩溃。&lt;/p&gt;
+
+&lt;p&gt;在博文里面有提到：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;h1 id=&#34;creating-dispatch-sources&#34;&gt;Creating Dispatch Sources&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;因为调度源在使用之前必须进行额外的配置才能被使用，dispatch_source_create函数返回一个挂起状态的调度源。在挂起的时候，调度源会接收事件，但是不会处理它们。这时你可以安装事件处理器并执行额外的配置。&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;所以这里我们可以得出我们源码里面的playTimer是处于挂起状态的。&lt;/p&gt;
+
+&lt;p&gt;然后在最后一个章节Suspending and Resuming Dispatch Sources里面有提到：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;h1 id=&#34;suspending-and-resuming-dispatch-sources&#34;&gt;Suspending and Resuming Dispatch Sources&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;你可以使用dispatch_suspend 和 dispatch_resume函数临时的挂起和继续调度源的事件传递。这个函数分别增加和减少调度对象的挂起计数。因此，你必须每次dispatch_suspend调用之后，都需要dispatch_resume才能继续事件的传递。&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;从这里我们得知，重点就是挂起和恢复的函数要成对调用(要达到平衡)，因为这两个函数会增加和减少挂起计数(这个计数可能跟引用计数类似或者就是同一个计数，我也不知道。)。&lt;/p&gt;
+
+&lt;p&gt;官方文档的原话就是：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;h1 id=&#34;suspending-and-resuming-dispatch-sources-1&#34;&gt;Suspending and Resuming Dispatch Sources&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;You can suspend and resume the delivery of dispatch source events temporarily using the dispatch_suspend and dispatch_resume methods. These methods increment and decrement the suspend count for your dispatch object. As a result, you must balance each call to dispatch_suspend with a matching call to dispatch_resume before event delivery resumes.&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;文档里面提到的是suspend count，这个跟引用计数的英文应该不一样吧，我书读的少，我也不管了。&lt;/p&gt;
+
+&lt;p&gt;所以我们来分析下，只要我们创建轮播视图，就会声明初始化playTimer这个常量属性，并且playTimer是处于挂起状态。所以我同事就说了，一开始挂起计数就增加了。然后当图片数量等于1的时候，里面的dispatch_resume函数没有执行，然后在退出时，挂起计数没有减少。没有达到平衡，所以就出现了崩溃。&lt;/p&gt;
+
+&lt;p&gt;尼玛，我读文档的时候，文档根本就没说这些啊。文档只说了你的调用要成对出现啊，要平衡啊。我就初始化了下，什么都没做啊你就让我崩溃了。&lt;/p&gt;
+
+&lt;p&gt;我读文档的时候把重点放在了你的调用要成对出现，既然我什么都没调用，所以我觉得就是没问题的啊。我感觉我是被坑了，唉，其实是我书读的太少了，想的太少了，不知道文字背后这一层意思。&lt;/p&gt;
+
+&lt;p&gt;一开始的时候我各种Google、Stackoverflow发现了很多OC版写的&lt;strong&gt;DISPATCH_SOURCE_TYPE_TIMER&lt;/strong&gt;类型的Dispatch Sources。他们也都是使用属性声明了dispatch_source_t，但是大家都知道OC不能像Swift这样直接初始化。肯定都在代码里面跟另外的代码一起执行了(即初始化和设置的代码放在一起执行)，并且我发现他们的代码路径不管是怎样的，那些代码都是一起执行的(即初始化和设置的代码放在一起执行)。所以我想我当时要是使用OC写这个轮播，可能这个BUG就这么错过了。因为我肯定也是先声明dispatch_source_t的属性，然后在使用的时候进行初始化，然后紧跟着就设置、调用dispatch_resume方法。&lt;/p&gt;
+
+&lt;p&gt;以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>iOS提交App包</title>
+      <link>http://lynchwong.com/blog/2015/10/ios%E6%8F%90%E4%BA%A4app%E5%8C%85/</link>
+      <pubDate>Tue, 27 Oct 2015 15:45:05 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/10/ios%E6%8F%90%E4%BA%A4app%E5%8C%85/</guid>
+      <description>&lt;p&gt;前两天打包项目提交App Store的时候一直提交不上去，根据提示的错误信息网上都说是网络的问题，多提交几次就行了。所以刚开始的时候并不在意，过一会再提交。
+&lt;/p&gt;
+
+&lt;p&gt;过了一会再去提交的时候还是相同的问题，提交不上去。后来验证二进制包，有时能通过有时不能通过，就算通过了还是上传不上去。后来就改用&lt;strong&gt;Application Loader&lt;/strong&gt;来提交，然后就报了错误：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ERROR ITMS-90056: &amp;quot;This bundle is invalid. The Info.plist file is missing the required key: CFBundleVersion.&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;回头去看项目的Info.plist文件，发现确实是有CFBundleVersion的，所以就重新打包，结果还是报这个错。各种修改版本号等等，又打包了几次仍然报这个错。&lt;/p&gt;
+
+&lt;p&gt;关键时刻还是&lt;strong&gt;StackOverflow&lt;/strong&gt;给力啊，搜索到了解决方案：&lt;a href=&#34;http://stackoverflow.com/questions/33312621/this-bundle-is-invalid-the-info-plist-file-is-missing-the-required-key-cfbundl&#34;&gt; This bundle is invalid. The Info.plist file is missing the required key: CFBundleVersion &lt;/a&gt;。原因就是因为项目里面的框架的CFBundleVersion是空值导致的，比如Facebook Pop。正好另外一个同事在项目里面加了Facebook Pop，除了这个还把其他框架的CFBundleVersion的值改成了和项目相同的CFBundleVersion值。&lt;/p&gt;
+
+&lt;p&gt;这个Info.plist里的CFBundleVersion值就是我们项目Targets-&amp;gt;General-&amp;gt;Build的值。&lt;/p&gt;
+
+&lt;p&gt;最后解决了问题，提交成功。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Debug/Release等编译模式</title>
+      <link>http://lynchwong.com/blog/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Sun, 25 Oct 2015 00:07:53 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</guid>
+      <description>&lt;p&gt;通常我们的App有多种不同的编译模式，比如&lt;strong&gt;Debug&lt;/strong&gt;、&lt;strong&gt;Release&lt;/strong&gt;。我们在开发的时候大都是&lt;strong&gt;Debug&lt;/strong&gt;模式，发布的时候会选择&lt;strong&gt;Release&lt;/strong&gt;模式。通常我们的服务请求地址也会根据编译模式来进行不同的选择。当然系统已经给我们定义好了这两种编译模式，但有时候我们不止需要两种，我可以自己添加额外的编译模式。
+&lt;/p&gt;
+
+&lt;p&gt;假设我们有3种环境，开发、测试、发布。开发是开发人员使用的环境；测试是测试人员使用的环境；发布是App正式上线之后使用的环境。那么我们就需要3种编译模式，测试对应&lt;strong&gt;Debug&lt;/strong&gt;、发布对应&lt;strong&gt;Release&lt;/strong&gt;，那么还需要添加另外一种编译模式。这里我们假设就需要添加一种叫做&lt;strong&gt;Develop&lt;/strong&gt;的编译模式。&lt;/p&gt;
+
+&lt;p&gt;我们新建一个项目，语言选择OC。然后我们替换&lt;strong&gt;ViewController.m&lt;/strong&gt;文件内容如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#import &amp;quot;ViewController.h&amp;quot;
+
+@interface ViewController ()
+
+@end
+
+@implementation ViewController
+
+#ifdef DEBUG
+    #define kWidth 100.0f
+#elif RELEASE
+    #define kWidth 200.0f
+#else
+    #define kWidth 300.0f
+#endif
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+    NSLog(@&amp;quot;kWidht : %f&amp;quot;, kWidth);
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+@end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里我们在3种不同的环境下定义了&lt;strong&gt;kWidth&lt;/strong&gt;常量，然后我们打印这个常量，运行之后输出如下结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-10-25 13:48:01.217 DebugRelease[1193:76047] kWidht : 100.000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;项目新建之后我们没有对Scheme做任何更改，默认Scheme截图如下，模拟器运行是在&lt;strong&gt;DEBUG&lt;/strong&gt;模式下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;修改Scheme，将&lt;strong&gt;Build Configuration&lt;/strong&gt;修改为Release，截图如下；&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;运行之后控制台输出：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-10-25 14:01:37.186 DebugRelease[1360:87151] kWidht : 300.000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;跟我们预想的有些不一样，按照逻辑来说应该输出：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-10-25 14:05:10.454 DebugRelease[1430:90460] kWidht : 200.000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来我们做下修改就好了，截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图中所示，我们在&lt;strong&gt;Build Settings&lt;/strong&gt;中搜索macro，然后发现&lt;strong&gt;Release&lt;/strong&gt;这一项是没值的，所以到了另外一个分支里面，输出了其他结果。&lt;strong&gt;Debug&lt;/strong&gt;已经默认设置好了，所以我们这里设置一下值就好了，设置为&lt;strong&gt;RELEASE=1 $(inherited)&lt;/strong&gt;，运行之后输出结果就对了。&lt;/p&gt;
+
+&lt;p&gt;这里我们还需要添加一种编译模式，如最开始的时候说的&lt;strong&gt;Develop&lt;/strong&gt;模式。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们点击&lt;strong&gt;+&lt;/strong&gt;号来添加一个编译模式，叫&lt;strong&gt;Develop&lt;/strong&gt;。截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后我们修改Scheme为&lt;strong&gt;Develop&lt;/strong&gt;，运行后输出：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-10-25 14:19:55.663 DebugRelease[1555:100946] kWidht : 200.000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是因为我是按照&lt;strong&gt;Release&lt;/strong&gt;模式来设置&lt;strong&gt;Develop&lt;/strong&gt;的，如果我们去&lt;strong&gt;Build Settings&lt;/strong&gt;里面去看就会发现&lt;strong&gt;Develop&lt;/strong&gt;模式的值和&lt;strong&gt;Release&lt;/strong&gt;的值是一样的，所以输出的结果也是一样的。如果你是按照按照&lt;strong&gt;Debug&lt;/strong&gt;模式来设置&lt;strong&gt;Develop&lt;/strong&gt;，那么输出的结果就是和&lt;strong&gt;Debug&lt;/strong&gt;的值一样。所以我们这里修改下&lt;strong&gt;Develop&lt;/strong&gt;的值，修改为&lt;strong&gt;DEVELOP=1 $(inherited)&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;运行后的结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-10-25 14:25:07.919 DebugRelease[1584:104028] kWidht : 300.000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;判断编译模式的代码也可以修改为如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#ifdef DEBUG
+    #define kWidth 100.0f
+#elif RELEASE
+    #define kWidth 200.0f
+#elif DEVELOP
+    #define kWidth 300.0f
+#endif
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这种方式可能会导致没有&lt;strong&gt;kWidth&lt;/strong&gt;这个常量，当其他的同事定义使用了其他的编译模式时就会出现这个问题。原来的代码始终会有一个&lt;strong&gt;kWidth&lt;/strong&gt;常量，只是值可能不是你期望的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>storyboard、xib、AutoLayout实现UILabel自动换行</title>
+      <link>http://lynchwong.com/blog/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/</link>
+      <pubDate>Thu, 22 Oct 2015 22:23:20 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/</guid>
+      <description>&lt;p&gt;UILabel自动换行的这种需求随处可见的，基本上大家都会，几行代码就能解决。&lt;/p&gt;
+
+&lt;p&gt;大多数开发者都是使用代码实现这种需求的，当然使用自动布局，xib，storyboard也能实现，接下来就来看看这两种方法。
+&lt;/p&gt;
+
+&lt;p&gt;新建一个项目，然后在SB中拖放一个UILabel，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;布局如图中所示，居中在ViewController中，然后我们@IBOutlet到ViewController。&lt;/p&gt;
+
+&lt;p&gt;在&lt;strong&gt;viewDidLoad()&lt;/strong&gt;方法中设置UILabel的文本信息，尽量设置超出长度。运行后如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;自动布局换行&#34;&gt;自动布局换行&lt;/h1&gt;
+
+&lt;p&gt;现在我们来实现这以功能：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;设置Lines为0；&lt;/li&gt;
+&lt;li&gt;设置UILabel的高为0；&lt;/li&gt;
+&lt;li&gt;设置高度的约束小于等于1200；&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/3.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/4.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;运行后截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;代码实现换行&#34;&gt;代码实现换行&lt;/h1&gt;
+
+&lt;p&gt;在&lt;strong&gt;ViewController&lt;/strong&gt;的&lt;strong&gt;viewDidLoad()&lt;/strong&gt;方法中添加如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let anotherLabel = UILabel(frame: CGRect(x: 0.0, y: 20.0, width: 192, height: 21))
+anotherLabel.text = &amp;quot;Do any additional setup after loading the view, typically from a nib.&amp;quot;
+anotherLabel.numberOfLines = 0
+anotherLabel.textAlignment = NSTextAlignment.Center
+view.addSubview(anotherLabel)
+
+let attributesDic = [NSFontAttributeName: anotherLabel.font]
+let labelSize = (anotherLabel.text! as NSString).boundingRectWithSize(CGSize(width: 192, height: CGFloat.max),
+    options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attributesDic, context: nil).size
+anotherLabel.frame = CGRect(x: 0.0, y: 20.0, width: labelSize.width, height: labelSize.height)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行后效果如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/UILabelDemo&#34;&gt; 完整源码 &lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>UIButton传递参数</title>
+      <link>http://lynchwong.com/blog/2015/08/uibutton%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</link>
+      <pubDate>Sun, 09 Aug 2015 16:23:22 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/08/uibutton%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</guid>
+      <description>&lt;p&gt;今天开发自己项目的时候有个需求，需要&lt;strong&gt;UIButton&lt;/strong&gt;的Action传递多个参数。项目里的实际需求是需要传递&lt;strong&gt;NSIndexPath&lt;/strong&gt;，如果只需要section或者row那很好办，设置tag就可以了。但是两个都需要，所以就要传递对象过去了。这里就涉及到了OBJC运行时，使用关联对象就很好办了。
+&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/chenglibin1988/article/details/27549925&#34;&gt; 【iOS】UIButton 传递多个参数的方法 &amp;mdash;&amp;ndash;使用关联函数 &lt;/a&gt;
+&lt;a href=&#34;http://stackoverflow.com/questions/13397258/how-to-add-a-method-with-multiple-parameters-to-the-selector-of-a-button&#34;&gt;How to add a method with multiple parameters to the selector of a button&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;这里给出两个连接，讲解的很详细，我就不罗嗦了，代码也很简单。&lt;/p&gt;
+
+&lt;p&gt;最后贴出我自己的部分代码，Swift版的，仅作参考：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var AssociatedKey = &amp;quot;IndexPath&amp;quot;
+objc_setAssociatedObject(cell!.checkButton, &amp;amp;AssociatedKey, indexPath, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+
+func uncheck(sender: UIButton) {
+    var indexPath = objc_getAssociatedObject(sender, &amp;amp;AssociatedKey) as! NSIndexPath
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>审核被拒</title>
+      <link>http://lynchwong.com/blog/2015/06/%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/</link>
+      <pubDate>Thu, 11 Jun 2015 11:03:47 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/</guid>
+      <description>&lt;p&gt;审核被拒估计大多数开发者都遇到过，如果从来都没有被拒过，那你上辈子一定是拯救过银河系。
+&lt;/p&gt;
+
+&lt;p&gt;有时候被拒的理由真的是让人觉的完全没理由，觉得不同审核的人之间的差别太大了。所以有时候就觉得审核没通过真是运气不好，换个人也许就通过了。&lt;/p&gt;
+
+&lt;p&gt;凌晨1点左右，本来都快睡着了，迷迷糊糊之际听到收到了邮件的声音，估摸差不多这两天审核就有结果了。所以就看了下邮件，果然是iTunes Store发来的，说App状态变成了正在审核。过了大概没多久就收到邮件说App被拒了，瞬间就清醒了好么，睡不着了。&lt;/p&gt;
+
+&lt;p&gt;握了棵草耶，居然没通过，然后就去查看原因。又握了棵草耶，就给我说了个2.9和10.6，就没信息了。搜索了下审核指南，
+中文版的&lt;a href=&#34;http://www.cocoachina.com/appstore/20140901/9500.html&#34;&gt; App Store审核指南中文版（2014.9.3更新）：新增扩展、HealthKit、HomeKit以及TestFlight &lt;/a&gt;，英文版&lt;a href=&#34;https://developer.apple.com/app-store/review/guidelines/&#34;&gt; App Store Review Guidelines &lt;/a&gt;：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2.9 beta版、demo版、trial版和test版的程序将会被拒绝。&lt;/li&gt;
+&lt;li&gt;10.6 苹果和我们的客户高度推崇简单、精致、富有创造性以及经过精心设计的界面。虽然需要付出更多，但却非常值得。苹果设立了很高的门槛。如果你的用户界面太过复杂或者水准不高，可能会被拒绝。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;中文的意思大概是这样，而且就这两条信息。以前也有审核被拒，违反了什么规则，但都会指出你App哪里违反了。这次什么都没有，我完全不知道我App哪里违反了审核的规则。又握了棵草耶，已经三棵草了。&lt;/p&gt;
+
+&lt;p&gt;所以我就问能不能更具体点，给出其他的信息让我确定App哪里出了错。&lt;/p&gt;
+
+&lt;p&gt;早上来得时候就已经回复我了，给出了具体的信息。我觉得可能昨天看的时候没信息，是因为我发现被拒的太快了，审核人员还没来得及编辑这些信息。&lt;/p&gt;
+
+&lt;p&gt;我们先说10.6，审核人员描述的原因是我的应用程序里有更新的按钮，应该使用苹果内建的更新机制。这里我使用的是友盟的更新，具体的原因应该就是不能有更新按钮，跟使不使用友盟应该没多大关系。给出的建议是移除这个功能，所以我删除了友盟检查更新。&lt;/p&gt;
+
+&lt;p&gt;然后就是2.9了，当我应用程序没有数据的时候，我的界面是这样的，如下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSShenHe/iOSshenhe.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这张图是审核人员截图的。当程序第一次安装的时候是没有数据的，所以我在做了图中的那个提示来提醒用户还没有联系人。但是审核人员却认为我的App是未完成的，是测试版等等。看到这里的时候，我的内心是崩溃的。没办法，去除掉。然后从新打包上传审核。&lt;/p&gt;
+
+&lt;p&gt;刚学习iOS，自己第一次发布App被拒的原因是因为元数据错误。那时就知道了不能在App里面包含测试数据等等。
+第二次被拒就是被认为程序是未完成的，不过那次确实是有一些没有用的按钮等。不过这次只是提示的信息，也被认为程序是未完成的，是测试版。&lt;/p&gt;
+
+&lt;p&gt;已从新打包上传，能不能通过还需等待。&lt;/p&gt;
+
+&lt;p&gt;======= 更新 =======&lt;/p&gt;
+
+&lt;p&gt;6月20日审核已通过。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gym on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/gym/index.xml</link>
+    <description>Recent content in Gym on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/gym/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Fastlane - Gym</title>
+      <link>http://lynchwong.com/blog/2016/06/fastlane---gym/</link>
+      <pubDate>Tue, 28 Jun 2016 09:05:06 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/fastlane---gym/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;说明：翻译的 &lt;code&gt;Gym&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; 原文地址 &lt;/a&gt;。
+&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneGym/gym.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;gym&#34;&gt;gym&lt;/h1&gt;
+
+&lt;p&gt;构建你的应用程序从未如此简单。&lt;/p&gt;
+
+&lt;h1 id=&#34;gym-是什么&#34;&gt;gym 是什么？&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;gym&lt;/code&gt; 构建然后打包你的 iOS 和 OS X 应用程序。为你处理了很多繁重的事情，能够非常简单的生成签名的 &lt;code&gt;ipa&lt;/code&gt; 或者 &lt;code&gt;app&lt;/code&gt; 文件。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;gym&lt;/code&gt; 是 &lt;a href=&#34;https://github.com/nomad/shenzhen&#34;&gt;shenzhen&lt;/a&gt; 的替代。&lt;/p&gt;
+
+&lt;h2 id=&#34;gym-之前&#34;&gt;&lt;code&gt;gym&lt;/code&gt; 之前&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;xcodebuild clean archive -archivePath build/MyApp \
+                         -scheme MyApp
+xcodebuild -exportArchive \
+           -exportFormat ipa \
+           -archivePath &amp;quot;build/MyApp.xcarchive&amp;quot; \
+           -exportPath &amp;quot;build/MyApp.ipa&amp;quot; \
+           -exportProvisioningProfile &amp;quot;ProvisioningProfileName&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;使用-gym&#34;&gt;使用 &lt;code&gt;gym&lt;/code&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;gym
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;为什么使用-gym&#34;&gt;为什么使用 &lt;code&gt;gym&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;gym&lt;/code&gt; 使用最新的API来构建签名你的应用程序，会节省大量的构建时间。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;Gym的功能&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;code&gt;gym&lt;/code&gt; 比其它构建工具，比如 &lt;a href=&#34;https://github.com/nomad/shenzhen&#34;&gt;shenzhen&lt;/a&gt; 要快30%&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;漂亮的输出&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;帮助你解决常见的构建错误，比如 Code Signing issues&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;合理的默认值：自动检测Project、Schemes等&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;与其它工具以及 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; 完美配合&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;自动生成 &lt;code&gt;ipa&lt;/code&gt; 和 压缩的 &lt;code&gt;dSYM&lt;/code&gt; 文件&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;不需要记住任何复杂的命令，只有 &lt;code&gt;gym&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;使用参数和环境变量能够简单的动态配置&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;在 &lt;code&gt;Gymfile&lt;/code&gt; 文件中存储常用的构建设置&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;所有的 Archives 存储了，可以在 Xcode Organizer 中访问&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;支持 iOS 和 Mac 应用程序&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneGym/gymScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneGym/gym.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo gem install gym
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;确保你已经安装了最新版本的 Xcode 命令行工具：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xcode-select --install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;gym
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这就是构建程序所需的所有命令。如果你需要更多的控制，这里有些可用的参数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gym --workspace &amp;quot;Example.xcworkspace&amp;quot; --scheme &amp;quot;AppName&amp;quot; --clean
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你需要安装使用不同的 Xcode，使用 xcode-select 或者定义 DEVELOPER_DIR：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DEVELOPER_DIR=&amp;quot;/Applications/Xcode6.2.app&amp;quot; gym
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;获取可用的参数列表：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gym --help
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你遇到任何问题，使用 &lt;code&gt;verbose&lt;/code&gt; 模式获取更多的信息：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gym --verbose
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通常来说，当你在导出 Archive 时遇到问题，尝试运行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gym --use_legacy_build_api
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你不需要上传到 App Store 或者 TestFlight 设置正确的导出方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gym --export_method ad-hoc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;传递布尔参数确保是否使用 &lt;code&gt;gym&lt;/code&gt; ：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gym --include_bitcode true --include_symbols false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;访问原始的 &lt;code&gt;xcodebuild&lt;/code&gt; 输出，打开 &lt;code&gt;~/Library/Logs/gym&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;h2 id=&#34;gymfile&#34;&gt;Gymfile&lt;/h2&gt;
+
+&lt;p&gt;由于你可能想要手动触发一个新的构建而不想每次都指定所有的参数，你可以将默认值存储在 &lt;code&gt;Gymfile&lt;/code&gt; 里。&lt;/p&gt;
+
+&lt;p&gt;运行 &lt;code&gt;gym init&lt;/code&gt; 创建一个新的配置文件，比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;scheme &amp;quot;Example&amp;quot;
+
+sdk &amp;quot;iphoneos9.0&amp;quot;
+
+clean true
+
+output_directory &amp;quot;./build&amp;quot;    # store the ipa in this folder
+output_name &amp;quot;MyApp&amp;quot;           # the name of the ipa file
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;导出选项&#34;&gt;导出选项&lt;/h2&gt;
+
+&lt;p&gt;由于 Xcode7，&lt;code&gt;gym&lt;/code&gt; 使用新的 Xcode API 允许我们使用 &lt;code&gt;plist&lt;/code&gt; 文件指定导出选项。&lt;code&gt;gym&lt;/code&gt; 会为你创建这个文件，然后你可以通过使用 &lt;code&gt;export_method&lt;/code&gt;，&lt;code&gt;export_team_id&lt;/code&gt;，&lt;code&gt;include_symbols&lt;/code&gt; 或者 &lt;code&gt;include_bitcode&lt;/code&gt; 来修改一些参数。如果你想要更多的选项，比如创建  manifest 文件 或者 app thinning，你可以提供你自己的 &lt;code&gt;plist&lt;/code&gt; 文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;export_options &amp;quot;./ExportOptions.plist&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;或者你可以在 &lt;code&gt;Gymfile&lt;/code&gt; 文件里直接提供 hash 值：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;export_options(
+    method: &amp;quot;ad-hoc&amp;quot;,
+    manifest: {
+        appURL: &amp;quot;https://example.com/My App.ipa&amp;quot;,
+    },
+    thinning: &amp;quot;&amp;lt;thin-for-all-variants&amp;gt;&amp;quot;
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;列出可用的选项运行 &lt;code&gt;xcodebuild -help&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;设置-code-signing&#34;&gt;设置 Code Signing&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/fastlane/docs/Codesigning&#34;&gt;More information on how to get started with codesigning&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Codesigning/XcodeProject.md&#34;&gt;Docs on how to set up your Xcode project&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;自动处理所有过程&#34;&gt;自动处理所有过程&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;gym&lt;/code&gt; 与 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; 工作的很好，将所有的发布工具整合到工作流里面。&lt;/p&gt;
+
+&lt;p&gt;你可以像这样定义 &lt;code&gt;fastlane&lt;/code&gt; 的配置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lane :beta do
+    xctool
+    gym(scheme: &amp;quot;MyApp&amp;quot;)
+    crashlytics
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后你可以非常容易的在其它 &lt;code&gt;lane&lt;/code&gt; 之间切换(比如 &lt;code&gt;testflight&lt;/code&gt;，&lt;code&gt;hockey&lt;/code&gt;，&lt;code&gt;s3&lt;/code&gt; 等等)。&lt;/p&gt;
+
+&lt;p&gt;更多信息，访问 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/fastlane&#34;&gt;fastlane GitHub page&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h1 id=&#34;如何工作的&#34;&gt;如何工作的？&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;gym&lt;/code&gt; 使用最新的API来构建签名你的应用程序。两个主要的控件：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;xcodebuild&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/supermarin/xcpretty&#34;&gt;xcpretty&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当你运行 &lt;code&gt;gym&lt;/code&gt; ，没有使用 &lt;code&gt;--silent&lt;/code&gt; 模式，将会打印每一个执行的命令。&lt;/p&gt;
+
+&lt;p&gt;为了构建 Archive ，&lt;code&gt;gym&lt;/code&gt; 使用如下命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;set -o pipefail &amp;amp;&amp;amp; \
+xcodebuild -scheme &#39;Example&#39; \
+-project &#39;./Example.xcodeproj&#39; \
+-configuration &#39;Release&#39; \
+-destination &#39;generic/platform=iOS&#39; \
+-archivePath &#39;/Users/felixkrause/Library/Developer/Xcode/Archives/2015-08-11/ExampleProductName 2015-08-11 18.15.30.xcarchive&#39; \
+archive | xcpretty
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;构建之后，&lt;code&gt;gym&lt;/code&gt; 会检查。如果有效，就会签名打包到 &lt;code&gt;ipa&lt;/code&gt; 文件里。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;gym&lt;/code&gt; 会根据你当前使用的 Xcode 的版本选择不同的打包方法。&lt;/p&gt;
+
+&lt;h2 id=&#34;xcode7-及以上&#34;&gt;Xcode7 及以上&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;/usr/bin/xcrun path/to/xcbuild-safe.sh -exportArchive \
+-exportOptionsPlist &#39;/tmp/gym_config_1442852529.plist&#39; \
+-archivePath &#39;/Users/fkrause/Library/Developer/Xcode/Archives/2015-09-21/App 2015-09-21 09.21.56.xcarchive&#39; \
+-exportPath &#39;/tmp/1442852529&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;gym&lt;/code&gt; 使用 Xcode7 最新的API，允许我们使用 &lt;code&gt;plist&lt;/code&gt; 文件来执行导出选项。你可以运行 &lt;code&gt;xcodebuild --help&lt;/code&gt; 获取更多可用选项的信息。&lt;/p&gt;
+
+&lt;p&gt;Using this method there are no workarounds for WatchKit or Swift required, as it uses the same technique Xcode uses when exporting your binary.&lt;/p&gt;
+
+&lt;p&gt;Note: the &lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/gym/lib/assets/wrap_xcodebuild/xcbuild-safe.sh&#34;&gt;xcbuild-safe.sh script&lt;/a&gt; wraps around xcodebuild to workaround some incompatibilities.&lt;/p&gt;
+
+&lt;h2 id=&#34;xcode6-及以下&#34;&gt;Xcode6 及以下&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;/usr/bin/xcrun /path/to/PackageApplication4Gym -v \
+&#39;/Users/felixkrause/Library/Developer/Xcode/Archives/2015-08-11/ExampleProductName 2015-08-11 18.15.30.xcarchive/Products/Applications/name.app&#39; -o \
+&#39;/Users/felixkrause/Library/Developer/Xcode/Archives/2015-08-11/ExampleProductName.ipa&#39; \
+--sign &amp;quot;identity&amp;quot; --embed &amp;quot;provProfile&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note: the official PackageApplication script is replaced by a custom PackageApplication4Gym script. This script is obtained by applying a &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym/lib/assets/package_application_patches&#34;&gt;set of patches&lt;/a&gt; on the fly to fix some known issues in the official Xcode PackageApplication script.&lt;/p&gt;
+
+&lt;p&gt;Afterwards the ipa file is moved to the output folder. The dSYM file is compressed and moved to the output folder as well.&lt;/p&gt;
+
+&lt;h1 id=&#34;提示&#34;&gt;提示&lt;/h1&gt;
+
+&lt;h2 id=&#34;fastlane-工具链&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt;工具链&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; &lt;code&gt;deliver&lt;/code&gt; &lt;/a&gt;：将你的应用、截图、元数据上传到App Store&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; &lt;code&gt;snapshot&lt;/code&gt; &lt;/a&gt;：将你iOS应用在每一种设备上进行本地化自动截图&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; &lt;code&gt;frameit&lt;/code&gt; &lt;/a&gt;：快速将你的截图放入到适合的设备框中&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; &lt;code&gt;pem&lt;/code&gt; &lt;/a&gt;自动生成和更新你的推送通知证书&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; &lt;code&gt;sigh&lt;/code&gt; &lt;/a&gt;：管理你的 provisioning profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; &lt;code&gt;produce&lt;/code&gt; &lt;/a&gt;：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; &lt;code&gt;cert&lt;/code&gt; &lt;/a&gt;：自动创建和维护iOS的 code signing certificates&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; &lt;code&gt;spaceship&lt;/code&gt; &lt;/a&gt;：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; &lt;code&gt;pilot&lt;/code&gt; &lt;/a&gt;：管理你TestFlight测试人员的最好方式，使用终端构建&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; &lt;code&gt;boarding&lt;/code&gt; &lt;/a&gt;：邀请你 TestFlight 的beta测试人员的最简单方式&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; &lt;code&gt;scan&lt;/code&gt; &lt;/a&gt;：为你iOS和Mac应用运行测试的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; &lt;code&gt;match&lt;/code&gt; &lt;/a&gt;：使用Git在你的团队中同步你的 certificates 和 profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/supply&#34;&gt; &lt;code&gt;supply&lt;/code&gt; &lt;/a&gt;：将你的Android应用和数据上传到 Google Play&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/screengrab&#34;&gt; &lt;code&gt;screengrab&lt;/code&gt; &lt;/a&gt;：Android版&lt;code&gt;snapshot&lt;/code&gt;，一样的功能&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;使用-provisioning-quicklook-plugin&#34;&gt;使用 &amp;lsquo;Provisioning Quicklook plugin&amp;rsquo;&lt;/h2&gt;
+
+&lt;p&gt;下载安装 &lt;a href=&#34;https://github.com/chockenberry/Provisioning&#34;&gt;Provisioning Plugin&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h1 id=&#34;帮助&#34;&gt;帮助&lt;/h1&gt;
+
+&lt;p&gt;请提交 issue 到 GitHub，并提供你关于设置的信息。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

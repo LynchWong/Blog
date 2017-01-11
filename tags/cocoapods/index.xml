@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cocoapods on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/cocoapods/index.xml</link>
+    <description>Recent content in Cocoapods on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/cocoapods/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>创建自己的Spec</title>
+      <link>http://lynchwong.com/blog/2015/06/%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84spec/</link>
+      <pubDate>Mon, 15 Jun 2015 16:33:08 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84spec/</guid>
+      <description>&lt;p&gt;CocoaPods相信大家都听说过了，是用来帮助我们管理第三方依赖库的工具。
+&lt;/p&gt;
+
+&lt;p&gt;CocoaPods使用起来相当方便，简单的安装和使用就不说了，可以参考一下资料：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://code4app.com/article/cocoapods-install-usage&#34;&gt;CocoaPods安装和使用教程&lt;/a&gt;
+&lt;a href=&#34;http://blog.csdn.net/wzzvictory/article/details/18737437&#34;&gt;CocoaPods详解之&amp;mdash;-使用篇&lt;/a&gt;
+&lt;a href=&#34;https://cocoapods.org/&#34;&gt;CocoaPods官网&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;相信大家有自己重用的代码，而且很多都可以当做第三方库使用，我们完全可以创建自己的依赖库。&lt;/p&gt;
+
+&lt;p&gt;先给出参考链接：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/wzzvictory/article/details/20067595&#34;&gt;CocoaPods详解之&amp;mdash;-制作篇&lt;/a&gt; 貌似上传podspec文件，已经不用该博主的方式了。CocoaPods在0.33加入了Trunk服务，后面会讲到。
+&lt;a href=&#34;http://nshipster.cn/cocoapods/&#34;&gt;Cocoa​Pods&lt;/a&gt;，该博文也提到了Trunk服务。&lt;/p&gt;
+
+&lt;p&gt;下面给出创建步骤：&lt;/p&gt;
+
+&lt;h1 id=&#34;创建github-repository&#34;&gt;创建GitHub Repository&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图所示，我创建了一个叫做&lt;strong&gt;HZPersistentStack&lt;/strong&gt;的Repository，描述那里根据自己的需求随便写，设为Public。选择License，大家自行选择，这里的License是必须的。点击创建后如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后我们Clone到本地，如下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后我们进入Clone的文件夹，创建一个叫做HZPersistentStack的spec，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;创建spec&#34;&gt;创建Spec&lt;/h1&gt;
+
+&lt;p&gt;创建了一个&lt;strong&gt;HZPersistentStack.podspec&lt;/strong&gt;文件，下面我们就要编辑这个文件，你可以使用Vim直接打开编辑或者进入文件夹打开文件直接编辑。&lt;/p&gt;
+
+&lt;p&gt;博主用Sublime Text 2打开，打开后发现有很多可编辑的选项，大家可以自行研究下。直接替换为如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Pod::Spec.new do |s|  
+  s.name             = &amp;quot;HZPersistentStack&amp;quot;  
+  s.version          = &amp;quot;0.0.1&amp;quot;  
+  s.summary          = &amp;quot;CoreData PersistentStack&amp;quot;  
+  s.homepage         = &amp;quot;https://github.com/LynchWong/HZPersistentStack&amp;quot;  
+  s.license          = &#39;MIT&#39;  
+  s.author           = { &amp;quot;Lynch Wong&amp;quot; =&amp;gt; &amp;quot;lynch.wong@me.com&amp;quot; }  
+  s.source           = { :git =&amp;gt; &amp;quot;https://github.com/LynchWong/HZPersistentStack.git&amp;quot;, :tag =&amp;gt; s.version.to_s }    
+  s.platform     = :ios, &#39;7.0&#39;  
+  s.requires_arc = true  
+  s.source_files = &#39;Classes/*&#39;  
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;请注意将s.name、s.source替换成自己。&lt;/p&gt;
+
+&lt;p&gt;注意这里的s.source_files是相对于&lt;strong&gt;HZPersistentStack.podspec&lt;/strong&gt;的路径，所以我们进入到文件夹创建&lt;strong&gt;Classes&lt;/strong&gt;文件夹，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后我们将文件类文件放入到&lt;strong&gt;Classes&lt;/strong&gt;里，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;验证spec&#34;&gt;验证Spec&lt;/h1&gt;
+
+&lt;p&gt;然后设置版本和tag，注意版本和tag都是0.0.1，和&lt;strong&gt;HZPersistentStack.podspec&lt;/strong&gt;里面的是一样的。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后执行&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git add -A &amp;amp;&amp;amp; git commit -m &amp;quot;Release 0.0.1.&amp;quot;  
+git tag &#39;0.0.1&#39;  
+git push --tags  
+git push origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后执行&lt;strong&gt;pod lib lint&lt;/strong&gt;验证Spec，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图所示，通过了验证。&lt;/p&gt;
+
+&lt;h1 id=&#34;发布spec&#34;&gt;发布Spec&lt;/h1&gt;
+
+&lt;p&gt;其实这部分内容可以参考&lt;a href=&#34;http://nshipster.cn/cocoapods/&#34;&gt;Cocoa​Pods&lt;/a&gt;，也解释了为什么要使用Trunk服务。所以这里不再赘述，直接引用：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;CocoaPods 0.33中加入了Trunk服务。&lt;/p&gt;
+
+&lt;p&gt;虽然一开始使用GitHub Pull Requests来整理所有公共pods效果很好。但是，随着Pod数量的增加，这个工作对于spec维护人员Keith Smiley来说变得十分繁杂。甚至一些没有通过$ pod lint的spec也被提交上来，造成repo无法build。&lt;/p&gt;
+
+&lt;p&gt;CocoaPods Trunk服务的引入，解决了很多类似的问题。CocoaPods作为一个集中式的服务，使得分析和统计平台数据变得十分方便。&lt;/p&gt;
+
+&lt;p&gt;要想使用Trunk服务，首先你需要注册自己的电脑。这很简单，只要你指明你的邮箱地址（spec文件中的）和名称即可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pod trunk register mattt@nshipster.com &amp;quot;Mattt Thompson&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后就会收到邮件验证等。
+至此，你就可以通过以下命令来方便地发布和升级你的Pod！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pod trunk push NAME.podspec
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;最后发布Spec：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;现在你可以搜索你自己的依赖库了，如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在项目的Podfile文件中添加，如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source &#39;https://github.com/CocoaPods/Specs.git&#39;
+platform :ios, &#39;8.0&#39;
+
+target &#39;Demooo&#39; do
+    pod &#39;HZPersistentStack&#39;, &#39;~&amp;gt; 0.0.1&#39;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后&lt;strong&gt;pod install&lt;/strong&gt;，最后项目结构如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CreateCocoaPods/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在需要使用的地方引入：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#import &amp;lt;HZPersistentStack/PersistentStack.h&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

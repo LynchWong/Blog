@@ -1,0 +1,923 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>SpriteKit：简介</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="前一段时间一直都在看这本书iOS Games by Tutorials Second Edition，本想SpriteKit这个系列把书中的章节全部翻译过来就好了。但是书是需要购买的，有版权，包括书中配套的源码和艺术资源都是不能共享给别人的。所以这个系列还是得自己写，质量应该不会很高，仅供入门用用，高手不要喷。当然还是推荐大家去看这种原版书籍，支持正版。
+">
+    <meta property="og:description" content="前一段时间一直都在看这本书iOS Games by Tutorials Second Edition，本想SpriteKit这个系列把书中的章节全部翻译过来就好了。但是书是需要购买的，有版权，包括书中配套的源码和艺术资源都是不能共享给别人的。所以这个系列还是得自己写，质量应该不会很高，仅供入门用用，高手不要喷。当然还是推荐大家去看这种原版书籍，支持正版。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="SpriteKit：简介">
+    <meta property="og:url" content="/2015/04/spritekit%E7%AE%80%E4%BB%8B/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="前一段时间一直都在看这本书iOS Games by Tutorials Second Edition，本想SpriteKit这个系列把书中的章节全部翻译过来就好了。但是书是需要购买的，有版权，包括书中配套的源码和艺术资源都是不能共享给别人的。所以这个系列还是得自己写，质量应该不会很高，仅供入门用用，高手不要喷。当然还是推荐大家去看这种原版书籍，支持正版。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      SpriteKit：简介
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-04-12T16:40:05Z">
+    
+  
+  
+  
+  
+    2015-04-12 16:40:05
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>前一段时间一直都在看这本书<a href="http://www.raywenderlich.com/store/ios-games-by-tutorials">iOS Games by Tutorials Second Edition</a>，本想SpriteKit这个系列把书中的章节全部翻译过来就好了。但是书是需要购买的，有版权，包括书中配套的源码和艺术资源都是不能共享给别人的。所以这个系列还是得自己写，质量应该不会很高，仅供入门用用，高手不要喷。当然还是推荐大家去看这种原版书籍，支持正版。
+</p>
+
+<p>我们就直接从新建一个项目开始吧，当前操作系统版本是10.10.3，Xcode是6.3，Swift的版本应该是1.2。</p>
+
+<h2 id="创建spritekit项目">创建SpriteKit项目</h2>
+
+<p>打开Xcode，我们选择<strong>Create a new Xcode project</strong>，然后选择<strong>iOS</strong>中<strong>Application</strong>的<strong>Game</strong>选项,点击<strong>Next</strong>，在选项框中填好对应的选项，如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/SpriteKitIntro/1.png" alt="alt text" /></p>
+
+<p>我们语言选择Swift，这里多说一句。我自己的项目现在都是用Swift写，公司项目还是用OC，毕竟OC更稳定。不过觉得Swift是趋势，会成为主流，所以早点学习更好。<strong>Game Technology</strong>选择SpriteKit，下拉选项里面还有SceneKit、Metal和OpenGL ES。SceneKit带来了3D引擎和一些增强功能。Metal可以说是跟OpenGL ES类似的东西，只不过只适用于苹果的平台，对苹果的硬件有特别的优化，并且很多游戏引擎如Unity3D都支持了Metal。OpenGL ES是一个编程接口规范，在不同的平台有不同的实现，直接和GPU打交道，属于比较底层的API。在以前没有引擎的时候，那些游戏开发的大神都是基于OpenGL ES开发游戏。<strong>Devices</strong>这项选择Universal，即iPhone和iPad都适用。</p>
+
+<p>我们点击<strong>Next</strong>，然后<strong>Create</strong>，创建后的项目结构截图如下所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/SpriteKitIntro/2.png" alt="alt text" /></p>
+
+<p>点击上面那个三角形的按钮Build and Run，或者快捷键⌘R，模拟器选择iPhone 6。效果图如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/SpriteKitIntro/3.png" alt="alt text" /></p>
+
+<p>每次点击屏幕都会增加一个旋转的飞机到场景里面。</p>
+
+<p>所以我们打开GameScene.swift文件去看看源代码。<code>didMoveToView()</code>方法会在SpriteKit将你的场景展示到View之前调用；所以这个方法是你初始化场景内容的一个好地方。<code>update()</code>方法是SpriteKit每一帧都会自动调用的，这个方法里面会处理一些游戏逻辑。<code>touchesBegan()</code>方法处理用户对屏幕的操作。</p>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html">SpriteKit Programming Guide</a>这里讲解了SpriteKit的很多基本原理及编程指南，中文版的应该也能搜到，建议大家看下。</p>
+
+<p>将GameScene.swift文件内容替换成如下代码：</p>
+
+<pre><code>import SpriteKit
+
+class GameScene: SKScene {
+    override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.whiteColor()
+    }
+}
+</code></pre>
+
+<p>在创建SpriteKit项目的时候，模板会自动创建GameScene.sks文件。你可以用Xcode新的内建的编辑器编辑这个文件，用来可视化展示你的游戏场景。这个场景编辑器对于SpriteKit来说就像Interface Builder对于UIKit一样。后面学习粒子系统时候也会用到这个场景编辑器。现在我们删除这个文件，使用代码创建场景。邮件选择文件删除，<strong>Move to Trash</strong>。</p>
+
+<p>打开GameViewController.swift文件，删除如下代码：</p>
+
+<pre><code>extension SKNode {
+    class func unarchiveFromFile(file : String) -&gt; SKNode? {
+        if let path = NSBundle.mainBundle().pathForResource(file, ofType: &quot;sks&quot;) {
+            var sceneData = NSData(contentsOfFile: path, options: .DataReadingMappedIfSafe, error: nil)!
+            var archiver = NSKeyedUnarchiver(forReadingWithData: sceneData)
+
+            archiver.setClass(self.classForKeyedUnarchiver(), forClassName: &quot;SKScene&quot;)
+            let scene = archiver.decodeObjectForKey(NSKeyedArchiveRootObjectKey) as! GameScene
+            archiver.finishDecoding()
+            return scene
+        } else {
+            return nil
+        }
+    }
+}
+</code></pre>
+
+<p>仔细看看这段代码就会发现是用来加载上面提到的.sks文件的，所以这里就不需要了，后面用到.sks文件加载场景的时候就需要用到这段代码了。替换GameViewController.swift的内容为如下代码：</p>
+
+<pre><code>import UIKit
+import SpriteKit
+
+class GameViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let scene = GameScene(size: CGSize(width: 750.0, height: 1334.0))
+        let skView = self.view as! SKView
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        skView.ignoresSiblingOrder = true
+        scene.scaleMode = .AspectFill
+        skView.presentScene(scene)
+    }
+    override func prefersStatusBarHidden() -&gt; Bool {
+        return true
+    }
+}
+</code></pre>
+
+<h2 id="添加精灵到场景中">添加精灵到场景中</h2>
+
+<p>当制作2D游戏时，我们通常会把图片放到场景中来代表我们游戏中各种各样的元素：英雄，敌人，子弹，怪物等等。所有这些我们都称作为“精灵”。现在我们来添加第一个精灵，打开GameScene.swift文件修改<code>didMoveToView()</code>方法如下：</p>
+
+<pre><code>override func didMoveToView(view: SKView) {
+    backgroundColor = SKColor.whiteColor()
+    let ship = SKSpriteNode(imageNamed: &quot;Spaceship&quot;)
+    addChild(ship)
+}
+</code></pre>
+
+<p>修改背景颜色为白色，然后用飞船的图片初始化了一个精灵，然后添加到场景中。⌘R启动模拟器，效果如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/SpriteKitIntro/4.png" alt="alt text" /></p>
+
+<h2 id="设置精灵位置">设置精灵位置</h2>
+
+<p>飞船的位置跟大家期望的肯定不一样，这里有几点需要说明一下：</p>
+
+<ol>
+<li>SpriteKit的坐标系统和UIKit的是不一样的，UIKit的坐标原点在左上角，SpriteKit的坐标原点在左下角。</li>
+<li>对于没有设置位置（属性为position）的精灵，SpriteKit默认设置为(0, 0)。</li>
+</ol>
+
+<p>所以飞船的位置就出现在了左下角的坐标原点处。现在我们将飞船位置设置到正中间，在添加到场景前添加如下代码：</p>
+
+<pre><code>ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+</code></pre>
+
+<p>⌘R运行，飞船就显示到正中间了，这里就不贴图了。</p>
+
+<h2 id="精灵的anchorpoint属性">精灵的anchorPoint属性</h2>
+
+<p>也许大家注意到了，在设置飞船精灵的位置时，相当于是把精灵的中点设置到了那个位置。跟UIKit里面也是不一样的，这种效果是由精灵的anchorPoint属性决定。当没有设置精灵的anchorPoint属性时，SpriteKit默认设置为(0.5, 0.5)。anchorPoint是一个点，取值范围从0 ~ 1。默认(0.5, 0.5)即表示中点；(0.0, 0.0)的时候表示左下角；(1.0, 1.0)的时候表示右上角；大家可以依次类推。</p>
+
+<p>下图展示了不同anchorPoint的值时，精灵的位置：</p>
+
+<p><img src="http://lynchwong.com/blog/img/SpriteKitIntro/5.png" alt="alt text" /></p>
+
+<p>我们注释掉之前设置精灵位置的代码，然后设置精灵的anchorPoint为(0.0, 0.0)。</p>
+
+<pre><code>ship.anchorPoint = CGPoint(x: 0.0, y: 0.0)
+</code></pre>
+
+<p>模拟器效果如图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/SpriteKitIntro/6.png" alt="alt text" /></p>
+
+<p>因为我们注释掉了设置位置的代码，所以SpriteKit默认设置了position属性为(0.0, 0.0)。然后设置了anchorPoint为(0.0, 0.0)，效果就如上图中间一样，只是position变为了原点，而不是中点。所以大家就看到了飞船完整的出现在了原点的位置。如果将anchorPoint为(1.0, 1.0)，大家就看不到飞船了，大家可以试下。现在大家也可以解释为什么最开始的时候只有飞船的右上部分出现在屏幕上。大家可以设置不同的position和anchorPoint然后看看不同的飞船位置，以确保自己理解了anchorPoint。</p>
+
+<p>通常情况下，大家都可以不用管anchorPoint，SpriteKit会默认设置为(0.5, 0.5)，除非你需要精灵按照你指定的点进行旋转，后面我们会提到。</p>
+
+<p>简单点说就是：当你设置精灵的位置时，默认的你就是设置了精灵的中点到那个位置。</p>
+
+<h2 id="旋转精灵">旋转精灵</h2>
+
+<p>添加如下代码在添加精灵到场景之前：</p>
+
+<pre><code>ship.zRotation = CGFloat(M_PI) / 8
+</code></pre>
+
+<p>效果如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/SpriteKitIntro/7.png" alt="alt text" /></p>
+
+<p>zRotation属性接受弧度值，类型为<code>CGFloat</code>，这里<code>M_PI</code>是<code>Double</code>类型，所以使用<code>CGFloat</code>把<code>M_PI</code>转换成<code>Double</code>。弧度值换乘以180然后除以π就是角度值；角度值乘以π然后除以180就是弧度值。所以这个角度值就是22.5度。</p>
+
+<p>这里是围绕anchorPoint旋转的，所以这里anchorPoint的作用就显示出来了。大家设想一下，比如我有一个人物较色，我需要旋转角色的手臂，那么我就需要设置人物手臂的anchorPoint到关节处。</p>
+
+<h2 id="精灵的尺寸">精灵的尺寸</h2>
+
+<p>有时我们需要知道精灵的尺寸，精灵默认的尺寸就是图片的大小。在SpriteKit中，我们用纹理代表图片。添加如下代码到<code>didMoveToView()</code>方法的最后来获取飞船精灵的大小。</p>
+
+<pre><code>let shipSize = ship.size
+println(&quot;Size: \(shipSize)&quot;)
+</code></pre>
+
+<p>运行之后控制台会输出：</p>
+
+<pre><code>Size: (394.0, 347.0)
+</code></pre>
+
+<h2 id="精灵和节点">精灵和节点</h2>
+
+<p>如果我们要精灵显示在屏幕上，我们就需要将精灵添加为场景的子节点，或者子节点的子节点。</p>
+
+<p>所有出现在屏幕上得元素都是<code>SKNode</code>的子类，值得注意的是<code>SKNode</code>并不绘制实际的内容。场景类(<code>SKScene</code>)也继承自<code>SKNode</code>，精灵类（<code>SKSpriteNode</code>）同样也继承自<code>SKNode</code>。</p>
+
+<p>这里推荐给大家<a href="https://developer.apple.com/library/ios/documentation/SpriteKit/Reference/SKNode_Ref/index.html#//apple_ref/doc/uid/TP40013023">SKNode Class Reference</a>，这里面有<code>SKNode</code>得很多属性和方法的讲解，同时也讲解了一些<code>SKNode</code>的使用技巧，比如用来管理场景内容等。这里就不赘述了。</p>
+
+<p>每个节点都有一个叫作zPosition的属性，默认值为0。每个节点绘制子节点都是按照zPosition值得顺序绘制的，即从小到大。在GameViewController.swift中我们设置了ignoresSiblingOrder属性为true。</p>
+
+<pre><code>skView.ignoresSiblingOrder = true
+</code></pre>
+
+<p>如果ignoresSiblingOrder属性为true，当一个节点中的两个子节点有相同的zPosition值时，SpriteKit无法保证绘制的顺序。如果ignoresSiblingOrder属性为false，SpriteKit会按照添加到父节点的顺序绘制。通常设置为true更好一些，因为SpriteKit会做一些优化使游戏运行的更快。</p>
+
+<p>如果ignoresSiblingOrder属性为true，我们最好不要设置相同的zPosition值。比如我们有一个表示背景的精灵，那我们应该设置其zPosition值为-1来避免背景覆盖了玩家精灵。</p>
+
+<p>这章主要就讲了一些很基础的东西，还有一些大家可能需要注意的东西。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/spritekit/">SpriteKit</a>
+
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/ios-game/">iOS Game</a>
+
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/spritekitactions/" data-tooltip="SpriteKit：Actions">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/spritekit%E5%BC%95%E8%A8%80/" data-tooltip="SpriteKit：引言">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fspritekit%25E7%25AE%2580%25E4%25BB%258B%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fspritekit%25E7%25AE%2580%25E4%25BB%258B%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fspritekit%25E7%25AE%2580%25E4%25BB%258B%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/spritekitactions/" data-tooltip="SpriteKit：Actions">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/spritekit%E5%BC%95%E8%A8%80/" data-tooltip="SpriteKit：引言">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fspritekit%25E7%25AE%2580%25E4%25BB%258B%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fspritekit%25E7%25AE%2580%25E4%25BB%258B%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fspritekit%25E7%25AE%2580%25E4%25BB%258B%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fspritekit%25E7%25AE%2580%25E4%25BB%258B%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fspritekit%25E7%25AE%2580%25E4%25BB%258B%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fspritekit%25E7%25AE%2580%25E4%25BB%258B%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/04\/spritekit%E7%AE%80%E4%BB%8B\/';
+          
+            this.page.identifier = '\/2015\/04\/spritekit%E7%AE%80%E4%BB%8B\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

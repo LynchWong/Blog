@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kvo on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/kvo/index.xml</link>
+    <description>Recent content in Kvo on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/kvo/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Key-Value Observing Programming Guide - Key-Value Observing Implementation Details</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-observing-programming-guide---key-value-observing-implementation-details/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:34 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-observing-programming-guide---key-value-observing-implementation-details/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueObserving/Articles/KVOImplementation.html#//apple_ref/doc/uid/20002307-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Observing Programming Guide - Registering Dependent Keys</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-observing-programming-guide---registering-dependent-keys/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:33 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-observing-programming-guide---registering-dependent-keys/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueObserving/Articles/KVODependentKeys.html#//apple_ref/doc/uid/20002179-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Observing Programming Guide - KVO Compliance</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-observing-programming-guide---kvo-compliance/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:32 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-observing-programming-guide---kvo-compliance/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueObserving/Articles/KVOCompliance.html#//apple_ref/doc/uid/20002178-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Observing Programming Guide - Registering for Key-Value Observing</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-observing-programming-guide---registering-for-key-value-observing/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:31 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-observing-programming-guide---registering-for-key-value-observing/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueObserving/Articles/KVOBasics.html#//apple_ref/doc/uid/20002252-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Observing Programming Guide - Introduction</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-observing-programming-guide---introduction/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:30 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-observing-programming-guide---introduction/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueObserving/KeyValueObserving.html#//apple_ref/doc/uid/10000177-BCICJDHA&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Coding Programming Guide - Performance Considerations</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---performance-considerations/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:29 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---performance-considerations/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/Performance.html#//apple_ref/doc/uid/20002175-CJBDBHCB&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Coding Programming Guide - Describing Property Relationships</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---describing-property-relationships/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:28 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---describing-property-relationships/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/Relationships.html#//apple_ref/doc/uid/20000956-BBCDDGCC&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Coding Programming Guide - Accessor Search Implementation Details</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---accessor-search-implementation-details/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:27 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---accessor-search-implementation-details/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/SearchImplementation.html#//apple_ref/doc/uid/20000955-CJBBBFFA&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Coding Programming Guide - Collection Operators</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---collection-operators/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:26 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---collection-operators/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/CollectionOperators.html#//apple_ref/doc/uid/20002176-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Coding Programming Guide - Scalar and Structure Support</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---scalar-and-structure-support/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:25 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---scalar-and-structure-support/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/DataTypes.html#//apple_ref/doc/uid/20002171-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Coding Programming Guide - Ensuring KVC Compliance</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---ensuring-kvc-compliance/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:24 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---ensuring-kvc-compliance/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/Compliant.html#//apple_ref/doc/uid/20002172-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Coding Programming Guide - Key-Value Validation</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---key-value-validation/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:23 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---key-value-validation/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/Validation.html#//apple_ref/doc/uid/20002173-CJBDBHCB&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Coding Programming Guide - Key-Value Coding Accessor Methods</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---key-value-coding-accessor-methods/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:22 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---key-value-coding-accessor-methods/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/AccessorConventions.html#//apple_ref/doc/uid/20002174-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Coding Programming Guide - Key-Value Coding Fundamentals</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---key-value-coding-fundamentals/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:21 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---key-value-coding-fundamentals/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/BasicPrinciples.html#//apple_ref/doc/uid/20002170-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Key-Value Coding Programming Guide - Terminology</title>
+      <link>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---terminology/</link>
+      <pubDate>Sun, 10 Jan 2016 18:58:20 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/key-value-coding-programming-guide---terminology/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/Terminology.html#//apple_ref/doc/uid/20001840-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

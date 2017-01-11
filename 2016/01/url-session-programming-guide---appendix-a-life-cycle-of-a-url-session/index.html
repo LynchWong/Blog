@@ -1,0 +1,842 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>URL Session Programming Guide - Appendix A: Life Cycle of a URL Session</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="官方文档
+">
+    <meta property="og:description" content="官方文档
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="URL Session Programming Guide - Appendix A: Life Cycle of a URL Session">
+    <meta property="og:url" content="/2016/01/url-session-programming-guide---appendix-a-life-cycle-of-a-url-session/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="官方文档
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      URL Session Programming Guide - Appendix A: Life Cycle of a URL Session
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2016-01-29T14:14:22Z">
+    
+  
+  
+  
+  
+    2016-01-29 14:14:22
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/%e7%bc%96%e7%a8%8b%e6%8c%87%e5%8d%97">编程指南</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/NSURLSessionConcepts/NSURLSessionConcepts.html#//apple_ref/doc/uid/10000165i-CH2-SW1">官方文档</a>
+</p>
+
+<h1 id="life-cycle-of-a-url-session">Life Cycle of a URL Session</h1>
+
+<p>(URL Session的生命周期)</p>
+
+<p>你可以有两种方式使用NSURLSession的API：使用系统提供的代理或者你自己的代理。通常，如果你的应用程序需要做如下任何事情时你必须使用自己的代理：</p>
+
+<ul>
+<li>在应用程序没有运行的时候使用后台会话下载或者上传内容。</li>
+<li>执行自定义的认证。</li>
+<li>执行自定义的SSL证书验证。</li>
+<li>决定传输的内容是应该下载到磁盘或者基于服务器返回的MIME类型或者类似标准来显示。</li>
+<li>从body stream上传数据(而不是一个NSData对象)。</li>
+<li>编程限制缓存。</li>
+<li>编程限制HTTP重定向。</li>
+</ul>
+
+<p>如果你的应用程序不需要做以上任何事情，你的应用程序可以使用系统提供的代理。取决于你使用哪种技术，你应该阅读以下之一的章节：</p>
+
+<ul>
+<li><a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/NSURLSessionConcepts/NSURLSessionConcepts.html#//apple_ref/doc/uid/10000165i-CH2-SW2"> Life Cycle of a URL Session with System-Provided Delegates </a>提供了轻量级的关于如何创建和使用URL会话的代码。即使你尝试编写你自己的代理你也应该阅读这个章节，因为它给了一个你的代码配置使用对象的完整的模版。</li>
+<li><a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/NSURLSessionConcepts/NSURLSessionConcepts.html#//apple_ref/doc/uid/10000165i-CH2-SW42"> Life Cycle of a URL Session with Custom Delegates </a>提供了URL会话操作的每一个步骤的完整视图。你应该阅读本章节来帮助你明白会话是如何与代理交互的。具体来说，这章节解释了每个代理方法在何时调用。</li>
+</ul>
+
+<h2 id="life-cycle-of-a-url-session-with-system-provided-delegates">Life Cycle of a URL Session with System-Provided Delegates</h2>
+
+<p>(使用系统提供代理的URL Session的生命周期)</p>
+
+<p>如果你使用NSURLSession类而没有提供代理对象，系统提供的代理会帮你处理很多细节。这里是当你使用系统提供代理的NSURLSession调用方法的基本顺序：</p>
+
+<ol>
+<li>创建一个会话配置。对于后台会话，这个配置必须包含一个唯一标识。存储那个标识，如果你的应用程序崩溃或者终结或者挂起时使用这个标识与会话重新关联。</li>
+<li>创建会话，指定一个配置对象和nil的代理。</li>
+<li>使用会话创建一个任务对象来表示资源请求。每一个任务都以挂起的状态开始。当你应用程序调用了任务对象的resume方法后，它就会开始下载指定的资源。任务对象是NSURLSessionTask的子类，如NSURLSessionDataTask，NSURLSessionUploadTask，或者NSURLSessionDownloadTask，取决于你想实现的行为。这些对象类似于NSURLConnection对象，但是给你更多的控制和统一的代理模式。尽管你的应用程序可以(通常来说应该)添加不止一个任务给会话，为了简单起见，其余的步骤描述了单个任务的生命周期。</li>
+</ol>
+
+<p><strong>重要</strong>：如果你使用NSURLSession类而没有提供代理，那么你应用程序调用创建任务的方法必须传入completionHandler参数，否则你无法从类获取到数据。</p>
+
+<ol>
+<li>对于一个下载任务，在与服务器传输期间，如果你的用户告诉应用程序暂停下载，通过调用cancelByProducingResumeData:方法取消下载。之后可以传递返回的数据给downloadTaskWithResumeData:或者downloadTaskWithResumeData:completionHandler:方法来创建新的下载任务继续下载。</li>
+<li>当任务完成时，NSURLSession对象会调用任务的完成处理句柄。</li>
+</ol>
+
+<p><strong>注意</strong>：NSURLSession不会通过error参数来报告服务器的错误。你应用程序通过这个错误接收到的都是客户端这边的错误，比如无法解析主机或者无法连接主机。错误码在<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Constants/index.html#//apple_ref/doc/constant_group/URL_Loading_System_Error_Codes"> URL Loading System Error Codes </a>中描述。服务端的错误通过NSHTTPURLResponse对象里面的HTTP状态码来报告。更多信息，参见<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSHTTPURLResponse_Class/index.html#//apple_ref/occ/cl/NSHTTPURLResponse"> NSHTTPURLResponse </a>和<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLResponse_Class/index.html#//apple_ref/occ/cl/NSURLResponse"> NSURLResponse </a>类的文档。</p>
+
+<ol>
+<li>当你的应用程序不再需要会话，通过调用<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/invalidateAndCancel"> invalidateAndCancel </a>(取消未完成的任务)或者<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/finishTasksAndInvalidate"> finishTasksAndInvalidate </a>(允许未完成的任务完成之后再使会话无效)。</li>
+</ol>
+
+<h2 id="life-cycle-of-a-url-session-with-custom-delegates">Life Cycle of a URL Session with Custom Delegates</h2>
+
+<p>(使用自定义代理的URL Session的生命周期)</p>
+
+<p>你可以经常使用NSURLSession的API而无需提供代理。但是，如果你使用NSURLSession的API进行后台下载和上传，或者你需要以非缺省的方式处理认证和缓存，那么你必须提供一个适配了会话代理协议的代理，一个或者多个任务代理协议，或者这些协议的组合。这个代理服务于许多用途：</p>
+
+<ul>
+<li>当使用下载任务时，NSURLSession对象会使用代理给你的应用程序提供一个文件URL来获取下载的数据。所有的后台下载和上传都要求代理。这些代理必须提供了<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDownloadDelegate_protocol/index.html#//apple_ref/occ/intf/NSURLSessionDownloadDelegate"> NSURLSessionDownloadDelegate </a>协议的所有代理方法。</li>
+<li>代理可以处理某些认证挑战。</li>
+<li>代理为基于流上传数据到服务器的任务提供body streams。</li>
+<li>代理决定是否遵循HTTP重定向。</li>
+<li>NSURLSession对象使用代理为你的应用程序提供每个数据传输的状态。数据任务代理接收初始调用，你可以将请求转换成下载及后续调用，提供了从远程服务器接收的数据块。</li>
+<li>代理是告诉你应用程序传输任务完成的方法之一。</li>
+</ul>
+
+<p>如果你的URL会话(要求后台任务)使用自定义的代理，那么URL会话的生命周期就很复杂。下面是使用自定义代理时基本的代理方法的调用顺序：</p>
+
+<ol>
+<li>创建一个会话配置。对于后台会话，这个配置必须包含一个唯一标识。存储那个标识，如果你的应用程序崩溃或者终结或者挂起时使用这个标识与会话重新关联。</li>
+<li>创建会话，指定配置对象，可选的，一个代理。</li>
+<li>使用会话创建一个任务对象来表示资源请求。每一个任务都以挂起的状态开始。当你应用程序调用了任务对象的resume方法后，它就会开始下载指定的资源。任务对象是NSURLSessionTask的子类，如NSURLSessionDataTask，NSURLSessionUploadTask，或者NSURLSessionDownloadTask，取决于你想实现的行为。这些对象类似于NSURLConnection对象，但是给你更多的控制和统一的代理模式。尽管你的应用程序可以(通常来说应该)添加不止一个任务给会话，为了简单起见，其余的步骤描述了单个任务的生命周期。</li>
+<li>如果远程服务器返回一个状态码指示要求认证以及如果认证要求连接级别的挑战(比如SSL客户端证书)，NSURLSession就会调用认证挑战的代理方法。
+
+<ul>
+<li>对于会话级别的挑战，NSURLAuthenticationMethodNTLM，NSURLAuthenticationMethodNegotiate，NSURLAuthenticationMethodClientCertificate，或者NSURLAuthenticationMethodServerTrust，NSURLSession对象调用会话代理的URLSession:didReceiveChallenge:completionHandler:方法。如果你的应用程序没有提供会话代理方法，NSURLSession对象会调用任务代理的URLSession:task:didReceiveChallenge:completionHandler:方法来处理认证挑战。</li>
+<li>对于非会话级别的挑战(其它所有情况)，NSURLSession对象会调用会话代理的URLSession:task:didReceiveChallenge:completionHandler:方法来处理挑战。如果你的应用程序提供了会话代理以及你需要处理认证，那么你必须在任务级别处理认证或者提供一个任务级别的处理器，显示调用每一个会话的处理器。会话的代理方法URLSession:didReceiveChallenge:completionHandler:对于非会话级别的挑战并不会调用。
+<strong>注意</strong>：Kerberos认证是透明处理的。
+如果上传任务的认证失败，任务的数据由流来提供，NSURLSession对象调用代理的URLSession:task:needNewBodyStream:代理方法。代理必须提供一个新的NSInputStream对象来为新的请求提供新的数据。
+关于如何实现NSURLSession认证的代理方法，参阅<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW1"> Authentication Challenges and TLS Chain Validation </a>。</li>
+</ul></li>
+<li>根据接收到的HTTP重定向响应，NSURLSession对象会调用代理的URLSession:task:willPerformHTTPRedirection:newRequest:completionHandler:方法。代理方法会调用提供的完成处理器，一个新的NSURLRequest对象(重定向到不同的URL)，或者nil(将重定向的响应当作有效的效应然后作为结果返回)。
+
+<ul>
+<li>如果遵循重定向，会返回到步骤四(认证挑战处理)。</li>
+<li>如果代理没有实现这些方法，重定向会遵循最大的重定向次数。</li>
+</ul></li>
+<li>对于调用downloadTaskWithResumeData:或者downloadTaskWithResumeData:completionHandler:方法重新创建的下载任务，NSURLSession会使用新的任务对象调用URLSession:downloadTask:didResumeAtOffset:expectedTotalBytes:方法。</li>
+<li>对于一个数据任务，NSURLSession对象会调用代理的URLSession:dataTask:didReceiveResponse:completionHandler:方法。决定是否将数据任务转换成为下载任务，然后调用完成回调来接收数据或者下载数据。如果你的应用程序选择将数据任务转换成为下载任务，NSURLSession会使用新的下载任务当作参数调用代理的URLSession:dataTask:didBecomeDownloadTask:方法。在调用之后，代理不再接收来自数据任务更多的回调，然后接收来自下载任务的回调。</li>
+<li>如果是uploadTaskWithStreamedRequest:方法创建的任务，NSURLSession会调用代理的URLSession:task:needNewBodyStream:方法来提供body data。</li>
+<li>在初始化上传到服务器的内容期间，代理会定期的接收URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:回调来报告上传的进度。</li>
+<li>在与服务器传输期间，任务的代理会定期的接收回调来报告上传的进度。对于一个下载任务，会话会调用代理的URLSession:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:方法，该方法会携带成功写入磁盘的比特数。对于数据任务，会话会调用代理的URLSession:dataTask:didReceiveData:方法，该方法懈怠了接收的数据块。对于一个下载任务，在与服务器传输期间，如果用户告诉应用程序暂停下载，通过调用cancelByProducingResumeData:方法来取消任务。之后，如果用户要求你应用程序恢复下载，你可以调用 ownloadTaskWithResumeData:或者downloadTaskWithResumeData:completionHandler:方法，传入返回的恢复数据来创建一个新的下载任务继续之前的下载，然后返回步骤3(创建恢复的任务对象)。</li>
+<li>对于一个数据任务，NSURLSession对象会调用代理的URLSession:dataTask:willCacheResponse:completionHandler:方法。你的应用程序应该决定是否允许缓存。如果你没有实现这个方法，那么默认行为就是使用指定了会话配置对象的缓存策略。</li>
+<li>如果一个下载任务成功完成，NSURLSession对象就会调用任务的URLSession:downloadTask:didFinishDownloadingToURL:方法，该方法会携带一个下载了数据的本地的临时文件。你的应用程序在该方法返回之前要么从文件中读取数据要么移动你应用程序沙盒中的永久的地址。</li>
+<li>当任何任务完成时，NSURLSession对象会调用代理的URLSession:task:didCompleteWithError:方法，该方法会携带一个error对象或者nil(任务成功完成)。如果任务失败，大多数应用程序应该重新请求直到用户取消下载或者服务器返回错误指示请求永远都不会成功。你的应用程序不应该立即重试。相反的，你应该使用reachability的API来检测服务器是否是可达的，并且只有在接收到可达性改变的通知后发起一个新的请求。如果下载任务是可以恢复的，NSError对象的userInfo字典包含一个NSURLSessionDownloadTaskResumeData的键。你的应用程序应该传递这个值给downloadTaskWithResumeData:或者downloadTaskWithResumeData:completionHandler:来创建一个新的下载任务来继续已经存在的下载。如果任务是不可恢复的，你的应用程序应该创建一个新的下载任务然后重新开始任务。在任一情况下，如果传输失败超过一个服务器错误以外的任何原因，转到步骤3(创建和恢复任务对象)。
+<strong>注意</strong>：NSURLSession不会通过error参数来报告任何服务器的错误。通过error参数你代理接收到的错误只是客户端这一边的错误，比如无法解析主机或者无法连接到主机。错误代码在<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Constants/index.html#//apple_ref/doc/constant_group/URL_Loading_System_Error_Codes"> URL Loading System Error Codes </a>中描述。服务端的错误通过NSHTTPURLResponse对象的HTTP状态码来报告。关于更多信息，参阅<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSHTTPURLResponse_Class/index.html#//apple_ref/occ/cl/NSHTTPURLResponse"> NSHTTPURLResponse </a>和<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLResponse_Class/index.html#//apple_ref/occ/cl/NSURLResponse"> NSURLResponse </a>类的文档。</li>
+<li>如果响应是多部分编码的，会话可能会再次调用代理的didReceiveResponse方法，伴随着零次或者多次didReceiveData调用。如果发生这些，返回步骤7(处理didReceiveResponse调用)。</li>
+<li>当你不在需要会话时，通过调用invalidateAndCancel(取消未完成的任务)或者finishTasksAndInvalidate(允许未完成的任务完成之后再使会话对象无效)方法来使会话对象无效。在会话对象无效后，当所有的未完成的任务完成或者取消时，会话会给代理发送URLSession:didBecomeInvalidWithError:消息。当代理方法返回时，会话会处置对代理的强引用。
+<strong>重要</strong>：会话对象会保持对代理的强引用直到你的应用程序显式的使会话无效。如果你不将会话失效，你的应用程序会内存泄漏。</li>
+</ol>
+
+<p>如果你的应用程序取消了一个正在进行的下载，NSURLSession对象会由因为发生错误而调用代理的URLSession:task:didCompleteWithError:方法。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/nsurlsession/">NSURLSession</a>
+
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/nsurlconnection/">NSURLConnection</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---introduction/" data-tooltip="Advanced Memory Management Programming Guide - Introduction">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/url-session-programming-guide---cookies-and-custom-protocols/" data-tooltip="URL Session Programming Guide - Cookies and Custom Protocols">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---appendix-a-life-cycle-of-a-url-session%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---appendix-a-life-cycle-of-a-url-session%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---appendix-a-life-cycle-of-a-url-session%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---introduction/" data-tooltip="Advanced Memory Management Programming Guide - Introduction">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/url-session-programming-guide---cookies-and-custom-protocols/" data-tooltip="URL Session Programming Guide - Cookies and Custom Protocols">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---appendix-a-life-cycle-of-a-url-session%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---appendix-a-life-cycle-of-a-url-session%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---appendix-a-life-cycle-of-a-url-session%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---appendix-a-life-cycle-of-a-url-session%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---appendix-a-life-cycle-of-a-url-session%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---appendix-a-life-cycle-of-a-url-session%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2016\/01\/url-session-programming-guide---appendix-a-life-cycle-of-a-url-session\/';
+          
+            this.page.identifier = '\/2016\/01\/url-session-programming-guide---appendix-a-life-cycle-of-a-url-session\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

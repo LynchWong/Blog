@@ -1,0 +1,964 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>CoreData: Fetching</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="前面我们从CoreData提取数据的时候都只是简单的使用了NSFetchRequest，没有对数据进行精确的控制和刷选。
+
+本章就讲讲NSFetchRequest，但是没有Demo演示，大多都只是给出代码，相信大家都能看得懂，然后自己去尝试使用。
+
+">
+    <meta property="og:description" content="前面我们从CoreData提取数据的时候都只是简单的使用了NSFetchRequest，没有对数据进行精确的控制和刷选。
+
+本章就讲讲NSFetchRequest，但是没有Demo演示，大多都只是给出代码，相信大家都能看得懂，然后自己去尝试使用。
+
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="CoreData: Fetching">
+    <meta property="og:url" content="/2015/07/coredata-fetching/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="前面我们从CoreData提取数据的时候都只是简单的使用了NSFetchRequest，没有对数据进行精确的控制和刷选。
+
+本章就讲讲NSFetchRequest，但是没有Demo演示，大多都只是给出代码，相信大家都能看得懂，然后自己去尝试使用。
+
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      CoreData: Fetching
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-07-22T22:00:06Z">
+    
+  
+  
+  
+  
+    2015-07-22 22:00:06
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>前面我们从CoreData提取数据的时候都只是简单的使用了<strong>NSFetchRequest</strong>，没有对数据进行精确的控制和刷选。</p>
+
+<p>本章就讲讲<strong>NSFetchRequest</strong>，但是没有Demo演示，大多都只是给出代码，相信大家都能看得懂，然后自己去尝试使用。</p>
+
+<p></p>
+
+<h1 id="nsfetchrequest">NSFetchRequest</h1>
+
+<p>从前面的章节我们得知，从CoreData获取数据的方法就是新建<strong>NSFetchRequest</strong>的实例，然后进行你需要的配置，再交给<strong>NSManagedObjectContext</strong>来完成操作。</p>
+
+<p>看起来相当的简单，实际上，有四种方法来获取一个<strong>NSFetchRequest</strong>。如下所示：</p>
+
+<pre><code>//1
+let fetchRequest1 = NSFetchRequest()
+let entity = NSEntityDescription.entityForName(&quot;Warehouse&quot;, inManagedObjectContext: managedContext)!
+fetchRequest1.entity = entity
+
+//2
+let fetchRequest2 = NSFetchRequest(entityName: &quot;Warehouse&quot;)
+
+//3
+let fetchRequest3 = managedObjectModel.fetchRequestTemplateForName(&quot;FetchRequest&quot;)
+
+//4
+let fetchRequest4 = managedObjectModel.fetchRequestFromTemplateWithName(&quot;FetchRequest&quot;, substitutionVariables: [&quot;name&quot; : &quot;apple&quot;])
+</code></pre>
+
+<p>如上代码所示，第一种和第二种都很简单。第三种方法，我们从<strong>NSManagedObjectModel</strong>里面检索了<strong>NSFetchRequest</strong>。你可以在Xcode的数据模型编辑器里面存储你经常使用的一些<strong>NSFetchRequest</strong>，后面我们会讲解。第四种方法和第三种是类似的，但是传递了参数，<code>substitutionVariables</code>会用在谓词中来细化我们要获取的数据。</p>
+
+<h1 id="stored-fetch-requests">Stored fetch requests</h1>
+
+<p>正如之前提到的，我们可以将一些频繁使用的<strong>NSFetchRequest</strong>存储到数据模型中。这样不仅便于我们访问，而且可视化的界面操作也便于我们设置参数。</p>
+
+<p>打开<strong>.xcdatamodeld</strong>文件，然后长按<strong>Add Entity</strong>，然后选择<strong>Add Fetch Request</strong>。如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreDataFetching/1.png" alt="alt text" /></p>
+
+<p>你可以从新设置名字，这里我使用了默认的名字。也增加了谓词，如图中所示。查找name是apple的Good。使用如下代码来获取这个FetchRequest，以及使用：</p>
+
+<pre><code>let fetchRequest = managedObjectModel.fetchRequestTemplateForName(&quot;FetchRequest&quot;)!
+var error: NSError?
+let results = managedContext.executeFetchRequest(fetchRequest, error: &amp;error) as? [Good]
+if let fetchedResults = results {
+    let good = fetchedResults[0]
+    println(&quot;result : \(good.name)&quot;)
+} else {
+    println(&quot;Could not fetch \(error), \(error!.userInfo)&quot;)
+}
+</code></pre>
+
+<p>使用方法和我们之前是类似的，只是获取的方式不一样。注意这里是使用的<strong>managedObjectModel</strong>来获取的，即是我们之前<strong>CoreDataStack</strong>里面的<strong>model</strong>属性，<strong>NSManagedObjectModel</strong>的实例。<strong>fetchRequestTemplateForName()</strong>方法接收一个字符串参数，这个字符串必须与我们设置的FetchRequest的名字匹配，否侧程序会抛出异常然后崩溃。</p>
+
+<p>如果你使用的是上一章节的Demo，那么你就需要在<strong>AppDelegate.swift</strong>里设置<strong>ViewController.swift</strong>时添加如下代码，同理还要在<strong>ViewController.swift</strong>设置一个<strong>managedObjectModel</strong>属性：</p>
+
+<pre><code>viewController.managedObjectModel = coreDataStack.model
+
+var managedObjectModel: NSManagedObjectModel!
+</code></pre>
+
+<p>最后输出结果：</p>
+
+<pre><code>result : apple
+</code></pre>
+
+<h1 id="fetching-different-result-types">Fetching different result types</h1>
+
+<p>感觉上<strong>NSFetchRequest</strong>没有多大用处，实际上，<strong>NSFetchRequest</strong>就像一把多功能瑞士军刀。你可以用它获取独立的数据，计算过后的数据，比如平均值、最小值、最大值等等。</p>
+
+<p><strong>NSFetchRequest</strong>有一个<strong>resultType</strong>属性，到目前为止，我们使用的都是默认的<strong>NSManagedObjectResultType</strong>。如下列出了所有可能的值：</p>
+
+<ul>
+<li><strong>NSManagedObjectResultType</strong>：返回managed objects(默认值)。</li>
+<li><strong>NSCountResultType</strong>：返回结果的条数。</li>
+<li><strong>NSDictionaryResultType</strong>：返回不同的计算结果。</li>
+<li><strong>NSManagedObjectIDResultType</strong>：返回一个唯一的identifiers，而不是整个对象。</li>
+</ul>
+
+<h2 id="nscountresulttype">NSCountResultType</h2>
+
+<pre><code>let fetchRequest = NSFetchRequest(entityName: &quot;Good&quot;)
+fetchRequest.resultType = .CountResultType
+var error: NSError?
+let results = managedContext.executeFetchRequest(fetchRequest, error: &amp;error) as? [NSNumber]
+if let fetchedResults = results {
+    let number = fetchedResults[0]
+    println(&quot;result : \(number.integerValue)&quot;)
+} else {
+    println(&quot;Could not fetch \(error), \(error!.userInfo)&quot;)
+}
+</code></pre>
+
+<p>一旦你设置了resultType为<strong>NSCountResultType</strong>，返回值就变成了包含单个<strong>NSNumber</strong>对象的可选数组。因为没有添加谓词，所以应该会查询所有的Good，CoreData里面只有两条数据，最后输出如下：
+    result : 2</p>
+
+<p><strong>注意：</strong>你可能会觉得我们不需设置为<strong>NSCountResultType</strong>，只需使用默认值，然后使用数组的count属性就可以达到相同的目的。但是这样的话，返回值数组包含的是对象。假设我们有百万条数据，你觉得CoreData是给我们一个数值高效还是给我们百万条记录更高效，同时内存占用也完全不一样。</p>
+
+<h3 id="an-alternate-way-to-fetch-a-count">An alternate way to fetch a count</h3>
+
+<p>还有另外一种可以替代设置resultType为<strong>NSCountResultType</strong>的方法，如下：</p>
+
+<pre><code>let fetchRequest = NSFetchRequest(entityName: &quot;Good&quot;)
+var error: NSError?
+let count = managedContext.countForFetchRequest(fetchRequest, error: &amp;error)
+if count == NSNotFound {
+    println(&quot;Could not fetch \(error), \(error!.userInfo)&quot;)
+}
+println(&quot;count : \(count)&quot;)
+</code></pre>
+
+<h2 id="nsdictionaryresulttype">NSDictionaryResultType</h2>
+
+<p>假设Good有个<strong>price</strong>的属性，类型是<strong>Double</strong>。现在我们有个新的需求，就是要得到所有商品的价格总和。实现这个需求并不难，我们可以把所有的商品查询出来，然后用一个循环把商品的价格加起来就实现了这个需求。幸运的是CoreData内建支持了大量不同的函数，比如求平均值的、总和的、最小值或最大值等等。</p>
+
+<pre><code>//1
+let fetchRequest = NSFetchRequest(entityName: &quot;Good&quot;)
+fetchRequest.resultType = .DictionaryResultType
+//2
+let sumExpressionDesc = NSExpressionDescription()
+sumExpressionDesc.name = &quot;sumPrice&quot;
+//3
+sumExpressionDesc.expression = NSExpression(forFunction: &quot;sum:&quot;, arguments:[NSExpression(forKeyPath: &quot;price&quot;)])
+sumExpressionDesc.expressionResultType = .Integer32AttributeType
+//4
+fetchRequest.propertiesToFetch = [sumExpressionDesc]
+//5
+var error: NSError?
+let result = managedContext.executeFetchRequest(fetchRequest, error: &amp;error) as? [NSDictionary]
+if let resultArray = result {
+    let resultDict = resultArray[0]
+    let sumPrice: AnyObject? = resultDict[&quot;sumPrice&quot;]
+    println(&quot;SumPrice : \(sumPrice!)&quot;)
+} else {
+    println(&quot;Could not fetch \(error), \(error!.userInfo)&quot;)
+}
+</code></pre>
+
+<p>最后输出结果：</p>
+
+<pre><code>SumPrice : 100
+</code></pre>
+
+<p>我修改了下Good实体，添加了price属性，然后重新生成了NSManagedObject subclasses。然后在添加Good的方法里面设置所有添加的商品的price都为100。这里就不详细讲解怎么实现的了。</p>
+
+<p>我们创建了<strong>NSExpressionDescription</strong>来请求总和，然后设置<strong>name</strong>属性为“sumPrice”。便于我们在后面字典里面获取这个值。然后我们指定了“sum:”这个函数以及需要求和的属性“price”；设置返回结果的类型，最后设置了propertiesToFetch属性wierd我们刚才创建的<strong>NSExpressionDescription</strong>。</p>
+
+<p><strong>注意：</strong>CoreData支持哪些函数，count, min, max, average, median, mode, absolute value等等，详见苹果官方文档的<strong>NSExpression</strong>。</p>
+
+<h2 id="nsmanagedobjectidresulttype">NSManagedObjectIDResultType</h2>
+
+<p>当设置为这种类型的时候，返回值数组包含的是<strong>NSManagedObjectID</strong>对象，而不是实体对象。<strong>NSManagedObjectID</strong>是一个全局唯一的identifier，就像是数据库里面的主键一样。</p>
+
+<p>在iOS5之前，是用IDs来fetching数据很流行，因为它适配了并发模型。而现在线程限制已在更现代的并发模型中被废弃了，所以没有再使用这种类型的理由了。</p>
+
+<h1 id="sorting-fetched-results">Sorting fetched results</h1>
+
+<p><strong>NSFetchRequest</strong>另一个强大的功能就是对请求的数据进行排序，通过使用<strong>NSSortDescriptor</strong>。排序发生在<strong>SQLite</strong>层面，而不是在内存中。这让排序在CoreData中很高效。</p>
+
+<pre><code>fetchRequest.sortDescriptors = [NSSortDescriptor(key: &quot;warehouse.name&quot;, ascending: true)]
+</code></pre>
+
+<p>使用如上代码给<strong>NSFetchRequest</strong>添加排序，支持key path。</p>
+
+<h1 id="asynchronous-fetching">Asynchronous fetching</h1>
+
+<p>到目前为止，我们执行的每一个<strong>NSFetchRequest</strong>都会阻塞主线程，阻塞主线程会导致什么结果相信大家都很清楚。</p>
+
+<p>在我们的Demo中没有感受到阻塞是因为我们的数据量太少，做的操作都很简单。</p>
+
+<p>CoreData从一开始就提供了几种不同的技术在后台执行<strong>NSFetchRequest</strong>。在iOS8，CoreData有了一个新的API，能够在后台长时间的执行<strong>NSFetchRequest</strong>，然后在完成时进行回调。</p>
+
+<pre><code>let fetchRequest = NSFetchRequest(entityName: &quot;Good&quot;)
+let asyncFetchRequest = NSAsynchronousFetchRequest(fetchRequest: fetchRequest) {
+    [unowned self] (result: NSAsynchronousFetchResult! ) -&gt; Void in
+        var goods = result.finalResult as! [Good]
+}
+var error: NSError?
+let results = managedContext.executeRequest(asyncFetchRequest, error: &amp;error)
+if let persistentStoreResults = results {
+    //Returns immediately, cancel here if you want
+} else {
+    println(&quot;Could not fetch \(error), \(error!.userInfo)&quot;)
+}
+</code></pre>
+
+<p>从代码中可以看到<strong>NSAsynchronousFetchRequest</strong>，但是仍然需要<strong>NSFetchRequest</strong>。这里需要注意的是<strong>executeFetchRequest()</strong>被<strong>executeRequest()</strong>方法替换了。
+<strong>注意：</strong>你可以使用<strong>NSAsynchronousFetchRequest</strong>的<strong>cancel()</strong>方法来取消数据请求。
+除此之外还要修改<strong>NSManagedObjectContext</strong>，在比如之前的Demo，我们需要修改<strong>CoreDataStack</strong>中的<strong>context</strong>，如下：
+    context = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)</p>
+
+<p><strong>NSManagedObjectContext</strong>有三种concurrencyType。如果你不设置，默认的是<strong>.ConfinementConcurrencyType</strong>，已经废弃了。还有一种是<strong>.PrivateQueueConcurrencyType</strong>，后面的章节会讲解。</p>
+
+<h1 id="batch-updates-no-fetching-required">Batch updates: no fetching required</h1>
+
+<p>我们从CoreData里面获取数据就是为了要修改数据，大部分的操作也是基于此。如果你想要一次更新上百上千条数据怎么办呢？这需要大量的时间和内存开销，当然最普通的方法就是循环需要修改的数据，单着并不是最好的方法。</p>
+
+<p>幸运的是在iOS8，苹果引进了batch updates，一种新的更新CoreData对象的方法，而不需要fetch任何东西到内存里。这种方式大大的减少了时间和内存的开销。代码如下：</p>
+
+<pre><code>let batchUpdate = NSBatchUpdateRequest(entityName: &quot;Good&quot;)
+batchUpdate.propertiesToUpdate = [&quot;price&quot;: NSNumber(double: 150)]
+batchUpdate.affectedStores = psc.persistentStores
+batchUpdate.resultType = .UpdatedObjectsCountResultType
+
+var batchError: NSError?
+let batchResult = managedContext.executeRequest(batchUpdate, error: &amp;batchError) as? NSBatchUpdateResult
+
+if let result = batchResult {
+    println(&quot;Records updated \(result.result)&quot;)
+} else {
+    println(&quot;Could not update \(batchError), \(batchError!.userInfo)&quot;)
+}
+</code></pre>
+
+<p>比如上面的代码，我将所有商品的价格都修改成了150。经典的使用场景就是一个邮件或者消息客户端有个“Mark all as read”的功能。</p>
+
+<p>本章没有完整的演示Demo，大都只是提供代码，相信大家都能看懂，毕竟很多代码都是前面几章Demo涉及到的。</p>
+
+<p>PS：最后两小节比较有局限性，只在iOS8中可用。到目前为止，整个App都只有单个的<strong>NSManagedObjectContext</strong>，后面我们会涉及到多个<strong>NSManagedObjectContext</strong>，以及在多线程间的同步问题。不过在学习这些之前还有些基础的知识需要了解学习，以上。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/coredata/">CoreData</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/07/coredata-nsfetchedresultscontroller/" data-tooltip="CoreData: NSFetchedResultsController">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/07/coredata-the-core-data-stack/" data-tooltip="CoreData: The Core Data Stack">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-fetching%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-fetching%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-fetching%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/07/coredata-nsfetchedresultscontroller/" data-tooltip="CoreData: NSFetchedResultsController">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/07/coredata-the-core-data-stack/" data-tooltip="CoreData: The Core Data Stack">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-fetching%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-fetching%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-fetching%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-fetching%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-fetching%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f07%2fcoredata-fetching%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/07\/coredata-fetching\/';
+          
+            this.page.identifier = '\/2015\/07\/coredata-fetching\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

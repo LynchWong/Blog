@@ -1,0 +1,1145 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Fastlane - Match</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="
+说明：翻译的 Match 的指南， 原文地址 。
+">
+    <meta property="og:description" content="
+说明：翻译的 Match 的指南， 原文地址 。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Fastlane - Match">
+    <meta property="og:url" content="/2016/06/fastlane---match/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="
+说明：翻译的 Match 的指南， 原文地址 。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="http://lynchwong.com/img/FastlaneMatch/match.png">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('/img/FastlaneMatch/match.png')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Fastlane - Match
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2016-06-28T09:05:34Z">
+    
+  
+  
+  
+  
+    2016-06-28 09:05:34
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p>
+</blockquote>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneMatch/match.png" alt="alt text" /></p>
+
+<h1 id="match">match</h1>
+
+<p>在你的团队之间使用 Git 轻松的同步你的证书和配置文件。</p>
+
+<p>iOS Code Signing 的新方法：在你的开发团队中共享一个 Code Signing identity，简化 CodeSigning 的设置工作，防止其它问题出现。</p>
+
+<p><code>match</code> 是 <a href="https://codesigning.guide">https://codesigning.guide</a> 概念的实现。<code>match</code> 创建请求所有的证书和配置文件，然后存储在另外一个 Git Repository 中。团队中的每一个成员都可以访问这个 Repository，使用这些证书来 CodeSigning。<code>match</code> 也会自动修复损坏的，过期的证书。<code>match</code> 是在团队中共享签名证书的最简单方法。</p>
+
+<h1 id="为什么使用match">为什么使用match？</h1>
+
+<p>在开始使用 <code>match</code> 前，确保已经阅读了 <a href="https://codesigning.guide">codesigning.guide</a> 了。</p>
+
+<blockquote>
+<p>When deploying an app to the App Store, beta testing service or even installing it on a device, most development teams have separate code signing identities for every member. This results in dozens of profiles including a lot of duplicates.</p>
+
+<p>You have to manually renew and download the latest set of provisioning profiles every time you add a new device or a certificate expires. Additionally this requires spending a lot of time when setting up a new machine that will build your app.</p>
+</blockquote>
+
+<p>新方法：</p>
+
+<blockquote>
+<p>Share one code signing identity across your development team to simplify your setup and prevent code signing issues. What if there was a central place where your code signing identity and profiles are kept, so anyone in the team can access them during the build process?</p>
+</blockquote>
+
+<p>(这些我就不翻译了，就是说了一大堆团队成员之间证书管理混乱、各种revoke)</p>
+
+<h2 id="为什么不让-xcode-处理这些">为什么不让 Xcode 处理这些？</h2>
+
+<ul>
+<li>让要发生的事情都完全在你控制中</li>
+<li>你可以访问所有的证书和配置文件，这些都安全的存储在 Git 中</li>
+<li>在团队中共享一个 Code Signing identity，少量的证书和配置文件</li>
+<li>有时 Xcode 会 revoke(废除) 证书，打乱你的设置，导致项目构建失败</li>
+<li>比起 <code>自动</code> 设置，通过显式设置配置文件，构建项目时我们更能预测会发生什么</li>
+<li>It just works™(这只是工作？ Xcode 只是有点作用，少了其它方面的考量？)</li>
+</ul>
+
+<h2 id="match-为你做了什么工作"><code>match</code> 为你做了什么工作？</h2>
+
+<table>
+<thead>
+<tr>
+<th align="center">match</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">在团队成员中使用 Git 自动同步你的 iOS Keys 和 Profiles</td>
+</tr>
+
+<tr>
+<td align="center">处理所有繁重的事情，比如创建存储你的证书和配置文件</td>
+</tr>
+
+<tr>
+<td align="center">一分钟就能在新机器上设置好 Code Signing</td>
+</tr>
+
+<tr>
+<td align="center">能够与你的应用的多个的 Targets 和 Bundle identity 很好的工作</td>
+</tr>
+
+<tr>
+<td align="center">你能够完全控制 Git Repo，没有第三方的服务参与</td>
+</tr>
+
+<tr>
+<td align="center">Provisioning Profile 始终与正确的 Certificate 匹配</td>
+</tr>
+
+<tr>
+<td align="center">如果你当前账户过期了或者 Profiles 无效，很方便的重置你已经存在的 Profiles 和 Certificates</td>
+</tr>
+
+<tr>
+<td align="center">使用 <code>--force</code> 选项能够自动更新你的 Provisioning Profiles，会包含你所有的设备</td>
+</tr>
+
+<tr>
+<td align="center">支持多个苹果账户和多个团队</td>
+</tr>
+
+<tr>
+<td align="center">与 <a href="https://fastlane.tools">fastlane</a> 紧密集成，与 <a href="https://github.com/fastlane/fastlane/tree/master/gym">gym</a> 等其它工具能够无缝衔接</td>
+</tr>
+</tbody>
+</table>
+
+<p>更多关于概念上的信息，访问 <a href="https://codesigning.guide">codesigning.guide</a>。</p>
+
+<h1 id="安装">安装</h1>
+
+<pre><code>sudo gem install match
+</code></pre>
+
+<p>确保你已经安装了 Xcode 最新版本的命令行工具：</p>
+
+<pre><code>xcode-select --install
+</code></pre>
+
+<h1 id="使用">使用</h1>
+
+<h2 id="设置">设置</h2>
+
+<ol>
+<li>创建一个<strong>新的私有 Git Repo</strong>(比如在 <a href="https://github.com/new">GitHub</a> 或者 <a href="https://bitbucket.org/account/signin/?next=/repo/create">BitBucket</a> 上)命名为诸如 <code>certificates</code> 这样的。<strong>重要：</strong>确保 Repository 设置为了私有的。</li>
+<li>可选：创建一个<strong>新的，共享的 Apple Developer Portal 账户</strong>，诸如 <code>office@company。com</code> ，现在开始团队共享这个帐号(更多信息访问 <a href="https://codesigning.guide">codesigning.guide</a>)。</li>
+
+<li><p>在项目文件夹中运行如下命令开始使用 <code>match</code> ：</p>
+
+<pre><code>match init
+</code></pre></li>
+</ol>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneMatch/match_init.gif" alt="alt text" /></p>
+
+<p>会要求你输入 Git Repo 的 URL。可以是 <code>https://</code> 或者 <code>git</code> URL。<code>match init</code> 不会读取或者修改你的证书或者配置文件。</p>
+
+<p>会在你当前目录(或者在你的 <code>./fastlane/</code> 文件夹)创建 <code>Matchfile</code> 。</p>
+
+<p>示例内容(更多高级设置，查看 <a href="https://github.com/fastlane/fastlane/tree/master/match#fastlane">fastlane section</a>)：</p>
+
+<pre><code>git_url &quot;https://github.com/fastlane/fastlane/tree/master/certificates&quot;
+
+app_identifier &quot;tools.fastlane.app&quot;
+username &quot;user@fastlane.tools&quot;
+</code></pre>
+
+<h3 id="重要-每个团队使用一个-git-分支"><strong>重要：每个团队使用一个 Git 分支</strong></h3>
+
+<p><code>match</code> 也支持在一个 Repo 中为多个团队存储证书，通过使用不同的分支。如果你在多个团队中工作，确保你为每个团队设置了唯一的 <code>git_branch</code> 参数值。<code>match</code> 会自动为创建使用指定的分支。</p>
+
+<pre><code>match(git_branch: &quot;team1&quot;, username: &quot;user@team1.com&quot;)
+match(git_branch: &quot;team2&quot;, username: &quot;user@team2.com&quot;)
+</code></pre>
+
+<h2 id="运行">运行</h2>
+
+<blockquote>
+<p>Before running match for the first time, you should consider clearing your existing profiles and certificates using the <a href="https://github.com/fastlane/fastlane/tree/master/match#nuke">match nuke command</a>.</p>
+</blockquote>
+
+<p>在运行 <code>match init</code> 之后，你可以运行如下的命令来生成新的证书和配置文件：</p>
+
+<pre><code>match appstore
+match development
+</code></pre>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneMatch/match_appstore_small.gif" alt="alt text" /></p>
+
+<p>这回创建新的证书和配置文件(如果需要)然后存储在你的 Git Repo 中。如果你之前运行 <code>match</code> ，它会自动安装 Git Repo 里已经存在的 Profiles 。</p>
+
+<p>当 Certificates 和 Private keys 安装在 Keychain，Provisioning Profiles 安装在 <code>~/Library/MobileDevice/Provisioning Profiles</code> 。</p>
+
+<p>使用如下命令获得更详细的输出：</p>
+
+<pre><code>match --verbose
+</code></pre>
+
+<p>列出可用的选项：</p>
+
+<pre><code>match --help
+</code></pre>
+
+<h3 id="处理多个-targets">处理多个 Targets</h3>
+
+<p>如果你有不同的 Bundle identifiers，多个 Targets，为它们的每一个调用 <code>match</code> 。</p>
+
+<pre><code>match appstore -a tools.fastlane.app
+match appstore -a tools.fastlane.app.watchkitapp
+</code></pre>
+
+<p>你可以使用 <a href="https://github.com/fastlane/fastlane/tree/master/fastlane">fastlane</a> 让这过程更简单点：</p>
+
+<pre><code>lane :match do
+    match(app_identifier: &quot;com.krausefx.app1&quot;, readonly: true)
+    match(app_identifier: &quot;com.krausefx.app2&quot;, readonly: true)
+    match(app_identifier: &quot;com.krausefx.app3&quot;, readonly: true)
+end
+</code></pre>
+
+<p>然后所有团队需要做的就是 <code>fastlane match</code>，然后为所有 targets 的 keys、certs 和 profiles 都会同步。</p>
+
+<h3 id="密码">密码</h3>
+
+<p>当在一台新机器上第一次运行 <code>match</code> ，会询问你 Git Repository 的密码。这是一个额外的安全措施：所有的文件都会被 OpenSSL 加密。请务必记住密码，当你在不同机器上运行 <code>match</code> 的时候你会需要。</p>
+
+<p>使用环境变量来设置密码，使用 <code>MATCH_PASSWORD</code> 。</p>
+
+<h3 id="新机器">新机器</h3>
+
+<p>在新机器上设置证书和配置文件，使用如下命令：</p>
+
+<pre><code>match development
+</code></pre>
+
+<p>你也可以运行 <code>match</code> 的是使用 <code>readonly</code> 确保不会创建新的证书或者配置文件。</p>
+
+<pre><code>match development --readonly
+</code></pre>
+
+<h3 id="访问控制">访问控制</h3>
+
+<p>使用 <code>match</code> 的一个好处就是你允许团队成员可以访问 Code Signing Certificates，而不需要给每个成员访问 Developer Portal 的权限：</p>
+
+<ol>
+<li>运行 <code>match</code> 在 Git Repo 中存储证书</li>
+<li>给开发人员授予访问 Git Repo 的权限，并给他们密码</li>
+<li>开发人员现在可以运行 <code>match</code> 安装最新版本的 Code Signing Profile，所以他们可以直接构建签名应用程序，而不需要去访问 Developer Portal</li>
+<li>每次你运行 <code>match</code> 更新 Profiles(比如 添加新设备)，所有的开发人员在运行 <code>match</code> 时都会自动获取最新版本的 Profiles</li>
+</ol>
+
+<p>如果你决定运行 <code>match</code> 的时候不访问 Developer Portal，使用 <code>--readonly</code> 选项，就不会询问你 Developer Portal 的密码。</p>
+
+<p>这个方法的优势就是团队中的人不会因为手误废除(revoke)了证书。另外推荐安装 <a href="https://github.com/neonichu/FixCode">FixCode Xcode Plugin</a> 禁用 <code>Fix Issue</code> 按钮。</p>
+
+<h3 id="git-repo">Git Repo</h3>
+
+<p>在第一次运行 <code>match</code> 之后，你的 Git Repo 会包含两个目录：</p>
+
+<ul>
+<li><code>certs</code> 文件夹包含所有的 Certificates 和它们的 Private Keys</li>
+<li><code>profiles</code> 文件夹包含所有的 Provisioning Profiles</li>
+</ul>
+
+<p>除此之外，<code>match</code> 会为你创建一个漂亮的 Repo <code>README.md</code>，方便新的团队成员登船(入坑，哈哈，开玩笑)：</p>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneMatch/github_repo.png" alt="alt text" /></p>
+
+<h3 id="fastlane">fastlane</h3>
+
+<p>添加 <code>match</code> 到你的 <code>Fastfile</code> ，使用 <a href="https://fastlane.tools">fastlane</a> 自动获取最新版本的 Code Signing Certificates 。</p>
+
+<pre><code>match(type: &quot;appstore&quot;)
+
+match(git_url: &quot;https://github.com/fastlane/fastlane/tree/master/certificates&quot;,
+  type: &quot;development&quot;)
+
+match(git_url: &quot;https://github.com/fastlane/fastlane/tree/master/certificates&quot;,
+  type: &quot;adhoc&quot;,
+  app_identifier: &quot;tools.fastlane.app&quot;)
+
+# `match` should be called before building the app with `gym`
+gym
+...
+</code></pre>
+
+<h3 id="多个-targets">多个 Targets</h3>
+
+<p>如果你的应用程序有多个 Targets(比如 Today Widget or WatchOS Extension)</p>
+
+<pre><code>match(app_identifier: &quot;tools.fastlane.app&quot;, type: &quot;appstore&quot;)
+match(app_identifier: &quot;tools.fastlane.app.today_widget&quot;, type: &quot;appstore&quot;)
+</code></pre>
+
+<p><code>match</code> 甚至可以为所有的 Bundle identifiers 使用同一个 Git Repository 。</p>
+
+<h2 id="设置-xcode-项目">设置 Xcode 项目</h2>
+
+<p>为了确保 Xcode 为每一个 target 使用了正确的 Provisioning Profile，请不要为选择 Profile 的功能使用 <code>Automatic</code> 。</p>
+
+<p>另外，推荐使用 <a href="https://github.com/neonichu/FixCode">FixCode Xcode Plugin</a> 禁用 <code>Fix Issue</code>按钮。<code>Fix Issue</code> 按钮可以废除(revoke)你已经存在 Certificates，会使你的 Provisioning Profiles 无效。</p>
+
+<h3 id="使用-fastlane-https-fastlane-tools-从命令行构建">使用 <a href="https://fastlane.tools">fastlane</a> 从命令行构建</h3>
+
+<p><code>match</code> 会使用正确的 Provisioning Profiles 的 UUID 来自动填充环境变量，准备在你的 Xcode 项目中使用。</p>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneMatch/UDIDPrint.png" alt="alt text" /></p>
+
+<p>打开你的 target 设置，打开 <code>Provisioning Profile</code> 选择 <code>Other</code> ：</p>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneMatch/XcodeProjectSettings.png" alt="alt text" /></p>
+
+<p>Profile 环境变量以 <code>$(sigh_&lt;bundle_identifier&gt;_&lt;profile_type&gt;)</code> 命名</p>
+
+<p>比如 <code>$(sigh_tools.fastlane.app_development)</code></p>
+
+<h3 id="从-xcode-手动构建">从 Xcode 手动构建</h3>
+
+<p>当你使用 Development Profile 安装应用程序到设备上的时候非常有用。</p>
+
+<p>你可以在 Xcode 项目中静态的选择正确的 Provisioning Profile(名字与 <code>Development tools.fastlane.app</code> 匹配)。</p>
+
+<h2 id="持续集成">持续集成</h2>
+
+<h3 id="访问-repo">访问 Repo</h3>
+
+<p>为了让 CI 系统和 <code>match</code> 工作，只需要让 CI 系统能够访问 Repo。通常你只需要将 CI 系统的 public ssh key 当做 deploy key 添加到你的 <code>match</code> Repo 中，但由于你的 CI 系统可能已经使用 public ssh key 来访问代码的 Repo，<a href="https://help.github.com/articles/error-key-already-in-use/">那你就不能那么做了。</a></p>
+
+<p>有些 Repo Hosts 可能允许你为不同的 Repo 使用相同的 deploy 可以，但是 GitHub 不允许。如果你的 Host 也是，不需要担心，只需要将 CI 的 public ssh key 当做 deploy key 添加到你的 <code>match</code> Repo 中，然后滚动到&rdquo;Encryption password&rdquo;。</p>
+
+<p>大约有这几个方面：</p>
+
+<ol>
+<li>在你的 Repo Host 上创建新的帐号，对于你的 <code>match</code> Repo 只有 read-only 的访问权限。<a href="http://devcenter.bitrise.io/docs/adding-projects-with-submodules">这里有描述。</a></li>
+<li>有些 CI 允许你手动上传 Signing Credientials，但是这就意味着 profiles/keys/certs 每次改变你都要重新上传。</li>
+</ol>
+
+<p>这两种解决方法都不完美。两种方法需要你的权衡。看你是更在意设置额外的账户还是更在意证书的同步。</p>
+
+<h3 id="加密密码">加密密码</h3>
+
+<p>一旦你决定使用哪种方法，所有剩下要做的就是设置你加密的密码作为秘密的环境变量，命名为 <code>MATCH_PASSWORD</code> 。<code>match</code> 在运行的时候会带上这个参数。</p>
+
+<h2 id="nuke">Nuke</h2>
+
+<p>如果你从来不再以 Code Signing，并且 Apple Developer 账户有大量无效的，过期的，Xcode管理的 profiles／certificates，你可以使用 <code>match nuke</code> 命令来废除你的 Certificates 和 Provisioning Profiles。不要担心，已经在 App Store 里可用的应用程序仍然会继续工作。在 <code>nuke</code> 你的账户之后，通过 TestFlight 构建的 distributed 就不能再用了，所以你必需重新上传新的构建。在清理了你的账户之后，你将会从干净的状态开始，然后你就可以运行 <code>match</code> 再次生成 Certificates 和 Profiles。</p>
+
+<p>对指定环境的 Certificates 和 Provisioning Profiles 废除：</p>
+
+<pre><code>match nuke development
+match nuke distribution
+</code></pre>
+
+<p><img src="http://lynchwong.com/blog/img/FastlaneMatch/match_nuke.gif" alt="alt text" /></p>
+
+<p>在删除 profiles / certificates 之前你必需确认。</p>
+
+<h2 id="修改密码">修改密码</h2>
+
+<p>修改你 Repo 的密码，加密和解密所有文件运行：</p>
+
+<pre><code>match change_password
+</code></pre>
+
+<p>在你所有机器上下一次运行的时候会被询问新的密码。</p>
+
+<h2 id="手动解密">手动解密</h2>
+
+<p>如果你想手动解密文件：</p>
+
+<pre><code>openssl aes-256-cbc -k &quot;&lt;password&gt;&quot; -in &quot;&lt;fileYouWantToDecryptPath&gt;&quot; -out &quot;&lt;decryptedFilePath&gt;&quot; -a -d
+</code></pre>
+
+<h1 id="这个安全吗">这个安全吗？</h1>
+
+<p>你的 Keys 和 Provisioning Profiles 都使用了 OpenSSL 和 密码进行加密。</p>
+
+<p>将 Private Keys 存储在 Git Repo 中第一次听起来倒胃口。我们进行了一次深层次的潜在安全问题的分析，然后得出如下结论：</p>
+
+<h2 id="如果某人偷取了-private-key-会发生什么">如果某人偷取了 Private Key 会发生什么？</h2>
+
+<p>如果攻击者有了你的 Certificate 和 Provisioning Profile，他们就可以使用跟你相同的 Bundle identifier 来签名应用。</p>
+
+<p>对于每种类型的 Profile，最糟糕的情况是什么？</p>
+
+<h3 id="app-store-profiles">App Store Profiles</h3>
+
+<p>只要不是苹果重新签名的 App Store Profile 就没有任何的用处。而获取重新签名的唯一方法就是提交应用进行审核(将会花7天的时候左右)。攻击者只能提交应用进行审核，如果他们也获得了访问你 iTunes Connect 的 凭证(credentials，帐号？密码？)(这个凭证没有存储在 Git 中，而是在你本地的 Keychain 中)。另外，每一次的构建上传、取消，甚至是你的应用进入审核阶段之前你都会收到通知邮件。</p>
+
+<h3 id="development-and-ad-hoc-profiles">Development and Ad Hoc Profiles</h3>
+
+<p>通常来说这些 Profiles 是无害的，因为它们签名的应用程序只能安装在小部分的设备上。为了新增设备，攻击者也会需要你的 Apple Developer Portal 的凭证(这个凭证没有存储在 Git 中，而是在你本地的 Keychain 中)。</p>
+
+<h3 id="enterprise-profiles">Enterprise Profiles</h3>
+
+<p>攻击者可以使用 In-House Profile 来签名应用程序然后分发给潜在的没有数量限制的设备。所有的这些都运行在你的公司名下，最终会导致苹果撤销你的 In-House 账户。然而可以很容易的废除(revoke)证书，然后远程的破坏所有设备上的这个 App 。</p>
+
+<p>因为 In-House Profile 潜在的危险性，所以我们决定不允许 <code>match</code> 使用企业账户。</p>
+
+<p>总结一下：</p>
+
+<ul>
+<li>你可以完全控制 Git Repo，没有第三方服务的参与</li>
+<li>即使你的 Certificates 泄漏了，他们没有你的 iTunes Connect 登录凭证也无法引起任何损害</li>
+<li><code>match</code> 现在不支持 In-House Enterprise Profiles ，因为它们太难控制</li>
+<li>如果你使用 GitHub 或者 Bitbucket 我们强烈鼓励你开启所有访问 Certificates Repo 账户的两部验证</li>
+<li><code>match</code> 的所有的源码都开源在了 <a href="https://github.com/fastlane/fastlane/tree/master/match">Git Hub</a> 上</li>
+</ul>
+
+<h1 id="fastlane-工具链"><code>fastlane</code> 工具链</h1>
+
+<ul>
+<li><a href="https://fastlane.tools"> <code>fastlane</code> </a>：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/deliver"> <code>deliver</code> </a>：将你的应用、截图、元数据上传到App Store</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/snapshot"> <code>snapshot</code> </a>：将你iOS应用在每一种设备上进行本地化自动截图</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/frameit"> <code>frameit</code> </a>：快速将你的截图放入到适合的设备框中</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/pem"> <code>pem</code> </a>：自动生成和更新你的推送通知证书</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/produce"> <code>produce</code> </a>：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/cert"> <code>cert</code> </a>：自动创建和维护iOS的 code signing certificates</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> <code>spaceship</code> </a>：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/pilot"> <code>pilot</code> </a>：管理你TestFlight测试人员的最好方式，使用终端构建</li>
+<li><a href="https://github.com/fastlane/boarding"> <code>boarding</code> </a>：邀请你 TestFlight 的beta测试人员的最简单方式</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/gym"> <code>gym</code> </a>：构建你iOS应用程序</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/scan"> <code>scan</code> </a>：为你iOS和Mac应用运行测试的最简单方法</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/supply"> <code>supply</code> </a>：将你的Android应用和数据上传到 Google Play</li>
+<li><a href="https://github.com/fastlane/fastlane/tree/master/screengrab"> <code>screengrab</code> </a>：Android版<code>snapshot</code>，一样的功能</li>
+</ul>
+
+<h1 id="帮助">帮助</h1>
+
+<p>请提交 issue 到 GitHub，并提供你关于设置的信息。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/fastlane/">Fastlane</a>
+
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/automate/">Automate</a>
+
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/match/">Match</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/" data-tooltip="Fastlane - 示例">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/06/fastlane---scan/" data-tooltip="Fastlane - Scan">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---match%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---match%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---match%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/" data-tooltip="Fastlane - 示例">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/06/fastlane---scan/" data-tooltip="Fastlane - Scan">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---match%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---match%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---match%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---match%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---match%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f06%2ffastlane---match%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2016\/06\/fastlane---match\/';
+          
+            this.page.identifier = '\/2016\/06\/fastlane---match\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Deliver on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/deliver/index.xml</link>
+    <description>Recent content in Deliver on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/deliver/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Fastlane - Deliver</title>
+      <link>http://lynchwong.com/blog/2016/06/fastlane---deliver/</link>
+      <pubDate>Sat, 18 Jun 2016 12:49:42 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/fastlane---deliver/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;说明：翻译的 &lt;code&gt;Deliver&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; 原文地址 &lt;/a&gt;。
+&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneDeliver/deliver.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;deliver&#34;&gt;deliver&lt;/h1&gt;
+
+&lt;p&gt;使用简单的指令就能将你的应用、截图、元数据上传到App Store。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;deliver&lt;/code&gt;可以使用命令行工具上传 ipa 或者 pkg 文件，截图以及更多的数据到 iTunes Connect。&lt;/p&gt;
+
+&lt;h1 id=&#34;功能&#34;&gt;功能&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;自动化上传上百张本地化的截图&lt;/li&gt;
+&lt;li&gt;不需要使用任何一台 Mac 的 Xcode 就可以上传新的 ipa/pkg 文件到 iTunes Connect&lt;/li&gt;
+&lt;li&gt;在本地维你应用的元数据，然后将改变推送回 iTunes Connect&lt;/li&gt;
+&lt;li&gt;使用 fastlane 能够简单的实现真正的持续化的部署流程&lt;/li&gt;
+&lt;li&gt;使用 Git 管理配置文件，可以在任务一台 Mac 上部署，包括你持续集成的服务器&lt;/li&gt;
+&lt;li&gt;在将 App 元数据和截图上传到 iTC 之前会生成一个 HTML 的元数据预览&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;将构建的 App 上传到 TestFlight 查看 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; pilot &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+
+&lt;p&gt;安装 gem&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo gem install deliver
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;确保你已经安装了最新版本的 Xcode 命令行工具：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xcode-select --install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;快速开始&#34;&gt;快速开始&lt;/h1&gt;
+
+&lt;p&gt;指引会使用 iTunes Connect 上已经存在的 App 元数据为你创建所有必需的文件。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;cd [your_project_folder]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;deliver init&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;输入 iTunes Connect Credentials&lt;/li&gt;
+&lt;li&gt;输入 App Identifier&lt;/li&gt;
+&lt;li&gt;在电脑为你做好所有工作之前，可以去先去来一发&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;从现在起，你可以使用 &lt;code&gt;deliver&lt;/code&gt; 来部署一个新的版本更新，或者上传新的 App 元数据和截图。&lt;/p&gt;
+
+&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+
+&lt;p&gt;查看你本地 &lt;code&gt;./fastlane/metadata&lt;/code&gt; 和 &lt;code&gt;./fastlane/screenshots&lt;/code&gt;文件夹(如果你没有使用fastlane，&lt;code&gt;./metadata&lt;/code&gt;替换)。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneDeliver/metadata.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;你将会看见从 iTunes Connect 获取的元数据。你可以在本地修改这些数据，然后推送回 iTunes Connect。&lt;/p&gt;
+
+&lt;p&gt;运行 &lt;code&gt;deliver&lt;/code&gt; 将你本地机器的元数据上传。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deliver
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;提供 ipa 文件的路径，然后上传你的 App 进行审核：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deliver --ipa &amp;quot;App.ipa&amp;quot; --submit_for_review
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你页可以为 Mac OS X 的 apps 指定 pkg 文件的路径：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deliver --pkg &amp;quot;MacApp.pkg&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你使用 fastlane，你不需要手动指定 ipa/pkg 文件的路径。&lt;/p&gt;
+
+&lt;p&gt;这些只是 &lt;code&gt;deliver&lt;/code&gt; 能做的一小部分，查看完整文档&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/deliver/Deliverfile.md&#34;&gt; Deliverfile.md &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;从 iTunes Connect 下载已经存在的截图：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deliver download_screenshots
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;获取可用的运行选项：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deliver --help
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;选择之前上传的构建，然后提交审核：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deliver submit_build --build_number 830
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/deliver/Deliverfile.md&#34;&gt; Deliverfile.md &lt;/a&gt;获取更多选项。&lt;/p&gt;
+
+&lt;h2 id=&#34;证书&#34;&gt;证书&lt;/h2&gt;
+
+&lt;p&gt;关于你证书是如何处理的，在&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt; credentials_manager &lt;/a&gt;中可以得到详细的描述。&lt;/p&gt;
+
+&lt;p&gt;这些东西是如何工作的？是使用的魔法吗？&lt;/p&gt;
+
+&lt;p&gt;你的密码会存储在Mac OS X 的 keychain 中，但是也可以传递使用环境变量。(&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt; CredentialsManager &lt;/a&gt;中有更多信息)&lt;/p&gt;
+
+&lt;p&gt;其实在上传任何东西到 iTunes 之前，&lt;code&gt;deliver&lt;/code&gt; 会使用收集来的数据的摘要生成一个HTML。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;deliver&lt;/code&gt;在底层使用如下技术：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用 iTMSTransporter 工具来上传二进制文件到 iTunes Connect。iTMSTransporter 是 Apple 提供的一个命令行工具。&lt;/li&gt;
+&lt;li&gt;与所有actions相关的元数据，&lt;code&gt;deliver&lt;/code&gt;使用的是&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; spaceship &lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;提示&#34;&gt;提示&lt;/h1&gt;
+
+&lt;h2 id=&#34;fastlane-工具链&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt;工具链&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; &lt;code&gt;snapshot&lt;/code&gt; &lt;/a&gt;：将你iOS应用在每一种设备上进行本地化自动截图&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; &lt;code&gt;frameit&lt;/code&gt; &lt;/a&gt;：快速将你的截图放入到适合的设备框中&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; &lt;code&gt;pem&lt;/code&gt; &lt;/a&gt;：自动生成和更新你的推送通知证书&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; &lt;code&gt;sigh&lt;/code&gt; &lt;/a&gt;：管理你的 provisioning profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; &lt;code&gt;produce&lt;/code&gt; &lt;/a&gt;：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; &lt;code&gt;cert&lt;/code&gt; &lt;/a&gt;：自动创建和维护iOS的 code signing certificates&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; &lt;code&gt;spaceship&lt;/code&gt; &lt;/a&gt;：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; &lt;code&gt;pilot&lt;/code&gt; &lt;/a&gt;：管理你TestFlight测试人员的最好方式，使用终端构建&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; &lt;code&gt;boarding&lt;/code&gt; &lt;/a&gt;：邀请你 TestFlight 的beta测试人员的最简单方式&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; &lt;code&gt;gym&lt;/code&gt; &lt;/a&gt;：构建你iOS应用程序&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; &lt;code&gt;scan&lt;/code&gt; &lt;/a&gt;：为你iOS和Mac应用运行测试的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; &lt;code&gt;match&lt;/code&gt; &lt;/a&gt;：使用Git在你的团队中同步你的 certificates 和 profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/supply&#34;&gt; &lt;code&gt;supply&lt;/code&gt; &lt;/a&gt;：将你的Android应用和数据上传到 Google Play&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/screengrab&#34;&gt; &lt;code&gt;screengrab&lt;/code&gt; &lt;/a&gt;：Android版&lt;code&gt;snapshot&lt;/code&gt;，一样的功能&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;可用的语言码&#34;&gt;可用的语言码&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;no, en-US, en-CA, fi, ru, zh-Hans, nl-NL, zh-Hant, en-AU, id, de-DE, sv, ko, ms, pt-BR, el, es-ES, it, fr-CA, es-MX, pt-PT, vi, th, ja, fr-FR, da, tr, en-GB
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;默认值&#34;&gt;默认值&lt;/h2&gt;
+
+&lt;p&gt;Deliver 有指定的 &lt;code&gt;default&lt;/code&gt; 语言码，允许你提供不是本地化的值，如果你没有提供本地化的值，将会使用默认值。&lt;/p&gt;
+
+&lt;p&gt;你可以在deliverfile中使用json设置，也可以在metadata文件夹中设置。&lt;/p&gt;
+
+&lt;p&gt;假如你有&lt;code&gt;en-US, de-DE, el, it&lt;/code&gt;语言码的本地化数据。&lt;/p&gt;
+
+&lt;p&gt;你可以在deliverfile文件中如下设置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;release_notes({
+    &#39;default&#39; =&amp;gt; &amp;quot;Shiny and new”,
+    &#39;de-DE&#39; =&amp;gt; &amp;quot;glänzend und neu&amp;quot;
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Deliver会为 en-US, el 和 it 使用 &amp;ldquo;Shiny and new&amp;rdquo;。&lt;/p&gt;
+
+&lt;p&gt;为 de-DE 使用 &amp;ldquo;glänzend und neu&amp;rdquo;。&lt;/p&gt;
+
+&lt;p&gt;你也可以使用文件夹达到同样目的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;default
+  keywords.txt
+  marketing_url.txt
+  name.txt
+  privacy_url.txt
+  support_url.txt
+  release_notes.txt
+en-US
+  description.txt
+de-DE
+  description.txt
+el
+  description.txt
+it
+  description.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在这种情况下，keywords, urls, name 和 release notes 所有的本地化都会使用默认值，但是每一种语言都有完整的本地化描述。&lt;/p&gt;
+
+&lt;h2 id=&#34;自动创建截图&#34;&gt;自动创建截图&lt;/h2&gt;
+
+&lt;p&gt;如果你想 &lt;code&gt;deliver&lt;/code&gt; 集成&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; snapshot &lt;/a&gt;，查看&lt;a href=&#34;https://fastlane.tools&#34;&gt; fastlane！ &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;jenkins集成&#34;&gt;Jenkins集成&lt;/h2&gt;
+
+&lt;p&gt;关于如何在 &lt;code&gt;Jenkins&lt;/code&gt; 中设置 &lt;code&gt;deliver&lt;/code&gt; 和 &lt;code&gt;fastlane&lt;/code&gt; 的详细说明，参见&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Jenkins.md&#34;&gt; fastlane README &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;防火墙问题&#34;&gt;防火墙问题&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;deliver&lt;/code&gt; 使用 iTunes Transporter 来上传元数据和二进制。为了防止被防火墙阻挡，你可以指定不同的传输协议，使用方法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS=&amp;quot;-t DAV&amp;quot; deliver
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;http代理&#34;&gt;HTTP代理&lt;/h2&gt;
+
+&lt;p&gt;iTunes Transporter 是一个 Java 应用程序，与 Xcode 绑定在一起。为了利用&lt;code&gt;DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS=&amp;quot;-t DAV&amp;quot;&lt;/code&gt;，你需要配置 iTunes Transporter 使用独立于系统代理和任何环境代理的代理设置。你可以使用 Xcode 找到配置文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;TOOLS_PATH=$( xcode-select -p )
+REL_PATH=&#39;../Applications/Application Loader.app/Contents/itms/java/lib/net.properties&#39;
+echo &amp;quot;$TOOLS_PATH/$REL_PATH&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据&lt;a href=&#34;http://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html&#34;&gt; Java Proxy Configuration &lt;/a&gt;为&lt;code&gt;net.properties&lt;/code&gt;增加必需的代理配置值。&lt;/p&gt;
+
+&lt;h2 id=&#34;限制&#34;&gt;限制&lt;/h2&gt;
+
+&lt;p&gt;Apple 限制每天只能上传150个二进制文件。&lt;/p&gt;
+
+&lt;h2 id=&#34;编辑-deliverfile-文件&#34;&gt;编辑&lt;code&gt;Deliverfile&lt;/code&gt;文件&lt;/h2&gt;
+
+&lt;p&gt;将语法高亮改为Ruby。&lt;/p&gt;
+
+&lt;h1 id=&#34;需要帮助&#34;&gt;需要帮助？&lt;/h1&gt;
+
+&lt;p&gt;请在 GitHub 上提交 issue 并提供关于你设置的信息。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
