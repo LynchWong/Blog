@@ -1,0 +1,100 @@
+---
+title: "自定义进度视图"
+date: 2015-09-29 16:37:57
+categories: 
+- iOS
+tags: 
+- iOS自定义控件
+
+---
+
+最近项目需要做一个表示进度的视图，其实第三方的应该蛮多的。自己估摸着做一个应该很简单，直接着手就开始做了。
+<!--more-->
+
+# 准备工作 #
+
+* [Layer中自定义属性的动画](http://objccn.io/issue-12-2/)
+* [MRProgress](https://github.com/mrackwitz/MRProgress)
+
+我做的控件参考文献主要就是上面给出的这两个链接，一个是objc.io的文章。另一个是类似的开源控件的GitHub地址。
+
+# 源码和Demo #
+
+[CircleView](https://github.com/LynchWong/CircleView)
+
+# 控件功能 #
+
+控件的功能主要就是表示进度。项目主要有两种需求，用圆圈表示当前进度以及步骤显示。
+
+### 功能1.圆圈进度 ###
+
+![alt text](/img/iOSProgressCircleView/1.png)
+![alt text](/img/iOSProgressCircleView/2.png)
+
+如上图所示，这个是圆圈进度的截图。图中是一个播放声音的按钮，表示进度的圈圈会根据声音播放的进度来进行动画。当声音播放完成时整个圆圈也就动画完成了。下篇博客就写播放声音的接口，能播放本地的声音，也能播放网络声音。
+
+使用代码：
+
+    _progressCircleView = [[YKCircleView alloc] initWithType:CircleViewTypeProgress];
+    _progressCircleView.downArcColor = [UIColor clearColor];
+    _progressCircleView.upArcColor = [UIColor colorWithRed:80.0f/255.0f green:227.0f/255.0f blue:202.0f/255.0f alpha:1.0f];
+    _progressCircleView.arcWidth = 5.0f * ratio;
+    _progressCircleView.durationTime = 0.1;
+    _progressCircleView.bounds = CGRectMake(0, 0, radiu, radiu);
+    _progressCircleView.center = CGPointMake(kScreenWidth / 2, _topConstraint.constant + buttoWidth / 2);
+    _progressCircleView.userInteractionEnabled = YES;
+    [_progressCircleView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playSound:)]];
+    [_view addSubview:_progressCircleView];
+
+这是初始化的代码，**CircleViewTypeProgress**表示的是进度圈。其他的属性设置都很简单，更多详细的解释都在实现文件中。
+
+    /**
+     *  设置进度圈的Delegate，当progress为0.0和1.0的时候不会产生动画，避免当值为1.0的时候先动画一圈，然后再递减到0.
+     *
+     *
+     *  @param progress 0.0f － 1.0f
+     */
+    - (void)setProgress:(CGFloat)progress
+    {
+        if(progress >= 0 && progress <= 1)
+        {
+            [_progressCircleView setProgress:progress duration:0.1];
+        }
+        
+        if(progress >= 1.0f)//避免圆圈不能完全闭合
+        {
+            [_progressCircleView setProgress:progress duration:0.1];
+        }
+    }
+
+最后我们需要不断的调用上面的方法来设置视图的属性来产生动画。上面的方法会被我的声音接口在播放声音的时候不断的进行回调来设置当前播放的进度，从而产生动画。
+
+### 功能2.当前步骤 ###
+
+![alt text](/img/iOSProgressCircleView/3.png)
+
+如上图所示，表示的是当前进行到了第几个步骤，圈中间会有显示当前进行到的步骤以及总的步骤。
+
+使用代码：
+
+    _stepCircleView = [[YKCircleView alloc] initWithType:CircleViewTypeStep];
+    _stepCircleView.totalIndex = _lessonDetail.tips.count + 1;
+    _stepCircleView.downArcColor = [UIColor colorWithRed:217.0f/255.0f green:217.0f/255.0f blue:217.0f/255.0f alpha:1.0f];
+    _stepCircleView.upArcColor = [UIColor colorWithRed:67.0f/255.0f green:196.0f/255.0f blue:212.0f/255.0f alpha:1.0f];
+    _stepCircleView.arcWidth = 5.0f;
+    _stepCircleView.durationTime = 0.15;
+    _stepCircleView.bounds = CGRectMake(0, 0, 70, 70);
+    _stepCircleView.center = CGPointMake(self.view.bounds.size.width / 2, (kScreenHeight - 64.0f - _cognitionView.bounds.size.height) / 2 + _cognitionView.bounds.size.height);
+    [self.view addSubview:_stepCircleView];
+    
+    _stepCircleView.currentIndex = 1;
+
+初始化代码和上面类似的，这里就不讲解了。同理也需要对进度视图的属性进行设置，从而产生动画。如下方法所示：
+
+    - (void)currentOffsetX:(CGFloat)offsetX
+    {
+        CGFloat index = offsetX / (_cardWidth + 24) + 1;
+        _stepCircleView.currentIndex = index;
+    }
+
+这篇博客写的很简单，基本没有讲解什么。因为我觉得这个控件很简单，没有什么好讲的，大家一看代码就明白了。而且文章开头给出的两篇文章包含了所有的知识点，大家可以先看那两篇文章。

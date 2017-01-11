@@ -1,0 +1,57 @@
+---
+title: 最近的代码
+date: 2016-06-02 11:35:40
+tags: 
+- Swift
+- 播放器
+- VLC
+- MobileVLCKit
+categories: 
+- iOS
+
+---
+
+这三个小项目其实已经完成蛮久了，差不多一个多月的时间了。有发在Cocoachina的代码里面，我的[ GitHub ](https://github.com/LynchWong)上面也有源码。这里也只是作下记录，不做详细的讲解。
+<!--more-->
+
+# 仿 爱范儿 客户端
+
+仿 爱范儿 客户端，使用UIViewController容器、UIScrollView实现，使用 SnapKit 布局。
+
+实现左右滚动，顶部标题滚动，缩小视图，下拉刷新(上拉加载未实现)。
+
+说明：由于水平和思路的差异导致视觉效果上有些差异，除此之外还有些功能未实现(如 更多栏目)，请使用CocoaPods添加依赖库。
+
+[ 源码 ](https://github.com/LynchWong/mifanr)
+
+# 圆圈按钮
+
+自动布局，随意配制按钮个数和外观。
+
+[ 源码 ](https://github.com/LynchWong/CircleMenu)
+
+效果图：
+
+![alt text](/img/RecentCoding/demo.gif)
+
+# 播放器
+
+这个播放器是基于VLC的MobileVLCKit开发的，使用Swift。是我自己做的一个App，去年就上架到App Store了，最近空闲就小更新了下。
+
+MobileVLCKit功能强大，这个App只用到皮毛。实现了一些基本的功能：
+
+* 使用[ GCDWebServer ](https://github.com/swisspol/GCDWebServer)来进行本地视频上传到播放器。
+* 实现简单的播放、暂停、快进、后退、左侧上下滑动屏幕调节亮度、右侧上下滑动屏幕调节音量、左右扫动进度调节。
+
+* 没有支持播放远程视频，不支持外挂字幕，不支持截屏等其他功能。
+
+后续可能会添加这些功能的支持。
+
+项目App Store地址：
+[简易播放器 - 极简播放器](https://itunes.apple.com/us/app/jian-yi-bo-fang-qi-ji-jian/id1059131009?ls=1&mt=8)
+
+[ 源码 ](https://github.com/LynchWong/ePlayer)
+
+效果图：
+
+![alt text](/img/RecentCoding/intro.gif)

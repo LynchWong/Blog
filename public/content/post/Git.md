@@ -1,0 +1,22 @@
+---
+title: "Git"
+date: 2014-12-12 17:04:15
+categories: 
+- 杂项
+tags: 
+- Git
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
+
+---
+
+Git是分布式版本控制系统，相信很多同学都知道这个。类似的东西Svn，说是类似，其实有很大区别。这里推荐给大家两个地址，是学习Git很好的资料。当然还有其他优秀的资料，就不列举了。
+<!--more-->
+
+* [Git教程](http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000)
+
+* [Pro Git(中文版)](http://git.oschina.net/progit/)
+
+所以这篇博文不会讲解什么原理，也不会跟其他版本控制系统进行对比探讨孰优孰劣。当遇到需要使用更高级的命令时，知道可以来这里查找，这篇博文就是通向答案的一把钥匙，一盏指路的灯，而不是答案本身。
+

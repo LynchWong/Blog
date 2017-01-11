@@ -1,0 +1,249 @@
+---
+title: "Go的Web基础"
+date: 2015-07-01 12:52:12
+categories: 
+- Go
+tags: 
+- Go语言编程
+
+---
+
+基本上Go的语法以及一些基础的东西前面都讲完了，所以完全有能力使用Go开始编程了。当然还仅仅是编程而已，做桌面应用或者Web应用还是需要一些其他的知识。
+<!--more-->
+
+博主学Go主要是在Web编程这一块，而不是桌面应用。而目前最紧急的需求就是使用Go为自己的iOS App提供Web服务。所以现阶段主要的内容就是使用Go编写Web服务，这只是Web编程的一小部分。所以之后的内容主要就涉及到Go处理数据库，数据处理等与Web服务相关的内容。应该不会涉及到Web编程里面的其他内容，比如和JS交互，AJAX，HTML等。
+
+很多内容都来自 [《Go Web编程》](https://github.com/astaxie/build-web-application-with-golang)，包括之前博文的一些内容也都来自于此，大家可以参看原书。所以之后博文的部分内容可能会来自书中内容的精简。
+
+# Web基础
+
+由于Go目前已经拥有了成熟的HTTP处理包，这使得编写能做任何事情的动态Web程序易如反掌。
+
+## Go搭建一个简单的Web服务
+
+Web是基于http协议的一个服务，Go语言里面提供了一个完善的**net/http**包，通过http包可以很方便的就搭建起一个可以运行的Web服务。同时使用这个包能很简单地对Web的路由，静态文件，模板，cookie等数据进行设置和操作。
+
+### http包建立Web服务器
+
+打开我们的IDE，选择我们之前创建的**MyGo**项目，如下所示，如果忘了请参阅[ Go完整示例 ](http://lynchwong.com/2015/06/27/Go%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B/)
+
+![alt text](/img/GoWebBasic/1.png)
+
+打开之后在src下创建一个webdemo目录，然后在该目录下创建webdemo.go源文件，如下图所示(请忽略其他的文件夹)：
+
+![alt text](/img/GoWebBasic/2.png)
+
+现在我们进行编码，修改webdemo.go源文件的代码如下：
+
+	package main
+	
+	import (
+		"fmt"
+		"net/http"
+		"strings"
+		"log"
+	)
+	
+	func helloWorld(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()       //解析url传递的参数，对于POST则解析响应包的主体（request body）
+		//注意:如果没有调用ParseForm方法，下面无法获取表单的数据
+		fmt.Println(r.Form) //这些信息是输出到服务器端的打印信息
+		fmt.Println("path", r.URL.Path)
+		fmt.Println("scheme", r.URL.Scheme)
+		fmt.Println(r.Form["url_long"])
+		for k, v := range r.Form {
+			fmt.Println("key:", k)
+			fmt.Println("val:", strings.Join(v, ""))
+		}
+		fmt.Fprintf(w, "Hello Lynch!") //这个写入到w的是输出到客户端的
+	}
+	
+	func main() {
+		http.HandleFunc("/", helloWorld)       //设置访问的路由
+		err := http.ListenAndServe(":8866", nil) //设置监听的端口
+		if err != nil {
+			log.Fatal("ListenAndServe: ", err)
+		}
+	}
+
+你可以直接右键webdemo.go源文件来Run，如下所示：
+
+![alt text](/img/GoWebBasic/3.png)
+
+运行后IDE如下所示：
+
+![alt text](/img/GoWebBasic/4.png)
+
+然后在浏览器里面输入[ http://localhost:8866/ ](http://localhost:8866/)，如下所示：
+
+![alt text](/img/GoWebBasic/5.png)
+
+当然你也可以在终端里面输入**go build webdemo**，然后就会生成一个可执行文件，如下所示：
+
+![alt text](/img/GoWebBasic/6.png)
+
+双击可执行文件，然后就会监听8866端口了，在浏览器里面输入地址就可以请求了。
+
+## Go如何使得Web工作
+
+前面使用一个简单的**net/http**包就搭建起来了一个Web服务。现在就来讲讲Go是如何实现的。
+
+### Web工作方式的几个概念
+
+以下均是服务器端的几个概念
+
+Request：用户请求的信息，用来解析用户的请求信息，包括post、get、cookie、url等信息
+
+Response：服务器需要反馈给客户端的信息
+
+Conn：用户的每次请求链接
+
+Handler：处理请求和生成返回信息的处理逻辑
+
+### 分析http包运行机制
+
+`ListenAndServe`函数会在底层使用TCP协议搭建一个服务，然后监听我们设置的端口。
+
+	func (srv *Server) Serve(l net.Listener) error {
+		defer l.Close()
+		var tempDelay time.Duration // how long to sleep on accept failure
+		for {
+			rw, e := l.Accept()
+			if e != nil {
+				if ne, ok := e.(net.Error); ok && ne.Temporary() {
+					if tempDelay == 0 {
+						tempDelay = 5 * time.Millisecond
+					} else {
+						tempDelay *= 2
+					}
+					if max := 1 * time.Second; tempDelay > max {
+						tempDelay = max
+					}
+					log.Printf("http: Accept error: %v; retrying in %v", e, tempDelay)
+					time.Sleep(tempDelay)
+					continue
+				}
+				return e
+			}
+			tempDelay = 0
+			c, err := srv.newConn(rw)
+			if err != nil {
+				continue
+			}
+			go c.serve()
+		}
+	}
+	
+上面是http包的源码，来分析下源码。在函数内有一个for循环，通过Listener来接收请求，根据请求创建了一个Conn，然后单独开了一个goroutine，这里涉及到了高并发。
+
+Conn首先会解析请求，然后获取相应的handler：`handler := c.server.Handler`，也就是`ListenAndServe`的第二个参数，我们传递的是nil，所以默认获取`handler = DefaultServeMux`。这个变量就是一个路由器，我们通过`http.HandleFunc()`函数设置。比如我们代码里面设置了`/`的路由规则，当请求url为`/`的时候就会转到函数helloWorld。然后DefaultServeMux会调用ServeHTTP方法，这个方法内部会调用helloWorld方法本身(后面会讲该方法的实现)，最后通过写入response的信息反馈给客户端。
+
+## Go的http包详解
+
+接下来我们就来讲讲DefaultServeMux。之前我们的代码时调用了http包默认的路由器，通过路由器把本次请求的信息传递到了后端的处理函数。我们应该了解这个路由器的实现。
+
+它的结构如下：
+
+	type ServeMux struct {
+		mu sync.RWMutex   //锁，由于请求涉及到并发处理，因此这里需要一个锁机制
+		m  map[string]muxEntry  // 路由规则，一个string对应一个mux实体，这里的string就是注册的路由表达式
+		hosts bool // 是否在任意的规则中带有host信息
+	}
+	
+muxEntry如下所示：
+	
+	type muxEntry struct {
+		explicit bool   // 是否精确匹配
+		h        Handler // 这个路由表达式对应哪个handler
+		pattern  string  //匹配字符串
+	}
+	
+Handler接口：
+
+	type Handler interface {
+		ServeHTTP(ResponseWriter, *Request)  // 路由实现器
+	}
+	
+Handler是一个接口，但是我们的处理函数helloWorld并没有实现这个接口。那么为什么能把helloWorld函数添加为Handler呢。让我们看下`HandlerFunc`类型：
+
+	type HandlerFunc func(ResponseWriter, *Request)
+
+	// ServeHTTP calls f(w, r).
+	func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) {
+		f(w, r)
+	}
+	
+如上代码所示，我们将这样的函数func(ResponseWriter, *Request)定义为了`HandlerFunc`类型，并且添加了ServeHTTP方法，并且在方法实现里面调用了该方法自己。因为`HandlerFunc`类型实现了Handler接口，所以只要我们将我们传递的函数强转成`HandlerFunc`类型就可以了，比如HandlerFunc(helloWorld)，然后在ServeHTTP里面调用了helloWorld函数本身。
+
+路由器里面存储好了相应的路由规则之后，那么具体的请求又是怎么分发的呢？请看下面的代码，默认的路由器实现了`ServeHTTP`：
+
+	func (mux *ServeMux) ServeHTTP(w ResponseWriter, r *Request) {
+		if r.RequestURI == "*" {
+			w.Header().Set("Connection", "close")
+			w.WriteHeader(StatusBadRequest)
+			return
+		}
+		h, _ := mux.Handler(r)
+		h.ServeHTTP(w, r)
+	}
+	
+`mux.Handler(r)`返回了对应设置路由的处理Handler，然后执行了`h.ServeHTTP(w, r)`方法。也就是调用了对应路由的handler的ServerHTTP接口。那么mux.Handler(r)怎么处理的呢？
+
+	func (mux *ServeMux) Handler(r *Request) (h Handler, pattern string) {
+		if r.Method != "CONNECT" {
+			if p := cleanPath(r.URL.Path); p != r.URL.Path {
+				_, pattern = mux.handler(r.Host, p)
+				return RedirectHandler(p, StatusMovedPermanently), pattern
+			}
+		}	
+		return mux.handler(r.Host, r.URL.Path)
+	}
+	
+	func (mux *ServeMux) handler(host, path string) (h Handler, pattern string) {
+		mux.mu.RLock()
+		defer mux.mu.RUnlock()
+	
+		// Host-specific pattern takes precedence over generic ones
+		if mux.hosts {
+			h, pattern = mux.match(host + path)
+		}
+		if h == nil {
+			h, pattern = mux.match(path)
+		}
+		if h == nil {
+			h, pattern = NotFoundHandler(), ""
+		}
+		return
+	}
+	
+原来他是根据用户请求的URL和路由器里面存储的map去匹配的，当匹配到之后返回存储的handler，调用这个handler的ServeHTTP接口就可以执行到相应的函数了。
+
+通过上面这个介绍，我们了解了整个路由过程，Go其实支持外部实现的路由器 `ListenAndServe`的第二个参数就是用以配置外部路由器的，它是一个Handler接口，即外部路由器只要实现了Handler接口就可以，我们可以在自己实现的路由器的ServeHTTP里面实现自定义路由功能。
+
+	package main
+	
+	import (
+		"fmt"
+		"net/http"
+	)
+	
+	type MyServerMux struct {
+	}
+	
+	func (p *MyServerMux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/" {
+			helloWorld(w, r)
+			return
+		}
+		http.NotFound(w, r)
+		return
+	}
+	
+	func helloWorld(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello Lynch!")
+	}
+	
+	func main() {
+		mux := &MyServerMux{}
+		http.ListenAndServe(":8866", mux)
+	}
