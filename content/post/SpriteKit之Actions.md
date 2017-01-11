@@ -1,0 +1,420 @@
+---
+title: "SpriteKit：Actions"
+date: 2015-04-15 10:31:17
+categories: 
+- iOS
+tags: 
+- SpriteKit
+- iOS Game
+- Swift
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
+
+---
+
+上篇介绍了一些SpriteKit的基本概念，也介绍了怎么添加精灵到场景里面。但精灵在场景里都是静态的，我们还没有让它们动起来。所以这篇就讲讲怎么让精灵动起来，让游戏更生动。
+<!--more-->
+
+有两种方法可以让精灵动起来：
+
+1. 我们可以让精灵运行动作，在SpriteKit里面动作用`SKAction`这个类来表示。比如一些简单的动作，移动，缩放，旋转，跟随等。你可以将简单的动作组合起来，成为一个序列；你也可以指定动作执行的次数或者循环执行；你也可以自定义动作等等。
+2. 我们可以根据时间来手动设置精灵的位置。之前有提到过`GameScene.swift`里面有个`update(currentTime: NSTimeInterval)`方法，SpriteKit每帧都会自动调用这个方法。所以，在这个方法里根据时间设置精灵的位置是个不错的选择。但是这个方法的效果有时候不会很理想，特别是当帧率不稳定的时候，我们后边再讲。
+
+所以接下来我们就具体的看看这两种方法，我们先用第二种方法。
+
+## 使用update方法来移动精灵
+
+我们还是接着上次使用的项目来继续，如果没有了，新建一个也很快，只需添加一个精灵到场景中即可。
+
+`GameViewController.swift`代码如下，只是删除了一些现在用不到的东西：
+
+	import UIKit
+	import SpriteKit
+
+	class GameViewController: UIViewController {
+    	override func viewDidLoad() {
+        	super.viewDidLoad()
+        	let scene = GameScene(size: CGSize(width: 750.0, height: 1334.0))
+        	let skView = self.view as! SKView
+        	skView.showsFPS = true
+        	skView.showsNodeCount = true
+        	skView.ignoresSiblingOrder = true
+        	scene.scaleMode = .AspectFill
+        	skView.presentScene(scene)
+    	}
+    	override func prefersStatusBarHidden() -> Bool {
+        	return true
+    	}
+	}
+
+`GameScene.swift`的代码如下：
+
+	import SpriteKit
+
+	class GameScene: SKScene {
+    
+    	let ship = SKSpriteNode(imageNamed: "Spaceship")
+    
+    	override func didMoveToView(view: SKView) {
+        	backgroundColor = SKColor.whiteColor()
+        	ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        	addChild(ship)
+    	}
+    
+    	override func update(currentTime: NSTimeInterval) {
+        	ship.position.y += 1.0
+    	}
+	}
+	
+我将精灵声明为了GameScene的属性，其次我在update方法中更新精灵位置的y坐标，每帧增加1。⌘R运行后的效果就是飞船精灵由屏幕的正中间向上飞行，当然，看起来像是在飞行。这里我就不贴图了。
+
+也许大家都注意到了屏幕右下角的一些信息，1 node 60.0fps，这里分别表示当前屏幕内有多少个节点，每秒绘制多少次。Frames per second (FPS)，表示每秒绘制的次数，值越高越好。通常来说游戏都会尽量保持30 ~ 60的FPS以保证动画的流畅，当低于30的时候就会感觉到呆滞。
+
+这里我们需要研究SpriteKit每帧都做了些什么事情，官方文档[About Sprite Kit](https://developer.apple.com/library/ios/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html)开篇就讲了这个问题，看下图：
+
+![alt text](/img/SpriteKitActions/1.png)
+
+SpriteKit提供了图形渲染和动画基础，你可以用来使任意的纹理图像或者精灵动起来。SpriteKit使用传统的渲染循环，每一帧的内容会在这一帧渲染之前处理。你的游戏决定了场景的内容，以及场景内容在每一帧中怎么改变。SpriteKit使用图形硬件高效的绘制动画的每一帧。翻译的不好，大概意思就是这样。
+
+从图中可以看出调用update方法只是每一帧执行内容的一部分，除此之外还有很多其他的事情，最后才是渲染整个场景。这里就先不说其他的，后面需要的时候会再说。SpriteKit会尽量快得绘制每一帧，让FPS尽量的接近60。然而，如果你得update方法花了太多的时间，或者SpriteKit一次绘制了草果硬件能够处理的节点数量，FPS就会下降。而这下降就意味着两次调用update方法之间的时间间隔是不一样的，这就导致了我们精灵的位置始终是在我们期望的位置附近波动的。即使我们保持60FPS时，两次update方法之间的时间间隔仍然是波动的。只是这时波动较小，肉眼难以从动画中看出差别。
+
+接下来，我们添加代码来打印出两次方法调用之间的时间间隔：
+
+在`GameScene.swift`方法中添加如下两个属性：
+
+	var lastUpdateTime: NSTimeInterval = 0
+    var dt: NSTimeInterval = 0
+    
+在update方法中添加如下代码：
+
+	if lastUpdateTime > 0 {
+    	dt = currentTime - lastUpdateTime
+	} else {
+    	dt = 0
+	}
+	lastUpdateTime = currentTime
+	println("\(dt*1000) milliseconds since last update")
+
+控制台输出如下：
+
+	16.6635850000603 milliseconds since last update
+	16.6687409982842 milliseconds since last update
+	15.7276280006045 milliseconds since last update
+	17.6131959997292 milliseconds since last update
+	15.7501659996342 milliseconds since last update
+	17.1622560010292 milliseconds since last update
+	17.1266059987829 milliseconds since last update
+	15.6556320034724 milliseconds since last update
+	16.7910149975796 milliseconds since last update
+	16.4657300010731 milliseconds since last update
+	
+可以看出是波动的，虽然是毫秒单位，人眼难以识别，但是毫秒对计算机来说已经是相当的一段时间了。所以这种波动的时间导致动画效果就如下图所示：图片来自[iOS Games by Tutorials Second Edition](http://www.raywenderlich.com/store/ios-games-by-tutorials)。
+
+![alt text](/img/SpriteKitActions/2.png)
+
+总会在我们期望的准确位置附近波动。我们接下来就来修复这个问题：
+
+首先我们保持update方法足够的快，应当避免在update方法里面执行复杂的算法；其次让场景中节点的数量越少越好，比如移除屏幕外的和不再需要的节点。
+
+下面我们添加一个movePointsPerSec属性到`GameScene.swift`：
+
+	let movePointsPerSec: CGFloat = 480.0
+	
+然后修改update方法代码如下所示；
+
+	override func update(currentTime: NSTimeInterval) {
+        if lastUpdateTime > 0 {
+            dt = currentTime - lastUpdateTime
+        } else {
+            dt = 0
+        }
+        lastUpdateTime = currentTime
+        println("\(dt*1000) milliseconds since last update")
+        ship.position.y += movePointsPerSec * CGFloat(dt)
+    }
+    
+我们根据两次调用的时间差乘以期望每秒移动的距离，然后再加上原来位置的y坐标值，而不是像原来直接增加一个固定的值。
+
+示例很简单，是单坐标抽的移动，实际情况更复杂。但是思想是一样的，也能推导出来。比如，我想让飞船移动到我手指点击的那个点。首先我们在`touchesBegan`方法里面获取点击的坐标位置，代码如下：
+
+	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        let touch = touches.first as! UITouch
+        let touchLocation = touch.locationInNode(self)
+    }
+    
+这里有必要说一下，由于更新Swift1.2和Xcode6.3的原因，这个方法跟之前不一样了。原来是这样的`touchesBegan(touches: NSSet, withEvent event: UIEvent)`，用`let touch = touches.anyObject() as UITouch`获取`UITouch`对象。简单的查了下集合类`Set`的API改成上面那样获取`UITouch`对象。包括as!，应该是Swift1.2版本更新的内容。这里先不说了，Xcode6.3也提供了方法将之前的Swift版本代码转变到最新版本的代码，如下图所示：
+
+![alt text](/img/SpriteKitActions/3.png)
+
+试了下效果貌似不理想，可能是我使用方法不对，没做深究，大家自己试试。
+
+添加一个`velocity`属性：
+
+	var velocity = CGPointZero
+	
+然后添加吐下代码到`touchesBegan`方法：
+
+	let offset = CGPoint(x: touchLocation.x - ship.position.x, y: touchLocation.y - ship.position.y)
+    let length = sqrt(Double(offset.x * offset.x + offset.y * offset.y))
+    let unit = CGPoint(x: offset.x / CGFloat(length), y: offset.y / CGFloat(length))
+    velocity = CGPoint(x: unit.x * movePointsPerSec, y: unit.y * movePointsPerSec)
+    
+我们首先计算点击的点到当前精灵位置的差值，然后利用勾股定理计算出两点之间的距离，这些我想大家都懂了，要是忘了去搜下，或者自己用手画画坐标系，模拟计算下两点之间的距离。然后我们计算出单位向量，这个单位向量是以原来精灵的位置为坐标原点的，希望大家能理解。最后我们用单位向量乘以每秒期望移动的距离，最后得出一个速度。每当点击屏幕的时候，我们都会计算出一个速度。
+
+最后修改`update`方法：
+
+	override func update(currentTime: NSTimeInterval) {
+        if lastUpdateTime > 0 {
+            dt = currentTime - lastUpdateTime
+        } else {
+            dt = 0
+        }
+        lastUpdateTime = currentTime
+        println("\(dt*1000) milliseconds since last update")
+        let amountToMove = CGPoint(x: velocity.x * CGFloat(dt), y: velocity.y * CGFloat(dt))
+        ship.position = CGPoint(x: ship.position.x + amountToMove.x, y: ship.position.y + amountToMove.y)
+    }
+    
+我们用速度乘以时间差得出需要移动的距离，然后再加上精灵当前的位置。运行后就会发现精灵会向我们点击的点得方法移动，且会一直移动下去。怎么让精灵只移动到我们点击的点，大家自己试试。以及旋转飞机指向飞机前进的方向。
+
+## SKAction
+
+注释掉`update`和`touchesBegan`方法，我们现在通过`SKAction`来移动精灵。
+
+### Move action
+
+修改`didMoveToView`方法中的代码：
+
+    override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.whiteColor()
+        ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        ship.setScale(0.5)
+        addChild(ship)
+        
+        let actionMove = SKAction.moveTo(CGPoint(x: ship.position.x, y: size.height), duration: 2.0)
+        ship.runAction(actionMove)
+    }
+        
+通过调用`SKAction`的类方法来创建一个动作，如上创建的动作会使节点在指定的时间内移动到指定的点。精灵通过调用`runAction()`方法来执行动作，任何SKNode节点都可以调用`runAction()`。运行后就会看到飞船精灵从屏幕中心点移动到屏幕上方的中点。
+
+`moveTo(duration:)`方法会移动在指定时间移动节点到指定的位置，除此方法之外还有其他的移动精灵的方法。
+
+* `moveToX(duration:)`和`moveToY(duration:)`这两个移动方法会根据指定的x轴和y轴的值来移动，而其他的保持不变。比如上面的实例我们也可以用`moveToY(duration:)`这个方法实现。
+* `moveByX(y:duration:)`。“move to”的方法会移动精灵到指定的位置，但是有时候根据偏移量来移动精灵也是很方便的。比如上面的示例我们也可以用这个方法实现，传递“0”给x轴，传递“size.height / 2”给y轴。
+
+区别如下图所示：
+
+![alt text](/img/SpriteKitActions/4.png)
+
+“[action] to”和“[action] by”这两种模式在其他种类的动作中也存在。比如“scale to”、“scale by”、“rotate by”、“rotate to”等等，大家运用的时候多看看方法说明。
+
+有时候我们可以通过`extension`来拓展一个类添加新的功能。但是`SKAction`类无法拓展，创建action的唯一方法就是调用`SKAction`的相应的类方法。
+
+### Sequence action
+
+单个动作有时满足不了我们的需求，需要完成一个动作之后接着执行另一个动作。我们需要把一连串的动作排成一个序列，然后让节点执行这个动作。`SKAction`提供了相应的方法来满足这个需求。
+
+修改`didMoveToView()`方法如下：
+
+    override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.whiteColor()
+        ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        ship.setScale(0.5)
+        addChild(ship)
+        
+        let moveUp = SKAction.moveByX(0, y: 100, duration: 1.0)
+        let zoom = SKAction.scaleTo(2.0, duration: 0.25)
+        let wait = SKAction.waitForDuration(0.5)
+        let fadeAway = SKAction.fadeOutWithDuration(0.25)
+        let removeNode = SKAction.removeFromParent()
+        
+        let sequence = SKAction.sequence([moveUp, zoom, wait, fadeAway, removeNode])
+        ship.runAction(sequence)
+    }
+    
+稍微讲下涉及到的一两个动作，将动作序列起来也很简单，大家应该一看就能领悟，动作的效果大家运行便知：
+
+* wait 通常用到序列里面。这个动作只是简单的等待一段时间，然后就结束。
+* removeNode 动作是瞬时的，没有执行时间。虽然这个动作是序列的一部分，你会看到这个动作并没有出现在下面序列的时间线里面。作为瞬时动作，在 fadeAway 动作结束了就开始，然后马上就结束了。
+
+![alt text](/img/SpriteKitActions/5.png)
+
+### Group action
+
+“group action”是一组动作的集合，当节点开始执行“group action”时，所有的动作都开始执行。修改`didMoveToView()`代码：
+
+    override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.whiteColor()
+        ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        ship.setScale(0)
+        addChild(ship)
+        
+
+        let animate = SKAction.animateWithTextures([SKTexture(imageNamed: "Spaceship")], timePerFrame: 2.0)
+        let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+        let scale = SKAction.scaleTo(1.0, duration: 1.0)
+        let fadeIn = SKAction.fadeInWithDuration(1.0)
+        
+        let group = SKAction.group([animate, moveDown, scale, fadeIn])
+        ship.runAction(group)
+    }
+
+![alt text](/img/SpriteKitActions/6.png)
+
+上图展示了“group action”的时间线，可以看出和“sequence action”的区别。“group action”里面的动作在同一时间开始执行，单个动作的结束时间取决于自己的执行时间，“group action”的执行时间取决于执行时间最长的动作。
+
+### Repeating Sequence action
+
+    override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.whiteColor()
+        ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        ship.setScale(0.5)
+        addChild(ship)
+        
+
+        let fadeOut = SKAction.fadeOutWithDuration(1)
+        let fadeIn = SKAction.fadeInWithDuration(1)
+        let pulse = SKAction.sequence([fadeOut,fadeIn])
+        
+        let pulseThreeTimes = SKAction.repeatAction(pulse, count: 3)
+        ship.runAction(pulseThreeTimes)
+    }
+    
+代码很简单，下图展示了 pulseThreeTimes 动作的时间线。
+
+![alt text](/img/SpriteKitActions/7.png)
+
+### Repeating Group action
+
+修改`didMoveToView()`方法如下，循环执行一个“group action”：
+
+    override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.whiteColor()
+        ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        ship.setScale(0.5)
+        addChild(ship)
+        
+
+        let animate = SKAction.animateWithTextures([SKTexture(imageNamed: "Spaceship")], timePerFrame: 2.0)
+        let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+        
+        let group = SKAction.sequence([animate, moveDown])
+        let repeat = SKAction.repeatActionForever(group)
+        ship.runAction(repeat)
+    }
+    
+下图展示了 repeat 动作的时间线。
+
+![alt text](/img/SpriteKitActions/8.png)
+
+### Group repeat action
+
+标题的名字是不是有点让人糊涂了，但是仔细理解，认真看代码就能明白是什么意思了。这个标题的意思就是把重复动作用group组合起来。修改`didMoveToView()`方法：
+
+    override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.whiteColor()
+        ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        ship.setScale(0.5)
+        addChild(ship)
+        
+
+        let animate = SKAction.animateWithTextures([SKTexture(imageNamed: "Spaceship")], timePerFrame: 1.0)
+        let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+        
+        let repeatAnimation = SKAction.repeatActionForever(animate)
+        let repeatMove = SKAction.repeatActionForever(moveDown)
+        
+        let group = SKAction.group([repeatAnimation, repeatMove])
+        ship.runAction(group)
+    }
+    
+下图展示了 group 动作的时间线。其实group很好理解，完全可以理解为组合中得动作是互不相干的，这样思考起来可能就简单些了。
+
+![alt text](/img/SpriteKitActions/9.png)
+
+### Run block action
+
+有时我们希望运行一段block代码，比如我想在序列运行结束的时候打印一段log。
+
+        let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+        let logMessage = SKAction.runBlock() {
+            println("down 200.0!")
+        }
+        ship.runAction(SKAction.sequence([moveDown, logMessage]))
+        
+控制台输出`down 200.0!`。
+
+### Reversed actions
+
+上一个示例让精灵节点下移，现在我又想让精灵节点返回去。最直接的方法就是再创建一个上移的动作就可实现，但是我们有更好的选择。通过在指定的动作上调用`reversedAction()`方法可以逆转这个动作，返回一个和原来动作对立的新动作。
+
+如下图所示：
+
+![alt text](/img/SpriteKitActions/10.png)
+
+不是所有的动作都是可逆的，比如`moveTo(duration:)`就不是的。要知道一个动作是否是可逆的，请查看苹果的官方文档的说明。如果在不可逆的动作上调用了`reversedAction()`方法，会返回原来的动作。
+
+        let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+        let reversed = moveDown.reversedAction()        
+        ship.runAction(SKAction.sequence([moveDown, reversed]))
+        
+同样的“sequence action”也是可逆的。
+
+        let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+        let reversed = moveDown.reversedAction()
+        let sequence = SKAction.sequence([moveDown, reversed])
+        ship.runAction(SKAction.sequence([sequence, sequence.reversedAction()]))
+        
+上面的代码，演示性不强，大家自行修改下动作让掩饰性更强些。“sequence action”的`reversedAction()`方法，逆转了序列的顺序，也逆转了序列的每一个动作。上面代码的 sequence 动作的逆转，第一个动作就是 reversed 动作的逆转，第二个动作就是 moveDown 动作的逆转。可以得出 sequence 动作的逆转和 sequence 本身是一样的，所示最后运行的效果就像是执行了两遍 sequence 动作一样。
+
+### Animation action
+
+这个动作在前面我们已经用过了，就是这个样子的。
+
+	let animate = SKAction.animateWithTextures([SKTexture(imageNamed: "Spaceship")], timePerFrame: 2.0)
+	
+要运行这个动作，我们首先需要一组纹理。SpriteKit是通过纹理来展示图片的，用`SKTexture`类表示。我们之前通过图片来创建精灵，其实SpriteKit还是先用图片创建了纹理，然后再将纹理赋值给精灵的`texture`属性。我们可以在程序运行的时候随意改变精灵的`texture`属性。实际上，“animation action”就是根据我们提供的那组纹理，以及timePerFrame参数来自动的为我们改变精灵的`texture`属性。创建方法如上面代码所示，由于找不到美术资源，随意创建的。然后就像其他的动作一样在节点上运行。
+
+这个方法是我们以后会经常用到的，比如在游戏里面看见一些角色常常有一些基本的动作动画，这些就可以用这个动作实现。
+
+### Stopping action
+
+在运行动作的时候，我们可以给动作一个key。之前调用`runAction()`方法，现在`runAction(withKey:)`方法替代，我们就可以调用`removeActionForKey()`方法来停止一个动作。
+
+	ship.runAction(moveDown, withKey: "MoveDown")
+	ship.removeActionForKey("MoveDown")
+
+### Scale action
+
+这个动作和前面我们用的“move to”的模式是很像的，这里就不上代码了，有几点需要注意下：
+
+* scaleXTo(duration:), scaleYTo(duration:) 和 scaleXTo(y:duration:): 这些可以允许你独立的缩放x或者y轴，可以用来实现拉伸、挤压一个节点的效果。
+* scaleBy(duration:): 这个方法缩放的倍数是由当前节点的缩放倍数乘以传递过去的参数，通常我们没有设置缩放倍数时默认都是1.0。比如现在我传递过去的参数是2.0，那么现在就会变为原来的2倍，如果我再调用这个方法，就会变为4倍。所以如果我们一开始精灵的缩放倍数就是0，你调用这个方法始终都是0。
+* scaleXBy(y:duration:): 允许你延x和y轴独立的缩放。
+
+### Sound action
+
+	runAction(SKAction.playSoundFileNamed("xxxx", waitForCompletion: false))
+
+这个动作是用来播放音效的，通常运行在当前的场景节点上。
+
+### Sharing actions
+
+SpriteKit的动作是可以共享的，是SpriteKit很强大的。如果你像上面那样直接在需要的时候初始化一个音效，然后再来播放。很多时候第一次可能会卡顿，这是由于加载音频文件的原因。
+
+`SKAction`对象本身并没有维持什么状态，所以我们可以同时在任意多个节点上重用动作。比如我们创建了一个子弹发射出去的动作，我们可能创建很多个子弹精灵，但是这个动作只需一个就够了，我们可以将这个动作运行到不同的子弹精灵上。
+
+其实解决音频卡顿的问题也很简单，可以将播放音效的动作赋值为当前场景的一个属性，在场景初始化的时候就初始化了这个动作，然后在需要的时候运行就可以了。
+
+## 结束
+
+最后要讲得就是我们最开始的时候给了一张游戏渲染循环的一张图，如下，我还是贴出来：
+
+![alt text](/img/SpriteKitActions/1.png)
+
+之前我们讲了`update`方法，要讲得就是接下来的。这里我们先做个假设，比如我们场景中有两个精灵，一个是我们的玩家角色，另外一个是怪物。怪物精灵执行动作从屏幕右边出现往屏幕左边移动。现在我们要检测这两个精灵的碰撞，我们在`update`方法里面获取两个精灵的“frame”属性，然后调用`CGRectIntersectsRect(rect1: CGRect, rect2: CGRect)`方法来检测两个精灵是否有交叉的地方，如果有就说明有碰撞。后面我们会利用SpriteKit的物理引擎来检测碰撞，这里就先这样做了。
+
+有了这个假设我们再仔细的看看上面的那个图，主要看`update`后面的那两段。虽然不知道到底是干嘛，但是大致能想到跟action有关系。`-didEvaluateActions`应该也是个方法。Evaluate查了下有个求值的意思，那么这个方法的大概意思就是已经对action求值了。那么在我们上面描述的逻辑中就有一个Bug存在，首先我们是在`update`方法里面检测碰撞的，其次怪物精灵是通过执行动作来移动。而那时还没有对action求值，也就是说怪物精灵的位置还没有计算成最新的，获取的怪物CGRect值也不是最新的，任然是上一帧的，所以我们的检测总是慢了一帧。所以我们应该在`-didEvaluateActions`方法里面获取两个精灵的“frame”属性，然后调用`CGRectIntersectsRect(rect1: CGRect, rect2: CGRect)`方法来检测两个精灵是否有交叉的地方。
+
+这种情况可能对于一些游戏来说没有什么影响，人眼也难以区别这两者之间的不同。但是有的游戏可能就很容易区别出来，最好还是知道这一点。

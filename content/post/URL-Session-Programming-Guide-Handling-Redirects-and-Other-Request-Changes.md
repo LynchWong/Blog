@@ -1,0 +1,73 @@
+---
+title: "URL Session Programming Guide - Handling Redirects and Other Request Changes"
+date: 2016-01-29 14:11:59
+categories: 
+- 编程指南
+tags: 
+- NSURLSession
+- NSURLConnection
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
+
+---
+
+[官方文档](https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/RequestChanges.html#//apple_ref/doc/uid/TP40009506-SW1)
+<!--more-->
+
+# Handling Redirects and Other Request Changes
+(处理重定向和其它的请求变更)
+
+当服务器响应请求时指示客户端应该重新发起请求不同URL的请求时就会产生重定向。当发生重定向时NSURLSession， NSURLConnection，和NSURLDownload类会通知它们的代理。
+
+为了处理重定向，你URL加载系统的代理必须实现如下中的一个代理方法：
+
+* 对于NSURLSession，实现URLSession:task:willPerformHTTPRedirection:newRequest:completionHandler:代理方法。
+* 对于NSURLConnection，实现connection:willSendRequest:redirectResponse:代理方法。
+* 对于NSURLDownload，实现download:willSendRequest:redirectResponse:代理方法。
+
+在这些方法中，代理可以检查新的请求和引起重定向的响应，能够通过完成处理句柄返回一个新的请求对象给NSURLSession或者通过返回值给NSURLConnection和NSURLDownload。
+
+代理能够做如下任何事情：
+
+* 允许通过简单返回提供的请求进行重定向。
+* 创建一个新的请求，指向不同的URL，然后返回这个请求。
+* 通过返回nil来拒绝重定向和接收从连接返回的任何已经存在的数据。
+
+另外，代理可以取消重定向和连接。对于NSURLSession，代理通过给任务对象发送cancel消息来实现。对于NSURLConnection和NSURLDownload的API，代理通过给NSURLConnection和NSURLDownload对象发送cancel消息实现。
+
+如果NSURLProtocol的子类为了标准格式化NSURLRequest处理了请求，代理也会收到connection:willSendRequest:redirectResponse:消息。比如，为了修改**http://www.apple.com**为**http://www.apple.com/**改变了请求。这是因为标准或规范，用于缓存管理的请求版本。在这种特殊情况下，传递给委托的响应是nil，你应该简单的返回提供的请求。
+
+Listing 5-1的例子实现了允许规范的变化，拒绝所有服务器重定向。
+
+Listing 5-1  Example of an implementation of connection:willSendRequest:redirectResponse:
+
+    #if FOR_NSURLSESSION
+    - (void)URLSession:(NSURLSession *)session
+    task:(NSURLSessionTask *)task
+    willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
+    newRequest:(NSURLRequest *)request
+    completionHandler:(void (^)(NSURLRequest *))completionHandler
+    #elif FOR_NSURLCONNECTION
+    -(NSURLRequest *)connection:(NSURLConnection *)connection
+    willSendRequest:(NSURLRequest *)request
+    redirectResponse:(NSURLResponse *)redirectResponse
+    #else // FOR_NSURLDOWNLOAD
+    -(NSURLRequest *)download:(NSURLConnection *)connection
+    willSendRequest:(NSURLRequest *)request
+    redirectResponse:(NSURLResponse *)redirectResponse
+    #endif
+    {
+        NSURLRequest *newRequest = request;
+        if (redirectResponse) {
+            newRequest = nil;
+        }
+        
+    #if FOR_NSURLSESSION
+        completionHandler(newRequest);
+    #else
+        return newRequest;
+    #endif
+    }
+
+如果代理没有提供处理重定向的方法，所有的规范改变和服务器重定向都允许。

@@ -1,0 +1,171 @@
+---
+title: Fastlane - Scan
+date: 2016-06-28 09:05:20
+categories: 
+- iOS
+tags: 
+- Fastlane
+- Automate
+- Scan
+
+---
+
+> 说明：翻译的 `Scan` 的指南，[ 原文地址 ](https://github.com/fastlane/fastlane/tree/master/scan)。
+
+![alt text](/img/FastlaneScan/scan.png)
+<!--more-->
+
+# scan #
+
+运行你 iOS 和 Mac 应用程序测试的最简单方法
+
+`scan` 能够在模拟器或者连接的设备上运行你 iOS 和 Mac 应用程序的测试。
+
+# scan 是什么？ #
+
+![alt text](/img/FastlaneScan/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f43555263457075576f4141724533642e706e673a6c61726765.png)
+
+## `scan` 之前 ##
+
+	xcodebuild \
+		-workspace MyApp.xcworkspace \
+		-scheme "MyApp" \
+		-sdk iphonesimulator \
+		-destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1' \
+		test
+
+输出看起来像这样：
+
+	/Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/IntermediateBuildFilesPath/Example.build/Release-iphoneos/Example.build/Objects-normal/arm64/main.o Example/main.m normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+		cd /Users/felixkrause/Developer/fastlane/gym/example/cocoapods
+		export LANG=en_US.US-ASCII
+		export PATH="/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode-beta.app/Contents/Developer/usr/bin:/Users/felixkrause/.rvm/gems/ruby-2.2.0/bin:/Users/felixkrause/.rvm/gems/ruby-2.2.0@global/bin:/Users/felixkrause/.rvm/rubies/ruby-2.2.0/bin:/Users/felixkrause/.rvm/bin:/usr/local/heroku/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+		/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch arm64 -fmessage-length=126 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -fcolor-diagnostics -std=gnu99 -fobjc-arc -fmodules -gmodules -fmodules-cache-path=/Users/felixkrause/Library/Developer/Xcode/DerivedData/ModuleCache -fmodules-prune-interval=86400 -fmodules-prune-after=345600 -fbuild-session-file=/Users/felixkrause/Library/Developer/Xcode/DerivedData/ModuleCache/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror=non-modular-include-in-framework-module -Wno-trigraphs -fpascal-strings -Os -fno-common -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wunreachable-code -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DCOCOAPODS=1 -DNS_BLOCK_ASSERTIONS=1 -DOBJC_OLD_DISPATCH_PROTOTYPES=0 -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -miphoneos-version-min=9.0 -g -fvisibility=hidden -Wno-sign-conversion -fembed-bitcode -iquote /Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/IntermediateBuildFilesPath/Example.build/Release-iphoneos/Example.build/ExampleProductName-generated-files.hmap -I/Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/IntermediateBuildFilesPath/Example.build/Release-iphoneos/Example.build/ExampleProductName-own-target-headers.hmap -I/Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/IntermediateBuildFilesPath/Example.build/Release-iphoneos/Example.build/ExampleProductName-all-target-headers.hmap -iquote /Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/IntermediateBuildFilesPath/Example.build/Release-iphoneos/Example.build/ExampleProductName-project-headers.hmap -I/Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/BuildProductsPath/Release-iphoneos/include -I/Users/felixkrause/Developer/fastlane/gym/example/cocoapods/Pods/Headers/Public -I/Users/felixkrause/Developer/fastlane/gym/example/cocoapods/Pods/Headers/Public/HexColors -I/Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/IntermediateBuildFilesPath/Example.build/Release-iphoneos/Example.build/DerivedSources/arm64 -I/Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/IntermediateBuildFilesPath/Example.build/Release-iphoneos/Example.build/DerivedSources -F/Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/BuildProductsPath/Release-iphoneos -isystem /Users/felixkrause/Developer/fastlane/gym/example/cocoapods/Pods/Headers/Public -isystem /Users/felixkrause/Developer/fastlane/gym/example/cocoapods/Pods/Headers/Public/HexColors -MMD -MT dependencies -MF /Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/IntermediateBuildFilesPath/Example.build/Release-iphoneos/Example.build/Objects-normal/arm64/main.d --serialize-diagnostics /Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/IntermediateBuildFilesPath/Example.build/Release-iphoneos/Example.build/Objects-normal/arm64/main.dia -c /Users/felixkrause/Developer/fastlane/gym/example/cocoapods/Example/main.m -o /Users/felixkrause/Library/Developer/Xcode/DerivedData/Example-fhlmxikmujknefgidqwqvtbatohi/Build/Intermediates/ArchiveIntermediates/Example/IntermediateBuildFilesPath/Example.build/Release-iphoneos/Example.build/Objects-normal/arm64/main.o
+
+你可能会想要使用像 [xcpretty](https://github.com/supermarin/xcpretty) 这样的工具，像这样：
+
+	set -o pipefail &&
+		xcodebuild \
+			-workspace MyApp.xcworkspace \
+			-scheme "MyApp" \
+			-sdk iphonesimulator \
+			-destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1' \
+			test \
+		| xcpretty \
+			-r "html" \
+			-o "tests.html"
+
+## 使用 `scan` ##
+
+	scan
+
+## 为什么使用 `scan`? ##
+
+`scan` 使用最新的 API 和工具来确保能够很简单的运行测试，同时提供了集成到你现有的工作流中，比如 [fastlane](https://fastlane.tools) 或者 Jenkins。
+
+|scan 功能|
+|:------:|
+|在运行测试的时候有漂亮的输出|
+|合理的默认设置：自动检测 Project、Schemes等等|
+|支持 HTML、JSON、JUnit 报告|
+|Xcode 又 duplicated 你的模拟器？ `scan`将会为你处理这些|
+|与其它工具以及 [fastlane](https://fastlane.tools) 完美配合|
+|不需要记住任何复杂的构建命令，只有`scan`|
+|使用参数和环境变量能够非常容易的动态配置|
+|测试结果会用漂亮的 Slack Notifications 通知你|
+|在`Scanfile`里存储构建的命令设置|
+|原始的 `xcodebuild` 输出保存在 `~/Library/Logs/scan` 里|
+|支持 iOS 和 Mac 应用程序|
+|当运行在 Travis 上的时候会自动转换成 [travis formatter](https://github.com/kattrali/xcpretty-travis-formatter)|
+|帮助你解决常见的测试错误，比如模拟器不响应|
+
+`scan` 使用的是简单的 `xcodebuild` 命令，因此保持了与 `xcodebuild` 100%的兼容性。为了生成漂亮的输出，`scan` 使用 [xcpretty](https://github.com/supermarin/xcpretty)。你总是可以在 `~/Library/Logs/scan` 中访问原始的输出。
+
+![alt text](/img/FastlaneScan/scanScreenshot.png)
+
+![alt text](/img/FastlaneScan/slack.png)
+
+![alt text](/img/FastlaneScan/scanHTML.png)
+
+![alt text](/img/FastlaneScan/scanHTMLFailing.png)
+
+# 安装 #
+
+	sudo gem install scan
+
+确保你已经安装了最新版本的 Xcode 命令行工具：
+
+	xcode-select --install
+
+# 使用 #
+
+	scan
+
+这就是所有的命令。如果你想要更多的控制，这里有一些可用的参数：
+
+	scan --workspace "Example.xcworkspace" --scheme "AppName" --device "iPhone 6" --clean
+
+如果你需要安装不同的 Xcode，使用 `xcode-select` 或者定义 `DEVELOPER_DIR` :
+
+	DEVELOPER_DIR="/Applications/Xcode6.2.app" scan
+
+通过 [fastlane](https://fastlane.tools) 在多个设备上运行 `scan`，添加到你的 `Fastfile` ：
+
+	scan(
+		workspace: "Example.xcworkspace",
+		devices: ["iPhone 6s", "iPad Air"]
+	)
+
+列出所有可用的参数：
+
+	scan --help
+
+访问原始的 `xcodebuild` 输出，打开 `~/Library/Logs/scan` 。
+
+## Scanfile ##
+
+由于你可能想要手动触发测试，但是又不想每次都指定所有的参数，你可以将你的默认设置存储在 `Scanfile` 里。
+
+运行 `scan init` 创建一个新的配置文件，比如：
+
+	scheme "Example"
+	devices ["iPhone 6s", "iPad Air"]
+
+	clean true
+
+	output_types "html"
+
+## 自动化整个处理过程 ##
+
+`scan` 与 [fastlane](https://fastlane.tools) 一起工作良好，将所有的部署工具整合在一起。
+
+使用 `fastlane` 你可以像这样定义配置文件：
+
+	lane :test do
+		scan(scheme: "Example")
+	end
+
+更多信息，访问 [fastlane GitHub page](https://github.com/fastlane/fastlane/tree/master/fastlane)。
+
+# 提示 #
+
+# `fastlane` 工具链 #
+
+* [ `fastlane` ](https://fastlane.tools)：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法
+* [ `deliver` ](https://github.com/fastlane/fastlane/tree/master/deliver)：将你的应用、截图、元数据上传到App Store
+* [ `snapshot` ](https://github.com/fastlane/fastlane/tree/master/snapshot)：将你iOS应用在每一种设备上进行本地化自动截图
+* [ `frameit` ](https://github.com/fastlane/fastlane/tree/master/frameit)：快速将你的截图放入到适合的设备框中
+* [ `pem` ](https://github.com/fastlane/fastlane/tree/master/pem)：自动生成和更新你的推送通知证书
+* [ `produce` ](https://github.com/fastlane/fastlane/tree/master/produce)：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用
+* [ `cert` ](https://github.com/fastlane/fastlane/tree/master/cert)：自动创建和维护iOS的 code signing certificates
+* [ `spaceship` ](https://github.com/fastlane/fastlane/tree/master/spaceship)：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect
+* [ `pilot` ](https://github.com/fastlane/fastlane/tree/master/pilot)：管理你TestFlight测试人员的最好方式，使用终端构建
+* [ `boarding` ](https://github.com/fastlane/boarding)：邀请你 TestFlight 的beta测试人员的最简单方式
+* [ `gym` ](https://github.com/fastlane/fastlane/tree/master/gym)：构建你iOS应用程序
+* [ `match` ](https://github.com/fastlane/fastlane/tree/master/match)：在你的团队之间使用 Git 轻松的同步你的证书和配置文件
+* [ `supply` ](https://github.com/fastlane/fastlane/tree/master/supply)：将你的Android应用和数据上传到 Google Play
+* [ `screengrab` ](https://github.com/fastlane/fastlane/tree/master/screengrab)：Android版`snapshot`，一样的功能
+
+# 帮助 #
+
+请提交 issue 到 GitHub，并提供你关于设置的信息。
