@@ -7,6 +7,8 @@ tags:
 - Swift
 metaAlignment: center
 autoThumbnailImage: no
+thumbnailImagePosition: right
+thumbnailImage: /img/ThumbnailImage/swift.png
 coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
 
 ---
