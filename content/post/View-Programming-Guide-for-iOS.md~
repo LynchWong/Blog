@@ -1,0 +1,1178 @@
+---
+title: "View Programming Guide for iOS"
+date: 2015-04-27 14:41:53
+categories: 
+- 编程指南
+tags: 
+- 视图
+
+---
+
+[官方文档](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009503-CH1-SW2)
+<!--more-->
+
+# 简介
+
+## 关于Windows and Views
+
+在iOS里，你使用windows和views将你应用程序的内容呈现在屏幕上。Windows本身并没有可视内容但是为你的应用程序的views提供了一个基本的容器。Views定义了window的一部分，用来填充你想要的内容。比如，你可能想views显示图片，文字，图形，或者一些组合。你同样也可以使用views来组织、管理其他的views。
+
+### 概览
+
+每个应用程序至少有一个window和一个view来展示它的内容。UIKit和其他的系统框架提供了一预先定义的views供你使用展示你的内容。这些视图包括从简单的buttons、text labels到复杂的比如table views，picker views，以及scroll views。有时候预先定义的views没有提供你需要的，你也可以定义自己的views来管理图形绘制以及自己处理事件。
+
+#### views管理你应用程序的可视内容
+
+一个view是**UIView**类的实例(或者子类的实例)，在你的应用程序window中管理一块矩形的区域。views负责响应绘制内容，处理多点触控的时间，以及管理子视图的布局。绘制涉及使用graphics技术，诸如Core Graphics，OpenGL ES，或者UIKit在一个view的矩形区域里面绘制图形，图片，以及文字。一个view通过使用手势识别或者直接处理触摸事件来响应它矩形区域内的触摸事件。在view的继承层级中，父视图负责定位、改变子视图的大小，而且是动态的。这种能力能够动态的调整子视图，让你的views能够适应各种条件的改变，比如界面旋转和动画。
+
+你可以将views想象成你构建用户界面的构件。比起使用一个view来展示你所有的内容，你更应该使用几个views
+来构件view的层级。每一个在层级中的view都是你用户界面的一部分，通常都为了指定的内容进行了优化。比如，UIKit有展示图片，文字，或者其他类型内容的view。
+
+#### windows定位你要显示的views
+
+一个window是**UIWindow**类的实例，处理应用程序所有用户界面的显示。windows和views一起工作管理与可视视图层级的交互及改变。大多数情况下你应用程序的window都不会改变。window创建之后，就保持不变，只有通过它显示的views发生改变。每一个应用程序都至少有一个window，将应用程序的用户界面现在的设备的主屏幕上。如果设备连接了外部显示器，应用程序也可以创建第二个window在外部显示器上显示内容。
+
+#### 用户界面改变时动画为用户提供了可视反馈
+
+当你的view层级发生改变时，动画向用户提供了可视反馈。系统为呈现modal views以及不同views之间的转移定义了标准的动画。然而，一个view的许多属性也都是可以直接可动画的。比如，通过动画你可以改变一个view的透明度，屏幕上的位置，大小，背景颜色，或者其他的属性。如果你直接与view的Core Animation layer对象交互，你可以执行很多其他的动画。
+
+#### Interface Builder的角色
+
+Interface Builder是一个帮助你可视化构建你应用程序windows和views的应用程序。使用Interface Builder，你可以组装你的views，将它们放在一个nib file里，nib file是一个资源文件，用来存储你views和其他的对象。当你在运行时加载nib file时，在里面的对象被重建成真是的对象，在程序里面可以使用代码操纵它们。
+
+Interface Builder极大的简化了你创建应用程序用户界面的工作。因为支持Interface Builder和nib file是通过iOS合并的，一点小的努力就能将nib file合并到你的应用程序设计中。
+
+# View和Window体系结构
+
+views和windows呈现了你应用程序的用户界面，并且处理与界面的交互。UIKit和其他的系统框架提供了大量的views，你可以不需修改或者少量修改就可以使用。你也可以自定义views来显示那些标准views不能显示的内容。
+
+不管你是使用系统的views或者创建你自定义的views，你都需要明白由**UIView**和**UIWindow**类提供的基础构造。这些类提供了复杂的、精制的工具来管理views的呈现和布局。明白这些精制的工具如何工作非常重要，能够确保你应用程序改变时views具有合适的行为。
+
+## view的基本架构
+
+大部分你想要可视化的都可以使用view对象--**UIView**类的实例来完成。一个view对象定义了屏幕上的一个矩形区域，然后绘制和处理矩形区域内的内容和触摸事件。一个view也可以当做其他views的parent，设置这些views的位置和大小。**UIView**类的大部分工作就是管理这些views的关系，但是如果需要你也可以自定义默认行为。
+
+views和Core Animation layers一同处理view的内容的渲染和动画。UIKit里的每一个view都由一个layer对象(通常是**CALayer**类的实例)驱动，用来管理保存view的信息以及处理与view相关的动画。大部分操作你应该通过**UIView**的接口来执行。然而，当你需要更多的是控制你的view，而不是渲染或者动画相关的行为，你可以使用layer对象替代来执行这些操作。
+
+为了明白views和layers之间的关系，看一个例子更有帮助。如图1 - 1展示了一个来自简单应用程序[ ViewTransitions ](https://developer.apple.com/library/ios/samplecode/ViewTransitions/Introduction/Intro.html#//apple_ref/doc/uid/DTS40007411)的视图层级与Core Animation layers对象的关系。
+
+Figure 1-1  Architecture of the views in a sample application
+![alt text](/img/ViewProgrammingGuideforiOS/view-layer-store.jpg)
+
+Core Animation layer对象的使用对性能有很重要的影响。事实上，一个view对象的绘制代码会尽可能少得调用，当这些代码被调用时，会被Core Animation缓存并且在之后会尽可能的重用这些代码。重用已经渲染的内容消除了昂贵的绘制周期。重用这些内容特别是对于动画来说很重要，存在的内容能够被操纵。重用比新建内容开销更小。
+
+### view的层级及子视图的管理
+
+除了显示内容，一个view也可以当做容器来包含其他的views。当一个view包含另一个view，他们之间就建立了父子关系。子view被叫做*subview*然后父view被叫做*superview*。这种关系类型的建立就暗示了你应用程序的可视外观和行为。
+
+表面上看，subview的内容会模糊parent view的全部或者部分内容。如果subview是完全不透明的，那么被subview占有的那部分相应的parent的部分会完全隐藏。如果subview是部分透明的，那么两个views的内容会一起混合显示在屏幕上。每一个superview都将subviews存储在一个有序的数组里面，数组的顺序影响了subview可见性。如果两个同层级的subviews重叠在一起，后面添加(或者被移动到了subview数组的结尾)的这个将呈现在其他的上面。
+
+view之间的父子关系也影响了view的几个行为。改变parent view的大小具有涟漪效应会引起任何subviews的大小和位置也改变。当你改变一个parent view的大小时，你可以通过适当的配置view来控制每一个subview改变大小的行为。其他也会影响subviews的改变包括隐藏superview，改变superview的alpha属性，或者给superview的坐标系统应用数学转换。
+
+views在层级里面的布置也决定了你的应用怎样响应事件。当一个指定的view出现了触摸事件时，系统会直接给这个view发送一个携带了触摸信息的event object用来处理事件。然而，如果这个view不想处理触摸事件，它可以传递event object给它的superview。如果它的superview也不处理事件，它也可以传递给event object给superview，然后如此到达响应链。一些特别的views也可以传递event object给responder object(能够响应事件处理事件的对象)，比如view controller。如果没有对象处理这些事件，它最终会到达application object，通常会丢弃该事件。
+
+### view的绘制周期
+
+**UIView**类使用请求式的绘制模型来呈现内容。当一个view第一次出现在屏幕上，系统会要求它绘制自己的内容。系统捕获view内容的快照，并且使用那个快照当做view的可视呈现。如果你从来没有改变view的内容，那么view的绘制代码可能再也不会被调用。涉及到这个view的大部分操作都会重用这个快照。如果你改变了view的内容，你需要通知系统你view的内容改变了。这个view会重复绘制view的过程，然后捕获一张新的快照。
+
+当你view的内容改变时，并不是直接重绘这些改变。通过调用**setNeedsDisplay** 或者 **setNeedsDisplayInRect:**方法来告诉系统view的内容改变了，需要在下一次有机会的时候重绘。系统在开始任何绘制操作时会等待当前run loop的结束。这种推迟给了你机会将使多个views失效，从层级中添加或者删除views，隐藏，改变大小，位置等这些操作在一次完成。所有你做得这些改变都在同一时间被反射。
+
+**注意：**改变view的几何属性不会自动的让系统进行内容的重绘。view的**contentMode**属性决定了该如何解读对view几何的改变。大部分的**contentMode**属性都是拉伸或者从新定位已经存在的快照，不会创建一个新的快照。**contentMode**后面会详细讲解。
+
+当需要渲染view的内容时，真正的绘制过程依赖于view及其配置。系统的views通常实现了私有的绘制方法来渲染他们的内容。这些相同的系统views提供了暴露的接口让你配置view的外观。对于自定义**UIView**的子类，你通常重写你view的**drawRect:**方法来绘制你view的内容。也有其他的方法来提供view的内容，比如直接设置view的layer对象，但是重写**drawRect:**方法时最常用的技术。
+
+### Content Modes
+
+每一个view都有content mode来控制view如何响应几何变化。当一个view第一次显示，它会正常的渲染它的内容然后将捕获内容的位图。之后，不是没有的改变都会重新创建位图。相反的，**contentMode**属性的值决定了位图是否应该缩放来适合这个新的bounds或者简单的将一个角和view贴合。
+
+view的content mode会被应用到如下操作：
+
+* 改变viewframe或者bounds的长度或者宽度。
+* 赋值一个包含scaling因子的transform给view的transform属性。
+
+大部分views的**contentMode**属性被设置为**UIViewContentModeScaleToFill**，将会缩放view的内容来适合新的frame大小。如图1 - 2展示了一些可用的content modes。如图中所示，并不是所有的content mode都会将view的bounds整个填充，可能会扭曲view的内容。
+
+Figure 1-2  Content mode comparisons
+![alt text](/img/ViewProgrammingGuideforiOS/scale_aspect.jpg)
+
+content modes对view的内容再循环有好处，但是你也可以设置content mode的值为**UIViewContentModeRedraw**当你想自定义的views在缩放、改变大小操作时进行重绘。设置view的content mode为这个值会强制系统去调用你view的**drawRect:**方法响应几何改变。通常来说，你应该避免使用这个值，而且你不能在系统标准的view上使用这个值。
+
+### 视图伸缩
+
+你可以指定view的一部分是可拉伸的，所以当view的大小改变时只有可拉伸的部分内容会被影响。你通常为按钮以及那些定义了可重复模式的views使用可拉伸的区域。你指定的可拉伸区域允许沿着view的一个或者两个坐标轴拉伸。当然，当沿着view的两个轴进行拉伸时，view的边缘必须是可重复的，来避免任何的扭曲。如图1 - 3展示了view里面的扭曲。每个view里的原始像素的颜色都自我复制，以便可以填充更大视图的相应区域。
+
+Figure 1-3  Stretching the background of a button
+![alt text](/img/ViewProgrammingGuideforiOS/button_scale.jpg)
+
+你使用view的**contentStretch**属性来指定可拉伸的区域。这个属性接受一个值被标准化的矩形，范围在0.0到1.0。当拉伸这个view的时候，系统乘以标准值以及当前的bounds和缩放因子来决定哪些像素需要拉伸。使用标准值可以减轻每次改变视图的边界值都更新contentStretch属性的需要。
+
+view的content mode也在决定view的可拉伸区域的使用中扮演着重要的角色。只有当view的content mode会引起view的内容会缩放的时候才会使用可拉伸区域。这就意味着你的可拉伸视图只被**UIViewContentModeScaleToFill**， **UIViewContentModeScaleAspectFit**， 和 **UIViewContentModeScaleAspectFill** 这些content modes支持。如果你指定了一个将内容弹到边界或者角落的content mode(这样就没有真正的缩放内容)，这个视图会忽视可拉伸区域。
+
+**注意：**当需要创建一个可拉伸UIImage对象作为视图的背景时，使用contentStretch属性是推荐的。可拉伸视图完全被Core Animation层处理，这样性能通常更好。
+
+### 内建动画支持
+
+使用layer对象在背后支持每一个view的好处就是你可以轻松的使用动画来表现view相关的改变。动画是与用户进行信息交流的一个有用的方法，而且应该总是在进行应用设计的过程中考虑使用动画。大部分**UIView**类的属性都是可动画的，可以半自动的从一个值动画到另一个值。为了实现这样一个动画，你需要做的只是：
+
+1. 告诉UIKit你想要实现一个动画。
+2. 改变这个属性的值。
+
+在一个**UIView**对象中有以下的动画化属性：
+
+	frame - 你可以使用这个来动画的改变视图的尺寸和位置
+	bounds - 使用这个可以动画的改变视图的尺寸
+	center － 使用这个可以动画的改变视图的位置
+	transform － 使用这个可以翻转或者放缩视图
+	alpha － 使用这个可以改变视图的透明度
+	backgroundColor － 使用这个可以改变视图的背景颜色
+	contentStretch - 使用这个可以改变视图内容如何拉伸
+	
+动画的一个很重要的地方是用于从一组视图到另一组视图的过渡。通常来说，会用一个视图控制器来管理关系到用户界面的主要变更的动画。例如，涉及到从高层到底层信息的导航的界面，通常会使用一个导航控制器来管理视图的过渡，这些视图显示了数据的每一个连续层面。然而，你也可以使用动画来创建两组视图的过渡，而不是视图控制器。当你想用一个系统提供的视图控制器无法支持的导航方案时你可能会这样做。
+
+除了用**UIKit**类可以创建动画外，你也可以用**Core Animation**层来创建动画。在更低层你有更多的在时间或者动画属性上的控制权。
+
+## view的几何及坐标系统
+
+UIKit的默认坐标系统把原点设置在左上角，两条轴往下和右扩展。坐标值使用浮点数表示，这样允许内容的精确布局和定位而不用管屏幕的分辨率。如图1 - 4展示了相对于屏幕的坐标系统。除了屏幕坐标系统，windows和views也定义了它们自己的本地坐标系统，这样允许你指定相对于view或者window原点的坐标而不是屏幕。
+
+Figure 1-4 UIKit中的坐标系统 
+![alt text](/img/ViewProgrammingGuideforiOS/native_coordinate_system.jpg)
+
+因为每个view和window都定义了它自己的本地坐标系统，你需要留意在任何时间内是哪个坐标系统在起作用。每次绘制或者改变一个view都是基于一个坐标系统的。在某些绘制中会基于view本身的坐标系统。在某些几何结构变更中是基于superview的坐标系统的。**UIWindow**和**UIView**类都包含了帮助你从一个坐标系统转换到另一个的方法。
+
+**重要：**一些iOS技术定义了默认的坐标系统，它们的原点和方向与UIKit的不同。例如，Core Graphics和OpenGL ES的坐标系统是原点在可视区域的左下角，而y轴往上递增。当绘制或者创建内容时，你的代码应该考虑到一些不同并且适应坐标值。
+
+### Frame, Bounds, 和 Center属性之间的关系
+
+view对象使用frame，bounds和center属性来跟踪它的尺寸和位置：
+
+* frame属性包含了frame矩形，指定了在superview坐标系统中该视图的尺寸和位置。
+* bounds属性包含了边界矩形，指定了在视图本地坐标系统中视图的尺寸。
+* center属性包含了在superview坐标系统中的已知中心点。
+
+主要使用center和frame属性来控制当前view的几何结构。例如，当在运行时构建你的view层次或者改变view的尺寸或者位置时你可以使用这些属性。如果你只是要改变view的位置，那么推荐使用center属性。center属性的值永远是可用的，即使添加了放缩或者转换因子到view的转换矩阵当中。但是对于frame属性却不是，当视图的转换矩形不等于原始矩阵时它被当作时无效的。
+
+在绘制的过程中主要使用bounds属性。这个边界矩阵在视图的本地坐标系统被解释。这个矩形的默认原点是（0，0），它的尺寸与frame矩形的尺寸匹配。任何绘制在这个矩形当中的东西都是该view的可视内容的一部分。如果你改变了bounds矩形的原点，任何你绘制在新矩形的东西都会变成该视图可视内容的一部分。
+
+如图1 - 5展示了一个图像view的frame和bounds矩形之间的关系。图中，图像view的左上角被定位在superview坐标系统的（40， 40），它的矩形尺寸为240x380。对于bounds矩形，原点是（0， 0），矩形尺寸也是240x380。
+
+Figure 1-5  Relationship between a view's frame and bounds
+![alt text](/img/ViewProgrammingGuideforiOS/frame_bounds_rects.jpg)
+
+即使你可以独立的改变frame，bounds和center属性，按照如下的方式改变其中一个属性还是会影响到另外两个属性：
+
+* 当你设置了frame属性，bounds属性的尺寸值也改变来适应frame矩形的新尺寸。center属性也会改变为新frame矩形的中心值。
+* 当你设置了center属性，frame的原点也会相应的改变。
+* 当你设置了bounds属性，frame属性会改变以适应bounds矩形的新尺寸。
+
+默认情况下，view的frame不会被它的superview的frame裁剪。这样的化，任何放置在superview外的subviews都会被完整的渲染。你可以改变这种行为，改变superview的**clipsToBounds**属性就可以。不管subviews是否在视觉上被裁剪，触屏事件总是发生在目标view的superview的bounds矩形。换句话说，如果触摸位于superview外的那部分view，那么该事件不会被发送到该view。
+
+### 坐标系统转换
+
+坐标系统转换矩阵给改变view（或者是它的内容）提供了一个轻松和简易的方法。一个仿射转换是一个数学矩阵，它指定了在坐标系统中的点是怎么被映射到另一个坐标系统中的点。你可以对整个view应用仿射转换，以基于其superview来改变自己的尺寸，位置或者朝向。你也可以在你的绘制代码中应用仿射转换，以对已渲染内容的独立部分实现相同的操控。如何应用仿射转换是基于这样的上下文的：
+
+* 为了修改整个view，可以修改view的transform属性。
+* 为了在view中的drawRect:方法中修改内容的指定部分，可以修改与当前图形上下文相关的仿射转换。
+
+通常你修改一个view的**transform**属性是为了实现一个动画。例如，你可以使用这个属性来制作一个view围绕中心点翻转的动画。你不应该在其superview的坐标空间中用这个属性来永久的改变你的视图，像修改它的位置和尺寸。对于这种类型的改变，你可以修改view的frame矩形。
+
+**注意：**当修改视图的transform属性值时，所有的转换都是基于视图的中心点来实现的。
+
+在视图的drawRect:方法中，你可以使用仿射转换来定位或者翻转你想要绘制的项目。相对于在view某些部位中修正对象的位置，我们更倾向于相对于一个固定点去创建对象，通常是（0，0），同时在绘制之前使用转换来定位对象。这样的话，如果在view中对象的位置改变了，你要做的只是修改转换矩阵，这样比为对象重新创建新的位置性能更好开销更低。你可以通过使用CGContextGetCTM方法来获取关于图形上下文的仿射转换，同时可以用Core Graphics的相关方法在绘制中来设置或者修改这个转换矩阵。
+
+当前转换矩阵（CTM）是一个在任何时候都可使用的仿射矩阵。当操控整个view的几何结构时，CTM就是view的transform属性的值。在drawRect:方法中，CTM是关于图形上下文的仿射矩阵。
+
+每个subview的坐标系统都是构建在其祖先的坐标系统之上的。所以当你修改一个view的transform属性，这个改变会影响到view及其所有的subviews。然而，这些改变只会影响到屏幕上view的最终渲染。因为每个view都负责绘制自己的内容和对自己的subviews进行布局，所以在绘制和布局的过程中它可以忽略superview的转换。
+
+如图1 - 6演示了两个不同的转换因子是如何在视觉上组合起来的。在view的drawRect:方法中，对一个形状应用一个45度的转换因子会使该形状翻转指定的角度。另外加上一个45度的转换因子会导致整个形状翻转90度。这个形状对于绘制它的view来讲仍然只是翻转了45度，但是view自己的转换让它看起来像使翻转了90度。
+
+Figure 1-6  Rotating a view and its content
+![alt text](/img/ViewProgrammingGuideforiOS/xform_rotations.jpg)
+
+**重要：**如果一个view的transform属性不是其定义时转换矩阵，那么view的frame属性是未定义的而且必须被忽略。当对view应用转换时，你必须使用view的bounds和center属性来获取view的位置和尺寸。subviews的frame矩形仍然是有效的，因为它们与view的bounds相关。
+
+### 点和像素
+
+在iOS中，所有的坐标值和距离都被指定为使用浮点数，其单元值称为点。点的数量随着设备的不同而不同，而且彼此不相关。要明白关于点的最主要一点是它们提供了一个绘制用的固定框架。
+
+每一种使用基于点度量系统的设备都定义了一个用户坐标空间。这是几乎在你所有的代码都会用到的标准坐标空间。例如，当你要操控视图的几何结构或者调用Core Graphics方法来绘制内容时会用到点和用户坐标空间。即使有时用户坐标空间里的坐标是直接映射到设备屏幕的像素，你还是永远不应该假设这是永远不变的。相反，你应该记住：**一个点并不一定对应着屏幕上的一个像素。**
+
+在设备层面，所有由你指定的视图上的坐标在某些点上必须被转化成像素。然而，从用户坐标空间上的点到设备坐标空间上的像素通常由系统来处理。UIKit和Core Graphics都主要使用基于向量的绘制模型，所有的坐标值都被指定为使用点。这样，如果你用Core Graphics画了一条曲线，你会用一些值来指定这条曲线，而不管底层屏幕使用怎样的分辨率。
+
+当你需要处理图像或者其他基于像素的技术，像OpenGL ES时，iOS会帮你管理这些像素。对于存储为应用程序的束中的资源的静态图像文件，iOS定义了一些约定，可以指定不同像素密度的图像，也可以在加载图像时最大限度的适应当前屏幕的分辨率。view也提供了关于当前放缩因子的信息，以便你可以适当的调整任何基于像素的绘制代码来适应有更分辨率的屏幕。在不同屏幕的分辨率中处理基于像素内容的技术可以在["Supporting High-Resolution Screens"](https://developer.apple.com/library/ios/documentation/2DDrawing/Conceptual/DrawingPrintingiOS/SupportingHiResScreensInViews/SupportingHiResScreensInViews.html#//apple_ref/doc/uid/TP40010156-CH15)和["Drawing and Printing Guide for iOS"](https://developer.apple.com/library/ios/documentation/2DDrawing/Conceptual/DrawingPrintingiOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40010156)找到描述。 
+
+## view的运行时交互模型
+
+当用户和界面进行交互时，或者由代码程序性的改变一些东西时，一系列复杂的事件就会发生在UIKit的内部来处理这些交互。在这个系列中的某些点，UIKit唤出你的view类，同时给它们一个机会去响应程序的行为。理解这些唤出点对于理解view在哪里融入系统很重要。如图1 - 7展示了这些事件的基本序列，从用户触屏开始到图形系统更新屏幕内容来响应结束。同样的事件序列也会发生在任何程序性的动作里。
+
+Figure 1-7 UIKit 与视图对象进行交互
+![alt text](/img/ViewProgrammingGuideforiOS/drawingmodel.jpg)
+
+以下的步骤分解了图1－7中的事件序列，既解释了在每一步发生了什么，也解释了应用如何响应。
+
+1. 用户触摸屏幕。
+2. 硬件报告触摸事件给UIKit框架。
+3. UIKit框架将触摸事件打包成UIEvent对象，同时分发给适合的视图。
+4. 视图中的事件处理代码可能进行以下的动作来响应：
+	* 改变view或者其subviews的属性（frame， bounds， alpha， 等等）
+	* 调用setNeedsLayout方法以标记该view（或者它的subviews）为需要进行布局更新
+	* 调用setNeedsDisplay或者setNeedsDisplayInRect:方法以标记该view（或者它的subviews）需要进行重绘
+	* 通知一个控制器关于一些数据的更新
+
+	当然，哪些事情要做，哪些方法要被调用是由视图来决定的。
+5. 如果一个视图的几何结构改变了，UIKit会根据以下几条规则来更新它的subviews：
+	a. 如果你为view设置了autoresizing，UIKit会根据这些规则来调整view。
+	b. 如果视图实现了layoutSubviews方法，UIKit会调用它。
+	
+	你可以在你的自定义view中重写这个方法同时用它来调整任何subviews的位置和大小。例如，一个提供了巨大滚动区域的	view会需要使用几个subviews作为“瓦块”而不是创建一个不太可能放进内存的巨大view。在这个方法的实现中，view会	隐藏任何屏幕外的subviews，或者重定位它们然后用来绘制新的可视内容。作为这个流程的一部分，view的布局代码也可	以废止任何需要被重绘的view。
+6. 如果任何view的任何部分被标记为需要重绘，UIKit会要求view重画自身。
+	对于显式的定义了drawRect:方法的自定义view，UIKit会调用这个方法。这方法的实现应该尽快重绘view的指定区域，	并且不应该再做其他事。不要在这个点上做额外的布局，也不要改变应用的数据模型。提供这个方法仅仅是为了更新view的	可视内容。
+	
+	标准的系统view通常不会实现drawRect:方法，但是也会在这个时候管理它们的绘制。
+7. 任何已经更新的view会与应用余下的可视内容组合在一起，同时被发送到图形硬件去显示。
+8. 图形硬件将已渲染内容转化到屏幕上。
+
+**注意：**上面的更新模型主要应用于使用标准系统view和绘制技术的应用。使用OpenGL ES来绘制的应用通常会配置一个单一的全屏view和直接绘制相关的OpenGL图像上下文。你的view还是应该处理触屏事件，但是它是全屏的，毋需给subviews布局或者实现drawRect:方法。
+
+给定之前的一系列步骤，将自己的自定义view整合进去的方法包括：
+
+* 事件处理方法：
+	* touchesBegan:withEvent:
+	* touchesMoved:withEvent:
+	* touchesEnded:withEvent:
+	* touchesCancelled:withEvent:
+* layoutSubviews方法
+* drawRect:方法
+
+这些是view的最常用的覆盖方法，但是你可能不需要覆盖全部。如果你使用手势识别来处理事件，你不需要覆盖事件处理方法。相似的，如果你的view没有包含subviews或者它的尺寸不会改变，那就没有理由去覆盖layoutSubviews方法。最后，只有当view内容会在运行时改变，同时你要用UIKit或者Core Graphics等本地技术来绘制时才需要用到drawRect。
+ 
+要记住这些是主要的整合点，但是不仅仅只有这些。**UIView**类中有些方法是专门设计来给子类覆盖的。你应该到[UIView Class Reference](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/index.html#//apple_ref/doc/uid/TP40006816)中查看这些方法的描述，以便在定制时清楚哪些方法适合给你覆盖。
+
+## 如何有效的使用views
+
+当你需要绘制一些标准系统view不能提供的内容时，自定义view是很有用的。但是你要负责保证view的性能要足够的高。UIKit会尽可能的优化view相关的行为，也会帮助你提高性能。然而，考虑以下提示可以帮助到UIKit进行优化。
+
+**重要：**在优化绘制代码之前，你应该一直收集与你view当前性能有关的数据。估量当前性能让你可以确定是否真的有问题，同时如果真的有问题，它也提供一个基线，让你在未来的优化中可以比较。 
+
+### view不会总是有一个相应的View Controller
+
+在应用中，view和view controllers之间的一对一关系是很少见的。view controllers的工作是管理一个view层级，而view层级经常是包含了多个view，它们都有自包含特性。对于iPhone应用，每个view层级通常都填满了整个屏幕，尽管对于iPad应用来说不是。 
+
+当你设计用户界面的时候，考虑到view controllers的所扮演的角色是很重要的。view controllers提供了很多重要的行为，像协调view的展示，协调view的移除，释放内存以响应低内存警告，还有翻转view以响应界面的方向变更。逃避这些行为会导致应用发生错误。
+
+### 最小化自定义绘制
+
+尽管自定义的绘制有时是需要的，但是你也应该尽量避免它。真正需要定制绘画的时候是已有的view类无法提供足够的表现和能力时。任何时候你的内容都可以被已经存在的view组装而成，最好结果就是组合那些视图对象到自定义的view层级中。 
+
+### 利用Content Modes
+
+content mode可以最小化重绘视图要花费的时间。默认的，view使用**UIViewContentModeScaleToFill** content mode，这个模式会缩放view的已有内容来填充view的frame矩形。需要时你可以改变这个模式来调整你的内容，但是应该避免使用**UIViewContentModeRedraw** content mode。不管哪个content mode发生作用，你都可以调用**setNeedsDisplay**或者**setNeedsDisplayInRect:**方法来强制视图重绘它的内容。
+
+### 声明view的Opaque属性为YES
+
+UIKit使用opaque属性来决定它是否可以优化组合操作。将一个自定义view的这个属性设置为YES会告诉UIKit不需要渲染任何在该view后的内容。这样可以为你的绘制代码提高性能并且是推荐的。当然，如果你将这个属性设置为YES，你的view一定要用不透明的内容完全填充它的bounds矩形。
+
+### 当view滚动的时候调整view的绘制行为
+
+滚动会导致数个view在短时间内更新。如果view的绘制代码没有被适当的调整，滚动的性能会非常的缓慢。相对于总是保证view内容的平庸，我们更倾向于考虑滚动操作开始时改变view行为。例如，你可以暂时减少已渲染的内容，或者在滚动的时候改变content mode。当滚动停止时，你可以将view返回到前一状态，同时需要时更新内容。 
+
+### 不要通过植入Subviews来自定义Controls
+
+尽管在技术上增加subviews到标准系统控制对象－继承自**UIControl**的类－是可行的，你永远不应该用这种方法来定制它们。控制对象支持定制，它们有显式并且良好归档的接口。例如，**UIButton**类包含了设置标题和背景图片的方法。使用已定义好的方法意味着你的代码总是会正确的工作。不用这些方法，而嵌入一个自定义的图像view或者标签到按钮中去会导致应用出现未预期的结果。
+
+# Windows
+
+每一个iOS应用程序至少需要一个window--**UIWindow**类的实例--有的可能包含不止一个window。一个window对象有如下几个责任：
+
+* 它包含你程序的可视内容。
+* 它在触摸事件传送给你的view和其他应用程序对象中扮演关键角色。
+* 它和你应用程序的view controllers一起促进朝向变化。
+
+在iOS里，windows没有标题栏，关闭框，或者任何其他可视装饰品。一个总是空白的容器，用来包含一个或者多个views。同样，应用程序也不是通过显示新的windows来改变他们的内容。当你想改变显示的内容时，你通过替换你window的最前面的views来达到目的。
+
+大部分iOS应用程序在它们的生命周期内都只创建和使用唯一的一个window。这个window贯穿设备的整个屏幕，在应用程序的生命周期开始时加载了应用程序的一个主要的nib file(或者由程序创建)。然而，如果一个应用程序支持使用外部显示器显示视频，它可以创建额外的window显示内容在外部显示器上。所有的其他windows都是由系统创建的，通常创建是用来响应指定的服务，比如接电话的window。
+
+## 牵涉到Window得任务
+
+对于许多应用程序，唯一与window交互的时候就是在开始创建window的时候。然而，你可以使用你的应用程序的window对象来执行一些应用程序相关的任务：
+
+* 使用window对象将points以及rectangles转换成window本地的坐标系统或者从本地转换。比如，如果你提供了一个window坐标系统的值，你可能想在使用之前将其转换成指定view的坐标系统。更多关于转换坐标系统的信息，详见[ Converting Coordinates in the View Hierarchy ](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/CreatingViews/CreatingViews.html#//apple_ref/doc/uid/TP40009503-CH5-SW40)。
+* 使用window的通知来追踪window相关的改变。当windows显示、隐藏或者接收、辞去关键的状态都会生成通知。你可以使用这些通知在你应用程序其他的地方执行操作，详见[ Monitoring Window Changes ](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/CreatingWindows/CreatingWindows.html#//apple_ref/doc/uid/TP40009503-CH4-SW13)。
+
+## 创建和配置一个Window
+
+你可以使用Interface Builder或者程序代码来创建和配置你应用程序的主要的window。不管是哪种情况，你都是在程序启动的时候创建window然后将引用存储在应用程序的delegate对象里。如果你应用程序创建额外的windows，当需要的时候延迟加载。比如，如果你的应用程序支持在外部显示屏显示内容，那么应该等到连接了相应的显示屏时再创建相应的window。
+
+你应该始终在程序启动的时候创建主window而不用管应用程序是否已经启动进入了前台或者后台。创建和配置windos并不是昂贵的操作。然而，如果你的应用程序直接启动进入后台，你应该避免在应用程序进入前台之前让window可见。
+
+### 使用Interface Builder创建Windows
+
+使用Interface Builder创建应用程序的window很简单，因为Xcode的项目模板已经帮你做了。每一个Xcode的项目都包含一个主要的nib file(通常名字叫做**MainWindow.xib**或者一些其他的名字)包含应用程序的主window。另外，这些模板也为window在应用程序的delegate对象里定义了**outlet**。你使用这个**outlet**在你的代码里存取window对象。
+
+**重要：**当你在Interface Builder里创建window的时候，推荐将Launch option设置为Full Screen在attributes inspector里。如果没有设置这个选项，你的window会比设备的屏幕小，你的一些views可能就收不到触摸事件。因为windows在它的bounds rectangle外不能接收触摸事件。因为views默认并不会根据window的边界裁剪，views仍然是可见的，但是触摸不可用。设置Launch option为Full Screen确保window的尺寸与当前屏幕是合适的。
+
+如果你想将旧的项目使用Interface Builder，使用Interface Builder创建window时一件简单的事，只需要将window对象拖进你的nib file。当然还需做如下的事情：
+
+* 为了在runtime访问window，你需要使用outlet连接window，通常定义在应用程序的delegate活着nib file的拥有者。
+* 如果你准备将你的新的nib file作为你应用程序的main nib file，那么你必须在Info.plist设置**NSMainNibFile**键的值为你nib file的名字。
+
+### 代码创建Window
+
+如果你更喜欢使用代码创建主要的window，你应该在应用程序的delegate的**application:didFinishLaunchingWithOptions:**方法里面包含如下代码：
+
+	self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+	
+self.window是定义在应用程序delegate的属性，使用retain配置这个window对象。如果你为外部显示屏创建了一个window，你应该赋值给不同的变量，然后需要指定不是主要屏幕对象的边界。
+
+## 给Window添加内容
+
+每一个window通常都有一个single root view对象(由相应的view controller管理)，包含所有展示你内容的view。使用一个single root view简化了改变界面的过程；为了显示新的内容，所有你需要做得就是替换这个root view。将view添加到window，使用**addSubview:**方法。比如，将view controller管理的view添加到window，使用如下代码：
+
+	[window addSubview:viewController.view];
+	
+你可以在nib file里配置window的**rootViewController**属性来替代上面的方式。这个属性使用nib file提供了便利的方式来配置window的root view而不是使用代码设置。如果window从nib file加载的时候设置了这个属性，UIKit会自动从关联的view controller的view安装成为window的root view。这个属性只是用来安装root view，而不是用来和view controller交流通信的。
+
+你可以使用任何view作为你window的root view。依赖于你的界面设计，这个root view可以是通用的UIView对象，这个对象可能是一个或多个subviews的容器，也可以使标准的系统view，或者自定义的view。一些标准的系统views通常被用作root view，比如scroll views，table views，以及image views。
+
+当你配置window的root view时，你又责任设置它的大小和位置。对于没有状态栏或者状态栏透明的应用程序，设置这个view的大小和window匹配。对于显示不透明的状态栏，将view放在状态栏下面以及减少view的尺寸。将状态栏的高度从你view的高度减出，避免被遮挡。
+
+**注意：**如果你window的root view由容器类view controller提供(比如tab bar controller，navigation controller，或者split-view controller)，你不需要设置view的初始大小。这个容器类view controller会根据状态栏是否可见自动调整大小。
+
+### 改变Window的Level
+
+每一个**UIWindow**对象都有一个可以配置的**windowLevel**属性来决定自己的位置。最重要的一点就是你不应该去改变你应用程序windows的level。新建的window被自动设置为normal window level。这个normal window level指示这个window现实应用程序相关的内容。高级一点的window level可以将信息显示在内容之上，比如系统的状态栏或者alert messages。尽管你可以设置这个window为这些levels ，系统通常也会在你使用特定界面的时候帮你这些做。比如，当你隐藏或者显示状态栏或者alert view。系统自动创建需要的windows来显示这些项。
+
+## 监控Window的变化
+
+如果你想在应用程序里追踪window的显示和消失，你可以使用这些window相关的通知：
+
+* [UIWindowDidBecomeVisibleNotification](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIWindow_Class/index.html#//apple_ref/c/data/UIWindowDidBecomeVisibleNotification)
+* [UIWindowDidBecomeHiddenNotification](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIWindow_Class/index.html#//apple_ref/c/data/UIWindowDidBecomeHiddenNotification)
+* [UIWindowDidBecomeKeyNotification](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIWindow_Class/index.html#//apple_ref/c/data/UIWindowDidBecomeKeyNotification)
+* [UIWindowDidResignKeyNotification](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIWindow_Class/index.html#//apple_ref/c/data/UIWindowDidResignKeyNotification)
+
+当你应用程序的window发生变化的时候将会发送这些通知。当你的应用程序显示或者隐藏一个window，**UIWindowDidBecomeVisibleNotification** 和 **UIWindowDidBecomeHiddenNotification**通知会被发送。这些通知在你应用程序进入后台执行状态时不会发送。即使你的window没有显示在屏幕上当你的程序在后台时，但会被应用程序上下文认为是可见的。
+
+**UIWindowDidBecomeKeyNotification** 和 **UIWindowDidResignKeyNotification**通知帮助你应用程序追踪哪一个window是key window，哪一个window是当前接收键盘事件以及其他的非触摸相关的事件。然而触摸的事件会被传送到window，事件并没有相关的值传递给你应用程序的key window。一次只能有一个key window。
+
+## 在外部显示器上显示内容
+
+为了在外部显示屏上显示内容，你必须为你的应用程序创建一个额外的window，然后与表示外部显示屏的screen对象关联。新的window默认与main screen关联。改变window的关联的screen对象将会引起window的内容从新定向到相应的显示屏。一旦window与相应的screen关联，你可以添加view就像你对应用程序main screen做得那样。
+
+**UIScreen**类包含了一个表示可用硬件显示屏的列表。通常只有一个screen对象来用表示主要的显示屏，对于任何基于iOS的设备都是如此，但是支持连接外部显示屏的设备就有额外的screen对象可用。支持外部显示屏的设备就有Retina显示屏的iPhone和iPod touch以及iPad。老一些的设备，比如iPhone 3GS，不支持外部显示屏。
+
+**注意：**因为大部分的外部显示屏都是作为视频输出，你不应该期望从外部显示屏的触摸事件或者window的控制。除此之外，你应用程序有责任更新window的内容。为了镜像你main window的内容，你应用程序需要为外部显示屏创建一套views的副本，然后在你的main window里面更新他们。
+
+在外部显示屏上显示内容的步骤如下。然而，下面的步骤只总结了简单的过程：
+
+1. 在应用程序启动时，注册screen连接和断开连接的通知。
+2. 当要在外部显示屏显示内容时，创建配置window。
+	* 使用**UIScreen**的screens属性来获得外部显示屏的screen对象。
+	* 创建window对象，然后根据screen设置合适的大小。
+	* 将表示外部显示屏的UIScreen对象设置给window的screen属性。
+	* 调整screen对象的分辨率来支持你的内容，如有必要的话。
+	* 给window添加views。
+3. 显示window以及更新ta。
+
+### 处理screen连接和断开连接的通知
+
+screen连接和断开通知用来处理外部显示屏的改变。当一个用户连接或者断开显示屏，系统会给应用程序发送相应的通知。你应该使用这些通知来更新你应用程序的状态，创建或者释放与外部显示屏关联的window。
+
+关于连接和断开连接的通知的重要事情就是可能在任意时间到来，即使你应用程序在后台被挂起了。所以你应该在你应用程序运行时都一直在的对象里面来观察这个通知，比如delega。如果程序被挂起，通知会被排队等候直到你应用程序退出被挂起的状态开始运行。
+
+Listing 2-1的代码用来注册连接和断开连接的通知。这个方法在delegate初始化的时候被调用，你也可以在其他地方注册这些通知。处理方法的实现在Listing 2-2。
+
+Listing 2-1  Registering for screen connect and disconnect notifications
+
+	- (void)setupScreenConnectionNotificationHandlers
+	{
+	    NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
+	 
+	    [center addObserver:self selector:@selector(handleScreenConnectNotification:)
+	            name:UIScreenDidConnectNotification object:nil];
+	    [center addObserver:self selector:@selector(handleScreenDisconnectNotification:)
+	            name:UIScreenDidDisconnectNotification object:nil];
+	}
+	
+当外部显示屏连接到当前设备而且你的应用程序时活跃的，就应该创建第二个window来显示并且添加一些内容。这些内容并不需要是最终呈现给用户的。比如，如果你的应用程序还没有准备好使用额外的屏幕，它可以使用第二个window来显示一些占位的内容。如果 你没有为screen创建window，或者你创建了但是没有显示，黑色的区域将会显示在外部显示屏。
+
+Listing 2-2展示怎样去创建第二个window以及添加一些内容。在这个示例中，应用程序在用来处理接收screen连接通知的方法里面创建了window。创建了第二个window，与新的screen关联以及调用应用程序的main view controller添加了一些内容到window里面，然后显示。处理断开连接的方法释放了window，然后通知main view controller调整相应的呈现。
+
+Listing 2-2  Handling connect and disconnect notifications
+
+	- (void)handleScreenConnectNotification:(NSNotification*)aNotification
+	{
+	    UIScreen*    newScreen = [aNotification object];
+	    CGRect        screenBounds = newScreen.bounds;
+	 
+	    if (!_secondWindow)
+	    {
+	        _secondWindow = [[UIWindow alloc] initWithFrame:screenBounds];
+	        _secondWindow.screen = newScreen;
+	 
+	        // Set the initial UI for the window.
+	        [viewController displaySelectionInSecondaryWindow:_secondWindow];
+	    }
+	}
+	 
+	- (void)handleScreenDisconnectNotification:(NSNotification*)aNotification
+	{
+	    if (_secondWindow)
+	    {
+	        // Hide and then delete the window.
+	        _secondWindow.hidden = YES;
+	        [_secondWindow release];
+	        _secondWindow = nil;
+	 
+	        // Update the main screen based on what is showing here.
+	        [viewController displaySelectionOnMainScreen];
+	    }
+	 
+	}
+	
+### 为外部显示屏配置Window
+
+为了在外部屏幕上显示window，你必须关联相应的screen对象。这个过程涉及到找到合适的**UIScreen**对象然后赋值给window的**screen**属性。你可以从**UIScreen**类的**screens**类方法来得到screen对象的列表。这个方法返回的数组至少包含一个对象(表示main screen)。如果有第二个对象，那么那个对象表示连接的外部显示屏。
+
+Listing 2-3展示了在应用程序启动时检查是否已经连接了外部显示屏时的调用方法。如果是的，该方法就创建一个window，与外部显示屏关联，然后在显示window之前添加一些占位的内容。在这个例子中，占位内容是白色背景和一个标签提示没有可显示的内容。为了显示window，这个方法改变了**hidden**属性而不是调用**makeKeyAndVisible**方法。这样做得原因是因为window只包含静态的内容并且没有用来处理事件。
+
+Listing 2-3  Configuring a window for an external display
+
+	- (void)checkForExistingScreenAndInitializeIfPresent
+	{
+	    if ([[UIScreen screens] count] > 1)
+	    {
+	        // Associate the window with the second screen.
+	        // The main screen is always at index 0.
+	        UIScreen*    secondScreen = [[UIScreen screens] objectAtIndex:1];
+	        CGRect        screenBounds = secondScreen.bounds;
+	 
+	        _secondWindow = [[UIWindow alloc] initWithFrame:screenBounds];
+	        _secondWindow.screen = secondScreen;
+	 
+	        // Add a white background to the window
+	        UIView*            whiteField = [[UIView alloc] initWithFrame:screenBounds];
+	        whiteField.backgroundColor = [UIColor whiteColor];
+	 
+	        [_secondWindow addSubview:whiteField];
+	        [whiteField release];
+	 
+	        // Center a label in the view.
+	        NSString*    noContentString = [NSString stringWithFormat:@"<no content>"];
+	        CGSize        stringSize = [noContentString sizeWithFont:[UIFont systemFontOfSize:18]];
+	 
+	        CGRect        labelSize = CGRectMake((screenBounds.size.width - stringSize.width) / 2.0,
+	                                    (screenBounds.size.height - stringSize.height) / 2.0,
+	                                    stringSize.width, stringSize.height);
+	 
+	        UILabel*    noContentLabel = [[UILabel alloc] initWithFrame:labelSize];
+	        noContentLabel.text = noContentString;
+	        noContentLabel.font = [UIFont systemFontOfSize:18];
+	        [whiteField addSubview:noContentLabel];
+	 
+	        // Go ahead and show the window.
+	        _secondWindow.hidden = NO;
+	    }
+	}
+	
+**重要：**你应该总是在显示window前关联screen。尽管在当前显示的时候是可以改变window的screen的，但是这样做开销会很大而且应该避免这样做。
+
+只要外部显示屏的window显示了，你的应用程序就可以像其他window一样开始更新内容。如果需要你可以添加或者移除subviews，改变subviews的内容，使用动画来表现这些改变，如果需要可以让内容失效。
+
+### 配置外部显示屏的Screen Mode
+
+根据显示的内容，你可能想在关联window前改变screen mode。许多screens都支持多种分辨率，有的使用不同的像素宽高比。screen对象默认使用最常见的screen mode，但是你可以改变一个最适合你内容的screen mode。比如，你实现了一个基于OpenGL ES的游戏，而且纹理被设计为640 x 480的像素屏，你可能会改变screen mode，使用高一点的分辨率。
+
+如果你计划使用不是默认的screen mode，那么你应该在关联window之前将screen mode应用于UIScreen对象。[UIScreenMode](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIScreenMode_class/index.html#//apple_ref/occ/cl/UIScreenMode)类定义了一个single screen mode的属性。你可以使用**availableModes**属性来得到screen支持的modes的列表，然后从列表中选择一个匹配你需求的。
+
+更多关于screen modes的信息，详见[UIScreenMode Class Reference](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIScreenMode_class/index.html#//apple_ref/doc/uid/TP40009312)。
+
+# Views
+
+因为view对象是你与用户交互的主要的途径，肩负许多责任。比如如下这些：
+
+* 布局管理子视图
+	* 一个视图定义了改变自己大小的行为以及与父视图的关系。
+	* 一个视图可以管理子视图的列表。
+	* 一个视图在需要的时候可以重写子视图的尺寸和位置。
+	* 一个视图可以将自己坐标系统的点转换到其他视图或者窗口的坐标系统中。
+* 绘制和动画
+	* 一个视图在它的矩形区域内绘制内容。
+	* 视图的一些属性可以可动画到新的值。
+* 事件处理
+	* 视图可以接收触摸事件。
+	* 视图参与了响应链。
+
+本章内容专注于视图的创建，管理，绘制以及处理视图层级的布局和管理。
+
+## 创建和配置视图对象
+
+视图对象是自包含的，你可以使用代码或者Interface Builde创建，然后将它们组装到视图层级来使用。
+
+### Interface Builder创建视图对象
+
+创建视图的最简单的方式就是使用Interface Builder可视化的组装视图。使用Interface Builder，你可以添加视图到你的界面，将这些视图排列成层级结构，配置每一个视图的设置，通过代码连接与你视图相关的行为。你在Interface Builder里面使用的视图类的实例就将是你在运行时得到的。然后将这些对象保存在nib file。
+
+你通常创建nib files用来存储应用程序的一个view controller的整个视图层级。nib file的最顶层通常是一个表示view controller的view的视图。(这个view controller自己通常被File's Owner对象表示)最顶层的视图应该和设备的大小相同，能够包含所有需要呈现的其他视图。
+
+当view controller使用nib file时，所有你需要做得就是使用nib file的信息来初始化view controller。view controller将会在合适的时候加载和卸载你的视图。然而，如果你的nib file没有和view controller关联，你可以使用**NSBundle**或者**UINib**对象来手动加载nib file，使用nib file中的数据来重建你的视图对象。
+
+### 代码创建视图对象
+
+如果你更倾向于使用代码创建，你可以使用**allocation/initialization**模式。默认的初始化方法是**initWithFrame:**，在父视图中设置初始时的大小和位置。比如，创建一个通用的UIView对象，你可以使用如下所示的代码：
+
+	CGRect  viewRect = CGRectMake(0, 0, 100, 100);
+	UIView* myView = [[UIView alloc] initWithFrame:viewRect];
+
+**注意：**尽管所有的视图都支持**initWithFrame:**方法，有一些你可能需要使用**initialization**方法替代。
+
+在创建了视图之后，你必须添加到window或者window里面的一个视图里面，这样才能可见。
+
+### 设置视图的属性
+
+**UIView**类定义了一些控制视图外观和行为的属性。这些属性能够控制视图的位置以及尺寸，透明度，背景色，以及渲染行为。所有的这些属性都有合适的默认值，之后可以根据需求改变。你可以在Interface Builder里面使用Inspector window来配置这些属性。
+
+Table 3-1列出了常用的方法和属性，也描述了他们的用法。相关的一些属性列在一起。
+
+Table 3-1  [Usage of some key view properties](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/CreatingViews/CreatingViews.html#//apple_ref/doc/uid/TP40009503-CH5-SW6)
+
+视图的其他一些基础常见属性，详见 [UIView Class Reference](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/index.html#//apple_ref/doc/uid/TP40006816)。
+
+### 使用tag属性来辨识视图
+
+**UIView**类包含一个tag属性，你可以使用一个整型值来标记一个独立的视图对象。你可以使用tag属性唯一的标识一个视图对象，你可以在运行时搜索这些视图。(使用基于tag的搜索比枚举视图层级更快)tag属性的默认值是0.
+
+搜索一个有tag的视图，使用UIView的**viewWithTag:**方法。这个方法在接收者和子视图中执行深度优先搜索。并不在层级中的父视图搜索。如果在根视图上调用这个方法将会搜索层级中所有的视图，但是在指定的子视图上调用只会在视图的子视图中搜索。
+
+## 创建管理视图层级
+
+管理视图层级是应用程序开发用户界面的关键部分。你组织你视图的方式不仅影响了你应用程序的可视外观也影响了你应用程序将怎样响应改变和事件。比如，视图层级中的父子关系决定了哪一个对象处理指定的触摸事件，类似的，父子关系决定了每一个视图怎样响应界面朝向的改变。
+
+如图3 - 1展示了视图的层怎样创建了我们期望的应用程序的视觉效果。在这个时钟程序示例中，视图层级通过不同的资源排版。tab bar 和 navigation视图是特殊的视图层级，由tab bar 和 navigation controller对象提供，用来不管理用户界面的一部分。在tab bar 和 navigation bar视图之间的所有东西都是自定义的视图层级，由时钟应用程序提供。
+
+Figure 3-1  Layered views in the Clock application
+![alt text](/img/ViewProgrammingGuideforiOS/windowlayers.jpg)
+
+在iOS应用程序中有多种方法构建视图层级，包括Interface Builder和代码创建。下面的章节会展示怎样组装视图层级，以及怎样在层级中查找视图，在不同坐标系统中转换等。
+
+### 添加移除子视图
+
+创建视图层级的最方便的方法就是使用Interface Builder，因为你可视化的组装你的视图，能够清楚的看见视图间的关系，以及在运行时会如何显示。当使用Interface Builder时，将视图层级保存在nib file，在运行时加载的正是需要的。
+
+如果你倾向于使用代码创建，你可以创建初始化它们，然后使用如下的方法安排它们进视图层级：
+
+* 将视图添加给父视图，在父视图上调用**addSubview:**方法。这个方法将视图添加到父视图的子视图列表的最后。
+* 将视图插入到父视图的子视图列表之中，在父视图上调用**insertSubview:...**方法。
+* 从新排列父视图中的子视图，在父视图上调用**bringSubviewToFront:**，**sendSubviewToBack:**，或者 **exchangeSubviewAtIndex:withSubviewAtIndex:**方法。使用这些比移除子视图，再从新插入要快。
+* 从一个父视图上移除一个子视图，在子视图上调用**removeFromSuperview**方法(不是父视图)。
+# 
+当给父视图添加子视图时，子视图的当前frame标志了在父视图的位置。子视图在父视图可视范围外默认是不会裁剪的。如果你想要子视图沿着父视图裁剪，你需要显示的设置**clipsToBounds**属性为YES。
+
+将添加子视图到另外一个视图最常见的例子就是application:didFinishLaunchingWithOptions:方法。如下展示了将main view controler的view添加到了window。window和view controller都存储在应用程序的main nib file，在方法调用之前就加载了。然而，view controller管理的视图层级并没有加载，直到访问view属性。
+
+Listing 3-1  Adding a view to a window
+
+	- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+	{
+	    // Override point for customization after application launch.
+	 
+	    // Add the view controller's view to the window and display.
+	    [window addSubview:viewController.view];
+	    [window makeKeyAndVisible];
+	 
+	    return YES;
+	}
+	
+另一个常见添加子视图的地方就是view controller的**loadView** 或者 **viewDidLoad**。如果你使用代码创建视图，你可以将创建视图的代码放到loadView方法里面。不管你是代码创建还是从nib file加载，你都可以在viewDidLoad方法里面添加额外的视图配置。
+
+如下展示了从 [UICatalog: Creating and Customizing UIKit Controls (Obj-C and Swift)](https://developer.apple.com/library/ios/samplecode/UICatalog/Introduction/Intro.html#//apple_ref/doc/uid/DTS40007710)示例程序中的TransitionsViewController类的viewDidLoad方法。这个TransitionsViewController类管理两个视图过渡的动画。应用程序的初始的视图层级(包括根视图和toolbar)从nib file加载。接下来在viewDidLoad方法创建的容器视图和image视图用来管理过渡。设置容器视图的目的就是简化两个image视图之间过渡动画的操作。这个容器视图没有真实的内容。
+
+Listing 3-2  Adding views to an existing view hierarchy
+
+	- (void)viewDidLoad
+	{
+	    [super viewDidLoad];
+	 
+	    self.title = NSLocalizedString(@"TransitionsTitle", @"");
+	 
+	    // create the container view which we will use for transition animation (centered horizontally)
+	    CGRect frame = CGRectMake(round((self.view.bounds.size.width - kImageWidth) / 2.0),
+	                                                        kTopPlacement, kImageWidth, kImageHeight);
+	    self.containerView = [[[UIView alloc] initWithFrame:frame] autorelease];
+	    [self.view addSubview:self.containerView];
+	 
+	    // The container view can represent the images for accessibility.
+	    [self.containerView setIsAccessibilityElement:YES];
+	    [self.containerView setAccessibilityLabel:NSLocalizedString(@"ImagesTitle", @"")];
+	 
+	    // create the initial image view
+	    frame = CGRectMake(0.0, 0.0, kImageWidth, kImageHeight);
+	    self.mainView = [[[UIImageView alloc] initWithFrame:frame] autorelease];
+	    self.mainView.image = [UIImage imageNamed:@"scene1.jpg"];
+	    [self.containerView addSubview:self.mainView];
+	 
+	    // create the alternate image view (to transition between)
+	    CGRect imageFrame = CGRectMake(0.0, 0.0, kImageWidth, kImageHeight);
+	    self.flipToView = [[[UIImageView alloc] initWithFrame:imageFrame] autorelease];
+	    self.flipToView.image = [UIImage imageNamed:@"scene2.jpg"];
+	}
+	
+**重要：**父视图自动持有它们的子视图，所以嵌入子视图后可以安全的释放子视图。实际上，推荐这么做，因为能够阻止在同一时间被retain多次以及内存泄露。必须记住的是如果你从父视图移除了子视图并且想重用，你必须再次retain子视图。这个removeFromSuperview方法会在移除子视图时自动autoreleases。如果在下一次event loop cycle之前没有retain视图，这个视图会被释放。
+
+更多信息详见 [Advanced Memory Management Programming Guide](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011i)。
+
+当你添加一个子视图到另一个，UIKit会通知父视图和子视图的变化。如果你实现自定义的视图，你可以重写一个或者多个这些方法 **willMoveToSuperview:**，**willMoveToWindow:**，**willRemoveSubview:**，**didAddSubview:**，**didMoveToSuperview** 或者 **didMoveToWindow**来截取通知。你可以使用这些通知来更新你视图层级或者执行额外的任务。
+
+在创建了视图层级后，你可以是视图的superview 和 subviews属性。这个window属性就是当前显示切包含视图的window。因为根视图没有父视图，所以superview属性是nil。对于当前显示在屏幕上的这些视图，window就是视图层级的根视图。
+
+### 隐藏视图
+
+为了隐藏可见视图，你可以设置属性的hidden属性为YES或者alpha属性为0.0。隐藏的视图将不会接受系统的触摸事件。然而，会参与视图层级相关的autoresizing和布局操作。所以，隐藏视图通常是移除视图的一个方便的替代方法，特别是当你还要再次显示视图时。
+
+**重要：**当你隐藏一个当前是first responder的视图时，这个视图不会自动resign 它的 first responder状态。仍然会将事件传递给这个视图。为了阻止这些发生，你应该强制你的视图resign 它的 first responder状态在隐藏的时候。
+
+如果你想动画视图的可见过渡到隐藏(或者相反)，你必须使用视图的alpha属性。这个hidden属性时不可动画的，所以这个属性的任何改变会立即生效。
+
+### 在视图层级中定位视图
+
+有两种方法在视图层级中定位视图：
+
+* 存储指向视图的指针，比如view controller。
+* 使用视图的tag属性。
+
+存储引用来定位视图是最常见的方式，访问这些视图很方便。如果你使用Interface Builder创建视图，你可以使用outlets连接nib file里的对象(包括File’s Owner)。对于代码创建的视图，你可以将这些引用存储在私有成员变量里面。不管你是使用outlets或者私有成员变量，你都有责任在需要的时候持有它们，以及合适的时候释放它们。确保对象适当的retain和release的最好的方法就是声明属性。
+
+使用Tag是减少硬编码依赖以及支持动态灵活的解决方案。比起存储视图的指针，你可以使用tag来定位。tag也是更持久的方式。比如，如果你想要保存当前程序可视的列表视图，你可以将所有可视视图的tag写入文件。这比归档真是的视图对象要简单，特别是你只想追踪哪些视图是当前可见的时候。当你的应用程序在之后加载的时候，你可以重建你的视图，然后使用保存的tags列表来设置每一个视图是否可见，然后恢复了视图层级之前的状态。
+
+### 变换，缩放，旋转视图
+
+每一个视图都有关联的affine transform(仿射变换)，你可以用来变换，缩放，或者旋转视图的内容。视图的变换改变了视图最终呈现的外观，通常用来实现滚动，动画或者其他的可视效果。
+
+UIView的**transform**属性包含了**CGAffineTransform**结构体。默认情况下这个属性被设置为identity transform，并不改变视图的外观。你可以在任何时间赋值新的transform。比如，旋转45度，你可以使用如下的代码：
+
+	// M_PI/4.0 is one quarter of a half circle, or 45 degrees.
+	CGAffineTransform xform = CGAffineTransformMakeRotation(M_PI/4.0);
+	self.view.transform = xform;
+	
+上面的代码将会使视图围绕中心点顺时针旋转45度。如图3 - 2展示了向image view应用这个transformation 的效果：
+
+Figure 3-2  Rotating a view 45 degrees	
+![alt text](/img/ViewProgrammingGuideforiOS/rotated_view.jpg)
+
+当向一个视图应用多个transformations时，你添加给CGAffineTransform结构体的这些transformations信息是非常重要的。旋转视图然后变换视图跟变换视图然后旋转是不一样的。尽管各种情形中在旋转和变换的值是相同的，transformations的顺序影响了最后的结果。除此之外，你添加应用与视图的transformations依赖于中心点。旋转式围绕中心点。缩放会改变宽度和高度但是不改变中心点。
+
+### 视图层级中转换坐标系统
+
+在不同的时间，特别是处理事件时，应用程序可能需要转换坐标值。比如，触摸事件会报告每一次在window坐标系统的位置但是视图对象通常需要视图本地坐标系统的信息。UIView类定义了如下方法来转换坐标系统，不管是转换至其他坐标系统还是从其他坐标系统转换到本地坐标系统：
+
+[convertPoint:fromView:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/index.html#//apple_ref/occ/instm/UIView/convertPoint:fromView:)
+[convertRect:fromView:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/index.html#//apple_ref/occ/instm/UIView/convertRect:fromView:)
+[convertPoint:toView:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/index.html#//apple_ref/occ/instm/UIView/convertPoint:toView:)
+[convertRect:toView:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/index.html#//apple_ref/occ/instm/UIView/convertRect:toView:)
+
+convert...:fromView:将其他一些视图的坐标系统转换至本地坐标系统(bounds rectangle)。相反的，convert...:toView:方法将当前视图本地坐标(bounds rectangle)转换至指定视图的坐标系。如果你为这些方法的相关视图指定为nil，将会默认取值为包含该视图的window。
+
+除了UIView的转换方法，UIWindow类同样也定义了几个转换方法。跟UIView的方法类似，如下所示：
+
+[convertPoint:fromWindow:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIWindow_Class/index.html#//apple_ref/occ/instm/UIWindow/convertPoint:fromWindow:)
+[convertRect:fromWindow:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIWindow_Class/index.html#//apple_ref/occ/instm/UIWindow/convertRect:fromWindow:)
+[convertPoint:toWindow:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIWindow_Class/index.html#//apple_ref/occ/instm/UIWindow/convertPoint:toWindow:)
+[convertRect:toWindow:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIWindow_Class/index.html#//apple_ref/occ/instm/UIWindow/convertRect:toWindow:)
+
+当在旋转视图中转换坐标时，UIKit转换rectangles会假设你想要返回的rectangles是反射了原来rectangles的。如图3 - 3展示了在转换过程中旋转式怎样引起rectangle大小改变的例子。outerView包含一个旋转的视图。将子视图的坐标转换至父视图，rectangle变大了。这个larger rectangle实际上就是outerView的bounds里的smallest rectangle。
+
+Figure 3-3  Converting values in a rotated view
+![alt text](/img/ViewProgrammingGuideforiOS/uiview_convert_rotated.jpg)
+
+## 运行时调整视图的尺寸和位置
+
+每当视图的大小改变时，子视图的大小和位置也必须响应的改变。在视图层级中UIView类支持自动和手动的布局视图。自动布局时你给每一个视图设置规则来适应父视图的改变，而不需要做重设尺寸的操作。手动布局时你根据需要手动调整视图的尺寸和位置。
+
+### 为布局改变做准备
+
+布局变化可能在一个视图中引发下列任一事件：
+
+* 视图的bounds rectangle尺寸改变。
+* 用户界面朝向的改变，通常触发根视图的bounds rectangle改变。
+* 与视图的layer关联的Core Animation sublayers改变以及要求布局。
+* 应用程序通过调用视图的**setNeedsLayout** 或者 **layoutIfNeeded**方法专注于布局。
+* 应用程序通过调用视图的layer对象的**setNeedsLayout**方法专注于布局。
+
+### 使用Autoresizing规则自动处理布局变化
+
+当你改变视图的尺寸时，任何子视图的尺寸和位置通常也需要根据父视图的新尺寸进行相应的改变。父视图的**autoresizesSubviews**属性决定了子视图是否会重新设置尺寸。如果这个属性被设置为YES，视图使用子视图的**autoresizingMask**属性来决定怎样重新设置子视图的尺寸和位置。所有子视图尺寸的改变都会触发内嵌子视图的布局调整。
+
+对于每一个在视图层级中的视图来说，设置视图的**autoresizingMask**属性为合适的值是自动处理布局中重要的一部分。表3 - 2列出了autoresizing的选项，可以应用于给定的视图以及描述了布局操作是的影响。你可以使用OR(|)操作符组合在一起然后赋值给autoresizingMask属性。如果你使用Interface Builder来组装视图，你可以使用Autosizing inspector来设置这些选项。
+
+[Table 3-2  Autoresizing mask constants](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/CreatingViews/CreatingViews.html#//apple_ref/doc/uid/TP40009503-CH5-SW15)
+
+如图3 - 4展示了autoresizing mask应用于视图时的效果。这些给定得常量指示了当父视图的bounds改变时视图的某一方面会灵活调整。没有指定的那些常量表示视图布局的那一方面固定不变。当一个视图的单个轴配置了超过一个flexible attribute时，UIKit会均匀的分发相应的空间。
+
+Figure 3-4  View autoresizing mask constants
+![alt text](/img/ViewProgrammingGuideforiOS/uiview_autoresize.jpg)
+
+配置autoresizing规则的最简单的方式是使用Interface Builder的Size inspector的Autosizing controls。flexible的高度和宽度与之前代码设置的效果是相同的。然而，使用margin indicators的行为和效果是相反的。在Interface Builder中，设置了margin indicator意味着margin是固定大小的，没有设置意味着margin有个灵活的尺寸。幸运的是，Interface Builder提供了动画来演示这些autoresizing会怎样影响你的视图。
+
+**重要：**如果视图的transform属性不包含identity transform，那么视图的frame和autoresizing的行为的结果是不确定的。
+
+当所有应用于视图的自动autoresizing规则生效后，UIKit将会给每一个视图一次机会来手动做出任何需要的调整。
+
+### 手动调整你视图的布局
+
+每当视图的尺寸改变时，UIKit将会给每一个视图的子视图应用autoresizing行为然后调用视图的**layoutSubviews**方法来执行手动改变。你可以在自定义的视图中实现layoutSubviews方法，当autoresizing行为没有达到你的期望时。实现该方法时可以做如下任何事情：
+
+* 立即调整子视图的尺寸和位置。
+* 添加或者移除子视图或者Core Animation layers。
+* 通过调用**setNeedsDisplay** 或者 **setNeedsDisplayInRect:**方法强制子视图重绘。
+
+应用程序中通常需要手动布局子视图的地方就是实现较大的滚动区域时。因为用单个大的视图来实现可滚动的内容是不现实的，应用程序通常实现一个包含多个小的磁贴视图的根视图容器。当滚动事件发生时，根视图调用**setNeedsLayout**方法初始布局改变。然后它的layoutSubviews方法会响应。当这些磁贴视图滚动出可视区域时，**layoutSubviews**方法会将磁贴移到incoming edge，在这个过程中替换它们的内容。
+
+当你在编写布局代码时，请确保使用了如下方式进行了测试：
+
+* 改变视图的朝向确保视图在支持的所有朝向都看起来是正确的。
+* 确保你的代码响应状态的高度变化。当有电话进入时，状态栏的尺寸会增加，当用户结束通话时，状态栏的尺寸会减少。
+
+## 运行时改变视图
+
+当应用程序接收到用户的输入时，他们调整用户界面来响应变化。一个应用程序可能通过重新排列，改变尺寸和位置，隐藏或显示，加载新的视图集合等来调整视图。在iOS应用程序中，有个地方和方式来执行这些动作：
+
+* 在view controller中：
+	* 一个view controller必须在显示之前创建视图。可以从nib file加载或者代码创建。当不再需要这些视图时，需要处理这些。
+	* 当设备改变朝向时，view controller可能会调整视图的尺寸和位置来匹配。为了适应新的朝向，可能会隐藏一部分视图然后显示其他的。
+	* 当一个view controller管理可编辑的内容时，它可能会调整视图来适应编辑模式。比如，可能添加额外的按钮和其他控制来帮助编辑内容的各方面。这些可能也会要求重新设置已经存在视图的尺寸。
+* 在动画blocks中：
+	* 当你想在用户界面上得两个不同视图集过渡时，你隐藏一些视图然后显示其他的视图在动画block中。
+	* 当实现一些特殊的效果时，你可能会使用动画block来调整视图的多个属性。比如，动画的改变视图的尺寸，你需要改变frame rectangle的尺寸。
+* 其他方式：
+	* 当触摸事件或者手势识别发生时，你的界面响应肯恩工会加载新的视图集或者改变当前显示的视图集。
+	* 当用户和滚动视图交互时，一个大得可滚动区域可能会隐藏显示磁贴子视图。
+	* 当键盘出现时，你可能会调整你的视图不会显示在键盘之下。
+	
+view controller是开始改变视图最常见的地方。因为一个view controller管理显示内容相关的视图层级，这里是最终响应这些视图事件的地方。当处理视图或者处理朝向时，这个view controller可以添加新的视图或者隐藏替换已经存在的视图，以及让视图准备显示。如果你的实现支持编辑你视图的内容，UIViewController的**setEditing:animated:**方法让你在可编辑版本过渡。
+
+动画block是另一个初始视图改变的地方。动画内建到了UIView类，使其动画视图的属性更容易。你也可以使用**transitionWithView:duration:options:animations:completion:** 或者 **transitionFromView:toView:duration:options:completion:**方法在视图中过渡。
+
+## 与Core Animation Layers交互
+
+每一个视图对象都有一个专用的Core Animation Layer用来管理视图内容在屏幕上得呈现和动画。尽管你可以使用视图对象做很多工作，但是需要的时候你也可以直接与相应的Layer对象交互。Layer对象存储在视图的**layer**属性中。
+
+### 改变与视图关联的Layer类
+
+在视图创建之后，与视图关联的layer对象的类型不能在改变。每一个视图都使用**layerClass**类方法来指定类的layer对象。这方法的默认实现会返回**CALayer**类然后改变该值得唯一方法就是子类化，重写这个方法返回不同的值。你可以改变这个值返回一个不同类型的layer。比如，你的视图使用磁贴来显示打的可滚动区域，你可能想返回**CATiledLayer**类给你的视图。
+
+实现**layerClass**方法应该简单的创建期望的类对象然后返回。比如，一个视图使用磁贴应该如下实现该方法：
+
+	+ (Class)layerClass
+	{
+	    return [CATiledLayer class];
+	}
+	
+每一个视图都会在初始化过程的初期调用layerClass方法然后使用返回的类来创建layer对象。除此之外，视图总是将自己设置为layer对象的**delegate**(代理)。对于这一点，视图拥有它的layer并且视图和layer之间的关系必须不能改变。同时，你也不能将该视图设置为其他layer对象的delegate。改变视图的所属关系或者代理关系将会引起绘制问题以及潜在引发程序崩溃的可能。
+
+### 在视图中嵌入Layer对象
+
+如果你更倾向于使用layer对象替代视图，你可以在需要的时候将自定义的layer对象添加到你的视图层级中。一个自定义的layer对象是**CALayer**类的任何实例，并且不属于视图。通常你使用代码创建自定义的layer对象然后使用Core Animation例程。自定义的layer不会接收事件或者参与响应链，但是会绘制自身并且响应父视图尺寸的改变或者layer相应的Core Animation规则。
+
+Listing 3-3展示在view controller的viewDidLoad方法里创建自定义layer对象然后添加到根视图的例子。这个layer被用来显示静态图片。不再是将layer添加到视图本身，而是添加到视图的layer对象。
+
+Listing 3-3  Adding a custom layer to a view
+
+	- (void)viewDidLoad {
+	    [super viewDidLoad];
+	 
+	    // Create the layer.
+	    CALayer* myLayer = [[CALayer alloc] init];
+	 
+	    // Set the contents of the layer to a fixed image. And set
+	    // the size of the layer to match the image size.
+	    UIImage layerContents = [[UIImage imageNamed:@"myImage"] retain];
+	    CGSize imageSize = layerContents.size;
+	 
+	    myLayer.bounds = CGRectMake(0, 0, imageSize.width, imageSize.height);
+	    myLayer = layerContents.CGImage;
+	 
+	    // Add the layer to the view.
+	    CALayer*    viewLayer = self.view.layer;
+	    [viewLayer addSublayer:myLayer];
+	 
+	    // Center the layer in the view.
+	    CGRect        viewBounds = backingView.bounds;
+	    myLayer.position = CGPointMake(CGRectGetMidX(viewBounds), CGRectGetMidY(viewBounds));
+	 
+	    // Release the layer, since it is retained by the view's layer
+	    [myLayer release];
+	}
+	
+你可以将任意多个sublayers添加到你的sublayers层级中。然而，在有些时候，这些layers必须与视图关联。
+
+## 自定义视图
+
+如果标准的系统视图不能达到你的需求，你可以自定义视图。自定义视图让你完全控制你应用程序内容的外观以及如何处理与内容的交互。
+
+**注意：**如果你使用OpenGL ES处理你的绘制，你应该使用 [GLKView](https://developer.apple.com/library/ios/documentation/GLkit/Reference/GLKView_ClassReference/index.html#//apple_ref/occ/cl/GLKView) 类替代子类化UIView。怎样使用 OpenGL ES 进行绘制详见 [OpenGL ES Programming Guide for iOS.](https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008793)。
+
+### 实现自定义视图的步骤
+
+自定义视图的工作就是呈现内容和管理与内容的交互。一个成功的自定义视图的实现涉及的内容不仅仅包括绘制和处理事件。下面的列表包括了一些当你在实现自定义视图时需要重写(提供需要的行为)的重要方法：
+
+* 定义合适的初始化方法：
+	* 如果你想代码创建，重写**initWithFrame**方法或者定义自定义的初始化方法。
+	* 如果你想从nib file加载，重写**initWithCoder:**方法。使用该方法初始化你的视图。
+* 实现dealloc方法处理清除视图的数据。
+* 处理自定义的绘制，重写**drawRect:**方法，在该方法中做你的绘制工作。
+* 设置视图的autoresizingMask属性定义它的autoresizing行为。
+* 如果你的视图类管理一个或者多个子视图，做如下事情：
+	* 在初始化的序列中创建这些子视图。
+	* 在创建子视图的时候设置每一个子视图的autoresizingMask属性。
+	* 如果你的子视图要求自定义的布局，重写**layoutSubviews**方法然后在这里实现你的布局代码。
+* 处理基于触摸的事件，做如下事情：
+	* 使用**addGestureRecognizer:**方法给视图添加合适的手势识别。
+	* 你想自己处理触摸事件时，重写**touchesBegan:withEvent:**，**touchesMoved:withEvent:**，**touchesEnded:withEvent:**，和 **touchesCancelled:withEvent:**方法。(记住你应该始终重写**touchesCancelled:withEvent:**方法)
+如果你想打印的版本和屏幕上显示的版本不一样，实现**drawRect:forViewPrintFormatter:**方法。
+
+除了重写方法之外，记住使用视图存在的属性和方法还能做很多事情。比如，**contentMode** 和 **contentStretch**属性让你改变最终渲染的视图外观以及自己重绘。除了UIView类本身，你还可以直接或者间接的配置视图的CALayer对象的各方面。你也可以改变layer对象的类型。
+
+### 初始化自定义视图
+
+每一个你定义的新的视图对象都应该包括自定义的**initWithFrame:**初始化器方法。这个方法在创建的时候响应初始化类以及将视图对象放入可知的状态。当你在代码创建视图时你使用该方法来创建视图的实例。
+
+Listing 3-4展示了实现**initWithFrame:**方法的骨架。初始化的东西大家应该很了解了，不多说了。
+
+	- (id)initWithFrame:(CGRect)aRect {
+	    self = [super initWithFrame:aRect];
+	    if (self) {
+	          // setup the initial properties of the view
+	          ...
+	       }
+	    return self;
+	}
+	
+如果你希望从nib file加载你自定义视图类的实例，你需要注意的时，在iOS里nib加载不使用**initWithFrame:**方法来实例化新的视图对象。使用**initWithCoder:**方法替代，**NSCoding**协议的一部分。
+
+即使你适配了**NSCoding**协议，Interface Builder也不知道你视图的自定义属性，不会编码这些属性到nib file。你自己的**initWithCoder:**方法应该执行初始化的代码。你也可以在你的视图类里实现**awakeFromNib**方法执行额外的初始化。
+
+### 实现你的绘制代码
+
+对于那些需要自定义绘制的视图，你需要重写**drawRect:**方法然后在该方法中做你的绘制工作。自定义绘制推荐作为最后的手段。总的来说，如果你能用其他的视图呈现内容，更好。
+
+你的**drawRect:**方法的实现只做一件事情：那就是绘制你视图的内容。该方法不是更新程序数据结构或者执行与绘制无关的地方。它应该配置绘制环境，绘制内容，然后尽可能快得退出。如果你的**drawRect:**方法调用的很频繁，你要尽可能的优化你的绘制代码以及每次调用的时候尽可能少得绘制。
+
+在调用视图的**drawRect:**方法之前，UIKit为你的视图配置了基本的绘图环境。具体点，它创建了一个graphics上下文，以及准备好了坐标系统。因此，当调用**drawRect:**方法时，你可以使用原生的绘图技术如UIKit和Core Graphics来绘制你的内容。你可以使用**UIGraphicsGetCurrentContext**函数来得到当前graphics上下文的指针。
+
+**重要：**当前的graphics上下文只在调用**drawRect:**方法之间才有效。UIKit可能为之后的每一次调用都创建一个不同的graphics上下文，所以你不能缓存这个对象之后再使用。
+
+Listing 3-5展示了绘制一个10像素宽，围绕视图的红色的线条的实现。因为UIKit绘制操作使用Core Graphics，你可以在这混合绘制调用，达到你期望的效果。
+
+Listing 3-5  A drawing method
+
+	- (void)drawRect:(CGRect)rect {
+	    CGContextRef context = UIGraphicsGetCurrentContext();
+	    CGRect    myFrame = self.bounds;
+	 
+	    // Set the line width to 10 and inset the rectangle by
+	    // 5 pixels on all sides to compensate for the wider line.
+	    CGContextSetLineWidth(context, 10);
+	    CGRectInset(myFrame, 5, 5);
+	 
+	    [[UIColor redColor] set];
+	    UIRectFrame(myFrame);
+	}
+	
+如果你知道你的视图绘制代码始终会使用不透明的内容覆盖整个视图的表面，你可以通过设置视图的opaque属性为YES来提供系统执行的性能。当你标记了视图为不透明，UIKit会避免绘制图示后面的内容。这不仅减少了绘制的时间也简化绘制混合后的内容。然而，你应该确定你的视图完全不透明时设置这个属性为YES。如果你不能保证你视图的内容不总是不透明的，你应该设置为NO。
+
+另外一种提高绘制性能的方式，特别是在滚动时，是设置你视图的**clearsContextBeforeDrawing**属性为NO。当该属性设置为YES，UIKit会在调用你方法之前自动使用透明的黑色来填充**drawRect:**方法要更新的区域。当设置为NO时，消除了填充的操作，但是将系统填充的重担传递给给了**drawRect:**方法。
+
+### 响应事件
+
+视图对象时响应者对象--**UIResponder**类的实例--能够接收触摸事件。当触摸事件发生时，window会将事件分发给相应的视图。如果你的视图对事件不感兴趣，可以忽略然后向上传递给 响应链，让其他不同的对象处理。
+
+除了直接处理触摸事件，视图也可以使用手势识别来侦测点击，滑动，捏合以及一些其他常见的手机。手势识别追踪触摸事件确保它们遵循正确的规则。你可以创建手势识别来替代追踪触摸事件，你可以使用**addGestureRecognizer:**方法给视图添加手势识别。当响应的手势发生时会调用相应的方法。
+
+如果你更倾向于直接处理触摸事件，你可以在你的视图里实现如下方法：
+
+[touchesBegan:withEvent:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIResponder_Class/index.html#//apple_ref/occ/instm/UIResponder/touchesBegan:withEvent:)
+[touchesMoved:withEvent:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIResponder_Class/index.html#//apple_ref/occ/instm/UIResponder/touchesMoved:withEvent:)
+[touchesEnded:withEvent:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIResponder_Class/index.html#//apple_ref/occ/instm/UIResponder/touchesEnded:withEvent:)
+[touchesCancelled:withEvent:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIResponder_Class/index.html#//apple_ref/occ/instm/UIResponder/touchesCancelled:withEvent:)
+
+视图默认同一时间只响应一个触摸事件。如果用户使用了第二个手指，系统会忽略触摸时间并且不会报告给视图。如果你计划在你视图事件处理的方法里追踪多点触控，你应该设置视图的**multipleTouchEnabled**属性为YES。
+
+一些视图，比如labels和images，禁用了事件处理。你可以通过改变视图的**userInteractionEnabled**属性的值来控制视图是否可以接收触摸事件。也许在等待一个较长时间的操作时你可以设置该属性为NO来组织用户操作视图的内容。你可以使用UIApplication对象的**beginIgnoringInteractionEvents** 和 **endIgnoringInteractionEvents**方法来阻止时间到达你的视图。这些方法影响了整个应用程序事件的传送，不只是一个单一的视图。
+
+**注意：**UIView的动画方法在动画执行时通常禁用了触摸事件。你可以通过合适的配置动画来覆盖这一行为。
+
+UIKit使用UIView的**hitTest:withEvent:** 和 **pointInside:withEvent:**方法来决定给定的视图方位是否发生了触摸事件。尽管你很少需要重写这些方法，你也可以这样实现自定义的触摸行为。比如，你可以重写这些方法来阻止子视图处理触摸事件。
+
+### 清除视图
+
+如果你的视图类分配任何内存，存储了任何自定义对象的引用，或者持有资源，那么当视图释放的时候这些东西也必须释放，你必须实现**dealloc**方法。系统会在你视图的引用计数为零时调用这个方法然后释放视图。你实现该方法应该释放任何你持有的对象和资源，然后调用父类的实现，如Listing 3-6所示，你不应该使用该方法执行任何其他的任务。
+
+Listing 3-6  Implementing the dealloc method
+
+	- (void)dealloc {
+	    // Release a retained UIColor object
+	    [color release];
+	 
+	    // Call the inherited implementation
+	    [super dealloc];
+	}
+
+# 动画
+
+动画为用户界面不同状态之间的转换提供了流畅的视觉过渡效果。在iOS中，动画被广泛的用在复位视图，改变视图尺寸，从视图层级移除，以及隐藏。你可能使用动画想用户传达反馈或者实现一些有趣的视觉效果。
+
+在iOS中，创建精致的动画并不要求你写任何绘图的代码。本章描述的所有动画技术都是由Core Animation提供且内建支持的。所有你需要做得就是触发动画然后让Core Animation独立的渲染每一帧。只需要几行很简单的代码就能创建精致的动画。
+
+## 什么可以动画
+
+UIKit和Core Animation都提供了对动画的支持，但是,每种技术所提供的支持程度各有不同。在UIKit中，使用UIView对象来执行动画。视图提供了一个包括了大部分任务的基础的动画集。比如，你可以动画视图的属性或者使用过渡动画使用另一个视图集来替换一个视图集。
+
+Table 4-1列出了可动画的属性，这些属性在UIView类里面提供了内建动画支持。可动画不意味着动画会自动发生。改变这些属性的值只会正常的立即改变值而已，并没有动画。为了动画这些改变，你必须在动画block里面改变属性的值。
+
+[Table 4-1  Animatable UIView properties](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/AnimatingViews/AnimatingViews.html#//apple_ref/doc/uid/TP40009503-CH6-SW1)
+
+动画视图过渡是你改变由view controller提供给视图层级的过渡动画的方式。尽管你应该使用view controller来管理视图层级，但是有时你想替换部分或者全部视图层级。在这种情形下，你可以使用基于试图过渡的动画来动画的添加或者移除视图。
+
+在你想执行更精致的动画，或者UIView类不支持的动画，你可以使用Core Animation和视图的layer来创建动画。因为视图和layer对象是精致的链接在一起，改变视图的layer会影响视图本身。使用Core Animation，你可以为视图的layer动画如下类型的改变：
+
+* layer的尺寸和位置
+* 当执行变换时使用中心点
+* 在3D空间转换layer或者子的layer
+* 从layer层级结构中添加或者移除一个layer
+* layer的Z值得顺序与同层级的layers相关
+* layer的阴影
+* layer的边界
+* layer的一部分在从设大小的时候拉伸了
+* layer的opacity属性
+* 子layer的剪裁行为会超出layer的范围
+* layer的当前的内容
+* layer的光栅化行为
+
+**注意：**如果你的视图的layer是自定义的，即该layer对象时没有关联视图的，你必须使用Core Animation来动画它们任何改变。
+
+尽管本章发表了一些Core Animation行为的演说，详见 [Core Animation Programming Guide](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514)。
+
+## 动画视图属性的改变
+
+为了动画UIView类属性的改变，你必须将这些改变包装在动画block里面。在iOS4及以后，你使用block对象创建动画。在早期的iOS版本中，你使用UIView类的特殊方法来标记动画block的开始和结束。这两种方式的效果是相同的。然而，基于block的方法无论何时都更好。
+
+### 使用基于block的方法开始动画
+
+在iOS4及以后，你使用基于block的类方法来初始化动画。有几个基于block的不同的方法，提供了不同程度的配置，如下：
+
+* [animateWithDuration:animations:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/index.html#//apple_ref/occ/clm/UIView/animateWithDuration:animations:)
+* [animateWithDuration:animations:completion:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/index.html#//apple_ref/occ/clm/UIView/animateWithDuration:animations:completion:)
+* [animateWithDuration:delay:options:animations:completion:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/index.html#//apple_ref/occ/clm/UIView/animateWithDuration:delay:options:animations:completion:)
+
+因为这些事类方法，这些动画block并没有绑定到单个的视图对象。因此，你可以使用这些方法创建一个涉及多个视图的动画。比如，Listing 4-1展示了一个淡入淡出的动画。当这些代码执行时，这些指定的动画在另外一个线程上立即执行，避免阻塞了当前的主线程。
+
+Listing 4-1  Performing a simple block-based animation
+
+	[UIView animateWithDuration:1.0 animations:^{
+	        firstView.alpha = 0.0;
+	        secondView.alpha = 1.0;
+	}];
+	
+上面的动画使用ease-in，ease-out的动画曲线只执行了一次。如果你想改变默认的动画参数，你必须使用**animateWithDuration:delay:options:animations:completion:**方法来执行你的动画。该方法允许你配置如下的动画参数：
+
+* 延迟开始动画
+* 在动画时使用的时间曲线
+* 动画应该重复的次数
+* 是否反转动画
+* 动画执行的过程中是否接收触摸事件
+* 动画执行的过程中是否应该打断或者等待完成
+
+另外就是**animateWithDuration:animations:completion:** 和 **animateWithDuration:delay:options:animations:completion:**方法都有支持指定完成时执行的block的能力。你可能想在动画结束时告诉程序动画执行完成了。同时也是连接分开动画的一种方式。
+
+Listing 4-2展示了一个动画block在结束后使用completion handler初始了一个新的动画的实例。首先调用**animateWithDuration:delay:options:animations:completion:**方法设置了一个fade-out的动画然后自定义了一些选项。当这个动画完成时，completion handler运行然后设置了第二个动画。
+
+使用completion handler是连接多个动画的主要方式。
+
+Listing 4-2  Creating an animation block with custom options
+
+	- (IBAction)showHideView:(id)sender
+	{
+	    // Fade out the view right away
+	    [UIView animateWithDuration:1.0
+	        delay: 0.0
+	        options: UIViewAnimationOptionCurveEaseIn
+	        animations:^{
+	             thirdView.alpha = 0.0;
+	        }
+	        completion:^(BOOL finished){
+	            // Wait one second and then fade in the view
+	            [UIView animateWithDuration:1.0
+	                 delay: 1.0
+	                 options:UIViewAnimationOptionCurveEaseOut
+	                 animations:^{
+	                    thirdView.alpha = 1.0;
+	                 }
+	                 completion:nil];
+	        }];
+	}
+	
+**重要：**改变正在动画中的涉及的属性的值并不会停止当前的动画。相反，当前的动画会继续并且会动画到你刚设置值得属性的新值。
+
+### 使用Begin/Commit方法开始动画
+
+*实在不好意思，由于时间关系，加上这部分内容比较过时了，而且苹果也推荐使用基于block的方式来执行动画。所以这部分内容不再翻译了，大家请自行参考了解。*[Starting Animations Using the Begin/Commit Methods](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/AnimatingViews/AnimatingViews.html#//apple_ref/doc/uid/TP40009503-CH6-SW1)。
+
+### 嵌套动画block
+
+你可以通过嵌套动画block赋值不同的时间和配置选项给部分的动画block。如同名字暗示的一样，嵌套动画block就是在已经存在的动画block里面创建一个新的动画block。嵌套动画在同一时间开始但是使用自己的配置选项。默认的，嵌套动画继承父类的持续时间和动画曲线，但是如果必要的话也可以覆盖这些选项。
+
+Listing 4-5展示了在整个小组中怎样使用嵌套动画来改变时间，持续时间，以及一些动画的行为。在这个示例中，两个视图渐变到完全透明，但是anotherView对象改变了回来，在最终隐藏之前并且执行了好几次。使用在嵌套动画里面的**UIViewAnimationOptionOverrideInheritedCurve** 和 **UIViewAnimationOptionOverrideInheritedDuration**允许曲线和持续时间的值从第一个动画可以调整到第二个动画。如果没有这些选项，那么outer动画block的曲线和持续时间将会被取代。
+
+	[UIView animateWithDuration:1.0
+	        delay: 1.0
+	        options:UIViewAnimationOptionCurveEaseOut
+	        animations:^{
+	            aView.alpha = 0.0;
+	 
+	            // Create a nested animation that has a different
+	            // duration, timing curve, and configuration.
+	            [UIView animateWithDuration:0.2
+	                 delay:0.0
+	                 options: UIViewAnimationOptionOverrideInheritedCurve |
+	                          UIViewAnimationOptionCurveLinear |
+	                          UIViewAnimationOptionOverrideInheritedDuration |
+	                          UIViewAnimationOptionRepeat |
+	                          UIViewAnimationOptionAutoreverse
+	                 animations:^{
+	                      [UIView setAnimationRepeatCount:2.5];
+	                      anotherView.alpha = 0.0;
+	                 }
+	                 completion:nil];
+	 
+	        }
+	        completion:nil];
+	        
+*begin/commit的嵌套方式请自行了解。*
+	        
+### 反转动画
+
+当创建可反转的动画，并且有重复次数时，需要考虑指定了非整型值的重复次数。对于自动反转的动画，每一个完整的动画周期从原始的值到新的值然后再返回。如果你想要你的动画结束在新的值，将重复次数增加0.5将会导致动画完成这额外的半个周期结束在新的值。如果你没有包含这半步，你的动画将会执行到原始值然后再快速的对齐新的值，这种视觉效果可能不是你想要的。
+
+## 视图之间创建过渡动画
+
+视图过渡帮助你隐藏因为在视图层级中添加，移除，隐藏，或者显示视图造成的突然的改变。你使用视图过渡来实现如下类型的改变：
+
+* 改变已经存在视图的可视子视图。通常对已经存得视图做出很少的改变时会选择这个选项。
+* 使用一个不同的视图替换你视图层级中的一个视图。当你想要替换屏幕中视图层级的一部分或者所有的时候会选择这个选项。
+
+**重要：**视图过渡不要与view controller初始过渡混淆了，比如呈现modal view controller或者push新的view controller到navigation stack的过渡。视图过渡只会影响视图层级，view controller的过渡会改变现有的view controller。因此，对于视图过渡来说，不会影响view controller。
+
+### 改变视图的子视图
+
+改变视图的子视图允许你适度的修改视图。比如，你可能添加或者移除子视图来触发父视图在不同状态转换。当动画结束时，相同的视图但是显示不同的内容。
+
+在iOS4及以后，你使用**transitionWithView:duration:options:animations:completion:**方法为一个视图初始化过渡动画。在animations block里，唯一的改变可动画的就是与子视图相关的显示，隐藏，增加或者移除。限制动画这样设置允许视图在动画之前和之后创建快照，然后可以动画这两张图片，从而更高效。然而，如果你想动画其他的改变，你可以在调用方法的时候包含UIViewAnimationOptionAllowAnimatedContent选项。包含那个选项后会阻止视图创建快照然后直接动画所有的改变。
+
+Listing 4-6展示了怎样使用过渡动画来装饰新的text进入了页面。在这个例子中，main view包含了两个text view。一个text始终显示，另一个始终隐藏。当用户点击按钮创建新的页面时，该方法触发两个视图的可视性，新的空得页面以及空得text视图。当过渡完成的时候，视图使用私有方法从旧的页面保存text然后从新设置隐藏text来重用。视图重新安排它们的指针，所以当用户再次请求新的页面时可以准备好再次做同样的事情。
+
+Listing 4-6  Swapping an empty text view for an existing one
+
+	- (IBAction)displayNewPage:(id)sender
+	{
+	    [UIView transitionWithView:self.view
+	        duration:1.0
+	        options:UIViewAnimationOptionTransitionCurlUp
+	        animations:^{
+	            currentTextView.hidden = YES;
+	            swapTextView.hidden = NO;
+	        }
+	        completion:^(BOOL finished){
+	            // Save the old text and then swap the views.
+	            [self saveNotes:temp];
+	 
+	            UIView*    temp = currentTextView;
+	            currentTextView = swapTextView;
+	            swapTextView = temp;
+	        }];
+	}
+	
+在iOS3.2及之前执行过渡动画请自行了解 [setAnimationTransition:forView:cache:](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIView_Class/index.html#//apple_ref/occ/clm/UIView/setAnimationTransition:forView:cache:)。
+
+### 替换视图
+
+当你希望你的用户界面有些戏剧性的不同时可以替换视图。因为这个技术只是交换视图(不是view controller)，你有责任合适的设计你应用程序的controller对象。这项技术是使用标准过渡快速呈现新的视图的简单方法。
+
+在iOS4及以后，你可以使用**transitionFromView:toView:duration:options:completion:**方法来过渡两个视图。这个方法首先从你的视图层级移除第一个视图然后插入其他的，所以如果你想保存第一个视图的话请确保你引用了。如果你想隐藏而不是移除，你可以传递**UIViewAnimationOptionShowHideTransitionViews**选项。
+
+Listing 4-8展示了交换由一个view controller管理的两个视图。在这个示例中，view controller的根视图始终显示一个或者两个子视图。每一个视图都显示相同的内容但是以不同的方式。view controller使用displayingPrimary成员变量(布尔值)来追踪哪一个在给定的时间显示。翻页的方向依赖于显示哪一个视图。
+
+Listing 4-8  Toggling between two views in a view controller
+
+	- (IBAction)toggleMainViews:(id)sender {
+	    [UIView transitionFromView:(displayingPrimary ? primaryView : secondaryView)
+	        toView:(displayingPrimary ? secondaryView : primaryView)
+	        duration:1.0
+	        options:(displayingPrimary ? UIViewAnimationOptionTransitionFlipFromRight :
+	                    UIViewAnimationOptionTransitionFlipFromLeft)
+	        completion:^(BOOL finished) {
+	            if (finished) {
+	                displayingPrimary = !displayingPrimary;
+	            }
+	    }];
+	}
+	
+**注意：**除了换出视图，你的view controller的代码也需要管理primary 和 secondary这两个视图的加载和卸载。关于view controller怎样加载和卸载视图，详见 [View Controller Programming Guide for iOS](https://developer.apple.com/library/ios/featuredarticles/ViewControllerPGforiPhoneOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40007457)。
+
+## 同时连接多个动画
+
+UIView的动画接口提供支持连接单独的动画block以便他们按顺序执行，而不是同一时间。连接动画block的过程取决于你是使用基于动画的block还是begin/commit方法：
+
+* 对于基于block的动画，使用**animateWithDuration:animations:completion:** 和 **animateWithDuration:delay:options:animations:completion:**方法提供的completion handler来执行接下来的动画。
+* 对于begin/commit动画请自行了解，[链接](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/AnimatingViews/AnimatingViews.html#//apple_ref/doc/uid/TP40009503-CH6-SW10)。
+
+一种替代的方式就是使用嵌套的动画，使用不用的延迟因子来保证动画在不同的时间开始。详见 [Nesting Animation Blocks](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/AnimatingViews/AnimatingViews.html#//apple_ref/doc/uid/TP40009503-CH6-SW11)。
+
+## 同时动画视图和Layer
+
+应用程序在需要的时候可以自由的混合基于视图和layer的动画代码但是在混合过程中配置动画的参数依赖于谁拥有这个layer。改变视图拥有的layer跟改变视图本身是一样的，任何你应用于layer属性的动画都会遵守当前基于视图动画block的动画参数。但是你自己创建的layer就不一样。自定义创建的layer对象会无视基于视图的动画block的参数，而会使用Core Animation默认的参数替代。
+
+如果你想自定义你自己创建layer的动画参数，你必须直接使用Core Animation。通常动画layer使用Core Animation涉及创建**CABasicAnimation**对象或者一些其他的**CAAnimation**的子类。然后将动画添加给layer。你可以基于视图动画block的外部或者内部应用动画。
+
+Listing 4-9 展示了同时调整视图和自定义layer的动画。在这个示例中的视图包含一个自定义的**CALayer**对象。这个动画在逆时针旋转视图的同时也在顺时针旋转layer。因为旋转是相反的方向，layer相对于屏幕保持原来的方向，没有出现明显旋转。然而，下面的视图旋转360度然后回到原来的方向。这个示例主要演示了你可以怎样混合视图和layer的动画。这种类型的混合并不适用于需要精确时间的情形。
+
+Listing 4-9  Mixing view and layer animations
+
+	[UIView animateWithDuration:1.0
+	    delay:0.0
+	    options: UIViewAnimationOptionCurveLinear
+	    animations:^{
+	        // Animate the first half of the view rotation.
+	        CGAffineTransform  xform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(-180));
+	        backingView.transform = xform;
+	 
+	        // Rotate the embedded CALayer in the opposite direction.
+	        CABasicAnimation*    layerAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
+	        layerAnimation.duration = 2.0;
+	        layerAnimation.beginTime = 0; //CACurrentMediaTime() + 1;
+	        layerAnimation.valueFunction = [CAValueFunction functionWithName:kCAValueFunctionRotateZ];
+	        layerAnimation.timingFunction = [CAMediaTimingFunction
+	                        functionWithName:kCAMediaTimingFunctionLinear];
+	        layerAnimation.fromValue = [NSNumber numberWithFloat:0.0];
+	        layerAnimation.toValue = [NSNumber numberWithFloat:DEGREES_TO_RADIANS(360.0)];
+	        layerAnimation.byValue = [NSNumber numberWithFloat:DEGREES_TO_RADIANS(180.0)];
+	        [manLayer addAnimation:layerAnimation forKey:@"layerAnimation"];
+	    }
+	    completion:^(BOOL finished){
+	        // Now do the second half of the view rotation.
+	        [UIView animateWithDuration:1.0
+	             delay: 0.0
+	             options: UIViewAnimationOptionCurveLinear
+	             animations:^{
+	                 CGAffineTransform  xform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(-359));
+	                 backingView.transform = xform;
+	             }
+	             completion:^(BOOL finished){
+	                 backingView.transform = CGAffineTransformIdentity;
+	         }];
+	}];
+	
+**注意：**在Listing 4-9中，你也可以在基于视图的动画block外创建应用CABasicAnimation对象来实现相同的效果。这些动画最后都依赖于Core Animation的执行。因此，如果他们大约在同一时间提交，他们会一起运行。
+
+如果基于视图和layer的动画要求精确的时间，推荐使用Core Animation创建所有的动画。你可能发现一些动画使用Core Animation更容易执行。比如，在Listing 4-9基于视图的旋转要求多步旋转超过180度，Core Animation部分使用一个旋转值函数旋转从开始通过一个中间值到结束。
+
+如何使用Core Animation创建配置动画，详见 [Core Animation Programming Guide](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514)。

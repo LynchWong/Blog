@@ -1,0 +1,122 @@
+---
+title: Fastlane - Boarding
+date: 2016-06-28 09:04:26
+categories: 
+- iOS
+tags: 
+- Fastlane
+- Automate
+- Boarding
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: /img/FastlaneBoarding/BoardingHuge.png
+
+---
+
+> 说明：翻译的 `Boarding` 的指南，[ 原文地址 ](https://github.com/fastlane/boarding)。
+<!--more-->
+
+![alt text](/img/FastlaneBoarding/BoardingHuge.png)
+
+# boarding 是什么？ #
+
+即时为 TestFlight beta 测试人员创建一个注册页面。
+
+> Have you ever been to an airport, where you had to ask the manager of the airport if you can board now? Once the manager agrees, you'll be carried from your check-in to your gate into your plane.
+
+做为一个开发人员，当你想添加一个新的测试人员时你就是这么做的： [Open Screenshots](https://raw.githubusercontent.com/fastlane/boarding/master/assets/OldWay.jpg)
+
+你为什么不弄一个简单的网页，与你潜在的测试人员分享(比如邮件、Facebook、Twitter)，那些对你的新 App 感兴趣的人，然后让他们自己来 `board` ？
+
+![alt text](/img/FastlaneBoarding/BoardingScreenshot.png)
+
+感谢 [spaceship.airforce](https://spaceship.airforce) ，现在可以自动为你的 TestFlight beta 测试人员 boarding process 。
+
+## 例子 ##
+
+查看鲜活的例子页面： [boarding.herokuapp.com](https://boarding.herokuapp.com)
+
+# 开始 #
+
+将设你已经有 [Heroku](https://www.heroku.com) 账户，按照如下步骤：
+
+* Deploy to Heroku
+* 输入你 iTunes Connect 的凭证和你 App 的 Bundle identifier。这些会被当做你自己 Heroku 实例的环境变量
+* 一旦设置完成，点击 `view` 然后开始分享 URL
+
+`boarding` 已经为你做了所有神奇的工作，比如获取应用的名字和图标。
+
+对于标准的机器，Heroku 是免费的。如果你需要一个 Heroku 账户，如果你已经有了公司账户，询问你的支持团队。
+
+## 安全 ##
+
+为了确保你的网页的安全，你只需要为 `ITC_TOKEN` 环境变量设置任何密码。
+
+* 你可以给你的测试人员发送链接然后告诉他们密码
+* 你可以直接给他们发送包含 token 的链接，比如： https://url.com/?token=[password]
+
+## 可用的环境变量 ##
+
+要求：
+
+* `ITC_USER`  iTunes Connect 用户名
+* `ITC_PASSWORD` iTunes Connect 密码
+* `ITC_APP_ID` 你 App 的 Apple ID 或者 Bundle Identifier
+
+可选：
+
+* `ITC_TOKEN` 设置一个密码来防止路人注册
+* `ITC_CLOSED_TEXT` 这只这个变量来临时禁用新的测试人员注册
+* `RESTRICTED_DOMAIN` 设置这个域名来限制用户使用来自另一个域名的邮件进行注册。使用这种格式 `domain1.com,domain2.com` 支持设置多个域名
+* `FASTLANE_ITC_TEAM_NAME` 如果你在多个团队中，在这里输入你 iTC 团队的名字。确保匹配
+
+## 自定义域名 ##
+
+使用 Heroku ，你可以使用自己的域名，参见 [this guide](https://devcenter.heroku.com/articles/custom-domains)。
+
+# 如何工作的？ #
+
+`boarding` 是 [fastlane](https://fastlane.tools) 的一部分，帮助你自动化一些需要开发人员手动完成的工作。
+
+使用 [spaceship.airforce](https://spaceship.airforce) 能够管理测试人员、构建、元数据、证书等等。
+
+这个 Repository 就是一个简单的 Rails 应用程序，大部分代码在如下文件中：
+
+* [invite_controller.rb](https://github.com/fastlane/boarding/blob/master/app/controllers/invite_controller.rb)
+* [invite/index.html.erb](https://github.com/fastlane/boarding/blob/master/app/views/invite/index.html.erb)
+
+![alt text](/img/FastlaneBoarding/BoardingOverview.png)
+
+更多关于自动化过程的信息，参见 [my blog](https://krausefx.com) 。
+
+# 自定义 #
+
+如果你想要改变设计，布局，添加新的功能：
+
+* 安装 [Heroku toolbelt](https://toolbelt.heroku.com) 和 `heroku login`
+* Clone 你的应用程序，使用 `heroku git:clone --app [heroku_app_name]`
+* `cd [heroku_app_name]`
+* 修改上面描述到的文件的内容
+* 运行 `ITC_USER="email" ITC_... rails s` 在本地测试，然后打开 [http://127.0.0.1:3000](http://127.0.0.1:3000)
+* 提交改变
+* `git push`
+
+除了 Heroku 之外，推荐你将版本信息也存储在你的 Git Repo 中。
+
+## 更新到新的版本 ##
+
+随着时间的推移，`boarding` 会迎来更新。有两种方法来更新你的 Heroku 应用程序；
+
+### 推荐：使用 Terminal ###
+
+* 安装 [Heroku toolbelt](https://toolbelt.heroku.com) 和 `heroku login`
+* Clone 你的应用程序，使用 `heroku git:clone --app [heroku_app_name]`
+* `cd [heroku_app_name]`
+* `git pull https://github.com/fastlane/boarding`
+* `git push`
+
+### 使用 Heroku Website ###
+
+* 删除你在 [heroku.com](https://www.heroku.com) 上的应用程序
+* [Create a new boarding application](https://www.heroku.com/deploy?template=https://github.com/fastlane/boarding)
+* 再次输入你的用户凭证

@@ -1,0 +1,490 @@
+---
+title: "Objective-C Runtime Programming Guide"
+date: 2015-04-27 14:46:10
+categories: 
+- 编程指南
+tags: 
+- Objective-C Runtime
+- 运行时
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
+
+---
+
+[官方文档](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html)
+<!--more-->
+
+# 简介
+
+Objective-C尽可能的将编译时决定的事情推迟到运行时决定。不管是否可能，它都是动态的处理事情。这意味着Objective-C不仅需要一个编译器，同时也需要一个运行时系统来执行编译的代码。这个运行时系统就像是Objective-C的一个操作系统；保证Objective-C能够工作。
+
+本文档着眼于*NSObject*类以及如何编码与运行时系统交互。具体来说，在运行时动态的加载新的类，转发消息给其他对象。同时也提供了在程序运行时怎样找到其他对象的信息。
+
+你应该阅读本文档理解Objective-C的运行时系统是怎样工作的，以及如何利用运行时系统。如果你编写的是Cocoa应用程序，那么你就更需要理解这份材料。
+
+# 运行时版本和平台
+
+在不同的平台上有不同的运行时版本。
+
+## 遗留版和现代版
+
+有两个Objective-C运行时版本，现代(modern)和遗留(legacy)。现代版在Objective-C 2.0的时候介绍了，同时包含了一些新的特性。遗留版本运行时的编程接口在Objective-C 1 Runtime Reference中描述了；现代版本运行时的编程接口在[Objective-C Runtime Reference](https://developer.apple.com/library/ios/documentation/Cocoa/Reference/ObjCRuntimeRef/index.html#//apple_ref/doc/uid/TP40001418)中描述。
+
+最值得关注的新特性就是实例变量在现代版本的运行时中不再是脆弱(non-fragile)的：
+
+* 在遗留版本的运行时，如果你改变了类中实例变量的布局，你必须重新编译继承自该类的子类。
+* 在现代版本的运行时，如果你改变了类中实例变量的布局，你不需要从新编译继承自该类的子类。
+
+除此之外，现代版本的运行时支持为定义的属性合成实例变量，详见Objective-C Programming Language。
+
+## 平台
+
+iOS应用程序及OS X v10.5中64位程序及以后使用现代版本的运行时。
+其他的使用遗留版本的运行时。
+
+# 与运行时交互
+
+Objective-C程序可以在三个不同的层面上与运行时系统交互：通过Objective-C源码；Foundation框架中*NSObject*类中定义的方法；直接调用运行时函数。
+
+## Objective-C源码
+
+在极大程度上，运行时系统在场景后都是自动工作的。你通过编写及编译Objective-C源码就使用了运行时系统。
+
+当你编译包含Objective-C类和方法的代码时，编译器将会创建数据结构和函数调用来实现语言的动态特征。这些数据结构将会捕获定义在类、类别、协议中的信息；包括方法的选择器，实例变量的模板，以及源码中得来的其他信息。主要的一个运行时函数就是发送消息，[Messaging](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtHowMessagingWorks.html#//apple_ref/doc/uid/TP40008048-CH104-SW1)。由源码中的消息表达式调用(即[someObject someMethod])。
+
+## NSObject方法
+
+Cocoa中的大部分对象都是*NSObject*类的子类，所以大部分对象都继承了*NSObject*定义的方法(列外就是*NSProxy*类，更多[Message Forwarding](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtForwarding.html#//apple_ref/doc/uid/TP40008048-CH105-SW1))信息。因此，*NSObject*的方法就“规范”了它所有子类的行为。然而，在一些少数情况下，*NSObject*类仅仅定义了一些事情应该怎样完成的模板，并没有提供所有必要的代码。
+
+比如，*NSObject*类定义了一个*description*的实例方法来返回一个描述类的内容的字符串。主要用来GDB调试，打印该方法返回的字符串。在*NSObject*的实现中，该方法并不知道这个类包含什么内容，所以返回对象名字和地址的字符串。*NSObject*的子类在实现这个方法的时候可以返回更多的信息。比如，*Foundation*框架中的*NSArray*类会返回一个描述对象包含内容的列表。
+
+一些*NSObject*的方法简单的查询运行时系统得到信息。这些方法能够让对象执行内省。比如*class*方法，让对象识别自己的类；*isKindOfClass:* and *isMemberOfClass:*方法用来测试对象在继承层级里面所处的等级位置；*respondsToSelector:*方法指示一个对象是否能够响应特定的消息；*conformsToProtocol:*方法指示对象是否适配了某个协议；*methodForSelector:*方法提供了方法实现的地址。这些方法让对象有了内省的能力。
+
+## 运行时函数
+
+运行时系统是一个提供一系列公开函数接口以及数据结构的动态链接库，这些头文件位于本地/usr/include/objc。许多这些函数允许你使用纯C语言复制当你编写Objective-C代码时编译器做的事情。其他形式的接口则是*NSObject*类中定义的一些方法。这些方法可以用来实现其他的运行时接口以提高生产效率。但是这些对于Objective-C编程不是必须的。但是，少数的运行时函数在一些特殊情况下，对于Objective-C程序还是很有用途的。这些函数详见[Objective-C Runtime Reference](https://developer.apple.com/library/ios/documentation/Cocoa/Reference/ObjCRuntimeRef/index.html#//apple_ref/doc/uid/TP40001418)。
+
+# 消息传递
+
+本章将会描述发送消息的表达式([someObject someMethod])怎么转换成*objc_msgSend*函数调用，以及怎样通过方法的名字引用方法。解释了怎样利用*objc_msgSend*，以及在需要的情况下避开动态绑定。
+
+##objc_msgSend函数
+
+在Objective-C，直到运行时消息才被绑定到方法的实现。编译器将会转换消息表达式，
+
+	[receiver message]
+	
+成为一次消息传递函数调用，objc_msgSend。这个函数使用消息的接收者以及消息中提到的方法的选择器作为它的两个主要参数：
+
+	objc_msgSend(receiver, selector)
+	
+任何在消息中传递的参数也会被*objc_msgSend*函数处理：
+
+消息传递函数为动态绑定做了所有必须的工作：
+
+* 首先找到方法选择器关联的方法的程序(即方法的实现)。由于同一个方法可以被不同的类实现，所以找到这个程序(方法的实现)的精确性安全依赖于接收者所属的类。
+* 然后调用这个程序，传递接收者对象(指向数据的指针)，以及方法中指定的那些参数。
+* 最后，传递程序的返回值作为自己的返回值。
+
+*注意：*编译器会自动生成调用消息传递函数。在编写代码时你不应该直接调用消息传递函数。
+
+消息传递函数的关键位于编译器为每个类和对象构建的结构体中。每个类的结构体包含两个基本的元素：
+
+* 指向父类的指针。
+* 类消息分发表。这个表拥有整个把方法选择器和识别方法的入口地址关联起来的列表。*setOrigin::*方法的选择器和该方法*setOrigin::*实现的入口地址相关联，*display*方法的选择器和*display*方法实现的入口地址相关联，等等。
+
+当一个新的对象创建时，为它分配内存，然后它的实例变量初始化。这些变量中的第一个便是指向它所属类的结构体的指针。这个指针叫做*isa*，这个指针能够让对象访问所属类的信息，通过所述的类，又能访问它所继承的类。
+
+*注意：*严格意义上来说，被Objective-C运行时系统要求的*isa*指针并不是语言的一部分。一个对象需要等价于无论在什么场合定义的*objc_object*(该结构体在*objc/objc.h*中定义)结构体。然而，你几乎不需要创建自己的根类，继承自*NSObject* 或者 *NSProxy*的对象会自动包含*isa*指针变量。
+
+插图3 - 1说明了这些类的元素和对象的结构体。
+
+Figure 3-1  Messaging Framework
+![alt text](/img/ObjectiveCRuntime/messaging1.gif)
+
+当一个消息被发送给一个对象时，消息传递函数会根据对象的*isa*指针找到指向的类的结构体，然后在消息分发表中查找方法的选择器。如果在那里找不到选择器，*objc_msgSend*函数会根据指向父类的指针，在父类的消息分发表中查找。如果一直查找失败将会导致*objc_msgSend*函数查找到*NSObject*类。一旦查找到对应的选择器，这个函数就会调用分发表里对应的方法地址，传递接收者对象的数据结构。
+
+这就是在运行时选择调用方法实现的方式，专业点说，在面向对象程序设计中，方法动态绑定到消息。
+
+为了加速消息传递的过程，运行时系统会缓存调用过的方法的选择器和地址。这些缓存针对每一个类单独缓存，包括继承方法的选择器以及定义在类中方法的选择器。在搜索消息分发表之前，消息传递的路径首先是检查接收者对象所属类的缓存(根据使用过一次可能会再次使用的理论)。如果这个方法的选择器被缓存了，整个消息传递的过程只比直接的函数调用慢一点点。一旦程序运行了出够长的时间“预热”它的缓存，几乎所有发送的消息都能找到缓存了。缓存是根据程序运行时新消息的调用动态增长的。
+
+## 使用隐藏参数
+
+当*objc_msgSend*函数找到了方法实现的程序，它就会调用这个程序然后传递消息中的参数。它也会传递两个隐藏参数给这个程序：
+
+* 接收者对象
+* 方法的选择器
+
+这些参数使方法的实现知道了接收者和发送消息的明确信息。之所以说它们是隐藏的是因为在源码定义方法时并没有声明这两个参数。它们是在编译的时候插入到方法实现中的。
+
+尽管这些参数没有被显式声明，源代码仍然可以引用到它们(就像是能够引用到接收者对象的实例变量)。一个方法引用接收者对象使用*self*，使用*_cmd*来引用自己的选择器。在下面的示例中，*_cmd*引用了*strange*方法的选择器，*self*指向接收*strange*消息的对象。
+
+	- strange
+	{
+	    id  target = getTheReceiver();
+	    SEL method = getTheMethod();
+	 
+	    if ( target == self || method == _cmd )
+	        return nil;
+	    return [target performSelector:method];
+	}
+	
+*self*是两个参数中比较有用的一个。事实上，可以通过它访问到消息接收者对象的实例变量。
+
+## 得到方法的地址
+
+避开动态绑定的唯一方法就是得到方法的地址，当做函数直接调用。这种方式的一个使用场景是一个特殊的方法需要被连续调用很多次并且你希望避免每次的一连串的消息传递。
+
+通过定义在*NSObject*类中的方法*methodForSelector:*，你可以获得一个指向方法实现入口的指针，然后使用这个指针调用该程序。*methodForSelector:*方法返回的指针必须小心的转换为合适的函数类型(函数指针)。包括返回值和参数列表都应该包含在转换中。
+
+下面的示例展示了怎么调用*setFilled:*方法的实现程序：
+
+	void (*setter)(id, SEL, BOOL);
+	int i;
+	 
+	setter = (void (*)(id, SEL, BOOL))[target
+	    methodForSelector:@selector(setFilled:)];
+	for ( i = 0 ; i < 1000 ; i++ )
+	    setter(targetList[i], @selector(setFilled:), YES);
+	    
+传递给程序的头两个参数是接收者对象(*self*)和方法选择器(*_cmd*)。这些参数隐藏在方法的语法中，但是当方法被当做函数调用时必须明确的给出。
+
+使用*methodForSelector:*方法来避开动态绑定节省了大量消息传递时的时间。然而这种节约只在需要重复调用特定方法多次的情形中才会有意义(节省的时间才会比较显著)，比如上面所示的*for*循环。
+
+*注意：**methodForSelector:*方法是由Cocoa的运行时系统提供；而不是Objective-C语言自己的特性。
+
+# 动态方法解析
+
+本章将介绍怎样动态的实现一个方法。
+
+## 动态方法解析
+
+编码过程中你可能会遇到需要动态提供方法实现的时候。比如，Objective-C声明属性的特性时使用了*@dynamic*指令：
+
+	@dynamic propertyName;
+	
+告诉编译器这个属性的关联方发会被动态的提供。
+
+你可以通过实现*resolveInstanceMethod:* 和 *resolveClassMethod:*方法来分别为给定选择器的实例方法和类方法提供动态实现。
+
+一个Objective-C方法简单来说就是一个至少有两个参数的C函数--*self*和*_cmd*。你可以使用*class_addMethod*函数，将一个函数当做方法添加给一个类：
+
+	void dynamicMethodIMP(id self, SEL _cmd) {
+	    // implementation ....
+	}
+	
+你可以使用*resolveInstanceMethod:*方法动态的向类添加方法，如下，添加了一个叫做*resolveThisMethodDynamically*的方法：
+
+	@implementation MyClass
+	+ (BOOL)resolveInstanceMethod:(SEL)aSEL
+	{
+	    if (aSEL == @selector(resolveThisMethodDynamically)) {
+	          class_addMethod([self class], aSEL, (IMP) dynamicMethodIMP, "v@:");
+	          return YES;
+	    }
+	    return [super resolveInstanceMethod:aSEL];
+	}
+	@end
+	
+消息转发([Message Forwarding](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtForwarding.html#//apple_ref/doc/uid/TP40008048-CH105-SW1)中描述)和动态方法解析是正交的。一个类在转发机制介入之前有机会动态的解析方法。如果*respondsToSelector:* 或者 *instancesRespondToSelector:*方法被调用了，动态方法解析会有机会首先给选择器提供一个*IMP*。如果你实现了*resolveInstanceMethod:*方法，但是希望一些选择器通过转发机制来解析，你可以为这些选择器返回*NO*。
+
+## 动态加载
+
+一个Objective-C程序在运行的时候可以动态的加载和链接新的类和类别。这些新加入的代码会像最初加入的类和类别一样的对待。
+
+动态加载可以用来做许多不同的事情。比如，许多系统设置程序中的大量模块都是动态加载的。
+
+在Cocoa编程环境中，动态加载普遍被应用在个性化应用程序上。别人可以编写你程序在运行时加载的模块——就如Interface Builder加载自定义的组件和OS X系统设置程序加载自定义设置模块一样。可加载模块扩展了你应用程序的能力。他们通过你允许的方式但是你并未参与和定义的方式加载。你提供框架，但是其他人提供代码。
+
+尽管有一个运行时函数用来执行动态加载Objective-C模块(*objc_loadModules*，定义在*objc/objc-load.h*文件中)，Cocoa的*NSBundle*类提供了更方便的动态加载的接口--面向对象并且和相关服务整合的接口。更多信息自行参见*NSBundle*类。
+
+# 消息转发
+
+如果给一个对象发送的消息没有处理，那么那条消息就是错误的消息。然而，在宣布错误之前，运行时系统给接收者对象第二次机会来处理这条消息。
+
+## 转发
+
+如果给一个对象发送消息，但是没有处理那条消息，在宣布发生错误之前，运行时会向该对象发送一个携带*NSInvocation*对象为单独参数的*forwardInvocation:*消息--*NSInvocation*对象封装了原始消息和消息传递的参数。
+
+你可以实现*forwardInvocation:*方法来给那条消息默认的响应，或者以其他的方式来避免错误。正如它名字表示的那样，*forwardInvocation:*方法通常用来将消息转发给其他的对象。
+
+为了明白转发的范围和意图，想象一下如下场景：假设，你设计一个能够响应*negotiate*方法的对象，而且你想消息响应实现里面包含响应另外一种对象。你可以在*negotiate*的实现里面传递*negotiate*消息给其他的对象来简单的实现这一需求。
+
+我们可以更深入一点，假设你想要对象响应*negotiate*消息，并且要该方法的实现在另外一个类中。实现该需求的一种方式就是让你的类继承自另外一个类。然后，我们假设两个类处在不同的继承层级当中，不能如此实现。
+
+即使你的类不能继承*negotiate*方法，你仍然可以借用这个方法，通过实现一个简单传递消息给类的实例的方法。
+
+	- (id)negotiate
+	{
+	    if ( [someOtherObject respondsTo:@selector(negotiate)] )
+	        return [someOtherObject negotiate];
+	    return self;
+	}
+	
+使用这种方式有一点笨重，特别是你的对象需要将大量消息传递给其他对象。你还必须实现一个覆盖了所有需要从其他类借用方法的方法。除此之外，还不能处理你不知道的情形，在你编写这些代码的时候，你想转发的消息的整个集合。这个集合可能依赖于运行时的事件，并且当新的方法和类在未来被实现时会发生改变。
+
+*forwardInvocation:*消息的第二次机会提供了以临时解决方法，它的动态性比静态的更好。它的工作机制如下：当一个对象因为没有方法匹配的的选择器时将不能响应消息，运行时系统将通知对象发送*forwardInvocation:*消息。任何对象都从*NSObject*类那里继承了*forwardInvocation:*方法。然而，*NSObject*版本的方法简单的调用*doesNotRecognizeSelector:*方法。通过重写*NSObject*版本的方法实现你自己的，你将可以利用由*forwardInvocation:*方法提供转发消息给其他对象的机会。
+
+为了转发消息，*forwardInvocation:*需要做如下的事情：
+
+* 决定消息应该转发到哪里
+* 转发时携带原始的参数
+
+可以使用*invokeWithTarget:*方法发送消息：
+
+	- (void)forwardInvocation:(NSInvocation *)anInvocation
+	{
+	    if ([someOtherObject respondsToSelector:
+	            [anInvocation selector]])
+	        [anInvocation invokeWithTarget:someOtherObject];
+	    else
+	        [super forwardInvocation:anInvocation];
+	}
+	
+转发消息的返回值返回给了最初的发送者。所有类型的返回值都能被传送到发送者，包括*id*，结构体，double，float，指针等。
+
+*forwardInvocation:*方法可以当做未识别方法的分发中心，打包给不同的接收者。或者当做一个传送站，发送所有的消息到相同的目的地。也可以将一个消息转换成另一个，或者就是简单的吞掉一些消息而没有响应也没有错误。*forwardInvocation:*方法也可以合并几个消息成为一个单一的响应。*forwardInvocation:*的具体作用取决于实现者。然而，提供了在消息转发链中链接对象的机会为程序设计开创了可能性。
+
+*注意：**forwardInvocation:*方法只会没有调用接收者存在的方法的时候才会去处理消息。比如，你想让你自己的对象转发*negotiate*消息给另外一个对象，它自己没有*negotiate*方法。如果它自己有，消息就绝不会到达*forwardInvocation:*。
+
+## 转发和多继承
+
+转发模拟继承，可以用来为Objective-C编程提供多继承。如图5 - 1所示，一个对象通过转发来响应消息，通过借用或者继承定义实现在另外一个类中的方法。
+
+![alt text](/img/ObjectiveCRuntime/forwarding.gif)
+
+在这个插图中，*Warrior*类的实例转发了*negotiate*消息给*Diplomat*类的实例。*Warrior*将会像*Diplomat*一样。就像会响应*negotiate*消息，响应了所有(尽管所有的工作都是*Diplomat*做得)。
+
+一个对象转发消息就像是从两个继承层级分支中继承了方法--自己所在的层级和响应消息对象的层级。在上面的示例中，*Warrior*类就像继承自*Diplomat*，*Diplomat*就像是*Warrior*的父类。
+
+转发提供了你想从多继承得到的大部分特性。然而，两者之间有一个重要的区别：多继承将不同的功能继承到一个对象中，它会让对象变得过大，涉及的东西过多；相反的，消息转发将功能分解到独立的小的对象中，但是通过某种方式将这些对象连接起来，并做相应的消息转发。
+
+## 代理对象
+
+转发不仅模拟多继承，它还可以开发轻量的对象，代表或者覆盖更多实质性的对象。代理项代替了其他的对象，也会刷选消息。
+
+在*Objective-C Programming Language*里面讨论的“Remote Messaging”的委托就像是代理项。代理负责管理消息转发到远程接收者的细节，确保参数值赋值以及检索整个连接，等等。但是它不会尝试做其他的事情；不会重复远程对象的功能，只会给远程对象一个本地地址，能够接收其他程序消息的地方。
+
+其他种类的代理对象也是可能的。比如，你有一个操纵大量数据的对象--也许创建了复杂的图像或者从磁盘读取内容。设置这个对象会花费大量的时间，所以你更希望延迟加载这个对象--当确实需要或者系统资源闲置的时候。在这同时，为了其他对象的正确运行，你至少需要一个这个对象的占位符。
+
+在这种环境下，你需要初始化，创建，但是不是完整的这个对象，而是该对象的一个轻量的代理项。这个对象能够自行完成一些事情，比如应答数据，但是大多数只是为了这个更大的对象占有一个位置，当时机到来时向它转发消息。当代理项的*forwardInvocation:*消息第一次收到目的地是其他对象的消息，它会确保那个对象时存在的，如果不存在的话会创建它。所有发送给这个更大对象的消息都会经过代理项，所以，对于其他的程序而言，这个代理项和这个更大的对象是一样的。
+
+## 转发和继承
+
+尽管转发模拟继承，但*NSObject*类还是可以区分二者。像*respondsToSelector:* 和 *isKindOfClass:*方法只会在继承层级中查找，决不会在转发链中查找。比如询问一个*Warrior*对象是否响应*negotiate*方法：
+
+	if ( [aWarrior respondsToSelector:@selector(negotiate)] )
+	    ...
+	    
+答案是*NO*，即使它能够接收*negotiate*消息而且没有错误的响应，通过转发给*Diplomat*。
+
+在我看来，*NO*是正确的答案。但是也可能不是。如果你使用转发设置代理项对象或者拓展了类的能力，转发机制就应该对继承是透明的。如果你的对象需要转发的消息就如同继承的行为，你需要重新实现*respondsToSelector:* 和 *isKindOfClass:*方法来包含转发的算法：
+
+	- (BOOL)respondsToSelector:(SEL)aSelector
+	{
+	    if ( [super respondsToSelector:aSelector] )
+	        return YES;
+	    else {
+	        /* Here, test whether the aSelector message can     *
+	         * be forwarded to another object and whether that  *
+	         * object can respond to it. Return YES if it can.  */
+	    }
+	    return NO;
+	}
+	
+除了*respondsToSelector:* 和 *isKindOfClass:*方法外，*instancesRespondToSelector:*方法也应该镜像转发的算法。如果使用了协议，*conformsToProtocol:*方法也应该重写。类似的，如果一个对象转发了它接收的任何远程消息，你应该有一个*methodSignatureForSelector:*方法，能够返回响应转发消息的方法的精确描述；比如，一个对象能够转发消息给它的代理项，你应该如此实现*methodSignatureForSelector:*方法：
+
+	- (NSMethodSignature*)methodSignatureForSelector:(SEL)selector
+	{
+	    NSMethodSignature* signature = [super methodSignatureForSelector:selector];
+	    if (!signature) {
+	       signature = [surrogate methodSignatureForSelector:selector];
+	    }
+	    return signature;
+	}
+	
+你应该将转发的算法放在比较私有的代码里面，并且应该有所有的这些方法，包括*forwardInvocation:*方法。
+
+*注意：*这只是一种建议，没有其他可能的时候的一种合适的解决方案。没有要取代继承的意图。如果你必须要使用这项技术，确保你完整的明白了你转发消息的类行为，以及转发到的那个类。
+
+# 类型编码
+
+为了帮助运行时系统，编译器将每一个方法的返回值和参数值的类型编码为字符，并将其与方法的选择器关联在一起。这种编码方案在其他情况下也很有用，你可以使用*@encode()*编译器指令来获取它。当给定一种类型时，*@encode()*指令返回类型的字符串编码。这种类型可以是*int*，指针，结构体，或者类名--任何类型，实际上，任何可以作为sizeof()操作参数的类型都可以用于*@encode()*。
+
+	char *buf1 = @encode(int **);
+	char *buf2 = @encode(struct key);
+	char *buf3 = @encode(Rectangle);
+	
+下面的列表列出了类型的编码。注意下面列出的许多编码都是与我们用于归档或者分发的编码类型是相同的。然而，有一部分你不能使用，你也许想使用不是通过*@encode()*生成的编码。
+
+参见表[Table 6-1  Objective-C type encodings](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html#//apple_ref/doc/uid/TP40008048-CH100-SW1)。
+
+*重要：Objective-C*并不支持*long double*类型。*@encode(long double)*将会返回*d*，给编码*double*返回的一样。
+
+一个数组的类型编码位于方括号中；数组元素的个数指定在括号之后类型之前。比如，一个有12个元素的*float*数组的编码如下：
+
+	[12^f]
+	
+结构体使用大括号。首先是结构体的标识，然后就是等号。比如，结构体：
+
+	typedef struct example {
+	    id   anObject;
+	    char *aString;
+	    int  anInt;
+	} Example;
+
+编码如下：
+
+	{example=@*i}
+	
+不管是否定义了类型名(Example)或者是将结构体标识传递给*@encode()*编译指令，编码的结果都是一样的。结构体指针的编码和结构体的域携带相同数量的信息：
+
+	^{example=@*i}
+	
+然而，另一个间接层去掉了内部类型的指定：
+
+	^^{example}
+	
+对象被当做结构体对待。比如，传递*NSObject*类给*@encode()*得到如下编码：
+
+	{ NSObject=# }
+	
+*NSObject*类声明一个实例变量，*isa*，*Class*类型。
+
+尽管*@encode()*指令不返回他们，但是运行时系统为类型限定使用额外的编码表，当它们用来在协议中声明方法时，如表6 - 2所示。
+
+详见[Table 6-2  Objective-C method encodings](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html#//apple_ref/doc/uid/TP40008048-CH100-SW1)。
+
+# 声明属性
+
+属性的结构以定义了不透明的属性描述的句柄。
+
+	typedef struct objc_property *Property;
+	
+你可以使用*class_copyPropertyList* 和 *protocol_copyPropertyList*函数来分别查询与类(包括类别)和协议关联的属性数组：
+
+	objc_property_t *class_copyPropertyList(Class cls, unsigned int *outCount)
+	objc_property_t *protocol_copyPropertyList(Protocol *proto, unsigned int *outCount)
+	
+比如，给出如下类的声明：
+
+	@interface Lender : NSObject {
+	    float alone;
+	}
+	@property float alone;
+	@end
+	
+可以像如下获得属性的列表：
+
+	id LenderClass = objc_getClass("Lender");
+	unsigned int outCount;
+	objc_property_t *properties = class_copyPropertyList(LenderClass, &outCount);
+	
+你可以使用*property_getName*函数来发现属性的名字：
+
+	const char *property_getName(objc_property_t property)
+	
+你可以使用函数*class_getProperty* 和 *protocol_getProperty*根据类和协议中给定的名字来得到属性的引用：
+
+	objc_property_t class_getProperty(Class cls, const char *name)
+	objc_property_t protocol_getProperty(Protocol *proto, const char *name, BOOL isRequiredProperty, BOOL isInstanceProperty)
+	
+你可以使用*property_getAttributes*函数来发现属性*@encode*类型字符串的名字：
+
+	const char *property_getAttributes(objc_property_t property)
+	
+你可以使用如下代码打印与类关联的属性列表：
+
+	id LenderClass = objc_getClass("Lender");
+	unsigned int outCount, i;
+	objc_property_t *properties = class_copyPropertyList(LenderClass, &outCount);
+	for (i = 0; i < outCount; i++) {
+	    objc_property_t property = properties[i];
+	    fprintf(stdout, "%s %s\n", property_getName(property), property_getAttributes(property));
+	}
+	
+## 属性类型字符
+
+你可以使用*property_getAttributes*函数来发现属性*@encode*类型字符串的名字，以及描述属性的限定符。
+
+这字符串以*T*开头，紧接编码的类型和逗号，然后以*V*及备份的实例变量结束。在这些之间,是指定的属性描述符后,由逗号分隔：
+
+详见[Table 7-1  Declared property type encodings](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html#//apple_ref/doc/uid/TP40008048-CH101-SW1)。
+
+## 属性限定符描述示例
+
+给出如下定义：
+
+	enum FooManChu { FOO, MAN, CHU };
+	struct YorkshireTeaStruct { int pot; char lady; };
+	typedef struct YorkshireTeaStruct YorkshireTeaStructType;
+	union MoneyUnion { float alone; double down; };
+	
+下表展示了简单的属性定义，以及对应的*property_getAttributes*的返回值：
+
+详见[最后一个表格](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html#//apple_ref/doc/uid/TP40008048-CH101-SW1)。
+
+# Method Swizzling
+
+该技术可以交换两个方法的实现，相当于是用你写的方法来重载原有的方法，并且还能够使原有方法的行为保持不变。
+
+比如我们可以使用该技术交换UIViewController的viewWillAppear方法打印出每一个在屏幕上显示的view。该示例来自[NSHipster](http://nshipster.com/method-swizzling/)，更多的信息大家可以参看原文，以及下面几个链接。
+
+[差不多是原文的翻译](http://southpeak.github.io/blog/2014/11/06/objective-c-runtime-yun-xing-shi-zhi-si-:method-swizzling/)；
+[Method Swizzling](http://blog.csdn.net/yiyaaixuexi/article/details/9374411)。
+
+	#import <objc/runtime.h>
+	
+	@implementation UIViewController (Tracking)
+	
+	+ (void)load {
+	    static dispatch_once_t onceToken;
+	    dispatch_once(&onceToken, ^{
+	        Class class = [self class];
+	
+	        SEL originalSelector = @selector(viewWillAppear:);
+	        SEL swizzledSelector = @selector(xxx_viewWillAppear:);
+	
+	        Method originalMethod = class_getInstanceMethod(class, originalSelector);
+	        Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
+	
+	        // When swizzling a class method, use the following:
+	        // Class class = object_getClass((id)self);
+	        // ...
+	        // Method originalMethod = class_getClassMethod(class, originalSelector);
+	        // Method swizzledMethod = class_getClassMethod(class, swizzledSelector);
+	
+	        BOOL didAddMethod =
+	            class_addMethod(class,
+	                originalSelector,
+	                method_getImplementation(swizzledMethod),
+	                method_getTypeEncoding(swizzledMethod));
+	
+	        if (didAddMethod) {
+	            class_replaceMethod(class,
+	                swizzledSelector,
+	                method_getImplementation(originalMethod),
+	                method_getTypeEncoding(originalMethod));
+	        } else {
+	            method_exchangeImplementations(originalMethod, swizzledMethod);
+	        }
+	    });
+	}
+	
+	#pragma mark - Method Swizzling
+	
+	- (void)xxx_viewWillAppear:(BOOL)animated {
+	    [self xxx_viewWillAppear:animated];
+	    NSLog(@"viewWillAppear: %@", self);
+	}
+	
+	@end
+	
+这里只是简单的提及Method Swizzling，大家参考上面的三篇博文以及Objective-C的运行时系统应该就能够很好的理解Method Swizzling。
+
+# 结束
+
+文中翻译难以达到信雅达的水平，整个运行时系统是Objective-C的基石，这里只是抛砖引玉罢了。如何利用运行时系统文中少有提及，还需大家自行探索，前行路漫漫。
+
+Objective-C的运行时系统的源码可以在这里下载[源码](http://www.opensource.apple.com/tarballs/objc4/)，大家可以阅读研究源码。

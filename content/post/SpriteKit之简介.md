@@ -1,0 +1,184 @@
+---
+title: "SpriteKit：简介"
+date: 2015-04-12T16:40:05
+categories: 
+- iOS
+tags: 
+- SpriteKit
+- iOS Game
+- Swift
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
+
+---
+
+前一段时间一直都在看这本书[iOS Games by Tutorials Second Edition](http://www.raywenderlich.com/store/ios-games-by-tutorials)，本想SpriteKit这个系列把书中的章节全部翻译过来就好了。但是书是需要购买的，有版权，包括书中配套的源码和艺术资源都是不能共享给别人的。所以这个系列还是得自己写，质量应该不会很高，仅供入门用用，高手不要喷。当然还是推荐大家去看这种原版书籍，支持正版。
+<!--more-->
+
+我们就直接从新建一个项目开始吧，当前操作系统版本是10.10.3，Xcode是6.3，Swift的版本应该是1.2。
+
+## 创建SpriteKit项目
+
+打开Xcode，我们选择**Create a new Xcode project**，然后选择**iOS**中**Application**的**Game**选项,点击**Next**，在选项框中填好对应的选项，如下图所示：
+
+![alt text](/img/SpriteKitIntro/1.png)
+
+我们语言选择Swift，这里多说一句。我自己的项目现在都是用Swift写，公司项目还是用OC，毕竟OC更稳定。不过觉得Swift是趋势，会成为主流，所以早点学习更好。**Game Technology**选择SpriteKit，下拉选项里面还有SceneKit、Metal和OpenGL ES。SceneKit带来了3D引擎和一些增强功能。Metal可以说是跟OpenGL ES类似的东西，只不过只适用于苹果的平台，对苹果的硬件有特别的优化，并且很多游戏引擎如Unity3D都支持了Metal。OpenGL ES是一个编程接口规范，在不同的平台有不同的实现，直接和GPU打交道，属于比较底层的API。在以前没有引擎的时候，那些游戏开发的大神都是基于OpenGL ES开发游戏。**Devices**这项选择Universal，即iPhone和iPad都适用。
+
+我们点击**Next**，然后**Create**，创建后的项目结构截图如下所示：
+
+![alt text](/img/SpriteKitIntro/2.png)
+
+点击上面那个三角形的按钮Build and Run，或者快捷键⌘R，模拟器选择iPhone 6。效果图如下：
+
+![alt text](/img/SpriteKitIntro/3.png)
+
+每次点击屏幕都会增加一个旋转的飞机到场景里面。
+
+所以我们打开GameScene.swift文件去看看源代码。`didMoveToView()`方法会在SpriteKit将你的场景展示到View之前调用；所以这个方法是你初始化场景内容的一个好地方。`update()`方法是SpriteKit每一帧都会自动调用的，这个方法里面会处理一些游戏逻辑。`touchesBegan()`方法处理用户对屏幕的操作。
+
+[SpriteKit Programming Guide](https://developer.apple.com/library/ios/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html)这里讲解了SpriteKit的很多基本原理及编程指南，中文版的应该也能搜到，建议大家看下。
+
+将GameScene.swift文件内容替换成如下代码：
+
+	import SpriteKit
+
+	class GameScene: SKScene {
+    	override func didMoveToView(view: SKView) {
+        	backgroundColor = SKColor.whiteColor()
+    	}
+	}
+
+在创建SpriteKit项目的时候，模板会自动创建GameScene.sks文件。你可以用Xcode新的内建的编辑器编辑这个文件，用来可视化展示你的游戏场景。这个场景编辑器对于SpriteKit来说就像Interface Builder对于UIKit一样。后面学习粒子系统时候也会用到这个场景编辑器。现在我们删除这个文件，使用代码创建场景。邮件选择文件删除，**Move to Trash**。
+
+打开GameViewController.swift文件，删除如下代码：
+
+	extension SKNode {
+    	class func unarchiveFromFile(file : String) -> SKNode? {
+        	if let path = NSBundle.mainBundle().pathForResource(file, ofType: "sks") {
+            	var sceneData = NSData(contentsOfFile: path, options: .DataReadingMappedIfSafe, error: nil)!
+            	var archiver = NSKeyedUnarchiver(forReadingWithData: sceneData)
+            
+            	archiver.setClass(self.classForKeyedUnarchiver(), forClassName: "SKScene")
+            	let scene = archiver.decodeObjectForKey(NSKeyedArchiveRootObjectKey) as! GameScene
+            	archiver.finishDecoding()
+            	return scene
+        	} else {
+            	return nil
+        	}
+    	}
+	}
+	
+仔细看看这段代码就会发现是用来加载上面提到的.sks文件的，所以这里就不需要了，后面用到.sks文件加载场景的时候就需要用到这段代码了。替换GameViewController.swift的内容为如下代码：
+
+	import UIKit
+	import SpriteKit
+
+	class GameViewController: UIViewController {
+    	override func viewDidLoad() {
+        	super.viewDidLoad()
+        	let scene = GameScene(size: CGSize(width: 750.0, height: 1334.0))
+        	let skView = self.view as! SKView
+        	skView.showsFPS = true
+        	skView.showsNodeCount = true
+        	skView.ignoresSiblingOrder = true
+        	scene.scaleMode = .AspectFill
+        	skView.presentScene(scene)
+    	}
+    	override func prefersStatusBarHidden() -> Bool {
+        	return true
+    	}
+	}
+	
+## 添加精灵到场景中
+	
+当制作2D游戏时，我们通常会把图片放到场景中来代表我们游戏中各种各样的元素：英雄，敌人，子弹，怪物等等。所有这些我们都称作为“精灵”。现在我们来添加第一个精灵，打开GameScene.swift文件修改`didMoveToView()`方法如下：
+
+	override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.whiteColor()
+        let ship = SKSpriteNode(imageNamed: "Spaceship")
+        addChild(ship)
+    }
+    
+修改背景颜色为白色，然后用飞船的图片初始化了一个精灵，然后添加到场景中。⌘R启动模拟器，效果如下：
+
+![alt text](/img/SpriteKitIntro/4.png)
+
+## 设置精灵位置
+
+飞船的位置跟大家期望的肯定不一样，这里有几点需要说明一下：
+
+1. SpriteKit的坐标系统和UIKit的是不一样的，UIKit的坐标原点在左上角，SpriteKit的坐标原点在左下角。
+2. 对于没有设置位置（属性为position）的精灵，SpriteKit默认设置为(0, 0)。
+
+所以飞船的位置就出现在了左下角的坐标原点处。现在我们将飞船位置设置到正中间，在添加到场景前添加如下代码：
+
+	ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+	
+⌘R运行，飞船就显示到正中间了，这里就不贴图了。
+
+## 精灵的anchorPoint属性
+
+也许大家注意到了，在设置飞船精灵的位置时，相当于是把精灵的中点设置到了那个位置。跟UIKit里面也是不一样的，这种效果是由精灵的anchorPoint属性决定。当没有设置精灵的anchorPoint属性时，SpriteKit默认设置为(0.5, 0.5)。anchorPoint是一个点，取值范围从0 ~ 1。默认(0.5, 0.5)即表示中点；(0.0, 0.0)的时候表示左下角；(1.0, 1.0)的时候表示右上角；大家可以依次类推。
+
+下图展示了不同anchorPoint的值时，精灵的位置：
+
+![alt text](/img/SpriteKitIntro/5.png)
+
+我们注释掉之前设置精灵位置的代码，然后设置精灵的anchorPoint为(0.0, 0.0)。
+
+	ship.anchorPoint = CGPoint(x: 0.0, y: 0.0)
+
+模拟器效果如图所示：
+
+![alt text](/img/SpriteKitIntro/6.png)
+
+因为我们注释掉了设置位置的代码，所以SpriteKit默认设置了position属性为(0.0, 0.0)。然后设置了anchorPoint为(0.0, 0.0)，效果就如上图中间一样，只是position变为了原点，而不是中点。所以大家就看到了飞船完整的出现在了原点的位置。如果将anchorPoint为(1.0, 1.0)，大家就看不到飞船了，大家可以试下。现在大家也可以解释为什么最开始的时候只有飞船的右上部分出现在屏幕上。大家可以设置不同的position和anchorPoint然后看看不同的飞船位置，以确保自己理解了anchorPoint。
+
+通常情况下，大家都可以不用管anchorPoint，SpriteKit会默认设置为(0.5, 0.5)，除非你需要精灵按照你指定的点进行旋转，后面我们会提到。
+
+简单点说就是：当你设置精灵的位置时，默认的你就是设置了精灵的中点到那个位置。
+
+## 旋转精灵
+
+添加如下代码在添加精灵到场景之前：
+
+	ship.zRotation = CGFloat(M_PI) / 8
+	
+效果如下：
+
+![alt text](/img/SpriteKitIntro/7.png)
+
+zRotation属性接受弧度值，类型为`CGFloat`，这里`M_PI`是`Double`类型，所以使用`CGFloat`把`M_PI`转换成`Double`。弧度值换乘以180然后除以π就是角度值；角度值乘以π然后除以180就是弧度值。所以这个角度值就是22.5度。
+
+这里是围绕anchorPoint旋转的，所以这里anchorPoint的作用就显示出来了。大家设想一下，比如我有一个人物较色，我需要旋转角色的手臂，那么我就需要设置人物手臂的anchorPoint到关节处。
+
+## 精灵的尺寸
+
+有时我们需要知道精灵的尺寸，精灵默认的尺寸就是图片的大小。在SpriteKit中，我们用纹理代表图片。添加如下代码到`didMoveToView()`方法的最后来获取飞船精灵的大小。
+
+	let shipSize = ship.size
+    println("Size: \(shipSize)")
+    
+运行之后控制台会输出：
+
+	Size: (394.0, 347.0)
+	
+## 精灵和节点
+
+如果我们要精灵显示在屏幕上，我们就需要将精灵添加为场景的子节点，或者子节点的子节点。
+
+所有出现在屏幕上得元素都是`SKNode`的子类，值得注意的是`SKNode`并不绘制实际的内容。场景类(`SKScene`)也继承自`SKNode`，精灵类（`SKSpriteNode`）同样也继承自`SKNode`。
+
+这里推荐给大家[SKNode Class Reference](https://developer.apple.com/library/ios/documentation/SpriteKit/Reference/SKNode_Ref/index.html#//apple_ref/doc/uid/TP40013023)，这里面有`SKNode`得很多属性和方法的讲解，同时也讲解了一些`SKNode`的使用技巧，比如用来管理场景内容等。这里就不赘述了。
+
+每个节点都有一个叫作zPosition的属性，默认值为0。每个节点绘制子节点都是按照zPosition值得顺序绘制的，即从小到大。在GameViewController.swift中我们设置了ignoresSiblingOrder属性为true。
+
+	skView.ignoresSiblingOrder = true
+	
+如果ignoresSiblingOrder属性为true，当一个节点中的两个子节点有相同的zPosition值时，SpriteKit无法保证绘制的顺序。如果ignoresSiblingOrder属性为false，SpriteKit会按照添加到父节点的顺序绘制。通常设置为true更好一些，因为SpriteKit会做一些优化使游戏运行的更快。
+
+如果ignoresSiblingOrder属性为true，我们最好不要设置相同的zPosition值。比如我们有一个表示背景的精灵，那我们应该设置其zPosition值为-1来避免背景覆盖了玩家精灵。
+
+这章主要就讲了一些很基础的东西，还有一些大家可能需要注意的东西。

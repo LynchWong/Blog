@@ -1,0 +1,18 @@
+---
+title: "Event Handling Guide for iOS"
+date: 2015-04-27 14:43:26
+categories: 
+- 编程指南
+tags: 
+- 事件处理
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
+
+---
+
+[官方文档](https://developer.apple.com/library/ios/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009541-CH1-SW1)
+
+# 简介
+## 关于iOS中的事件
+### 概览

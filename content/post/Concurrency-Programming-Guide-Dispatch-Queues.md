@@ -1,0 +1,370 @@
+---
+title: "Concurrency Programming Guide - Dispatch Queues"
+date: 2016-01-14 13:51:45
+categories: 
+- 编程指南
+tags: 
+- 并发编程
+metaAlignment: center
+autoThumbnailImage: no
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
+
+---
+
+[官方文档](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW1)
+<!--more-->
+
+# Dispatch Queues
+(调度队列)
+
+Grand Central Dispatch (GCD)调度队列是执行任务的强大工具。调度队列允许你同步或者异步的执行任意的代码块。原先使用单独线程执行的所有的任务都可以替换为使用调度队列。调度队列的优势就在于使用简单，而且比对应的线程代码执行任务时更高效。
+
+## About Dispatch Queues
+(关于调度队列)
+
+在你的应用程序中，调度队列是一种更简单的异步执行任务的方法。一个任务就是你应用程序需要执行的一些工作。比如，你可以定义一个任务来执行一些计算，创建或者修改数据结构，处理从文件读取的数据，或者任何事情。通过将对应的代码封装在函数或者一个Block对象里面来定义任务，然后添加到调度队列。
+
+调度队列是一个类似于对象的结构体，用来管理你提交的任务。所有的调度队列都是先进先出的数据结构。因此，你添加到队列的任务的开始顺序和添加的顺序是一样的。GCD自动为你提供了几种调度队列，但是你也可以根据具体的目的创建队列。Table 3-1列出了你应用程序可用的调度队列的类型以及如何使用它们。
+
+Table 3-1  Types of dispatch queues
+
+![alt text](/img/ConcurrencyProgrammingGuideDispatchQueues/1.png)
+
+* 串行：串行队列(也称为私有调度队列)按照任务添加的顺序同一时间只执行一个任务。当前正在执行的任务运行在不同的线程上(不同任务的线程可能不同)，调度队列管理这些线程。串行队列通常用来对特定资源进行同步访问。根据需要你可以创建任意多个的串行队列，虽然每个队列本身每次只能执行一个任务，但是各个队列之间是并发执行的。如果你创建了四个串行队列，每个队列同一时间一次只能执行一个任务，但是最多可以有四个任务在并发执行，每个队列有一个任务在执行。关于如何创建串行队列的更多信息，参见[ Creating Serial Dispatch Queues ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW6)。
+* 并发：并发队列(也称为全局调度队列)并发的执行一个或多个任务，但是任务开始的顺序与添加时的顺序是一样的。当前执行的任务运行在不同线程上，由调度队列管理。同时运行的任务数量是变化的，而且依赖于系统条件。在iOS5及之后，你可以指定队列的类型为**DISPATCH_QUEUE_CONCURRENT**来创建并发调度队列。除此之外，已经有四个预先定义好的全局并发队列可供你应用程序使用。更多关于如何获取全局并发队列，参见[ Getting the Global Concurrent Dispatch Queues ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW5)。
+* 主队列：主队列是全局可用的串行队列，在应用程序的主线程上执行任务。这个队列与应用程序的**run loop**(如果有的话)交叉执行。由于它运行在你应用程序的主线程上，所以这个队列通常用于应用的关键同步点。尽管你不需要创建主队列，但是你需要确保你的应用程序适当回收。更多关于该队列如何管理的信息，参见[ Performing Tasks on the Main Thread ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW15)。
+
+当要给应用程序添加并发时，调度队列比线程有优势。最直观的优势就是简单的工作队列编程模型。使用线程，你必须编写要执行工作的代码以及线程创建和管理的代码。调度队列让你专注于要执行的工作而不用担心线程的创建和管理。相反，系统为你处理了线程的创建和管理。优势就是系统比任何单个应用程序管理线程都要更高效。系统可以基于当前可用资源和系统条件动态调控线程数量。除此之外，跟你自己创建线程比起来，系统通常能够更快的执行你的任务。
+
+虽然你认为为调度队列重写代码很困难，它往往比编写线程代码更简单。设计编写任务的关键点是要自包含且能够异步运行。(这一点对于线程和调度队列都是正确的。)但是，调度队列的优势就是更有可预测性。如果你有两个任务需要访问相同的共享资源，但是运行在不同的线程上，不管是哪个线程先修改资源，你需要使用锁来确保两个任务不会同时修改资源。使用调度队列，你可以将两个任务添加到一个串行队列中，确保任何时间都只有一个任务在修改资源。这种类型的队列基于同步比锁更高效，因为锁总是在双方有争议和无争议的情况下要求昂贵的内核开销，而调度队列主要工作在应用程序的进程空间，只在绝对必要的时候才会下行调用内核。
+
+虽然你可以正确的指出那两个任务运行在一个串行队列里面而不是并发的，你必须记住如果两个线程在同一时间使用了锁，那么线程提供的任何的并发能力就会丢失或者显著性的下降。更重要的是，线程模式需要创建两个线程，同时会占用内核和用户的内存。调度队列就不需要为它们使用的线程开销相同的内存，并且会让它们使用的线程处理繁忙状态且不会阻塞。
+
+调度队列包含如下几个其它的关键点需要记住：
+
+* 调度队列相对于其它的调度队列是并发的执行任务的。同一个调度队列中的任务被限制成为串行的。
+* 任何时候执行的任务总数量都是由系统决定的。因此，应用程序中100个队列启动100个任务并不会并发的执行所有的这些任务(除非系统有100个或者更多的内核)。
+* 系统在选择执行哪个任务时，会考虑队列的优先级。
+* 队列里的任务在添加到队列时随时都要准备好执行(如果你之前使用了Cocoa的操作对象，那么你注意到了这里的行为与操作对象不同)。
+* 私有调度队列是引用计数的对象。除了将队列保留在你的代码会增加引用计数之外，还要注意的是调度源也会依附队列，同时也会增加队列的引用计数。因此，你必须确保所有的调度源都被取消了，并且所有的**retain**方法的调用和**release**方法的调用是成对的。更多关于队列的保留和释放，参见[ Memory Management for Dispatch Queues ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW11)。更多关于调度源的信息，参见[ About Dispatch Sources ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW12).
+
+关于操纵调度队列的接口，参见[ Grand Central Dispatch (GCD) Reference ](https://developer.apple.com/library/prerelease/mac/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html#//apple_ref/doc/uid/TP40008079)。
+
+## Queue-Related Technologies
+(队列相关的技术)
+
+除了调度队列，Grand Central Dispatch提供几种使用队列帮助你管理代码的技术。Table 3-2列出了这些技术，并且提供了链接来获取更多的信息。
+
+Table 3-2  Technologies that use dispatch queues
+
+![alt text](/img/ConcurrencyProgrammingGuideDispatchQueues/2.png)
+
+* **Dispatch groups**：是监控一组Block对象完成的方式。(你可以根据你的需要异步或者同步的监控你的Block。)组提供了一种有用的同步机制，你的代码可以等待其它任务的完成。更多关于使用组的信息，参见[ Waiting on Groups of Queued Tasks ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW25)。
+* **Dispatch semaphores**：调度信号量类似于传统的信号量，但是通常更高效。只有当调用线程由于信号量不可用的时候它才会去调用内核。如果线程信号量可用，就不会与内核进行交互。更多关于如何使用调度信号量的例子，参见[ Using Dispatch Semaphores to Regulate the Use of Finite Resources ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW24)。
+* **Dispatch sources**：一个调度源在特定系统事件发生时会生成通知。你可以使用调度源监控系统事件，比如处理通知、信号以及其它事件。当事件发生时，你的调度源提交任务代码到指定的调度队列上异步处理。更多关于创建和使用调度源的代码，参见[ Dispatch Sources ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW12)。
+
+## Implementing Tasks Using Blocks
+(使用Block实现任务)
+
+Block对象是基于C语言的功能，可以在C，Objective-C，C++代码中使用。Block让定义一个自包含的单元工作块变得简单。尽管它们看起来像是函数指针，块实际上由底层数据结构表示，类似于一个对象，由编译器为你创建和管理。编译器打包了你提供的代码(以及任何相关的数据)，封装为可以在堆上存在的格式，并可以在应用中各个地方传递。
+
+使用Block的另外一个关键优势就是它们能够使用自己范围之外的变量。当你在一个函数或者方法里面定义一个Block，在某些时候这个Block就像是传统的代码块一样。比如，一个Block可以读取定义在上一层级范围内的变量。Block访问的变量会被复制到堆上的Block的数据结构里面，以便Block可以在之后读取。当Block被添加到调度队列，这些值必须是只读形式的。不过同步执行的Block可以使用那些使用关键字**__block**定义的变量，对这些变量的修改会影响到调用层级的范围内。
+
+你可以使用类似于函数指针的语法来声明一个内联的块。Block和函数指针的最主要区别就是Block的名字使用^号代替星号*。类似于函数指针，你可以给Block传递参数以及获取返回值。Listing 3-1向你展示了怎么在代码中声明以及同步执行Block。变量**aBlock**被声明为接受一个整型值无返回值的Block。然后将一个实际与aBlock匹配的内联Block赋值给它。最后一行立即执行了Block，然后打印出结果。
+
+Listing 3-1  A simple block example
+
+    int x = 123;
+    int y = 456;
+
+    // Block declaration and assignment
+    void (^aBlock)(int) = ^(int z) {
+        printf("%d %d %d\n", x, y, z);
+    };
+
+    // Execute the block
+    aBlock(789);   // prints: 123 456 789
+
+当你在设计你的Block的时候，应该考虑这些总结以及关键指导：
+
+* 对于想要异步执行的Block请使用调度队列，可以安全的捕获使用父函数或者方法里面的变量。然而你不应该尝试去捕获大型的数据结构或者其它基于指针的变量，它们由Block的调用上下文分配和删除。在你的Block被执行时，这些指针引用的内存可能已经不存在了。当然，你自己显式的分配内存，然后让Block拥有这些内存是安全可行的。
+* 调度队列会在Block被添加进来的时候复制它们，然后执行完成之后释放。换句话说就是你不需要在添加它们之前显式的复制它们。
+* 尽管队列执行小任务比原始线程更加高效，但是创建和执行这些Block仍然有开销。如果一个Block做太少的工作，可能内联执行比队列里面执行开销更小。使用性能工具来确认Block的工作是否太少。
+* 不要在底层线程缓存数据，然后期望在不同的Block中访问这些数据。如果同一个队列里面的任务需要共享数据，使用调度队列的上下文引用来存储这些数据。关于更多如何访问调度队列上下文数据的信息，参见[ Storing Custom Context Information with a Queue ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW13)。
+* 如果你的Block创建了大量的Objective-C对象，你可能需要将你Block的大部分代码包含在一个**@autorelease**块中，用来管理这些对象的内存。尽管GCD调度队列有它们自己的自动释放池(autorelease pools)，但不保证在何时回首这些池。如果你的应用程序内存有限，创建你自己的自动释放池用来定期释放那些自动释放的对象。
+
+更多关于Block的信息，以及如何声明、使用它们，参见[ Blocks Programming Topics ](https://developer.apple.com/library/prerelease/mac/documentation/Cocoa/Conceptual/Blocks/Articles/00_Introduction.html#//apple_ref/doc/uid/TP40007502)。关于如何将Block添加到调度队列，参见[ Adding Tasks to a Queue ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW20)。
+
+## Creating and Managing Dispatch Queues
+(创建以及管理调度队列)
+
+在将任务添加到队列之前，你必须决定使用哪种类型的队列以及打算如何使用队列。调度队列可以串行或者并行的执行任务。如果你对队列有特别的用途，你可以配置队列的相应属性。接下来的章节向你展示了如何创建队列，以及如何配置使用队列。
+
+### Getting the Global Concurrent Dispatch Queues
+(获得全局并发调度队列)
+
+当你有多个任务可以并行运行时并发调度队列就很有用。不过并发队列仍然是先进先出的队列；然而，一个并发队列会在之前任务完成之前就出列下一个任务并启动执行。任何时候并发队列正在执行任务的数量都是变化的，能够根据你应用程序条件的改变而动态改变。很多因素都会影响并发队列正在执行任务的数量，包括当前可用的内核数量，其它处理器已经完成的工作量，其它串行调度队列任务的优先级和数量。
+
+系统给每个应用程序都提供了四种并发调度队列。这些队列对应用程序来说是全局的，队列之间唯一不同的地方就是优先级。因为它们是全局的，你不需要显式的创建。你可以使用**dispatch_get_global_queue**函数来获取，如下所示：
+
+	dispatch_queue_t aQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+
+除了获取默认的并发队列，你也可以给函数传递**DISPATCH_QUEUE_PRIORITY_HIGH** 和 **DISPATCH_QUEUE_PRIORITY_LOW**来获取高和低优先级的队列，或者传递**DISPATCH_QUEUE_PRIORITY_BACKGROUND**常量获取后台队列。如你预期的那样，高优先级的并发队列里面的任务比低优先级并发队列里面的任务先执行。相似的，默认的比低优先级的也先执行。
+
+**注意**：**dispatch_get_global_queue**函数的第二个参数是保留的。现在，你应该总是传递0。
+
+尽管调度队列是引用计数的对象，你不需要保留或者释放全局的并发队列。因为它们对于应用程序是全局的，对队列使用**retain** 和 **release**方法会被忽视。因此，你不需要强引用这些队列。每当你需要引用这些队列的时候，你只需要调用**dispatch_get_global_queue**函数就行了。
+
+### Creating Serial Dispatch Queues
+(创建串行的调度队列)
+
+当你想要任务按照特定顺序执行的时候串行队列很有用。串行队列同一时间只有一个任务执行，而且总是从队列的头拉取任务。你可能会使用串行队列替代锁来保护共享资源或者可变的数据结构。不像锁，一个串行队列确保任务执行的顺序是可预测的。并且只要你提交了你的任务到异步的串行队列，这个队列就永远不会死锁。
+
+不像并发队列，已经给你创建好了，你必须显示的创建管理任何你想要使用的串行队列。你可以为你的应用程序创建任意数量的串行队列但是应该避免为了同时执行大量任务而创建大量的串行队列。如果你想并发的执行大量任务，将任务提交到全局并发队列。当创建串行队列，你应该明白创建每一个队列的目的，比如保护资源或者同步应用程序的某些关键行为。
+
+Listing 3-2展示了创建一个自定义串行队列的步骤。**dispatch_queue_create**函数需要两个参数：队列的名字和队列属性的集合。调试器和一些性能工具能够向你展示队列的名字帮助你追踪你的任务是如何执行的。这个队列的属性参数被保留，现在应该传递**NULL**。
+
+Listing 3-2  Creating a new serial queue
+
+	dispatch_queue_t queue;
+	queue = dispatch_queue_create("com.example.MyQueue", NULL);
+
+除了任何你创建的自定义的队列，系统自动创建了一个绑定到你应用程序主线程的串行队列。更多关于如何获取主线程的队列，参见[ Getting Common Queues at Runtime ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW3)。
+
+### Getting Common Queues at Runtime
+(在运行时获取常用队列)
+
+Grand Central Dispatch提供了函数让你访问应用程序中几个常用的调度队列：
+
+* 使用**dispatch_get_current_queue**函数主要用作调试或者测试当前队列的标识。在Block对象中调用这个函数会返回Block提交到队列(这个时候队列应该正在执行)。在Block对象外调用这个方法会返回你应用程序默认的并发队列。
+* 使用**dispatch_get_main_queue**函数来获取你应用程序主线程相关的串行调度队列。调用了**dispatch_main**函数或者在主线程上配置了**run loop**(使用**CFRunLoopRef**类型或者**NSRunLoop**对象)的Cocoa应用程序和程序会自动创建这个队列。
+* 使用**dispatch_get_global_queue**函数来获取任何共享的并发队列。更多信息，参见[ Getting the Global Concurrent Dispatch Queues ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW5)。
+
+### Memory Management for Dispatch Queues
+(调度队列的内存管理)
+
+调度队列和其它的调度对象都是引用计数的数据类型。当你创建一个串行的调度队列，引用计数为1。你可以根据需要使用**dispatch_retain** 和 **dispatch_release**函数来增加和减少引用计数。当一个队列的引用计数为0的时候，系统就会异步的释放这个队列。
+
+保留和释放你的调度对象很重要，比如队列，当你使用队列的时候确保它们保留在内存中。和Cocoa对象的内存管理一样，通用的规则就是如果你使用一个传递给你代码的队列，你应该在使用前保留，使用完之后释放。这种基本的模式保证了队列在使用时保留在内存中。
+
+**注意**：你不需要保留或者释放任何全局调度队列，包括并发调度队列或者主调度队列。任何保留或者释放操作都会被忽视。
+
+即使你实现的是自动垃圾回收的应用程序，你仍然需要保留和释放你的调度队列和其它调度对象。Grand Central Dispatch并不支持垃圾回收的机制来回收内存。
+
+### Storing Custom Context Information with a Queue
+(在队列中存储自定义的上下文信息)
+
+所有的调度对象(包括调度队列)允许你关联自定义的上下文数据。你可以使用**dispatch_set_context** 和 **dispatch_get_context**函数为给定的对象设置和获取数据。系统不会使用你的自定义数据，所以由你决定何时分配和销毁这些数据。
+
+对于队列，你可以使用上下文数据来存储一个Objective-C对象的指针或者其它能够帮助标识这个队列或者代码用途的数据结构。你也可以使用队列的**finalizer**函数在队列释放前来销毁关联数据。Listing 3-3展示了一个如何使用**finalizer**函数清除队列上下文数据的例子。
+
+### Providing a Clean Up Function For a Queue
+(为队列提供一个清理函数)
+
+在你创建了串行调度队列之后，你可以附加一个**finalizer**函数来执行任何自定义的清理操作在队列被释放时。调度队列是引用计数的对象，你可以使用**dispatch_set_finalizer_f**函数来指定一个函数来执行清理操作，当队列的引用计数为0时。你可以使用这个函数来清理队列相关的上下文数据，这个函数只在上下文指针不为**NULL**的时候才会调用。
+
+Listing 3-3展示了一个自定义的**finalizer**函数以及一个创建队列并把**finalizer**函数附加到队列的函数。队列使用**finalizer**函数来释放或者存储在队列上下文指针的数据。**myInitializeDataContextFunction** 和 **myCleanUpDataContextFunction**函数用于初始化和清理上下文数据。传递给**finalizer**函数的上下文指针包含了与队列关联的数据对象。
+
+Listing 3-3  Installing a queue clean up function
+
+    void myFinalizerFunction(void *context)
+    {
+        MyDataContext* theData = (MyDataContext*)context;
+        
+        // Clean up the contents of the structure
+        myCleanUpDataContextFunction(theData);
+        
+        // Now release the structure itself.
+        free(theData);
+    }
+
+    dispatch_queue_t createMyQueue()
+    {
+        MyDataContext*  data = (MyDataContext*) malloc(sizeof(MyDataContext));
+        myInitializeDataContextFunction(data);
+        
+        // Create the queue and set the context data.
+        dispatch_queue_t serialQueue = dispatch_queue_create("com.example.CriticalTaskQueue", NULL);
+        if (serialQueue)
+        {
+            dispatch_set_context(serialQueue, data);
+            dispatch_set_finalizer_f(serialQueue, &myFinalizerFunction);
+        }
+        
+        return serialQueue;
+    }
+
+## Adding Tasks to a Queue
+(添加任务到队列)
+
+为了执行任务，你必须将任务调度到合适的调度队列。你可以同步或者异步的调度任务，你也可以单个或者组的调度。一旦进入到队列，队列会尽可能快的执行你的任务。接下来的章节会向你展示调度任务到队列的一些技术以及优势。
+
+### Adding a Single Task to a Queue
+(添加单个任务到队列)
+
+有两种方法可以将一个任务添加到队列：异步或者同步。如果可能，尽可能的使用**dispatch_async** 和 **dispatch_async_f**函数来执行任务。当你添加一个Block对象或者函数到队列时，没有办法知道这些代码何时会执行。因此，异步的添加Block或者函数可以让你调用执行的代码，然后让调用线程继续做其它的工作。特别是应用程序主线程应该异步调度任务，这样才能及时相应用户的事件。
+
+尽管你应该尽可能的异步添加任务，少数时候你可能希望同步添加任务来避免竞争条件和其它的用不错误。在这些情况下，你可以使用**dispatch_sync** 和 **dispatch_sync_f**函数来添加任务到队列。这些函数会阻塞当前线程的执行，直到指定的任务执行完成。
+
+**重要**：你绝对不能在同一个队列中的正在执行的任务里面调用**dispatch_sync** 和 **dispatch_sync_f**函数。特别是串行的队列，这样做肯定会导致死锁；而并发队列也应该避免这样做。
+
+下面的例子展示了如何使用基于Block的变量来异步或者同步调度任务：
+
+    dispatch_queue_t myCustomQueue;
+    myCustomQueue = dispatch_queue_create("com.example.MyCustomQueue", NULL);
+
+    dispatch_async(myCustomQueue, ^{
+        printf("Do some work here.\n");
+    });
+
+    printf("The first block may or may not have run.\n");
+
+    dispatch_sync(myCustomQueue, ^{
+        printf("Do some more work here.\n");
+    });
+    printf("Both blocks have completed.\n");
+
+### Performing a Completion Block When a Task Is Done
+(当任务结束执行完成Block)
+
+调度到队列里面的任务与创建它们的代码是独立运行的。然而当任务完成时，你的应用程序可能希望接收通知并使用任务完成的结果数据。传统的编程中，你可能会使用回调机制，不过调度队列允许你使用完成Block。
+
+一个完成Block就是调度队列的另一段代码，位于原始任务的最后。调用代码通常在启动任务时通过参数提供完成Block。任务只需要在完成工作时提交指定的Block或函数到指定的队列。
+
+Listing 3-4展示了使用Block使用平均数函数。平均数函数的最后两个参数允许调用者指定一个队列和报告结果的Block。在平均数函数计算完值会传递结果到指定的Block然后调度到队列上。为了防止队列过早的释放，必须首先保留这个队列，然后在调度完成这个完成Block之后再释放这个队列。
+
+Listing 3-4  Executing a completion callback after a task
+
+    void average_async(int *data, size_t len,
+                       dispatch_queue_t queue, void (^block)(int))
+    {
+        // Retain the queue provided by the user to make
+        // sure it does not disappear before the completion
+        // block can be called.
+        dispatch_retain(queue);
+        
+        // Do the work on the default concurrent queue and then
+        // call the user-provided block with the results.
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            int avg = average(data, len);
+            dispatch_async(queue, ^{ block(avg);});
+            
+            // Release the user-provided queue when done
+            dispatch_release(queue);
+        });
+    }
+
+### Performing Loop Iterations Concurrently
+(并发执行循环迭代)
+
+一个并发调度队列能够提升性能的地方就是有一定量的循环迭代的地方。比如，假设你有一个**for**循环，每次循环迭代都需要做一些工作：
+
+    for (i = 0; i < count; i++) {
+        printf("%u\n",i);
+    }
+
+如果每次迭代执行的任务与其它的迭代独立无关，而且循环迭代执行顺序也无关紧要的话，你可以使用**dispatch_apply** 和 **dispatch_apply_f**函数来替换循环。这两个函数为每次循环迭代提交一次指定的Block或函数到队列。当调度到并发队列时，有可能同时执行多个循环迭代。
+
+当调用**dispatch_apply** 或 **dispatch_apply_f**函数时你可以指定串行队列或者并发队列。传递并发队列允许你同时执行多个循环迭代，这也是这些函数最常用的方式。尽管也允许使用串行队列，也能使代码得到正确的结果，但是并没有什么性能提升。
+
+**重要**：类似于普通**for**循环，**dispatch_apply** 和 **dispatch_apply_f**函数也是所有循环迭代完成时才会返回。因此，在队列上下文执行的代码中调用这两个函数时必须非常小心。如果你传递的是串行队列，并且是正在执行当前代码的队列，调用这些函数会导致队列死锁。因为它们阻塞了当前线程，在主线程中调用这两个函数时同样也必须小心，它们可能会阻止事件处理的循环，无法响应用户事件。如果你循环的代码需要一定的执行时间，你可以考虑在另一个线程中调用这两个函数。
+
+Listing 3-5使用了**dispatch_apply**替换了**for**循环。你传递的Block必须包含一个参数，用来标识当前循环迭代。第一次迭代这个参数值为0，第二次时为1，最后一次值为count - 1。
+
+Listing 3-5  Performing the iterations of a for loop concurrently
+
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+
+    dispatch_apply(count, queue, ^(size_t i) {
+        printf("%u\n",i);
+    }); 
+
+你应该确保你的任务代码在每次迭代循环时都做了合理的工作量。对于任何你调度到队列的Block或者函数，执行时都会有开销。如果每次循环迭代只执行了少量的工作，调度代码的开销可能超过了从它调度到队列实现的性能优势。如果你测试的时候发现这是真的，你可以使用大步从而增加每次迭代的工作量。随着使用大步，将原始循环的多次迭代组合成一个Block，从而减少迭代的次数。比如，你需要执行100次迭代，决定使用4大步，你现在执行4个循环迭代来执行每个Block，迭代的次数是25。更多关于如何实现大步的信息，参见[ Improving on Loop Code ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW2)。
+
+### Performing Tasks on the Main Thread
+(在主线程上执行任务)
+
+Grand Central Dispatc提供了一个特殊的调度队列，让你可以在应用程序的主线程上执行任务。应用程序主线程设置了**run loop**(由**CFRunLoopRef**类型或者**NSRunLoop**对象管理)就会自动为应用程序创建这个队列、自动drained。如果你创建的不是Cocoa应用程序并且不想显式的设置**run loop**，你必须调用**dispatch_main**函数来显式的drained主队列。虽然你仍然能够添加任务到队列，如果你不调用这个方法，任务就不会执行。
+
+你可以调用**dispatch_get_main_queue**函数来获得应用程序主线程的调度队列。添加到这个队列里面的任务在主线程上是串行执行的。因此你可以在应用某些完成了工作的地方使用这个队列作为同步点。
+
+### Using Objective-C Objects in Your Tasks
+(在任务中使用Objective-C对象)
+
+GCD为Cocoa内存管理技术提供了内建支持，所以你可以在要提交到调度队列的Block里面自由使用Objective-C对象。每个调度队列都维护了一个自己的自动释放池，确保那些自动释放的对象在某些时候被释放了；队列并不能保证何时会释放这些对象。
+
+如果你的应用程序内存有限，并且你的Block创建了大量的自动释放的对象，你应该创建自己的自动释放池，确保你的对象被及时的释放掉了。如果你的Block创建了几百个对象，你可能会创建不止一个的自动释放池，并且定期的释放。
+
+关于更多自动释放池和Objective-C的内存管理，参见[ Advanced Memory Management Programming Guide ](https://developer.apple.com/library/prerelease/mac/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011i)。
+
+## Suspending and Resuming Queues
+(挂起和恢复队列)
+
+通过将队列挂起可以阻止它暂时执行Block对象。使用**dispatch_suspend**函数挂起队列，使用**dispatch_resume**函数来恢复队列。调用前者函数会增加队列的挂起引用计数，调用后者会减少队列的挂起引用计数。当这个计数大于0的时候，队列就会持续挂起。因此，你必须在调用这两个函数的时候要平衡，成对出现，能够让队列恢复继续处理Block。
+
+**重要**：挂起或者恢复函数的调用是异步的，只在执行的Block之间有效。挂起一个队列不会停止已经开始执行的任务。
+
+## Using Dispatch Semaphores to Regulate the Use of Finite Resources
+(使用调度信号来调节有限资源的使用)
+
+如果你提交到调度队列的任务需要访问一些有限的资源，你可能希望使用调度信号来调整能够同时访问资源的任务数。调度信号类似于一个调整信号，只有一点例外。当资源可用时，获取调度信号的时间与传统信号比起来更少。这是因为在这种情形下Grand Central Dispatch不会下行去调用内核。唯一需要去调用内核就是资源不可用时，系统需要暂停你的线程直到信号被提醒。
+
+使用调度信号的过程如下：
+
+1. 当你使用**dispatch_semaphore_create**函数创建信号时，你可以指定一个正的整型值来指示资源可用的数量。
+2. 在每一个任务中，调用**dispatch_semaphore_wait**函数等待信号。
+3. 当上面的调用返回时，获取资源然后开始你的工作。
+4. 当你使用完资源后，释放资源然后调用**dispatch_semaphore_signal**函数来提醒信号。
+
+有关这些步骤是如何工作的一个例子，考虑在系统上使用的文件描述符。每个应用程序都给了有限数量的文件描述符来使用。如果你的任务需要处理大量的文件，你不想一次打开很多文件而耗尽了文件描述符。相反，你可以使用信号来限制你任务代码在任何时候可以使用的文件描述符的数量。代码如下所示：
+
+    // Create the semaphore, specifying the initial pool size
+    dispatch_semaphore_t fd_sema = dispatch_semaphore_create(getdtablesize() / 2);
+
+    // Wait for a free file descriptor
+    dispatch_semaphore_wait(fd_sema, DISPATCH_TIME_FOREVER);
+    fd = open("/etc/services", O_RDONLY);
+
+    // Release the file descriptor when done
+    close(fd);
+    dispatch_semaphore_signal(fd_sema);
+
+当你创建信号的时候，你指定可用资源的数量。这个值是初始信号count变量的。每一次在信号上等待，**dispatch_semaphore_wait**就会将count变量的值减1。如果这个值的结果是负的，这个函数就会告诉内核去阻塞你的线程。**dispatch_semaphore_signal**函数会将count变量的值增加1指示资源已经被释放了。如果有任务阻塞等待资源，之后便不会再阻塞然后执行。
+
+## Waiting on Groups of Queued Tasks
+(等待一组队列中的任务)
+
+Dispatch groups会阻塞一个线程，直到一个或者多个任务执行结束。有时候你必须等待所有指定的任务完成后才能继续处理的时候就可以使用Dispatch groups。比如，在调度了几个任务之后计算一些数据，你可能需要使用组来等待这些任务然后处理结果。另外一种方法就是Dispatch groups可以替代thread joins。不同于开始几个子线程，而是加入到每一个当中，你可以添加对应的任务到Dispatch groups当中，然后等待这个组。
+
+Listing 3-6展示了设置组的基本过程，调度任务给组，然后等待结果。不是使用**dispatch_async**函数来调度任务到队列，而是使用**dispatch_group_async**函数。这个函数会关联组和队列要执行的任务。为了等待组的任务完成，你调用**dispatch_group_wait**函数，传递正确的组给这个函数。
+
+Listing 3-6  Waiting on asynchronous tasks
+
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_group_t group = dispatch_group_create();
+
+    // Add a task to the group
+    dispatch_group_async(group, queue, ^{
+        // Some asynchronous work
+        });
+
+    // Do some other work while the tasks execute.
+
+    // When you cannot make any more forward progress,
+    // wait on the group to block the current thread.
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+
+    // Release the group when it is no longer needed.
+    dispatch_release(group);
+
+## Dispatch Queues and Thread Safety
+(调度队列和线程安全)
+
+在调度队列上下文谈论线程安全看起来有点奇怪，但是线程安全仍然是相关的话题。你应用程序中任何时候实现的并发，以下几点你需要知道：
+
+* 调度队列本身是线程安全的。换句话说，你可以在系统的任何线程上提交任务到调度队列，而不用先加锁或者同步访问队列。
+* 不要在相同队列里面的任务代码中调用**dispatch_sync**函数，传递相同的队列。这样做会导致队列死锁。如果你需要调度当前的队列，使用**dispatch_async**函数异步调用。
+* 避免给提交到调度队列的任务添加锁。尽管这些任务使用锁是安全的，当你获取锁的时候，如果那个锁不可用，你增加了整个串行队列阻塞的风险。类似的，对于并发队列，等待一个锁可能会阻止其它任务的执行。如果你的代码需要同步，使用串行队列替代锁。
+* 尽管你可以在运行的任务中获取底层线程的信息，但是最好避免这样做。更多关于对比调度队列和线程的信息，参见[ Compatibility with POSIX Threads ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW18)。
+
+更多关于如何改变已经存在线程代码来使用调度队列，参见[ Migrating Away from Threads ](https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW1)。
