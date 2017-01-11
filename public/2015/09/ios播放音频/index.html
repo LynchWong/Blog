@@ -1,0 +1,761 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>iOS播放音频</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="上一篇博客提到了播放声音的接口，所以本篇就是播放声音的接口了。声音播放也是项目的需求，最开始是使用的SKTUtils工具类。
+">
+    <meta property="og:description" content="上一篇博客提到了播放声音的接口，所以本篇就是播放声音的接口了。声音播放也是项目的需求，最开始是使用的SKTUtils工具类。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="iOS播放音频">
+    <meta property="og:url" content="/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="上一篇博客提到了播放声音的接口，所以本篇就是播放声音的接口了。声音播放也是项目的需求，最开始是使用的SKTUtils工具类。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      iOS播放音频
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-09-29T23:31:11Z">
+    
+  
+  
+  
+  
+    2015-09-29 23:31:11
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>上一篇博客提到了播放声音的接口，所以本篇就是播放声音的接口了。声音播放也是项目的需求，最开始是使用的<a href="https://github.com/raywenderlich/SKTUtils">SKTUtils</a>工具类。
+</p>
+
+<p>这个工具类是大神raywenderlich写给SpriteKit的。这个工具类里面有播放声音的接口，我就直接使用了，然后进行了一些小的修改。</p>
+
+<p>既然是写给游戏的，里面就只有播放背景和音效的方法，而且音频大多是本地的，不涉及到网络音频。所以刚开始的时候我也不知道这个接口不能播放网络音频，直到后来项目需要播放网络音频的时候才发现。这个接口源码很简单，使用的是<strong>AVAudioPlayer</strong>，参考这里<a href="https://developer.apple.com/library/ios/qa/qa1634/_index.html">AVAudioPlayer Streaming Support</a>发现是不能播放网络音频的。当然我们可以先将音频下载下来，然后再播放也是可以的。而且上面也提到了可以使用<strong>AVPlayer</strong>或者使用<strong>Audio File Stream Services</strong>和<strong>Audio Queue Services</strong>。</p>
+
+<p>其实项目里面除了音频播放的需求，还有播放视频的需求，之前就有研究过<strong>AVPlayer</strong>，它能播放视频，同时也可以单独播放音频。项目中视频播放的模块交给了另外一个同事做，就是使用<strong>AVPlayer</strong>的，播放器做的很棒，下一篇博文可能就写视频播放器吧。这里给出两篇博文，写iOS的音频和视频的，超级棒的文章，推荐给大家，也给了我很多启发和帮助，同时苹果<strong>AVFoundation</strong>的官方编程指南也是很好的参考。</p>
+
+<p><a href="http://www.cnblogs.com/kenshincui/p/4186022.html">iOS开发系列&ndash;音频播放、录音、视频播放、拍照、视频录制</a>
+<a href="http://msching.github.io/blog/2014/07/07/audio-in-ios/">iOS音频播放 (一)：概述</a>
+<a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">AVFoundation Programming Guide</a></p>
+
+<h1 id="接口源码">接口源码</h1>
+
+<p><a href="https://github.com/LynchWong/YKTAudio">YKTAudio</a>，接口代码也很简单，就不讲解了。</p>
+
+<p>说明：</p>
+
+<ul>
+<li>如果你需要知道网络音频的播放进度，你需要实现<strong>RemotePlayProgressDelegate</strong>。</li>
+<li>避免将接口修改为单列模式，导致多处使用播放网络音频方法时音频重叠播放。</li>
+</ul>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/%E9%9F%B3%E9%A2%91/">音频</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/10/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/" data-tooltip="iOS视频播放">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/09/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%9B%E5%BA%A6%E8%A7%86%E5%9B%BE/" data-tooltip="自定义进度视图">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f09%2fios%25E6%2592%25AD%25E6%2594%25BE%25E9%259F%25B3%25E9%25A2%2591%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f09%2fios%25E6%2592%25AD%25E6%2594%25BE%25E9%259F%25B3%25E9%25A2%2591%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f09%2fios%25E6%2592%25AD%25E6%2594%25BE%25E9%259F%25B3%25E9%25A2%2591%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/10/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/" data-tooltip="iOS视频播放">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/09/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%9B%E5%BA%A6%E8%A7%86%E5%9B%BE/" data-tooltip="自定义进度视图">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f09%2fios%25E6%2592%25AD%25E6%2594%25BE%25E9%259F%25B3%25E9%25A2%2591%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f09%2fios%25E6%2592%25AD%25E6%2594%25BE%25E9%259F%25B3%25E9%25A2%2591%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f09%2fios%25E6%2592%25AD%25E6%2594%25BE%25E9%259F%25B3%25E9%25A2%2591%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f09%2fios%25E6%2592%25AD%25E6%2594%25BE%25E9%259F%25B3%25E9%25A2%2591%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f09%2fios%25E6%2592%25AD%25E6%2594%25BE%25E9%259F%25B3%25E9%25A2%2591%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f09%2fios%25E6%2592%25AD%25E6%2594%25BE%25E9%259F%25B3%25E9%25A2%2591%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/09\/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91\/';
+          
+            this.page.identifier = '\/2015\/09\/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

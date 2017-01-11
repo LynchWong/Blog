@@ -1,0 +1,1116 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Alamofire 源码学习 - Upload</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="创建这篇文章的时候是3月19号，今天已经是4月7号了。感觉时间过的好快啊，但是博客一直没更新，顿时感觉堕落了，没有成长。废话不多说了，直接进入正题。
+">
+    <meta property="og:description" content="创建这篇文章的时候是3月19号，今天已经是4月7号了。感觉时间过的好快啊，但是博客一直没更新，顿时感觉堕落了，没有成长。废话不多说了，直接进入正题。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Alamofire 源码学习 - Upload">
+    <meta property="og:url" content="/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---upload/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="创建这篇文章的时候是3月19号，今天已经是4月7号了。感觉时间过的好快啊，但是博客一直没更新，顿时感觉堕落了，没有成长。废话不多说了，直接进入正题。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Alamofire 源码学习 - Upload
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2016-03-19T13:11:25Z">
+    
+  
+  
+  
+  
+    2016-03-19 13:11:25
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/%e6%ba%90%e7%a0%81%e5%ad%a6%e4%b9%a0">源码学习</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>创建这篇文章的时候是3月19号，今天已经是4月7号了。感觉时间过的好快啊，但是博客一直没更新，顿时感觉堕落了，没有成长。废话不多说了，直接进入正题。
+</p>
+
+<p>其实Upload跟前面讲的Request模式基本是一样的，所以这篇文章应该就讲个大概，尽量简单些，很细分的东西自行了解学习了。</p>
+
+<p>Alamofire有更新过代码，我当前的版本是3.3.0。上篇的版本是多少，忘记了，所以代码可能会有不一样的地方。</p>
+
+<h1 id="alamofire-swift">Alamofire.swift</h1>
+
+<p>这个文件里面包含了很多的便捷方法，上篇有截图展示过，所以我们还是从这里开始。</p>
+
+<p>这个文件里关于上传的方法有八个，但是仔细看下，作者分为了4类：</p>
+
+<ul>
+<li>File</li>
+<li>Data</li>
+<li>Stream</li>
+<li>MultipartFormData</li>
+</ul>
+
+<p>每一类都有URLString和URLRequest两种，所以我们只需要看一种就行了。</p>
+
+<p>这里我们主要把前面三种当做一类，最后面一种当做一类来，所以主要就简单说明下这两种情况。因为前三种NSURLSession的API都提供了支持(方法源码如下所示)，只需要讲解一种就可以了。最后一种是作者自己实现的，但是后面也是借用了NSURLSession的API。</p>
+
+<pre><code>/* Creates an upload task with the given request.  The body of the request will be created from the file referenced by fileURL */
+public func uploadTaskWithRequest(request: NSURLRequest, fromFile fileURL: NSURL) -&gt; NSURLSessionUploadTask
+
+/* Creates an upload task with the given request.  The body of the request is provided from the bodyData. */
+public func uploadTaskWithRequest(request: NSURLRequest, fromData bodyData: NSData) -&gt; NSURLSessionUploadTask
+
+/* Creates an upload task with the given request.  The previously set body stream of the request (if any) is ignored and the URLSession:task:needNewBodyStream: delegate will be called when the body payload is required. */
+public func uploadTaskWithStreamedRequest(request: NSURLRequest) -&gt; NSURLSessionUploadTask
+</code></pre>
+
+<p>仔细看下这些API的方法名称，正好对应前面三种，方法的注释都说明了一些相关的信息，自行了解。<a href="https://developer.apple.com/library/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW15"> NSURLSession编程指南 </a>，<a href="http://lynchwong.com/2016/01/29/URL-Session-Programming-Guide-Using-NSURLSession/"> 中文翻译 </a>(翻译的不好见谅) 对这三种类型的上传也有说明：</p>
+
+<blockquote>
+<p>Your app can provide the request body content for an HTTP POST request in three ways: as an NSData object, as a file, or as a stream. In general, your app should:</p>
+
+<ul>
+<li>Use an NSData object if your app already has the data in memory and has no reason to dispose of it.</li>
+<li>Use a file if the content you are uploading exists as a file on disk, if you are doing background transfer, or if it is to your app’s benefit to write it to disk so that it can release the memory associated with that data.</li>
+<li>Use a stream if you are receiving the data over a network or are converting existing NSURLConnection code that provides the request body as a stream.</li>
+</ul>
+
+<p>Regardless of which style you choose, if your app provides a custom session delegate, that delegate should implement the URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend: delegate method to obtain upload progress information.</p>
+
+<p>Additionally, if your app provides the request body using a stream, it must provide a custom session delegate that implements the URLSession:task:needNewBodyStream: method, described in more detail in Uploading Body Content Using a Stream.</p>
+</blockquote>
+
+<p>所以这里就不再赘述这三种方法有什么区别，何时该使用哪种方法。</p>
+
+<p><strong>MultipartFormData</strong>其实到最后也是借助了<strong>File</strong>和<strong>Data</strong>来实现的，接下来就看源码。</p>
+
+<h1 id="upload-swift">Upload.swift</h1>
+
+<p>上传相关的信息都在这个文件里，包括创建上传的请求和上传需要的代理方法。这个文件并没有创建新的类，就是对<strong>Manager</strong>类和<strong>Request</strong>类的拓展。</p>
+
+<p>我们以<strong>File</strong>为例，找到入口方方法，源码如下：</p>
+
+<pre><code>public func upload(
+    method: Method,
+    _ URLString: URLStringConvertible,
+    headers: [String: String]? = nil,
+    file: NSURL)
+    -&gt; Request
+{
+    return Manager.sharedInstance.upload(method, URLString, headers: headers, file: file)
+}
+</code></pre>
+
+<p>这是Alamofire.swift文件里的入口方法，点击跳转到Upload.swift文件里，方法如下：</p>
+
+<pre><code>public func upload(
+    method: Method,
+    _ URLString: URLStringConvertible,
+    headers: [String: String]? = nil,
+    file: NSURL)
+    -&gt; Request
+{
+    let mutableURLRequest = URLRequest(method, URLString, headers: headers)
+    return upload(mutableURLRequest, file: file)
+}
+</code></pre>
+
+<p>继续点击跳转到的方法如下：</p>
+
+<pre><code>public func upload(URLRequest: URLRequestConvertible, file: NSURL) -&gt; Request {
+    return upload(.File(URLRequest.URLRequest, file))
+}
+</code></pre>
+
+<p>最后调用的方法：</p>
+
+<pre><code>private func upload(uploadable: Uploadable) -&gt; Request {
+    var uploadTask: NSURLSessionUploadTask!
+    var HTTPBodyStream: NSInputStream?
+
+    switch uploadable {
+    case .Data(let request, let data):
+        dispatch_sync(queue) {
+            uploadTask = self.session.uploadTaskWithRequest(request, fromData: data)
+        }
+    case .File(let request, let fileURL):
+        dispatch_sync(queue) {
+            uploadTask = self.session.uploadTaskWithRequest(request, fromFile: fileURL)
+        }
+    case .Stream(let request, let stream):
+        dispatch_sync(queue) {
+            uploadTask = self.session.uploadTaskWithStreamedRequest(request)
+        }
+
+        HTTPBodyStream = stream
+    }
+
+    let request = Request(session: session, task: uploadTask)
+
+    if HTTPBodyStream != nil {
+        request.delegate.taskNeedNewBodyStream = { _, _ in
+            return HTTPBodyStream
+        }
+    }
+
+    delegate[request.delegate.task] = request.delegate
+
+    if startRequestsImmediately {
+        request.resume()
+    }
+
+    return request
+}
+</code></pre>
+
+<p>如上的方法是一个工厂方法，其它上传类型<strong>Data</strong>和<strong>Stream</strong>最终也是从这个方法创建的。</p>
+
+<p>作者定义了具有关联值的枚举来标示这三种类型的上传：</p>
+
+<pre><code>private enum Uploadable {
+    case Data(NSURLRequest, NSData)
+    case File(NSURLRequest, NSURL)
+    case Stream(NSURLRequest, NSInputStream)
+}
+</code></pre>
+
+<p>然后在这个工厂方法里面通过枚举创建了不同的上传请求(都调用的是对应的NSURLSession的API)，最后返回了创建的Request实例，跟我们上篇讲解的Request模式是一样的。</p>
+
+<p>然后拓展了Request类，新添加了UploadTaskDelegate类：</p>
+
+<pre><code>class UploadTaskDelegate: DataTaskDelegate {
+    var uploadTask: NSURLSessionUploadTask? { return task as? NSURLSessionUploadTask }
+    var uploadProgress: ((Int64, Int64, Int64) -&gt; Void)!
+
+    // MARK: - NSURLSessionTaskDelegate
+
+    // MARK: Override Closures
+
+    var taskDidSendBodyData: ((NSURLSession, NSURLSessionTask, Int64, Int64, Int64) -&gt; Void)?
+
+    // MARK: Delegate Methods
+
+    func URLSession(
+        session: NSURLSession,
+        task: NSURLSessionTask,
+        didSendBodyData bytesSent: Int64,
+        totalBytesSent: Int64,
+        totalBytesExpectedToSend: Int64)
+    {
+        if initialResponseTime == nil { initialResponseTime = CFAbsoluteTimeGetCurrent() }
+
+        if let taskDidSendBodyData = taskDidSendBodyData {
+            taskDidSendBodyData(session, task, bytesSent, totalBytesSent, totalBytesExpectedToSend)
+        } else {
+            progress.totalUnitCount = totalBytesExpectedToSend
+            progress.completedUnitCount = totalBytesSent
+
+            uploadProgress?(bytesSent, totalBytesSent, totalBytesExpectedToSend)
+        }
+    }
+}
+</code></pre>
+
+<p>这个代理类以及实现的代理方法是为了获得上传的进度，这些知识点前面引用的部分有提及，不再赘述。以及这里代理调用的模式与上篇讲过的DataTaskDelegate和TaskDelegate是一样的，故这里也不再赘述了。基本上前面三种就这么些东西，只要明白了上篇Request的模式，上传和下载基本也就明白了。</p>
+
+<h2 id="multipartformdata">MultipartFormData</h2>
+
+<p>主要讲讲这个，使用方法如下所示：</p>
+
+<pre><code>Alamofire.upload(
+    .POST,
+    &quot;https://httpbin.org/post&quot;,
+    multipartFormData: { multipartFormData in
+        multipartFormData.appendBodyPart(fileURL: unicornImageURL, name: &quot;unicorn&quot;)
+        multipartFormData.appendBodyPart(fileURL: rainbowImageURL, name: &quot;rainbow&quot;)
+    },
+    encodingCompletion: { encodingResult in
+        switch encodingResult {
+            case .Success(let upload, _, _):
+                upload.responseJSON { response in
+                    debugPrint(response)
+                }
+            case .Failure(let encodingError):
+                print(encodingError)
+        }
+    }
+)
+</code></pre>
+
+<p>根据这个方法我们找到入口方法，然后找到最后处理的方法，源码如下：</p>
+
+<pre><code>/**
+    Encodes the `MultipartFormData` and creates a request to upload the result to the specified URL request.
+
+    It is important to understand the memory implications of uploading `MultipartFormData`. If the cummulative
+    payload is small, encoding the data in-memory and directly uploading to a server is the by far the most
+    efficient approach. However, if the payload is too large, encoding the data in-memory could cause your app to
+    be terminated. Larger payloads must first be written to disk using input and output streams to keep the memory
+    footprint low, then the data can be uploaded as a stream from the resulting file. Streaming from disk MUST be
+    used for larger payloads such as video content.
+
+    The `encodingMemoryThreshold` parameter allows Alamofire to automatically determine whether to encode in-memory
+    or stream from disk. If the content length of the `MultipartFormData` is below the `encodingMemoryThreshold`,
+    encoding takes place in-memory. If the content length exceeds the threshold, the data is streamed to disk
+    during the encoding process. Then the result is uploaded as data or as a stream depending on which encoding
+    technique was used.
+
+    If `startRequestsImmediately` is `true`, the request will have `resume()` called before being returned.
+
+    - parameter URLRequest:              The URL request.
+    - parameter multipartFormData:       The closure used to append body parts to the `MultipartFormData`.
+    - parameter encodingMemoryThreshold: The encoding memory threshold in bytes.
+                                         `MultipartFormDataEncodingMemoryThreshold` by default.
+    - parameter encodingCompletion:      The closure called when the `MultipartFormData` encoding is complete.
+*/
+public func upload(
+    URLRequest: URLRequestConvertible,
+    multipartFormData: MultipartFormData -&gt; Void,
+    encodingMemoryThreshold: UInt64 = Manager.MultipartFormDataEncodingMemoryThreshold,
+    encodingCompletion: (MultipartFormDataEncodingResult -&gt; Void)?)
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        let formData = MultipartFormData()
+        multipartFormData(formData)
+
+        let URLRequestWithContentType = URLRequest.URLRequest
+        URLRequestWithContentType.setValue(formData.contentType, forHTTPHeaderField: &quot;Content-Type&quot;)
+
+        let isBackgroundSession = self.session.configuration.identifier != nil
+
+        if formData.contentLength &lt; encodingMemoryThreshold &amp;&amp; !isBackgroundSession {
+            do {
+                let data = try formData.encode()
+                let encodingResult = MultipartFormDataEncodingResult.Success(
+                    request: self.upload(URLRequestWithContentType, data: data),
+                    streamingFromDisk: false,
+                    streamFileURL: nil
+                )
+
+                dispatch_async(dispatch_get_main_queue()) {
+                    encodingCompletion?(encodingResult)
+                }
+            } catch {
+                dispatch_async(dispatch_get_main_queue()) {
+                    encodingCompletion?(.Failure(error as NSError))
+                }
+            }
+        } else {
+            let fileManager = NSFileManager.defaultManager()
+            let tempDirectoryURL = NSURL(fileURLWithPath: NSTemporaryDirectory())
+            let directoryURL = tempDirectoryURL.URLByAppendingPathComponent(&quot;com.alamofire.manager/multipart.form.data&quot;)
+            let fileName = NSUUID().UUIDString
+            let fileURL = directoryURL.URLByAppendingPathComponent(fileName)
+
+            do {
+                try fileManager.createDirectoryAtURL(directoryURL, withIntermediateDirectories: true, attributes: nil)
+                try formData.writeEncodedDataToDisk(fileURL)
+
+                dispatch_async(dispatch_get_main_queue()) {
+                    let encodingResult = MultipartFormDataEncodingResult.Success(
+                        request: self.upload(URLRequestWithContentType, file: fileURL),
+                        streamingFromDisk: true,
+                        streamFileURL: fileURL
+                    )
+                    encodingCompletion?(encodingResult)
+                }
+            } catch {
+                dispatch_async(dispatch_get_main_queue()) {
+                    encodingCompletion?(.Failure(error as NSError))
+                }
+            }
+        }
+    }
+}
+</code></pre>
+
+<p>这个方法在Upload.swift文件中，我们一点一点来看这个方法，首先看作者的注释，大概意思：</p>
+
+<p>使用<code>MultipartFormData</code>方式进行上传时需要明白的最重要的一点就是内存的占用。如果上传的数据很小，那么直接将数据编码在内存中上传到服务器是最高效的方式。然而，如果上传的数据很大，将数据编码在内存中可能导致你的应用程序被终结。所以应该将这些大的要上传的数据使用输入或输出流写到硬盘上，这样会使内存占用比较低，然后将写入的文件转换成流进行上传。encodingMemoryThreshold允许Alamofire自动检测是将数据编码到内存还是写入硬盘。如果MultipartFormData的内容长度比encodingMemoryThreshold小，就会编码到内存中。如果大，就会在编码的过程中使用流写入硬盘。然后根据使用的编码方式来决定是使用Data还是Stream来进行上传。</p>
+
+<p>通过注释基本上也明白了参数的作用，encodingMemoryThreshold参数，默认值定义如下，大小应该是10M：</p>
+
+<pre><code>/// Default memory threshold used when encoding `MultipartFormData`.
+public static let MultipartFormDataEncodingMemoryThreshold: UInt64 = 10 * 1024 * 1024
+</code></pre>
+
+<p>encodingCompletion参数的类型类似于Result，只是没有泛型。MultipartFormData类型现在先不管，只需要知道它的作用就是对数据进行编码的就行了，我们先看这个方法。</p>
+
+<p>首先是GCD的异步操作，队列是全局并发队列中的DISPATCH_QUEUE_PRIORITY_DEFAULT，这里多线程没什么好讲的。首先创建了一个MultipartFormData实例，然后作为了multipartFormData闭包的参数，结合最开始我们提到的使用方式，这里的作用就是将数据添加到这个实例中，以便于我们之后再编码。然后设置了HTTP请求的首部字段<strong>Content-Type</strong>，值由前面创建的MultipartFormData实例提供，我们后面再讲解。然后根据NSURLSession实例的identifier属性来判断是否是后台回话，属性源码如下：</p>
+
+<pre><code>/* identifier for the background session configuration */
+public var identifier: String? { get }
+</code></pre>
+
+<p>然后根据要上传的数据的大小和encodingMemoryThreshold的比较，以及是否是后台回话进行条件判断，if else 二选一。进入if的条件就是要上传的数据比encodingMemoryThreshold小而且不是后台会话，然后我们直接调用MultipartFormData实例的encode()方法将数据编码到了内存中(因为数据比较小，跟encodingMemoryThreshold参数比较，所以直接编码到内存中，前面方法注释有提过)，然后创建一个MultipartFormDataEncodingResult实例encodingResult，在构造的方法中可以看出是使用Data的上传方式。然后返回主线程调用回调，传入前面创建的encodingResult当做参数。如果编码数据的时候直接产生错误就返回主线程调用回调，然后将错误传回去。</p>
+
+<p>然后是else分支，首先是构建目录、创建路径。首先在临时目录下创建一个&rdquo;com.alamofire.manager/multipart.form.data&rdquo;目录，然后使用这个目录和NSUUID().UUIDString生成的文件名生成了文件路径。然后在创建目录，将数据写入文件路径，这些都有错误处理。使用临时目录的好处就是iOS系统会自动清理临时目录。然后就是跟if里面类似的，创建MultipartFormDataEncodingResult实例encodingResult，构造方中可以看出是使用了File的上传方式，其它的都是一样的不再赘述。把是否是后台会话加入判断是因为基于后台会话的上传方式只支持基于文件的上传，基于Data和Stream的上传任务在程序退出时就会失败，这点在编程指南里面也有提及。关于后台传输(包括上传和下载)的一些信息，参考<a href="https://developer.apple.com/library/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW44"> Background Transfer Considerations </a>。</p>
+
+<h2 id="multipartformdata-swift">MultipartFormData.swift</h2>
+
+<p>MultipartFormData上传方式的主要核心就是这个文件里面的内容了，前面那个方法只是一些逻辑的处理。其实这个文件里面的内容也没什么难度，当然是代码上没什么难度，难的地方可能就是你不懂MultipartFormData的相关概念和定义，所以可能看起代码来不知道到底是在干什么。</p>
+
+<p>所以首先应该搞清楚MultipartFormData相关的概念、定义、知识等。这里就直接贴两个我之前研究学习的链接，就不详细讲解了。</p>
+
+<ul>
+<li><a href="http://blog.zhaojie.me/2011/03/html-form-file-uploading-programming.html"> 模拟HTML表单上传文件（RFC 1867） </a></li>
+<li><a href="http://blog.csdn.net/baple/article/details/45890405"> Android文件图片上传的详细讲解（一）HTTP multipart/form-data 上传报文格式实现手机端上传GOOD </a></li>
+</ul>
+
+<p>第二篇虽然是Android的，但是没关系，只需了解MultipartFormData的东西就可以了。</p>
+
+<p>理解了MultipartFormData相关的知识和概念后再看这个文件里面的代码就很简单了。</p>
+
+<p>之前有说过我山寨了Alamofire，但有些地方也做了些小修改。比如我写的MultipartFormData方式上传的方法支持参数，这里并不是Alamofire不支持，其实Alamofire是支持的，我这里做了些小修改只是在调用上更清晰而已。(经测试是可以使用的)</p>
+
+<p>源码如下：</p>
+
+<pre><code>public class func upload(
+    request: NSURLRequest,
+    parameters: [String: AnyObject]? = nil,
+    encodingMemoryThreshold: UInt64 = Manager.MultipartFormDataEncodingMemoryThreshold,
+    multipartFormData: MultipartFormData -&gt; Void)
+{
+    Manager.sharedInstance.upload(
+        request,
+        parameters: parameters,
+        encodingMemoryThreshold: encodingMemoryThreshold,
+        multipartFormData: multipartFormData
+    )
+}
+</code></pre>
+
+<p>然后在MultipartFormData.swift的基础上也做了些小修改，<a href="https://github.com/LynchWong/Speedy/blob/master/Speedy/Speedy/MultipartFormData.swift"> 源码链接 </a>。</p>
+
+<p>其实我们只需要将参数当做数据编码到HTTP请求Body中就可以了，<a href="http://blog.zhaojie.me/2011/03/html-form-file-uploading-programming.html"> 模拟HTML表单上传文件（RFC 1867） </a>中的例子就是这种情况。</p>
+
+<p>假设我们上传的时候需要携带<code>userName</code>这个参数，那么使用Alamofire的代码如下：</p>
+
+<pre><code>    Alamofire.upload(
+        .POST,
+        &quot;&quot;,
+        multipartFormData: { multipartFormData in
+            multipartFormData.appendBodyPart(data: &quot;Nobodyknows+&quot;.dataUsingEncoding(NSUTF8StringEncoding)!, name: &quot;userName&quot;)
+            multipartFormData.appendBodyPart(fileURL: unicornImageURL, name: &quot;unicorn&quot;)
+            multipartFormData.appendBodyPart(fileURL: rainbowImageURL, name: &quot;rainbow&quot;)
+        }) { encodingResult in
+            switch encodingResult {
+                case .Success(let upload, _, _):
+                    upload.responseJSON { response in
+                        debugPrint(response)
+                    }
+                case .Failure(let encodingError):
+                    print(encodingError)
+            }
+    }
+</code></pre>
+
+<p>理论上这样是可以的，实际没有测试过。</p>
+
+<p>以上。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/alamofire/">Alamofire</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---download/" data-tooltip="Alamofire 源码学习 - Download">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---request/" data-tooltip="Alamofire 源码学习 - Request">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f03%2falamofire-%25E6%25BA%2590%25E7%25A0%2581%25E5%25AD%25A6%25E4%25B9%25A0---upload%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f03%2falamofire-%25E6%25BA%2590%25E7%25A0%2581%25E5%25AD%25A6%25E4%25B9%25A0---upload%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f03%2falamofire-%25E6%25BA%2590%25E7%25A0%2581%25E5%25AD%25A6%25E4%25B9%25A0---upload%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---download/" data-tooltip="Alamofire 源码学习 - Download">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---request/" data-tooltip="Alamofire 源码学习 - Request">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f03%2falamofire-%25E6%25BA%2590%25E7%25A0%2581%25E5%25AD%25A6%25E4%25B9%25A0---upload%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f03%2falamofire-%25E6%25BA%2590%25E7%25A0%2581%25E5%25AD%25A6%25E4%25B9%25A0---upload%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f03%2falamofire-%25E6%25BA%2590%25E7%25A0%2581%25E5%25AD%25A6%25E4%25B9%25A0---upload%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f03%2falamofire-%25E6%25BA%2590%25E7%25A0%2581%25E5%25AD%25A6%25E4%25B9%25A0---upload%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f03%2falamofire-%25E6%25BA%2590%25E7%25A0%2581%25E5%25AD%25A6%25E4%25B9%25A0---upload%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f03%2falamofire-%25E6%25BA%2590%25E7%25A0%2581%25E5%25AD%25A6%25E4%25B9%25A0---upload%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2016\/03\/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---upload\/';
+          
+            this.page.identifier = '\/2016\/03\/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---upload\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

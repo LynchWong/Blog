@@ -1,0 +1,1165 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Swift之高级运算符</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="除了在之前介绍过的基本运算符,Swift 中还有许多可以对数值进行复杂操作的高级运算符。这些高级运算符包含 了在 C 和 Objective-C 中已经被大家所熟知的位运算符和移位运算符。
+">
+    <meta property="og:description" content="除了在之前介绍过的基本运算符,Swift 中还有许多可以对数值进行复杂操作的高级运算符。这些高级运算符包含 了在 C 和 Objective-C 中已经被大家所熟知的位运算符和移位运算符。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Swift之高级运算符">
+    <meta property="og:url" content="/2015/03/swift%E4%B9%8B%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97%E7%AC%A6/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="除了在之前介绍过的基本运算符,Swift 中还有许多可以对数值进行复杂操作的高级运算符。这些高级运算符包含 了在 C 和 Objective-C 中已经被大家所熟知的位运算符和移位运算符。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Swift之高级运算符
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-03-07T23:24:32Z">
+    
+  
+  
+  
+  
+    2015-03-07 23:24:32
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>除了在之前介绍过的基本运算符,Swift 中还有许多可以对数值进行复杂操作的高级运算符。这些高级运算符包含 了在 C 和 Objective-C 中已经被大家所熟知的位运算符和移位运算符。
+</p>
+
+<p>与C语言中的算术运算符不同,Swift 中的算术运算符默认是不会溢出的。所有溢出行为都会被捕获并报告为错 误。如果想让系统允许溢出行为,可以选择使用 Swift 中另一套默认支持溢出的运算符,比如溢出加法运算 符( &amp;+ )。所有的这些溢出运算符都是以 &amp; 开头的。</p>
+
+<p>在定义自有的结构体、类和枚举时,最好也同时为它们提供标准Swift运算符的实现。Swift简化了运算符的自定 义实现,也使判断不同类型所对应的行为更为简单。</p>
+
+<p>我们不用被预定义的运算符所限制。在 Swift 当中可以自由地定义中缀、前缀、后缀和赋值运算符,以及相应的 优先级与结合性。这些运算符在代码中可以像预设的运算符一样使用,我们甚至可以扩展已有的类型以支持自定 义的运算符。</p>
+
+<h2 id="位运算符">位运算符</h2>
+
+<p>位运算符( Bitwise operators )可以操作一个数据结构中每个独立的位。它们通常被用在底层开发中,比如图形编 程和创建设备驱动。位运算符在处理外部资源的原始数据时也十分有用,比如对自定义通信协议传输的数据进行 编码和解码。</p>
+
+<p>Swift 支持C语言中的全部位运算符,具体如下:</p>
+
+<p>按位取反运算符</p>
+
+<p>按位取反运算符( ~ ) 可以对一个数值的全部位进行取反:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/1.png" alt="alt text" /></p>
+
+<p>按位取反操作符是一个前置运算符,需要直接放在操作数的之前,并且它们之间不能添加任何空格。</p>
+
+<pre><code>let initialBits: UInt8 = 0b00001111
+let invertedBits = ~initialBits  // equals 11110000
+</code></pre>
+
+<p>UInt8 类型的整数有 8 个比特位,可以存储 0 ~ 255之间的任意整数。这个例子初始化了一个 UInt8 类型的整 数,并赋值为二进制的 00001111 ,它的前 4 位都为 0 ,后 4 位都为 1 。这个值等价于十进制的 15 。</p>
+
+<p>接着使用按位取反运算符创建了一个名为 invertedBits 的常量,这个常量的值与全部位取反后的 initialBits 相 等。即所有的 0 都变成了 1 ,同时所有的 1 都变成 0 。 invertedBits 的二进制值为 11110000 ,等价于无 符号十进制数的 240 。</p>
+
+<h3 id="按位与运算符">按位与运算符</h3>
+
+<p>按位与运算符( &amp; )可以对两个数的比特位进行合并。它返回一个新的数,只有当两个操作数的对应位都为 1 的 时候,该数的对应位才为 1 。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/2.png" alt="alt text" /></p>
+
+<p>在下面的示例当中, firstSixBits 和 lastSixBits 中间 4 个位的值都为 1 。按位与运算符对它们进行了运算,得 到二进制数值 00111100 ,等价于无符号十进制数的 60 :</p>
+
+<pre><code>let firstSixBits: UInt8 = 0b11111100
+let lastSixBits: UInt8  = 0b00111111
+let middleFourBits = firstSixBits &amp; lastSixBits  // equals 00111100
+</code></pre>
+
+<h3 id="按位或运算">按位或运算</h3>
+
+<p>按位或运算符( | )可以对两个数的比特位进行比较。它返回一个新的数,只要两个操作数的对应位中有任意一个为 1 时,该数的对应位就为 1 。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/3.png" alt="alt text" /></p>
+
+<p>在下面的示例当中, someBits 和 moreBits 将不同的位设置为 1 。接位或运算符对它们进行了运算,得到二 进制数值 11111110 ,等价于无符号十进制数的 254 :</p>
+
+<pre><code>let someBits: UInt8 = 0b10110010
+let moreBits: UInt8 = 0b01011110
+let combinedbits = someBits | moreBits  // equals 11111110
+</code></pre>
+
+<h3 id="按位异或运算符">按位异或运算符</h3>
+
+<p>按位异或运算符( ^ )可以对两个数的比特位进行比较。它返回一个新的数,当两个操作数的对应位不相同时,该 数的对应位就为 1 :</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/4.png" alt="alt text" /></p>
+
+<p>在下面的示例当中, firstBits 和 otherBits 都有一个自己设置为 1 而对方设置为 0 的位。 按位异或运算符 将这两个位都设置为 1 ,同时将其它位都设置为 0 :</p>
+
+<pre><code>let firstBits: UInt8 = 0b00010100
+let otherBits: UInt8 = 0b00000101
+let outputBits = firstBits ^ otherBits  // equals 00010001
+</code></pre>
+
+<h3 id="按位左移-右移运算符">按位左移/右移运算符</h3>
+
+<p>按位左移运算符( &lt;&lt; )和按位右移运算符( &gt;&gt; )可以对一个数进行指定位数的左移和右移,但是需要遵守下面定义 的规则。</p>
+
+<p>对一个数进行按位左移或按位右移,相当于对这个数进行乘以 2 或除以 2 的运算。将一个整数左移一位,等价于 将这个数乘以 2,同样地,将一个整数右移一位,等价于将这个数除以 2。</p>
+
+<h3 id="无符整型的移位操作">无符整型的移位操作</h3>
+
+<p>对无符号整型进行移位的规则如下:</p>
+
+<ol>
+<li>已经存在的比特位按指定的位数进行左移和右移。</li>
+<li>任何移动超出整型存储边界的位都会被丢弃。</li>
+<li>用 0 来填充移动后产生的空白位。</li>
+</ol>
+
+<p>这种方法称为逻辑移位( logical shift )。</p>
+
+<p>以下这张图展示了 11111111 &lt;&lt; 1 (即把 11111111 向左移动 1 位),和 11111111 &gt;&gt; 1 (即把 11111111 向右移动 1 位) 的结果。蓝色的部分是被移位的,灰色的部分是被抛弃的,橙色的部分则是被填充进来的。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/5.png" alt="alt text" /></p>
+
+<p>下面的代码演示了 Swift 中的移位操作:</p>
+
+<pre><code>let shiftBits: UInt8 = 4   // 00000100 in binary
+shiftBits &lt;&lt; 1             // 00001000
+shiftBits &lt;&lt; 2             // 00010000
+shiftBits &lt;&lt; 5             // 10000000
+shiftBits &lt;&lt; 6             // 00000000
+shiftBits &gt;&gt; 2             // 00000001
+</code></pre>
+
+<p>可以使用移位操作对其他的数据类型进行编码和解码:</p>
+
+<pre><code>let pink: UInt32 = 0xCC6699
+let redComponent = (pink &amp; 0xFF0000) &gt;&gt; 16    // redComponent is 0xCC, or 204
+let greenComponent = (pink &amp; 0x00FF00) &gt;&gt; 8   // greenComponent is 0x66, or 102
+let blueComponent = pink &amp; 0x0000FF           // blueComponent is 0x99, or 153
+</code></pre>
+
+<p>这个示例使用了一个命名为 pink 的 UInt32 型常量来存储层叠样式表( CSS )中粉色的颜色值。该 CSS 的十 六进制颜色值 #CC6699 , 在 Swift 中表示为 0xCC6699 。然后利用按位与运算符( &amp; )和按位右移运算
+符( &gt;&gt; )从这个颜色值中分解出红( CC )、绿( 66 )以及蓝( 99 )三个部分。</p>
+
+<p>红色部分是通过对 0xCC6699 和 0xFF0000 进行按位与运算后得到的。 0xFF0000 中的 0 部分作为掩 码,掩盖了 OxCC6699 中的第二和第三个字节,使得数值中的 6699 被忽略,只留下 0xCC0000 。</p>
+
+<p>然后,再将这个数按向右移动 16 位( &gt;&gt; 16 )。十六进制中每两个字符表示 8 个比特位,所以移动 16 位后 0xC C0000 就变为 0x0000CC 。这个数和 0xCC 是等同的,也就是十进制数值的 204 。</p>
+
+<p>同样的,绿色部分通过对 0xCC6699 和 0x00FF00 进行按位与运算得到 0x006600 。然后将这个数向右移 动 8 位,得到 0x66 ,也就是十进制数值的 102 。</p>
+
+<p>最后,蓝色部分通过对 0xCC6699 和 0x0000FF 进行按位与运算得到 0x000099 。并且不需要进行向右移 位,所以结果为 0x99 ,也就是十进制数值的 153 。</p>
+
+<h3 id="有符整型的移位操作">有符整型的移位操作</h3>
+
+<p>对比无符号整型来说,有符整型的移位操作相对复杂得多,这种复杂性源于有符号整数的二进制表现形式。(为了 简单起见,以下的示例都是基于 8 位有符号整数的,但是其中的原理对任何位数的有符号整数都是通用的。)</p>
+
+<p>有符号整数使用第 1 个比特位(通常被称为符号位)来表示这个数的正负。符号位为 0 代表正数,为 1 代表负 数。</p>
+
+<p>其余的比特位(通常被称为数值位)存储了这个数的真实值。有符号正整数和无符号数的存储方式是一样的,都是从 0 开始算起。这是值为 4 的 Int8 型整数的二进制位表现形式:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/6.png" alt="alt text" /></p>
+
+<p>符号位为 0 ,说明这是一个正数,另外 7 位则代表了十进制数值 4 的二进制表示。</p>
+
+<p>负数的存储方式略有不同。它存储的是 2 的 n 次方减去它的真实值绝对值,这里的 n 为数值位的位数。一个 8 位的数有 7 个数值位,所以是 2 的 7 次方,即 128。</p>
+
+<p>这是值为 -4 的 Int8 型整数的二进制位表现形式:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/7.png" alt="alt text" /></p>
+
+<p>这次的符号位为 1 ,说明这是一个负数,另外 7 个位则代表了数值 124 (即 128 - 4 ) 的二进制表示。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/8.png" alt="alt text" /></p>
+
+<p>负数的表示通常被称为二进制补码( two&rsquo;s complement )表示法。用这种方法来表示负数乍看起来有点奇怪,但 它有几个优点。</p>
+
+<p>首先,如果想对 -1 和 -4 进行加法操作,我们只需要将这两个数的全部 8 个比特位进行相加,并且将计算结 果中超出 8 位的数值丢弃:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/9.png" alt="alt text" /></p>
+
+<p>其次,使用二进制补码可以使负数的按位左移和右移操作得到跟正数同样的效果,即每向左移一位就将自身的数 值乘以 2,每向右一位就将自身的数值除以 2。要达到此目的,对有符号整数的右移有一个额外的规则:</p>
+
+<p>当对正整数进行按位右移操作时,遵循与无符号整数相同的规则,但是对于移位产生的空白位使用符号位进 行填充,而不是用 0。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/10.png" alt="alt text" /></p>
+
+<p>这个行为可以确保有符号整数的符号位不会因为右移操作而改变,这通常被称为算术移位( arithmetic shift )。</p>
+
+<p>由于正数和负数的特殊存储方式,在对它们进行右移的时候,会使它们越来越接近 0。在移位的过程中保持符号 位不变,意味着负整数在接近 0 的过程中会一直保持为负。</p>
+
+<h2 id="溢出运算符">溢出运算符</h2>
+
+<p>在默认情况下,当向一个整数赋超过它容量的值时,Swift 默认会报错,而不是生成一个无效的数。这个行为给我 们操作过大或着过小的数的时候提供了额外的安全性。</p>
+
+<p>例如, Int16 型整数能容纳的有符号整数范围是 -32768 到 32767 ,当为一个 Int16 型变量赋的值超过这个 范围时,系统就会报错:</p>
+
+<pre><code>var potentialOverflow = Int16.max
+// potentialOverflow equals 32767, which is the largest value an Int16 can hold
+potentialOverflow += 1
+// this causes an error
+</code></pre>
+
+<p>为过大或者过小的数值提供错误处理,能让我们在处理边界值时更加灵活。</p>
+
+<p>当然,你有意在溢出时对有效位进行截断,你可采用溢出运算,而非错误处理。Swfit 为整型计算提供了 5 个&amp;符号开头的溢出运算符。</p>
+
+<p>溢出加法 &amp;+
+溢出减法 &amp;-
+溢出乘法 &amp;*</p>
+
+<h3 id="数值溢出">数值溢出</h3>
+
+<p>数值有可能出现上溢或者下溢。</p>
+
+<p>这个示例演示了当我们对一个无符号整数使用溢出加法( &amp;+ )进行上溢运算时会发生什么:</p>
+
+<pre><code>var unsignedOverflow = UInt8.max
+// unsignedOverflow equals 255, which is the largest value a UInt8 can hold
+unsignedOverflow = unsignedOverflow &amp;+ 1
+// unsignedOverflow is now equal to 0
+</code></pre>
+
+<p>unsignedOverflow 被初始化为 UInt8 所能容纳的最大整数( 255 ,以二进制表示即 11111111 )。然后使用了 溢出加法运算符( &amp;+ )对其进行加 1 操作。这使得它的二进制表示正好超出 UInt8 所能容纳的位数,也就导致了 数值的溢出,如下图所示。数值溢出后,留在 UInt8 边界内的值是 00000000 ,也就是十进制数值的 0。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/11.png" alt="alt text" /></p>
+
+<p>同样地,当我们对一个无符号整数使用溢出减法( &amp;- )进行下溢运算时也会产生类似的现象:</p>
+
+<pre><code>var unsignedOverflow = UInt8.min
+// unsignedOverflow equals 0, which is the smallest value a UInt8 can hold
+unsignedOverflow = unsignedOverflow &amp;- 1
+// unsignedOverflow is now equal to 255
+</code></pre>
+
+<p>UInt8 的最小值是 0(二进制为 00000000)。使用&amp;-进行溢出减 1,就会得到二进制的 11111111 即十进制的 255。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/12.png" alt="alt text" /></p>
+
+<p>溢出也会发生在有符号整型数值上。在对有符号整型数值进行溢出加法或溢出减法运算时,符号位也需要参与计
+算,正如按位左移/右移运算符所描述的。</p>
+
+<pre><code>var signedUnderflow = Int8.min
+// signedUnderflow equals -128, which is the smallest value an Int8 can hold
+signedUnderflow = signedUnderflow &amp;- 1
+// signedUnderflow is now equal to 127
+</code></pre>
+
+<p>Int8 型整数能容纳的最小值是 -128,以二进制表示即 10000000。当使用溢出减法操作符对其进行减 1 操作 时,符号位被翻转,得到二进制数值 01111111,也就是十进制数值的 127,这个值也是 Int8 型整数所能容纳的最大值。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/13.png" alt="alt text" /></p>
+
+<p>对于无符号与有符号整型数值来说,当出现上溢时,它们会从数值所能容纳的最大数变成最小的数。同样地,当
+发生下溢时,它们会从所能容纳的最小数变成最大的数。</p>
+
+<h2 id="优先级和结合性">优先级和结合性</h2>
+
+<p>运算符的优先级( precedence )使得一些运算符优先于其他运算符,高优先级的运算符会先被计算。</p>
+
+<p>结合性( associativity )定义了相同优先级的运算符是如何结合(或关联)的 —— 是与左边结合为一组,还是与右 边结合为一组。可以将这意思理解为“它们是与左边的表达式结合的”或者“它们是与右边的表达式结合的”。</p>
+
+<p>在复合表达式的运算顺序中,运算符的优先级和结合性是非常重要的。举例来说,为什么下面这个表达式的运算 结果是 4 ?</p>
+
+<pre><code>2 + 3 * 4 % 5
+// this equals 4
+</code></pre>
+
+<p>如果严格地从左到右进行运算,则运算的过程是这样的:</p>
+
+<ol>
+<li>2 plus 3 equals 5</li>
+<li>5 times 4 equals 20</li>
+<li>20 remainder 5 equals 0</li>
+</ol>
+
+<p>但是正确答案是 4 而不是 0 。优先级高的运算符要先于优先级低的运算符进行计算。与C语言类似,在 Swift 当中,乘法运算符( * )与取余运算符( % )的优先级高于加法运算符( + )。因此,它们的计算顺序要先于加法运 算。</p>
+
+<p>而乘法与取余的优先级相同。这时为了得到正确的运算顺序,还需要考虑结合性。乘法与取余运算都是左结合
+的。可以将这考虑成为这两部分表达式都隐式地加上了括号:</p>
+
+<p>2 + ((3 * 4) % 5)
+(3 * 4) = 12 ,所以表达式相当于:
+2 + (12 % 5)
+12 % 5 = 2 ,所以表达式相当于:
+2 +2</p>
+
+<p>此时可以容易地看出计算的结果为 4 。</p>
+
+<p>如果想查看完整的 Swift 运算符优先级和结合性规则,请参考表达式。</p>
+
+<p>注意:对于C语言和 Objective-C 来说,Swift 的运算符优先级和结合性规则是更加简洁和可预测的。但是,这也意味着它们于那些基于C的语言不是完全一致的。在对现有的代码进行移植的时候,要注意确保运算符的行为仍然 是按照你所想的那样去执行。</p>
+
+<h2 id="运算符函数">运算符函数</h2>
+
+<p>类和结构可以为现有的操作符提供自定义的实现,这通常被称为运算符重载( overloading )。</p>
+
+<p>下面的例子展示了如何为自定义的结构实现加法操作符( + )。算术加法运算符是一个两目运算符( binary operator ),因为它可以对两个目标进行操作,同时它还是中缀( infix )运算符,因为它出现在两个目标中间。</p>
+
+<p>例子中定义了一个名为 Vector2D 的结构体用来表示二维坐标向量 (x, y) ,紧接着定义了一个可以对两个 or2D 结构体进行相加的运算符函数( operator function ):</p>
+
+<pre><code>struct Vector2D {
+    var x = 0.0, y = 0.0
+}
+
+func + (left: Vector2D, right: Vector2D) -&gt; Vector2D {
+    return Vector2D(x: left.x + right.x, y: left.y + right.y)
+}
+</code></pre>
+
+<p>该运算符函数被定义为一个全局函数,并且函数的名字与它要进行重载的 + 名字一致。因为算术加法运算符是 双目运算符,所以这个运算符函数接收两个类型为 Vector2D 的输入参数,同时有一个 Vector2D 类型的返回 值。</p>
+
+<p>在这个实现中,输入参数分别被命名为 left 和 right ,代表在 + 运算符左边和右边的两个 Vector2D 对 象。函数返回了一个新的 Vector2D 的对象,这个对象的 x 和 y 分别等于两个参数对象的 x 和 y 的值之 和。</p>
+
+<p>这个函数被定义成全局的,而不是 Vector2D 结构的成员方法,所以任意两个 Vector2D 对象都可以使用这个 中缀运算符:</p>
+
+<pre><code>let vector = Vector2D(x: 3.0, y: 1.0)
+let anotherVector = Vector2D(x: 2.0, y: 4.0)
+let combinedVector = vector + anotherVector
+// combinedVector is a Vector2D instance with values of (5.0, 5.0)
+</code></pre>
+
+<p>这个例子实现两个向量 (3.0,1.0) 和 (2.0,4.0) 相加,得到向量 (5.0,5.0) 的过程。如 下图示:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSAdvancedOperators/14.png" alt="alt text" /></p>
+
+<h3 id="前缀和后缀运算符">前缀和后缀运算符</h3>
+
+<p>上个例子演示了一个双目中缀运算符的自定义实现。类与结构体也能提供标准单目运算符( unary operators )的 实现。单目运算符只有一个操作目标。当运算符出现在操作目标之前时,它就是前缀( prefix )的(比如 -a ),而 当它出现在操作目标之后时,它就是后缀( postfix )的(比如 i++ )。</p>
+
+<p>要实现前缀或者后缀运算符,需要在声明运算符函数的时候在 func 关键字之前指定 prefix 或者 postfix 限定 符:</p>
+
+<pre><code>prefix func - (vector: Vector2D) -&gt; Vector2D {
+    return Vector2D(x: -vector.x, y: -vector.y)
+}
+</code></pre>
+
+<p>这段代码为 Vector2D 类型实现了单目减运算符( -a )。由于单目减运算符是前缀运算符,所以这个函数需要加 上 prefix 限定符。</p>
+
+<p>对于简单数值,单目减运算符可以对它们的正负性进行改变。对于 Vector2D 来说,单目减运算将其 x 和 y 属性的正负性都进行了改变。</p>
+
+<pre><code>let positive = Vector2D(x: 3.0, y: 4.0)
+let negative = -positive
+// negative is a Vector2D instance with values of (-3.0, -4.0)
+let alsoPositive = -negative
+// alsoPositive is a Vector2D instance with values of (3.0, 4.0)
+</code></pre>
+
+<h3 id="复合赋值运算符">复合赋值运算符</h3>
+
+<p>复合赋值运算符( Compound assignment operators )将赋值运算符( = )与其它运算符进行结合。比如,将加法 与赋值结合成加法赋值运算符( += )。在实现的时候,需要把运算符的左参数设置成 inout 类型,因为这个参数 的值会在运算符函数内直接被修改。</p>
+
+<pre><code>func += (inout left: Vector2D, right: Vector2D) {
+    left = left + right
+}
+</code></pre>
+
+<p>因为加法运算在之前已经定义过了,所以在这里无需重新定义。在这里可以直接利用现有的加法运算符函数,用
+它来对左值和右值进行相加,并再次赋值给左值:</p>
+
+<pre><code>var original = Vector2D(x: 1.0, y: 2.0)
+let vectorToAdd = Vector2D(x: 3.0, y: 4.0)
+original += vectorToAdd
+// original now has values of (4.0, 6.0)
+</code></pre>
+
+<p>还可以将赋值与 prefix 或 postfix 限定符结合起来,下面的代码为 Vector2D 实例实现了前缀自增运算符( ++a ):</p>
+
+<pre><code>prefix func ++ (inout vector: Vector2D) -&gt; Vector2D {
+    vector += Vector2D(x: 1.0, y: 1.0)
+    return vector
+}
+</code></pre>
+
+<p>这个前缀自增运算符使用了前面定义的加法赋值操作。它对 Vector2D 的 x 和 y 属性都进行了加 1 操 作,再将结果返回:</p>
+
+<pre><code>var toIncrement = Vector2D(x: 3.0, y: 4.0)
+let afterIncrement = ++toIncrement
+// toIncrement now has values of (4.0, 5.0)
+// afterIncrement also has values of (4.0, 5.0)
+</code></pre>
+
+<p>注意:不能对默认的赋值运算符( = )进行重载。只有组合赋值符可以被重载。同样地,也无法对三目条件运算 符 a ? b : c 进行重载。</p>
+
+<h3 id="等价操作符">等价操作符</h3>
+
+<p>自定义的类和结构体没有对等价操作符( equivalence operators )进行默认实现,等价操作符通常被称为“相 等”操作符( == )与“不等”操作符( != )。对于自定义类型,Swift 无法判断其是否“相等”,因为“相等”的 含义取决于这些自定义类型在你的代码中所扮演的角色。</p>
+
+<p>为了使用等价操作符来对自定义的类型进行判等操作,需要为其提供自定义实现,实现的方法与其它中缀运算符
+一样:</p>
+
+<pre><code>func == (left: Vector2D, right: Vector2D) -&gt; Bool {
+    return (left.x == right.x) &amp;&amp; (left.y == right.y)
+}
+func != (left: Vector2D, right: Vector2D) -&gt; Bool {
+    return !(left == right)
+}
+</code></pre>
+
+<p>上述代码实现了“相等”运算符( == )来判断两个 Vector2D 对象是否有相等。对于 Vector2D 类型来 说,“相等”意味“两个实例的 x 属性 和 y 属性都相等”,这也是代码中用来进行判等的逻辑。示例里同时也 实现了“不等”操作符( != ),它简单地将“相等”操作符进行取反后返回。</p>
+
+<p>现在我们可以使用这两个运算符来判断两个 Vector2D 对象是否相等。</p>
+
+<pre><code>let twoThree = Vector2D(x: 2.0, y: 3.0)
+let anotherTwoThree = Vector2D(x: 2.0, y: 3.0)
+if twoThree == anotherTwoThree {
+    println(&quot;These two vectors are equivalent.&quot;)
+}
+// prints &quot;These two vectors are equivalent.&quot;
+</code></pre>
+
+<h2 id="自定义运算符">自定义运算符</h2>
+
+<p>除了实现标准运算符,在 Swift 当中还可以声明和实现自定义运算符( custom operators )。可以用来自定义运算 符的字符列表请参考操作符 (页 0)</p>
+
+<p>新的运算符要在全局作用域内,使用 operator 关键字进行声明,同时还要指定 prefix 、 infix 或者 postfix 限定符:</p>
+
+<pre><code>prefix operator +++ {}
+</code></pre>
+
+<p>上面的代码定义了一个新的名为 +++ 的前缀运算符。对于这个运算符,在 Swift 中并没有意义,因为我们针对 Vector2D 的实例来定义它的意义。对这个示例来讲, +++ 被实现为“前缀双自增”运算符。它使用了前面定
+义的复合加法操作符来让矩阵对自身进行相加,从而让 Vector2D 实例的 x 属性和 y 属性的值翻倍:</p>
+
+<pre><code>prefix func +++ (inout vector: Vector2D) -&gt; Vector2D {
+    vector += vector
+    return vector
+}
+</code></pre>
+
+<p>Vector2D 的 +++ 的实现和 ++ 的实现很相似, 唯一不同的是前者对自身进行相加, 而后者是与另一个值为 (1.0, 1.0) 的向量相加.</p>
+
+<pre><code>var toBeDoubled = Vector2D(x: 1.0, y: 4.0)
+let afterDoubling = +++toBeDoubled
+// toBeDoubled now has values of (2.0, 8.0)
+// afterDoubling also has values of (2.0, 8.0)
+</code></pre>
+
+<h3 id="自定义中缀运算符的优先级和结合性">自定义中缀运算符的优先级和结合性</h3>
+
+<p>自定义的中缀( infix )运算符也可以指定优先级( precedence )和结合性( associativity )。优先级和结合性 (页0)中详细阐述了这两个特性是如何对中缀运算符的运算产生影响的。</p>
+
+<p>结合性( associativity )可取的值有 left , right 和 none 。当左结合运算符跟其他相同优先级的左结合运算符 写在一起时,会跟左边的操作数进行结合。同理,当右结合运算符跟其他相同优先级的右结合运算符写在一起 时,会跟右边的操作数进行结合。而非结合运算符不能跟其他相同优先级的运算符写在一起。</p>
+
+<p>结合性( associativity )的默认值是 none ,优先级( precedence )如果没有指定,则默认为 100 。</p>
+
+<p>以下例子定义了一个新的中缀运算符 +- ,此操作符是左结合的,并且它的优先级为 140 :</p>
+
+<pre><code>infix operator +- { associativity left precedence 140 }
+func +- (left: Vector2D, right: Vector2D) -&gt; Vector2D {
+    return Vector2D(x: left.x + right.x, y: left.y - right.y)
+}
+let firstVector = Vector2D(x: 1.0, y: 2.0)
+let secondVector = Vector2D(x: 3.0, y: 4.0)
+let plusMinusVector = firstVector +- secondVector
+// plusMinusVector is a Vector2D instance with values of (4.0, -2.0)
+</code></pre>
+
+<p>这个运算符把两个向量的 x 值相加,同时用第一个向量的 y 值减去第二个向量的 y 值。因为它本质上是属 于“加型”运算符,所以将它的结合性和优先级被设置为( left 和 140 ),这与 + 和 - 等默认的中缀加型操作 符是相同的。完整的 Swift 操作符默认结合性与优先级请参考表达式。</p>
+
+<p>注意: 当定义前缀与后缀操作符的时候,我们并没有指定优先级。然而,如果对同一个操作数同时使用前缀与 后缀操作符,则后缀操作符会先被执行。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/ios%E5%A4%9A%E7%BA%BF%E7%A8%8B/" data-tooltip="iOS多线程">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/" data-tooltip="Swift之访问控制">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E9%25AB%2598%25E7%25BA%25A7%25E8%25BF%2590%25E7%25AE%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E9%25AB%2598%25E7%25BA%25A7%25E8%25BF%2590%25E7%25AE%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E9%25AB%2598%25E7%25BA%25A7%25E8%25BF%2590%25E7%25AE%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/ios%E5%A4%9A%E7%BA%BF%E7%A8%8B/" data-tooltip="iOS多线程">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/" data-tooltip="Swift之访问控制">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E9%25AB%2598%25E7%25BA%25A7%25E8%25BF%2590%25E7%25AE%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E9%25AB%2598%25E7%25BA%25A7%25E8%25BF%2590%25E7%25AE%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E9%25AB%2598%25E7%25BA%25A7%25E8%25BF%2590%25E7%25AE%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E9%25AB%2598%25E7%25BA%25A7%25E8%25BF%2590%25E7%25AE%2597%25E7%25AC%25A6%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E9%25AB%2598%25E7%25BA%25A7%25E8%25BF%2590%25E7%25AE%2597%25E7%25AC%25A6%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E9%25AB%2598%25E7%25BA%25A7%25E8%25BF%2590%25E7%25AE%2597%25E7%25AC%25A6%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/03\/swift%E4%B9%8B%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97%E7%AC%A6\/';
+          
+            this.page.identifier = '\/2015\/03\/swift%E4%B9%8B%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97%E7%AC%A6\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

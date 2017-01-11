@@ -1,0 +1,857 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>音频 on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/%E9%9F%B3%E9%A2%91/index.xml</link>
+    <description>Recent content in 音频 on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/%E9%9F%B3%E9%A2%91/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>iOS视频播放</title>
+      <link>http://lynchwong.com/blog/2015/10/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/</link>
+      <pubDate>Wed, 14 Oct 2015 18:18:18 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/10/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/</guid>
+      <description>&lt;p&gt;离上一篇博客发布又是两周时间过去了，心里总是感觉空空的。两周没有发布一篇博客，感觉就像是虚度了。另外一个原因就是实在是不知道写点什么，有些内容兴趣不大就搁置了。其次就是之前的天坑真是没有动力去填了，比如CoreData，就放在那吧。上篇博客也提到了这篇做视频播放器，所以这篇就是讲讲视频播放器的。
+&lt;/p&gt;
+
+&lt;p&gt;上篇博客也提到了一些资源：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/kenshincui/p/4186022.html&#34;&gt;iOS开发系列&amp;ndash;音频播放、录音、视频播放、拍照、视频录制&lt;/a&gt;
+&lt;a href=&#34;http://msching.github.io/blog/2014/07/07/audio-in-ios/&#34;&gt;iOS音频播放 (一)：概述&lt;/a&gt;
+&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html&#34;&gt;AVFoundation Programming Guide&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;第一个资源基本所有的东西都讲到了，音频、视频等。简单易懂，入门级学习都够了，也能满足基本的需求。
+第二个资源主要讲解音频的，很专业。
+第三个资源是苹果官方的编程指南，具有很好的指导意义，建议大家阅读。&lt;/p&gt;
+
+&lt;p&gt;其实基本知识点前面的这些资源都讲到了，我这里再讲也就没什么意思了。&lt;/p&gt;
+
+&lt;p&gt;所以我们这里就做一个完整功能的播放器，播放，暂停，快进，全屏等功能。&lt;/p&gt;
+
+&lt;p&gt;接下来我们就开始吧，先说下我的开发环境。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;OS X EI Capitan(Version 10.11)&lt;/li&gt;
+&lt;li&gt;Xcode(Version 7.0.1)&lt;/li&gt;
+&lt;li&gt;使用Swift作为开发语言&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;建立项目&#34;&gt;建立项目&lt;/h1&gt;
+
+&lt;p&gt;如下图所示，我们选择*Single View Application*，项目名称叫做*LWPlayer*，语言选择*Swift*。
+&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后我们将项目的*Deployment Target*修改为8.0。然后我们删除*Main.storyboard*文件，同时*Main Interface*里面的Main也去掉。因为我们删除了storyboard文件，如果不删除Main的话程序无法启动直接崩溃。&lt;/p&gt;
+
+&lt;p&gt;现在项目的界面应该如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里我们删除了storyboard文件，我的打算是用代码手写界面，不使用storyboard和xib文件。大家可能都知道用代码写布局很繁琐，所以这里使用第三方的框架*SnapKit*。这个第三方框架其实就是OC版本的*Masonry*，这里就不细讲布局的事情了，参考资料&lt;a href=&#34;https://github.com/SnapKit/Masonry&#34;&gt; SnapKit &lt;/a&gt;和&lt;a href=&#34;https://github.com/SnapKit/Masonry&#34;&gt; Masonry &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;现在项目编译运行之后就是一片漆黑，之后我们要自己做一些初始化的工作。首先我们先添加第三方库，及*SnapKit*。我们使用依赖管理器来添加第三方库。可以使用*CocoaPods*，当然你也可以使用*Carthage*，如果是Swift以及iOS8.0以上推荐使用*Carthage*来管理。这里我们使用*Carthage*，&lt;a href=&#34;https://github.com/Carthage/Carthage#adding-frameworks-to-an-application&#34;&gt; Carthage &lt;/a&gt;，安装很简单，请自行了解。&lt;/p&gt;
+
+&lt;p&gt;*Carthage*的参考资料：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/Carthage/Carthage#adding-frameworks-to-an-application&#34;&gt;Carthage&lt;/a&gt;
+&lt;a href=&#34;http://www.cocoachina.com/ios/20141204/10528.html&#34;&gt;Carthage：去中心化的Cocoa依赖管理器&lt;/a&gt;
+&lt;a href=&#34;http://www.isaced.com/post-265.html&#34;&gt;Cocoa 新的依赖管理工具：Carthage&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;第一篇是官方的，第二篇相当于是官方的翻译，大家自行参考学习。&lt;/p&gt;
+
+&lt;p&gt;我们进入到项目目录执行如下命令，截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;进入到项目目录后我们创建了*Cartfile*文件，然后在里面添加需要的第三方库。如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后*:wq*保存退出，然后执行*carthage update*命令进行安装编译。&lt;/p&gt;
+
+&lt;p&gt;这里就算是安装编译完成了，我们可以进到工程目录里面看下编程生成的二进制framework文件。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;不仅有iOS的，还有Mac的。现在我们还差最后一步，就是将framework添加到我们的工程。设置*Framework Search Paths&lt;em&gt;是最简单的方法，告诉工程到那里去找这些framework。设置为&lt;/em&gt;$(SRCROOT)/Carthage/Build/iOS*，如果是OS X就把iOS改成Mac。如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这一步和官方说明的不一样，按照官方的方法，每次添加了新的framework都要自己到Xcode里面进行手动添加。&lt;/p&gt;
+
+&lt;p&gt;第三方库算是添加完成了，现在我们要修改*AppDelegate*文件。修改*func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&amp;gt; Bool*方法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&amp;gt; Bool {
+    // Override point for customization after application launch.
+
+    //appearance
+    UINavigationBar.appearance().barTintColor = UIColor(red: 56.0/255.0, green: 62.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+
+    //rootViewController
+    let rootVC = ViewController()
+
+    window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    window!.rootViewController = rootVC
+    window?.makeKeyAndVisible()
+
+    return true
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里代码很简单，就不讲解了。运行启动后屏幕仍然是黑的，我们继续做些修改。将*ViewController*的代码修改为如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import UIKit
+import SnapKit
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        view.backgroundColor = UIColor.whiteColor()
+
+        let aView = UIView()
+        aView.backgroundColor = UIColor.orangeColor()
+        view.addSubview(aView)
+
+        aView.snp_makeConstraints { (make) -&amp;gt; Void in
+            make.edges.equalTo(view).offset(UIEdgeInsets(top: 10, left: 10, bottom: -10, right: -10))
+        }
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们首先导入*SnapKit*模块，然后修改视图的背景色为白色，然后添加了一个距离父视图编剧为10的橙色子视图。布局的代码，*SnapKit*的使用方法就不讲解了。&lt;/p&gt;
+
+&lt;p&gt;编译运行后会发现如下错误，&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里是因为之前修改*Framework Search Paths*导致的，其实前面的这一步貌似并没有效果。所以我们还是得按照官方的来，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们在*Embedded Binaries*这里将*Carthage/Build/iOS/SnapKit.framework*添加进来，然后编译运行，截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;项目结构&#34;&gt;项目结构&lt;/h1&gt;
+
+&lt;p&gt;首先我们删除*ViewController*，新建*LWPlayerViewController*，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import UIKit
+import SnapKit
+
+class LWPlayerViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+        let aView = UIView();
+        aView.backgroundColor = UIColor.orangeColor();
+        view.addSubview(aView)
+
+        aView.snp_makeConstraints { (make) -&amp;gt; Void in
+            make.edges.equalTo(view)
+        }
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很简单就不讲解了，同时我们还需要修改*AppDelegate*的*func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&amp;gt; Bool*方法，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&amp;gt; Bool {
+    // Override point for customization after application launch.
+
+    //appearance
+    UINavigationBar.appearance().barTintColor = UIColor(red: 56.0/255.0, green: 62.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+
+    //rootViewController
+    let rootVC = LWPlayerViewController()
+
+    window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    window!.rootViewController = rootVC
+    window?.makeKeyAndVisible()
+
+    return true
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行后截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;你可能发现我们设置了导航栏的外观，所以我们接下来就新建*LWNavigationController*继承自*UINavigationController*，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import UIKit
+
+class LWNavigationController: UINavigationController {
+
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
+    }
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(&amp;quot;init(coder:) has not been implemented&amp;quot;)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    // MARK: - StatusBar
+
+    override func preferredStatusBarStyle() -&amp;gt; UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里的代码也没什么好讲解的，主要就是一些初始化方法，有些是必需的，没有会报错。之后我们修改*AppDelegate*，首先添加：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var navigationVC: LWNavigationController!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;的属性，然后修改*func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&amp;gt; Bool*方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&amp;gt; Bool {
+    // Override point for customization after application launch.
+
+    //appearance
+    UINavigationBar.appearance().barTintColor = UIColor(red: 56.0/255.0, green: 62.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+
+    //rootViewController
+    let rootVC = LWPlayerViewController()
+    navigationVC = LWNavigationController(rootViewController: rootVC)
+
+    window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    window!.rootViewController = navigationVC
+    window?.makeKeyAndVisible()
+
+    return true
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行后模拟器截图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;视频资源&#34;&gt;视频资源&lt;/h1&gt;
+
+&lt;p&gt;说来惭愧，没有在网上找到可以用来进行远程播放的视频资源，所以我们要自己弄个。使用&lt;strong&gt;CocoaHTTPServer&lt;/strong&gt;第三方库，让App内嵌一个HTTP server。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/viki-org/VKVideoPlayer&#34;&gt;VKVideoPlayer&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;这里有一个开源的播放器，功能很完善，包括加载字幕、广告等等，大家可以参考学习下。&lt;/p&gt;
+
+&lt;p&gt;这里我们先来添加第三方库&lt;strong&gt;CocoaHTTPServer&lt;/strong&gt;，前面我们使用的是Carthage来管理依赖的，貌似 这个第三方库不行。但是CocoaPods可以，但是我们这里就不使用CocoaPods，估计这里是可以用的，这两个依赖管理应该不会冲突，这里我们就不测试了，直接使用最原始的方法：拖放文件。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/robbiehanson/CocoaHTTPServer&#34;&gt;CocoaHTTPServer&lt;/a&gt; ，这里是下载地址，下载完成后我们将&lt;strong&gt;Core&lt;/strong&gt;，&lt;strong&gt;Extensions&lt;/strong&gt;，&lt;strong&gt;Vendor&lt;/strong&gt;放到新建的文件夹&lt;strong&gt;CocoaHTTPServer&lt;/strong&gt;中，其他的东西我们不需要了。然后将这个文件夹拖放到工程中，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接下来我们添加&lt;strong&gt;libxml2.tbd&lt;/strong&gt;，不添加会报找不到文件的错。添加后如下图所示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;因为这个第三方库是OC，如果要混编的话我们需要添加桥接头文件，&lt;strong&gt;LWPlayer-Bridging-Header.h&lt;/strong&gt;。修改文件内容的代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#import &amp;quot;HTTPServer.h&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后我们还要配置下头文件，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后我们参考&lt;a href=&#34;https://github.com/viki-org/VKVideoPlayer&#34;&gt; VKVideoPlayer &lt;/a&gt;的&lt;strong&gt;HTTPStreamingServer&lt;/strong&gt;，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import UIKit
+
+let HTTPStreamingServerSingleton = HTTPStreamingServer()
+
+class HTTPStreamingServer: NSObject {
+
+    var httpServer: HTTPServer!
+
+    class var sharedInstance: HTTPStreamingServer {
+        get {
+            return HTTPStreamingServerSingleton
+        }
+    }
+
+    override init() {
+        super.init()
+        initialize()
+    }
+
+    func initialize() {
+        httpServer = HTTPServer()
+        httpServer.setType(&amp;quot;_http._tcp.&amp;quot;)
+        httpServer.setPort(12345)
+        let webPath = NSBundle.mainBundle().resourcePath?.stringByAppendingString(&amp;quot;/web&amp;quot;)
+        httpServer.setDocumentRoot(webPath)
+    }
+
+    func start() {
+        do {
+            try httpServer.start()
+            print(&amp;quot;Started HTTP Server on port \(httpServer.listeningPort())&amp;quot;)
+        } catch {
+            print(&amp;quot;Error starting HTTP Server&amp;quot;)
+        }
+    }
+
+    func stop() {
+        httpServer.stop()
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;定义了一个全局的常量，然后使用类计算型属性实现单列。其他的代码很简单，就不讲解了。&lt;/p&gt;
+
+&lt;p&gt;然后我们在&lt;strong&gt;func applicationDidBecomeActive(application: UIApplication)&lt;/strong&gt;方法中加入&lt;strong&gt;HTTPStreamingServer.sharedInstance.start()&lt;/strong&gt;及&lt;strong&gt;func applicationWillTerminate(application: UIApplication)&lt;/strong&gt;方法中添加&lt;strong&gt;HTTPStreamingServer.sharedInstance.stop()&lt;/strong&gt;，运行之后在控制台输出&lt;strong&gt;Started HTTP Server on port 12345&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;然后我们将一些视频资源拖到项目中，这里我们就用&lt;strong&gt;VKVideoPlayer&lt;/strong&gt;的资源，将&lt;strong&gt;web&lt;/strong&gt;这个文件夹拖到我们项目中，注意我截图中的箭头，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;播放器&#34;&gt;播放器&lt;/h1&gt;
+
+&lt;p&gt;新建一个类&lt;strong&gt;LWPlayerView&lt;/strong&gt;继承自&lt;strong&gt;UIView&lt;/strong&gt;，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import UIKit
+import AVFoundation
+
+class LWPlayerView: UIView {
+
+    var player: AVPlayer {
+        set {
+            (layer as! AVPlayerLayer).player = newValue
+        }
+        get {
+            return (layer as! AVPlayerLayer).player!
+        }
+    }
+
+    override class func layerClass() -&amp;gt; AnyClass {
+        return AVPlayerLayer.classForCoder()
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你看过苹果的编程指南或者苹果给的Demo，都是这样实现的，可以算是最佳实践吧。&lt;/p&gt;
+
+&lt;p&gt;接下来我们就来实现播放器，到&lt;strong&gt;LWPlayerViewController&lt;/strong&gt;。首先我们添加如下所示的属性：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let videoPath = &amp;quot;http://localhost:12345/wifi_640_index.m3u8&amp;quot;//视频播放地址
+let radio = CGFloat(375.0 / 238.0)//缩放比例
+let width = UIScreen.mainScreen().bounds.size.width//屏幕宽度
+
+let playContentView = UIView()//播放器容器视图
+let toolContentView = UIView()//播放器工具容器视图
+
+var player: AVPlayer!//播放器
+var playerView = LWPlayerView()//播放视图
+
+var hideTool = false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;后面都有注释，最后一个属性用来表示是否隐藏状态栏和工具栏。然后我们添加初始化播放器的方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func initPlayer() {
+    let url = NSURL(string: videoPath)!
+    let playerItem = AVPlayerItem(URL: url)
+    player = AVPlayer(playerItem: playerItem)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后是初始化视图的方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func initView() {
+
+    playContentView.backgroundColor = UIColor.blackColor()
+    view.addSubview(playContentView)
+    playContentView.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.top.left.right.equalTo(view)
+        make.width.equalTo(playContentView.snp_height).multipliedBy(radio)
+    }
+
+    playerView.player = player
+    playerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector(&amp;quot;sigleTapAction&amp;quot;)))
+    playContentView.addSubview(playerView)
+    playerView.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.edges.equalTo(playContentView)
+    }
+
+    toolContentView.backgroundColor = UIColor(red: 56.0/255.0, green: 62.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    playContentView.addSubview(toolContentView)
+    toolContentView.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.left.bottom.right.equalTo(playContentView)
+        make.height.equalTo(30.0)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后我们实现&lt;strong&gt;sigleTapAction()&lt;/strong&gt;方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func sigleTapAction() {
+    if hideTool {
+        hideTool = false
+        navigationController?.navigationBar.hidden = false
+        toolContentView.hidden = false
+    } else {
+        hideTool = true
+        navigationController?.navigationBar.hidden = true
+        toolContentView.hidden = true
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后修改&lt;strong&gt;func viewDidLoad()&lt;/strong&gt;方法，当点击的时候会隐藏状态栏和工具栏：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func viewDidLoad() {
+    super.viewDidLoad()
+    view.backgroundColor = UIColor.whiteColor()
+    initPlayer()
+    initView()
+    player.play()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行后截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/17.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;大家都知道HTTP请求在iOS9里面有变化，所以有的同学可能没有看到视频播放的画面；同样的&lt;strong&gt;VKVideoPlayer&lt;/strong&gt;你可能也看不到视频播放，都是相同的原因，大家搜索都能解决。设置下&lt;strong&gt;.plist&lt;/strong&gt;文件就可以了，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/18.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;注意这两个字段的类型，一个是字典类型，一个是布尔类型。&lt;/p&gt;
+
+&lt;h2 id=&#34;播放器界面&#34;&gt;播放器界面&lt;/h2&gt;
+
+&lt;p&gt;接下来我们就来完成播放器的界面，让它开起来更像一个播放器。首先我们添加如下所示的属性：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let playButton = UIButton()//播放按钮
+let muteButton = UIButton()//静音按钮
+let progress = UISlider()//播放进度
+let srtsButton = UIButton()//字幕按钮
+let fullButton = UIButton()//全屏按钮
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来我们就来布局这些按钮，修改&lt;strong&gt;initView()&lt;/strong&gt;方法，代码如下，直接替换即可：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func initView() {
+
+    playContentView.backgroundColor = UIColor.blackColor()
+    view.addSubview(playContentView)
+    playContentView.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.top.left.right.equalTo(view)
+        make.width.equalTo(playContentView.snp_height).multipliedBy(radio)
+    }
+
+    playerView.player = player
+    playerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector(&amp;quot;sigleTapAction&amp;quot;)))
+    playContentView.addSubview(playerView)
+    playerView.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.edges.equalTo(playContentView)
+    }
+
+    toolContentView.backgroundColor = UIColor(red: 56.0/255.0, green: 62.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    playContentView.addSubview(toolContentView)
+    toolContentView.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.left.bottom.right.equalTo(playContentView)
+        make.height.equalTo(30.0)
+    }
+
+    playButton.setImage(UIImage(named: &amp;quot;pause_icon_vertical&amp;quot;), forState: UIControlState.Normal)
+    playButton.setImage(UIImage(named: &amp;quot;play_icon_vertical&amp;quot;), forState: UIControlState.Selected)
+    muteButton.setImage(UIImage(named: &amp;quot;sound_on_vertical&amp;quot;), forState: UIControlState.Normal)
+    muteButton.setImage(UIImage(named: &amp;quot;sound_off_vertical&amp;quot;), forState: UIControlState.Selected)
+    srtsButton.setImage(UIImage(named: &amp;quot;chinese_english_shift_vertical&amp;quot;), forState: UIControlState.Normal)
+    srtsButton.setImage(UIImage(named: &amp;quot;english_shift_vertical&amp;quot;), forState: UIControlState.Selected)
+    fullButton.setImage(UIImage(named: &amp;quot;full_screen_icon_vertical&amp;quot;), forState: UIControlState.Normal)
+
+    progress.minimumValue = 0.0
+    progress.maximumValue = 1.0
+    progress.continuous = false
+    progress.setThumbImage(UIImage(named: &amp;quot;VKScrubber_thumb_vertical&amp;quot;), forState: UIControlState.Normal)
+    progress.value = 0.0
+    progress.minimumTrackTintColor = UIColor(red: 10 / 255, green: 137 / 255, blue: 153 / 255, alpha: 1.0)
+    progress.maximumTrackTintColor = UIColor(red: 10 / 255, green: 137 / 255, blue: 153 / 255, alpha: 0.4)
+
+    playButton.addTarget(self, action: Selector(&amp;quot;playAction:&amp;quot;), forControlEvents: UIControlEvents.TouchUpInside)
+    muteButton.addTarget(self, action: Selector(&amp;quot;muteAction:&amp;quot;), forControlEvents: UIControlEvents.TouchUpInside)
+    srtsButton.addTarget(self, action: Selector(&amp;quot;srtsAction:&amp;quot;), forControlEvents: UIControlEvents.TouchUpInside)
+    fullButton.addTarget(self, action: Selector(&amp;quot;fullAction:&amp;quot;), forControlEvents: UIControlEvents.TouchUpInside)
+
+    toolContentView.addSubview(playButton)
+    toolContentView.addSubview(muteButton)
+    toolContentView.addSubview(progress)
+    toolContentView.addSubview(srtsButton)
+    toolContentView.addSubview(fullButton)
+
+    playButton.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.left.equalTo(10.0)
+        make.centerY.equalTo(toolContentView.snp_centerY)
+        make.height.width.equalTo(20.0)
+    }
+
+    muteButton.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.left.equalTo(playButton.snp_right).offset(13.0)
+        make.centerY.equalTo(toolContentView.snp_centerY)
+        make.height.width.equalTo(20.0)
+    }
+
+    progress.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.left.equalTo(muteButton.snp_right).offset(22.0)
+        make.right.equalTo(srtsButton.snp_left).offset(-16.0)
+        make.centerY.equalTo(toolContentView.snp_centerY)
+        make.height.equalTo(2.0)
+    }
+
+    srtsButton.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.right.equalTo(fullButton.snp_left).offset(-14.0)
+        make.centerY.equalTo(toolContentView.snp_centerY)
+        make.height.width.equalTo(20.0)
+    }
+
+    fullButton.snp_makeConstraints { (make) -&amp;gt; Void in
+        make.right.equalTo(-10.0)
+        make.centerY.equalTo(toolContentView.snp_centerY)
+        make.height.width.equalTo(20.0)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码很长，但是基本没有难点，大都是布局的代码，这里就不讲解了。然后我们添加按钮相应的Action：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func playAction(sender: UIButton) {
+    if player.rate == 0 {
+        player.play()
+        sender.selected = true
+    } else {
+        player.pause()
+        sender.selected = false
+    }
+}
+
+func muteAction(sender: UIButton) {
+    if player.muted {
+        player.muted = false
+        sender.selected = false
+    } else {
+        player.muted = true
+        sender.selected = true
+    }
+}
+
+func srtsAction(sender: UIButton) {
+
+}
+
+func fullAction(sender: UIButton) {
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后我们将&lt;strong&gt;viewDidLoad()&lt;/strong&gt;方法里面的播放的代码&lt;strong&gt;player.play()&lt;/strong&gt;去掉，运行之后截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/19.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;强制横屏&#34;&gt;强制横屏&lt;/h2&gt;
+
+&lt;p&gt;首先我们修改横屏按钮要调用的方法，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func fullAction(sender: UIButton) {
+    UIDevice.currentDevice().setValue(NSNumber(integer: UIInterfaceOrientation.LandscapeRight.rawValue), forKey: &amp;quot;orientation&amp;quot;)
+    UIViewController.attemptRotationToDeviceOrientation()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来就是要调整下横屏时的视图，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+    if UIInterfaceOrientationIsLandscape(toInterfaceOrientation) {
+        playContentView.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.edges.equalTo(view)
+        }
+
+        toolContentView.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.left.bottom.right.equalTo(playContentView)
+            make.height.equalTo(52.0)
+        }
+
+        playButton.setImage(UIImage(named: &amp;quot;pause_icon_landscape&amp;quot;), forState: UIControlState.Normal)
+        playButton.setImage(UIImage(named: &amp;quot;play_icon_landscape&amp;quot;), forState: UIControlState.Selected)
+        muteButton.setImage(UIImage(named: &amp;quot;sound_on_landscape&amp;quot;), forState: UIControlState.Normal)
+        muteButton.setImage(UIImage(named: &amp;quot;sound_off_landscape&amp;quot;), forState: UIControlState.Selected)
+        srtsButton.setImage(UIImage(named: &amp;quot;chinese_english_shift_landscape&amp;quot;), forState: UIControlState.Normal)
+        srtsButton.setImage(UIImage(named: &amp;quot;english_shift_landscape&amp;quot;), forState: UIControlState.Selected)
+        fullButton.setImage(UIImage(named: &amp;quot;full_screen_icon_landscape&amp;quot;), forState: UIControlState.Normal)
+        progress.setThumbImage(UIImage(named: &amp;quot;VKScrubber_thumb_landscape&amp;quot;), forState: UIControlState.Normal)
+
+        playButton.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.left.equalTo(25.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(24.0)
+        }
+
+        muteButton.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.left.equalTo(playButton.snp_right).offset(32.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(24.0)
+        }
+
+        progress.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.left.equalTo(muteButton.snp_right).offset(30.0)
+            make.right.equalTo(srtsButton.snp_left).offset(-31.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.equalTo(4.0)
+        }
+
+        srtsButton.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.right.equalTo(fullButton.snp_left).offset(-26.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(24.0)
+        }
+
+        fullButton.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.right.equalTo(-27.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(24.0)
+        }
+    } else {
+        playContentView.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.top.left.right.equalTo(view)
+            make.width.equalTo(playContentView.snp_height).multipliedBy(radio)
+        }
+
+        toolContentView.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.left.bottom.right.equalTo(playContentView)
+            make.height.equalTo(30.0)
+        }
+        UIApplication.sharedApplication().statusBarHidden = true
+        playButton.setImage(UIImage(named: &amp;quot;pause_icon_vertical&amp;quot;), forState: UIControlState.Normal)
+        playButton.setImage(UIImage(named: &amp;quot;play_icon_vertical&amp;quot;), forState: UIControlState.Selected)
+        muteButton.setImage(UIImage(named: &amp;quot;sound_on_vertical&amp;quot;), forState: UIControlState.Normal)
+        muteButton.setImage(UIImage(named: &amp;quot;sound_off_vertical&amp;quot;), forState: UIControlState.Selected)
+        srtsButton.setImage(UIImage(named: &amp;quot;chinese_english_shift_vertical&amp;quot;), forState: UIControlState.Normal)
+        srtsButton.setImage(UIImage(named: &amp;quot;english_shift_vertical&amp;quot;), forState: UIControlState.Selected)
+        fullButton.setImage(UIImage(named: &amp;quot;full_screen_icon_vertical&amp;quot;), forState: UIControlState.Normal)
+        progress.setThumbImage(UIImage(named: &amp;quot;VKScrubber_thumb_vertical&amp;quot;), forState: UIControlState.Normal)
+
+        playButton.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.left.equalTo(10.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(20.0)
+        }
+
+        muteButton.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.left.equalTo(playButton.snp_right).offset(13.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(20.0)
+        }
+
+        progress.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.left.equalTo(muteButton.snp_right).offset(22.0)
+            make.right.equalTo(srtsButton.snp_left).offset(-16.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.equalTo(2.0)
+        }
+
+        srtsButton.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.right.equalTo(fullButton.snp_left).offset(-14.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(20.0)
+        }
+
+        fullButton.snp_remakeConstraints { (make) -&amp;gt; Void in
+            make.right.equalTo(-10.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(20.0)
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行之后截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/20.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;现在只能横屏，还不能返回到竖屏的状态，接下来修改&lt;strong&gt;fullAction(sender: UIButton)&lt;/strong&gt;方法，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func fullAction(sender: UIButton) {
+    if UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait {
+        UIDevice.currentDevice().setValue(NSNumber(integer: UIInterfaceOrientation.LandscapeRight.rawValue), forKey: &amp;quot;orientation&amp;quot;)
+        UIViewController.attemptRotationToDeviceOrientation()
+    } else {
+        UIDevice.currentDevice().setValue(NSNumber(integer: UIInterfaceOrientation.Portrait.rawValue), forKey: &amp;quot;orientation&amp;quot;)
+        UIViewController.attemptRotationToDeviceOrientation()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;播放进度&#34;&gt;播放进度&lt;/h2&gt;
+
+&lt;p&gt;其实实现播放器进度很简单，如果看了最开始的那些资源的话。几行代码就可以解决了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func addProgressObserver() {
+    let playerItem = player.currentItem!
+    player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1), queue: dispatch_get_main_queue()) { (time: CMTime) -&amp;gt; Void in
+        let current = CMTimeGetSeconds(time)
+        let total = CMTimeGetSeconds(playerItem.duration)
+        let progress = current / total
+        self.progress.setValue(Float(progress), animated: true)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;获取当前播放器的播放资源，然后得出总的时间和当前的时间，然后做一个百分比，最后设置&lt;strong&gt;UISlider&lt;/strong&gt;的值。这个方法在我之前做进度条的时候就用到了，那里唯一不同的地方就是每秒调用10次，这里是每秒一次，设置&lt;strong&gt;CMTimeMake(1, 1)&lt;/strong&gt;为&lt;strong&gt;CMTimeMake(1, 10)&lt;/strong&gt;就是每秒调用10次。&lt;/p&gt;
+
+&lt;p&gt;然后我们在初始化播放器的方法里面添加调用该方法的代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func initPlayer() {
+    let url = NSURL(string: videoPath)!
+    let playerItem = AVPlayerItem(URL: url)
+    player = AVPlayer(playerItem: playerItem)
+    addProgressObserver()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行之后如下所示:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/21.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;拖动进度&#34;&gt;拖动进度&lt;/h2&gt;
+
+&lt;p&gt;首先我们添加一个属性，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var timeObserver: AnyObject!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后修改&lt;strong&gt;addProgressObserver()&lt;/strong&gt;方法，如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func addProgressObserver() {
+    let playerItem = player.currentItem!
+    timeObserver = player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1), queue: dispatch_get_main_queue()) { (time: CMTime) -&amp;gt; Void in
+        let current = CMTimeGetSeconds(time)
+        let total = CMTimeGetSeconds(playerItem.duration)
+        let progress = current / total
+        self.progress.setValue(Float(progress), animated: true)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后添加一个新的方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func removeProgressObserve() {
+    player.removeTimeObserver(timeObserver)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;苹果说这两个方法最好成对出现，你Cmd点击这些方法名就能看见苹果给的注释和描述了。&lt;/p&gt;
+
+&lt;p&gt;现在我们就来实现主要的逻辑了，但是首先还是要给我们的&lt;strong&gt;UISlider&lt;/strong&gt;添加Action，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;progress.addTarget(self, action: Selector(&amp;quot;updateProgress:&amp;quot;), forControlEvents: UIControlEvents.ValueChanged)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后我们实现&lt;strong&gt;updateProgress(sender: UISlider)&lt;/strong&gt;方法，这里就是主要逻辑了，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func updateProgress(sender: UISlider) {
+    removeProgressObserve()
+    let progress = Float64(sender.value)
+    let seekTime = CMTimeGetSeconds(player.currentItem!.duration) * progress
+    player.seekToTime(CMTimeMakeWithSeconds(seekTime, 1), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero) { (finished: Bool) -&amp;gt; Void in
+        if finished {
+            self.addProgressObserver()
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先我们移除掉进度监视的方法，避免在拖动的时候还在设置进度的值。然后我们算出拖动的值对应的要播放的时间，然后我们就调用&lt;strong&gt;AVPlayer&lt;/strong&gt;的方法就可以了，然后在结束的时候再添加进度监视就OK了。经测试，不调用这两个方法也是OK的。&lt;/p&gt;
+
+&lt;p&gt;运行后截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/22.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/23.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;第一张图启动后没有点击播放，然后我们拖动进度条，拖动后的效果就是第二张图。这个进度条不太好拖动，如果你是模拟器，用鼠标点击圆点的左上角比较好拖动。&lt;/p&gt;
+
+&lt;p&gt;播放器到此就基本完成了，当然功能不够完善，比如音量不能调节，只能静音开关。还剩下一个字幕的功能也没有做，这里就不再继续了。字幕的实现主要难点就是解析字幕文件了，留给大家了，不会就参考&lt;a href=&#34;https://github.com/viki-org/VKVideoPlayer&#34;&gt; VKVideoPlayer &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/LWPlayer&#34;&gt; 完整源码 &lt;/a&gt;，这里我把图片资源去掉了，不方便贡献给大家，见谅。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>iOS播放音频</title>
+      <link>http://lynchwong.com/blog/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/</link>
+      <pubDate>Tue, 29 Sep 2015 23:31:11 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/</guid>
+      <description>&lt;p&gt;上一篇博客提到了播放声音的接口，所以本篇就是播放声音的接口了。声音播放也是项目的需求，最开始是使用的&lt;a href=&#34;https://github.com/raywenderlich/SKTUtils&#34;&gt;SKTUtils&lt;/a&gt;工具类。
+&lt;/p&gt;
+
+&lt;p&gt;这个工具类是大神raywenderlich写给SpriteKit的。这个工具类里面有播放声音的接口，我就直接使用了，然后进行了一些小的修改。&lt;/p&gt;
+
+&lt;p&gt;既然是写给游戏的，里面就只有播放背景和音效的方法，而且音频大多是本地的，不涉及到网络音频。所以刚开始的时候我也不知道这个接口不能播放网络音频，直到后来项目需要播放网络音频的时候才发现。这个接口源码很简单，使用的是&lt;strong&gt;AVAudioPlayer&lt;/strong&gt;，参考这里&lt;a href=&#34;https://developer.apple.com/library/ios/qa/qa1634/_index.html&#34;&gt;AVAudioPlayer Streaming Support&lt;/a&gt;发现是不能播放网络音频的。当然我们可以先将音频下载下来，然后再播放也是可以的。而且上面也提到了可以使用&lt;strong&gt;AVPlayer&lt;/strong&gt;或者使用&lt;strong&gt;Audio File Stream Services&lt;/strong&gt;和&lt;strong&gt;Audio Queue Services&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;其实项目里面除了音频播放的需求，还有播放视频的需求，之前就有研究过&lt;strong&gt;AVPlayer&lt;/strong&gt;，它能播放视频，同时也可以单独播放音频。项目中视频播放的模块交给了另外一个同事做，就是使用&lt;strong&gt;AVPlayer&lt;/strong&gt;的，播放器做的很棒，下一篇博文可能就写视频播放器吧。这里给出两篇博文，写iOS的音频和视频的，超级棒的文章，推荐给大家，也给了我很多启发和帮助，同时苹果&lt;strong&gt;AVFoundation&lt;/strong&gt;的官方编程指南也是很好的参考。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/kenshincui/p/4186022.html&#34;&gt;iOS开发系列&amp;ndash;音频播放、录音、视频播放、拍照、视频录制&lt;/a&gt;
+&lt;a href=&#34;http://msching.github.io/blog/2014/07/07/audio-in-ios/&#34;&gt;iOS音频播放 (一)：概述&lt;/a&gt;
+&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html&#34;&gt;AVFoundation Programming Guide&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;接口源码&#34;&gt;接口源码&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/YKTAudio&#34;&gt;YKTAudio&lt;/a&gt;，接口代码也很简单，就不讲解了。&lt;/p&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如果你需要知道网络音频的播放进度，你需要实现&lt;strong&gt;RemotePlayProgressDelegate&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;避免将接口修改为单列模式，导致多处使用播放网络音频方法时音频重叠播放。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>内存管理 on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml</link>
+    <description>Recent content in 内存管理 on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Advanced Memory Management Programming Guide - Using Autorelease Pool Blocks</title>
+      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---using-autorelease-pool-blocks/</link>
+      <pubDate>Sun, 28 Feb 2016 15:03:32 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---using-autorelease-pool-blocks/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmAutoreleasePools.html#//apple_ref/doc/uid/20000047-CJBFBEDI&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;using-autorelease-pool-blocks&#34;&gt;Using Autorelease Pool Blocks&lt;/h1&gt;
+
+&lt;p&gt;(使用Autorelease池)&lt;/p&gt;
+
+&lt;p&gt;Autorelease池为你提供了延迟释放对象所有权的机制，避免了对象立即被dealloc(比如方法中返回的对象)。通常，你不需要创建你自己的Autorelease池，但个别情况下你必须或者最好这么做。&lt;/p&gt;
+
+&lt;h2 id=&#34;about-autorelease-pool-blocks&#34;&gt;About Autorelease Pool Blocks&lt;/h2&gt;
+
+&lt;p&gt;(关于Autorelease池)&lt;/p&gt;
+
+&lt;p&gt;Autorelease池的代码块用@autoreleasepool标识，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@autoreleasepool {
+    // Code that creates autoreleased objects.
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Autorelease池代码块的最后，对象会接收autorelease消息。&lt;/p&gt;
+
+&lt;p&gt;和其他代码块类似，Autorelease池代码块也可以被嵌套：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@autoreleasepool {
+    // . . .
+    @autoreleasepool {
+        // . . .
+    }
+    . . .
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(正常情况下你不会看见如上所示的代码，通常一个资源文件中的Autorelease池代码块中的代码会调用其他资源文件中的代码，这些代码可能包含了其他的Autorelease池代码块。)当发送autorelease消息时，发送autorelease消息的对应的Autorelease池的代码块会发送release消息。&lt;/p&gt;
+
+&lt;p&gt;Cocoa总是期望代码在Autorelease池代码块中执行，否则autorelease的对象不会被release导致你应用程序内存泄漏。(如果你在Autorelease池代码块之外发送autorelease消息，Cocoa会打印一个适当的错误消息。)AppKit和UIKit框架自动在每个消息循环的开始都创建一个池(比如鼠标按下事件、触摸事件)并在结尾处销毁这个池。正因为如此，你实际上不需要创建Autorelease池，甚至不需要知道创建Autorelease池的代码如何写。下面三种情形，你应该使用自己的Autorelease池：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;如果你写的程序，不是基于UI framework，比如命令行程序。&lt;/li&gt;
+&lt;li&gt;如果你写循环的时候创建了大量的临时对象。你可以在循环体内使用Autorelease池在下一次循环开始前销毁这些对象。这样可以减少你的应用程序对内存的占用峰值。&lt;/li&gt;
+&lt;li&gt;如果你发送了一个secondary线程(main线程之外的线程)。你必须在线程的最初执行代码中创建Autorelease池；否则你的应用程序就内存泄漏了。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;use-local-autorelease-pool-blocks-to-reduce-peak-memory-footprint&#34;&gt;Use Local Autorelease Pool Blocks to Reduce Peak Memory Footprint&lt;/h2&gt;
+
+&lt;p&gt;(使用本地Autorelease池减少内存占用峰值)&lt;/p&gt;
+
+&lt;p&gt;许多程序使用的临时对象都是autorelease的，这些对象是会占用内存的。要想减少对内存的占用峰值，就应该使用本地的Autorelease池。当池被销毁时，那些对象被release，进而系统占用内存情况得以改善。&lt;/p&gt;
+
+&lt;p&gt;下面的例子，在for循环中使用了本地Autorelease池：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSArray *urls = &amp;lt;# An array of file URLs #&amp;gt;;
+for (NSURL *url in urls) {
+
+    @autoreleasepool {
+        NSError *error;
+        NSString *fileContents = [NSString stringWithContentsOfURL:url
+                                                          encoding:NSUTF8StringEncoding error:&amp;amp;error];
+        /* Process the string, creating and autoreleasing more objects. */
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;for循环每次处理一个文件。任何对象(比如fileContents)在Autorelease池中都会发送一个autorelease消息，存放于池中。当池在单次循环结束时，进行销毁，这些对象也就release了。&lt;/p&gt;
+
+&lt;p&gt;在Autorelease池之后，那些曾经收到autorelease消息的对象，只能视为失效，而不要再给他们发消息，或者把他们作为返回值进行返回。如果你必须在Autorelease池代码块之后使用某个对象，你可以先发送一个retain消息，然后在Autorelease池代码块之后发送autorelease消息，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;– (id)findMatchingObject:(id)anObject {
+
+    id match;
+    while (match == nil) {
+        @autoreleasepool {
+
+            /* Do a search that creates a lot of temporary objects. */
+            match = [self expensiveSearchForObject:anObject];
+
+            if (match != nil) {
+                [match retain]; /* Keep match around. */
+            }
+        }
+    }
+
+    return [match autorelease];   /* Let match go and return it. */
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Autorelease池代码块中给match发送retain，然后在Autorelease池代码块之后发送autorelease，这样延长了match的生命周期。允许match在循环之外接收消息，并且返回给findMatchingObject:方法的调用者。&lt;/p&gt;
+
+&lt;h2 id=&#34;autorelease-pool-blocks-and-threads&#34;&gt;Autorelease Pool Blocks and Threads&lt;/h2&gt;
+
+&lt;p&gt;(Autorelease池和线程)&lt;/p&gt;
+
+&lt;p&gt;Cocoa应用程序里的每一个线程都维护的自己的Autorelease池的栈。如果你写的程序仅仅是一个基于Foundation的程序，或者你要detach一个线程，你需要创建你自己的Autorelease池。&lt;/p&gt;
+
+&lt;p&gt;如果你的程序或者线程是长期运行，可能会产生大量的临时对象，你应该使用Autorelease池(就像AppKit和UIKit在主线程上做的那样)；否则autorelease对象就会积累并消耗掉大量内存。如果你detach线程不调用Cocoa，你就不必使用Autorelease池。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;如果你使用POSIX线程API创建secondary线程，而不是NSThread，你不能使用Cocoa，除非Cocoa处于多线程模式。Cocoa只有在detach它的第一个NSThread对象之后，才能进入多线程模式。为了在secondary POSIX线程上使用Cocoa，你的应用程序首先要做的是detach至少一个NSThread对象，然后立刻结束这个线程。你可以使用NSThread的类方法isMultiThreaded来检测Cocoa是否处于多线程模式。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Advanced Memory Management Programming Guide - Practical Memory Management</title>
+      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---practical-memory-management/</link>
+      <pubDate>Sun, 28 Feb 2016 15:03:11 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---practical-memory-management/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW1&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;practical-memory-management&#34;&gt;Practical Memory Management&lt;/h1&gt;
+
+&lt;p&gt;(内存管理实战)&lt;/p&gt;
+
+&lt;p&gt;我们前面介绍了内存管理策略的一些基本概念。这些概念非常简单直接，但有些实战方面的做法可以使得内存管理更加容易，进而保证你的应用稳定而健壮，减少对系统资源的占用。&lt;/p&gt;
+
+&lt;h2 id=&#34;use-accessor-methods-to-make-memory-management-easier&#34;&gt;Use Accessor Methods to Make Memory Management Easier&lt;/h2&gt;
+
+&lt;p&gt;(使用访问方法使得内存管理更加容易)&lt;/p&gt;
+
+&lt;p&gt;如果你的类的属性是对象，你必须保证这个对象的值在你使用它的时候没有被dealloc。所以你必须在设置值的时候获得该对象的所有权。你还必须保证对这些对象所有权的放弃。&lt;/p&gt;
+
+&lt;p&gt;这个工作看似非常枯燥乏味，如果你坚持用访问方法，那么内存管理出现问题的几率就大大减少了。如果你在代码中对成员变量到处用retain和release，那么你基本上是做错了。&lt;/p&gt;
+
+&lt;p&gt;我们假定有一个Counter对象，你用它来实现计数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface Counter : NSObject
+@property (nonatomic, retain) NSNumber *count;
+@end;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个属性声明了两个访问方法。通常而言，这些方法由编译器来合成，但如果你知道这些方法是如何实现的，还是会帮助你理解问题的。&lt;/p&gt;
+
+&lt;p&gt;在get访问器中，就是返回实例变量，所以没有retain或者release。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (NSNumber *)count {
+    return _count;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在set访问器中，如果其他的人和我们使用相同的规则，那么你必须假设新的count可能会随时被dealloc。因此你必须通过发送retain消息来取得新的count的所有权，进而确保dealloc不会发生。你还必须对旧值发送release消息。在Objective-C中给nil发送消息是没有问题的，因此就算没有设置_count，这个方法的实现仍旧可以工作。你必须在[newCount retain]之后对旧值发送release。如果新值和旧值是同一个对象，如果你先release了，然后再retain，恐怕为时已晚。因为对象已经dealloc了，retain没用了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)setCount:(NSNumber *)newCount {
+    [newCount retain];
+    [_count release];
+    // Make the new assignment.
+    _count = newCount;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;use-accessor-methods-to-set-property-values&#34;&gt;Use Accessor Methods to Set Property Values&lt;/h3&gt;
+
+&lt;p&gt;(使用访问器方法来设置属性的值)&lt;/p&gt;
+
+&lt;p&gt;假设你要实现一个方法来复位计数器。有好几个可行的方法。第一种方法就是使用alloc创建NSNumber实例，然后调用release，使引用计数平衡。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)reset {
+    NSNumber *zero = [[NSNumber alloc] initWithInteger:0];
+    [self setCount:zero];
+    [zero release];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;第二种方法是使用便利方法创建一个新的NSNumber对象。所以就不需要release和retain消息。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)reset {
+    NSNumber *zero = [NSNumber numberWithInteger:0];
+    [self setCount:zero];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意上面都用了set访问器。&lt;/p&gt;
+
+&lt;p&gt;下面的做法对于简单的情况而言肯定是没问题的。但是，它的实现绕开了set方法，这样做在特定情况下会导致内存泄漏(比如，当你忘了retain或者release，或者这个变量的内存管理发生了变化)。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)reset {
+    NSNumber *zero = [[NSNumber alloc] initWithInteger:0];
+    [_count release];
+    _count = zero;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;还需要注意的是，如果你使用key-value observing，那么这种对于值的复位就跟KVO不兼容了。&lt;/p&gt;
+
+&lt;h3 id=&#34;don-t-use-accessor-methods-in-initializer-methods-and-dealloc&#34;&gt;Don’t Use Accessor Methods in Initializer Methods and dealloc&lt;/h3&gt;
+
+&lt;p&gt;(不要在初始化方法和dealloc方法中使用访问器方法)&lt;/p&gt;
+
+&lt;p&gt;不允许使用访问器方法来设置实例变量的地方就是初始化方法和dealloc方法。我们使用一个表示零的number对象来初始化一个counter对象，你可能会如下实现init方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- init {
+    self = [super init];
+    if (self) {
+        _count = [[NSNumber alloc] initWithInteger:0];
+    }
+    return self;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了让counter初始化为非0值，你可以实现一个initWithCount:方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- initWithCount:(NSNumber *)startingCount {
+    self = [super init];
+    if (self) {
+        _count = [startingCount copy];
+    }
+    return self;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为Counter类有一个成员对象实例，你就必须实现dealloc方法。这个方法通过发release消息来放弃对于所有其他对象的所有权，然后，在最后时刻调用super的实现：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)dealloc {
+    [_count release];
+    [super dealloc];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;use-weak-references-to-avoid-retain-cycles&#34;&gt;Use Weak References to Avoid Retain Cycles&lt;/h2&gt;
+
+&lt;p&gt;(使用弱引用来避免retain环)&lt;/p&gt;
+
+&lt;p&gt;Retain一个对象实际上是对一个对象的强引用。一个对象在所有的强引用解除之前是不能被dealloc的，这导致一个“环形持有”的问题：两个对象相互强引用(可能是直接引用，也可能是通过其他对象间接地引用)。&lt;/p&gt;
+
+&lt;p&gt;下图的所示的对象关系就构成了一个环形持有。Document对象持有多个Page对象，每个Page对象又具有一个Document引用来指示它归属的文档。如果Document对象有Page的强引用，Page对象有Document的强引用，这样每个对象都不能被dealloc。在Page对象release之前Document对象的引用计数不能变为0，而如果Document对象存在，Page对象也无法被release。&lt;/p&gt;
+
+&lt;p&gt;Figure 1  An illustration of cyclical references&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/PracticalMemoryManagement/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;解决环形持有的问题就是使用弱引用。所谓的弱引用，就是一种非持有的关系，源对象不会对它引用的对象进行持有。&lt;/p&gt;
+
+&lt;p&gt;为了实现上面的对象图，肯定是需要强引用的(如果只有弱引用，那么Page和Paragraph就没有了拥有者，就会被dealloc)。Cocoa设定了一个规则，那就是：父对象建立对子对象的强引用，而子对象只对父对象建立弱引用。&lt;/p&gt;
+
+&lt;p&gt;所以，在Figure 1中，document对象有对page对象的强引用，但是page对象有对document对象的弱引用。&lt;/p&gt;
+
+&lt;p&gt;Cocoa中弱引用的例子包括但不局限于：table data sources，outline view items，notification observers，miscellaneous targets和delegates。&lt;/p&gt;
+
+&lt;p&gt;当给弱引用的对象发送消息时需要小心。如果你给一个dealloc的弱引用对象发送消息，应用程序会崩溃。因此你必须判断对象是否有效。多数情况下，被弱引用的对象是知道其他对象对它的弱引用(比如环形持有的情形)，所以需要通知其他对象它自己的dealloc。比如，当你向Notification Center注册一个对象时，Notification Center对这个对象是弱引用的，并且在有消息需要通知到这个对象时，就发送消息给这个对象。当这个对象dealloc的时候，你必须向Notification Center取消这个对象的注册。这样，这个Notification Center就不会再发送消息给这个不存在的对象了。同样，当一个delegate对象被dealloc的时候，必须向其他对象发送一个setDelegate:消息，并传递nil参数，从而将代理的关系撤销。这些消息通常在对象的dealloc方法中发出。&lt;/p&gt;
+
+&lt;h2 id=&#34;avoid-causing-deallocation-of-objects-you-re-using&#34;&gt;Avoid Causing Deallocation of Objects You’re Using&lt;/h2&gt;
+
+&lt;p&gt;(避免dealloc你正在使用的对象)&lt;/p&gt;
+
+&lt;p&gt;Cocoa的所有权策略时这么说的：返回的对象，在调用者的调用方法中，始终保持有效。所以说，在当前方法内部，不必担心你收到的返回对象会被dealloc。对于你的代码而言，通过getter方法收到的返回对象是一个被缓存的实例，还是计算出来的实例。这并不重要，重要的是这个对象在你使用它的时候会一直有效。&lt;/p&gt;
+
+&lt;p&gt;这个策略并非放之四海而皆准，在有些情况下是特列，特别是下面两种情况：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;当一个对象从fundamental的集合类中删除的时候。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;heisenObject = [array objectAtIndex:n];
+[array removeObjectAtIndex:n];
+// heisenObject could now be invalid.
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;当一个对象从集合中删除的时候，系统会立刻调用对象的release方法(而不是autorelease)。如果这时候，这个集合是该对象的唯一属主，那么这个对象(本例中的heisenObject)会立刻被dealloc。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;当父对象被dealloc的时候：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;id parent = &amp;lt;#create a parent object#&amp;gt;;
+// ...
+heisenObject = [parent child] ;
+[parent release]; // Or, for example: self.parent = nil;
+// heisenObject could now be invalid.
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;有时候你从一个对象获取另外一个对象，然后直接或者间接的release了父对象。如果对父对象的release造成了它被dealloc，且这时候该父对象恰好是子对象的唯一属主，那么子对象(本例中的heisenObject)会同时也被dealloc(这里我们假定在父对象的dealloc方法中，对子对象发送的是release消息，而非autorelease)。&lt;/p&gt;
+
+&lt;p&gt;在这些情况下，你retain接收的heisenObject对象，然后完成工作后release。比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;heisenObject = [[array objectAtIndex:n] retain];
+[array removeObjectAtIndex:n];
+// Use heisenObject...
+[heisenObject release];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;don-t-use-dealloc-to-manage-scarce-resources&#34;&gt;Don’t Use dealloc to Manage Scarce Resources&lt;/h2&gt;
+
+&lt;p&gt;(不要使用dealloc来管理稀缺资源)&lt;/p&gt;
+
+&lt;p&gt;通常，你不应该在dealloc方法中管理稀缺资源，比如文件句柄、网络连接、缓存等。更具体的说，你不可能设计出一个类，你想让系统什么时候调用dealloc，系统就什么时候调用(因为你能做的就是release，至于release是否会导致系统一定调用dealloc，还要看这个对象有没有其他属主)。因为系统性能的下降、系统自身的BUG，有可能dealloc的调用被推迟搁置。&lt;/p&gt;
+
+&lt;p&gt;正确的做法是，如果你的对象管理了稀缺资源，它就必须知道它什么时候不再需要这些资源，并在此时立即释放资源。通常情况下，此时你会调用release来dealloc，但是因为此前你已经释放了资源，这里就不会遇到任何问题。&lt;/p&gt;
+
+&lt;p&gt;如果你把资源管理的职能交给dealloc，那么会暴露很多问题，比如：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;对象图的拆除顺序。
+实际上，对象图的拆除是没有任何顺序保证的。也许你认为、你希望有一个具体明确的顺序，但事实是没有。如果对象被放到了autorelease池，这个拆除的过程也会发生变化，并导致你无法预见的后果。&lt;/li&gt;
+&lt;li&gt;系统稀缺资源不能回收。
+内存泄漏是BUG，应该被修复，但这个问题不是立即就暴露出来的。如果没有保留的时候，你认为某个资源已经释放，而实际上没有释放，你就会面临更加严重的问题了。比如，如果文件句柄被用光了，其结果将是你无法保存数据。&lt;/li&gt;
+&lt;li&gt;清除逻辑在错误的线程上执行。
+如果对象在一个不确定的时刻被放到了autorelease池中，它将被线程池中的线程来dealloc。这对于有些只能由单一线程来访问的资源而言，是致命的错误。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;collections-own-the-objects-they-contain&#34;&gt;Collections Own the Objects They Contain&lt;/h2&gt;
+
+&lt;p&gt;(集合拥有包含对象的所有权)&lt;/p&gt;
+
+&lt;p&gt;当你把一个对象添加到集合容器中(比如数组array、字典dictionary、集合set)，容器就会取得对象的所有权。当容器自己release的时候，或者对象从容器中删除时，容器会放弃该对象的所有权。比如，如果要建一个存放数字的数组，你可以按下面方法来做：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSMutableArray *array = &amp;lt;#Get a mutable array#&amp;gt;;
+NSUInteger i;
+// ...
+for (i = 0; i &amp;lt; 10; i++) {
+    NSNumber *convenienceNumber = [NSNumber numberWithInteger:i];
+    [array addObject:convenienceNumber];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这时你并没有使用alloc，因此你也不必使用release。你不需要调用新数值的retain，因为数组会这么做。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSMutableArray *array = &amp;lt;#Get a mutable array#&amp;gt;;
+NSUInteger i;
+// ...
+for (i = 0; i &amp;lt; 10; i++) {
+    NSNumber *allocedNumber = [[NSNumber alloc] initWithInteger:i];
+    [array addObject:allocedNumber];
+    [allocedNumber release];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这种做法，我们在for循环内部向allocedNumber发送了与alloc相对应的release消息。因为Array的addObject:方法实际上对这个对象做了retain处理，那么这个对象(allocedNumber)不会因此而被dealloc。&lt;/p&gt;
+
+&lt;p&gt;我们换位思考一下，假定你自己就是这个集合类的作者。你要确保加入的对象只要继续存在于集合里，就不应该被dealloc，因此你在添加这个对象时，向它发送了retain消息，删除这个对象时，向它发送了release消息。当你这个集合类自己dealloc时，对容器内所有的对象发送release消息。&lt;/p&gt;
+
+&lt;h2 id=&#34;ownership-policy-is-implemented-using-retain-counts&#34;&gt;Ownership Policy Is Implemented Using Retain Counts&lt;/h2&gt;
+
+&lt;p&gt;(所有权策略通过引用计数来实现)&lt;/p&gt;
+
+&lt;p&gt;所有权策略是通过引用计数来实现的，通常称之为“retain count”。每个对象都有一个retain count。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当你创建一个对象时，它的retain count为1。&lt;/li&gt;
+&lt;li&gt;当你给对象发送retain消息，它的retain count增加1。&lt;/li&gt;
+&lt;li&gt;当你给对象发送release消息，它的retain count减少1。当你给对象发送autorelease消息，它的retain count将在未来某个时候减1。&lt;/li&gt;
+&lt;li&gt;如果对象的retain count减少到0，它就会被dealloc。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;重要：&lt;/strong&gt;其实你应该没有理由想知道一个对象的retain count。这个数值有时候会对你造成误导：实际上你不知道哪些框架retain了你感兴趣的对象。在调试内存问题的时候，你只需要遵守所有权规则就行了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Advanced Memory Management Programming Guide - Memory Management Policy</title>
+      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---memory-management-policy/</link>
+      <pubDate>Sun, 28 Feb 2016 15:02:46 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---memory-management-policy/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmRules.html#//apple_ref/doc/uid/20000994-BAJHFBGH&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;memory-management-policy&#34;&gt;Memory Management Policy&lt;/h1&gt;
+
+&lt;p&gt;(内存管理策略)&lt;/p&gt;
+
+&lt;p&gt;通过引用计数来进行内存管理的基本模型是由NSObject协议中的方法以及标准的方法命名规范来提供的。NSObject还定义了一个dealloc方法，该方法会在对象需要析构的时候自动调用。本文描述了在Cocoa程序中正确管理内存的基本规则，并提供了正确的示例。&lt;/p&gt;
+
+&lt;h2 id=&#34;basic-memory-management-rules&#34;&gt;Basic Memory Management Rules&lt;/h2&gt;
+
+&lt;p&gt;(基本内存管理规则)&lt;/p&gt;
+
+&lt;p&gt;内存管理的模型是基于对象所有权的。任何对象都可以有一个或者多个所有者。当对象至少有一个所有者的时候，对象就会继续存在。如果一个对象没有所有者，运行时系统就会自动析构它。为了清晰的描述你何时拥有一个对象、何时放弃所有权，Cocoa遵循如下策略：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;你拥有你所创建的对象&lt;/strong&gt;：你如果用下面字幕作为开头的方法来创建对象，那么你拥有这个对象，alloc，new，copy，mutableCopy。比如，alloc、newObject、或者mutableCopy。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;你可以使用retain来实现对一个对象的所有权&lt;/strong&gt;：如果你在一个方法体中，得到了一个对象，那么这个对象在本方法内部是一直都有效的。而且你还可以在本方法中将这个对象作为返回值返回给方法的调用者。在下面两种情况下，你需要用retain：1.在访问方法(getter、setter)或者init方法中，你希望将得到的返回对象作为成员变量(property)来存储。2.在执行某些操作时，你担心在过程中对象变得无效。(在&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/20000043-1000922&#34;&gt; Avoid Causing Deallocation of Objects You’re Using &lt;/a&gt;中解释)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;当你不再需要一个对象时，你必须放弃对对象的所有权&lt;/strong&gt;：通过向对象发送release或者autorelease消息来放弃所有权。用Cocoa的术语说，所谓放弃所有权，就是release一个对象。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;你不能放弃你没有拥有的对象的所有权&lt;/strong&gt;：这一点跟上一条对应，无需多言。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;a-simple-example&#34;&gt;A Simple Example&lt;/h3&gt;
+
+&lt;p&gt;(简单例子)&lt;/p&gt;
+
+&lt;p&gt;下面的代码做了示范：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+    Person *aPerson = [[Person alloc] init];
+    // ...
+    NSString *name = aPerson.fullName;
+    // ...
+    [aPerson release];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里的Person对象使用alloc初始化，然后用release消息来释放。Person的name因为不是使用所有权的方法得来的，所以不必release。请注意，这里使用的是release，而非autorelease。&lt;/p&gt;
+
+&lt;h3 id=&#34;use-autorelease-to-send-a-deferred-release&#34;&gt;Use autorelease to Send a Deferred release&lt;/h3&gt;
+
+&lt;p&gt;(使用autorelease延时release)&lt;/p&gt;
+
+&lt;p&gt;当你需要延时release方式时，就需要autorelease了，特别是当你从方法中返回一个对象的时候，比如，你可以这样来实现fullName方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (NSString *)fullName {
+    NSString *string = [[[NSString alloc] initWithFormat:@&amp;quot;%@ %@&amp;quot;,
+                         self.firstName, self.lastName] autorelease];
+    return string;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你拥有alloc返回的string，所以你有该对象的所有权。为了遵守内存管理规则，你必须在失去引用前放弃该对象的所有权。如果你使用release，那么string在返回前就释放了(该方法就会返回一个无效的对象)。使用autorelease来声明(这里仅仅是一种意愿的表达，而非实际放弃的动作。)我们对所有权的放弃，但是同时允许fullName方法的调用者在返回的string释放前使用返回的string对象。&lt;/p&gt;
+
+&lt;p&gt;你也可以如下实现这个方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (NSString *)fullName {
+    NSString *string = [NSString stringWithFormat:@&amp;quot;%@ %@&amp;quot;,
+                        self.firstName, self.lastName];
+    return string;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据基本规则，你并不拥有stringWithFormat:方法返回的string，所以你可以安全的返回这个string。&lt;/p&gt;
+
+&lt;p&gt;下面的实现是错误的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (NSString *)fullName {
+    NSString *string = [[NSString alloc] initWithFormat:@&amp;quot;%@ %@&amp;quot;,
+                        self.firstName, self.lastName];
+    return string;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据方法的命名规范，从这个方法的名字(fullName)看不出fullName方法的调用者将拥有返回的对象(译者:因为它并没有以 alloc、 new、 init 等开头)。因此，该方法的调用者自然也没有理由来release这个返回的string。最终导致内存泄漏。&lt;/p&gt;
+
+&lt;h3 id=&#34;you-don-t-own-objects-returned-by-reference&#34;&gt;You Don’t Own Objects Returned by Reference&lt;/h3&gt;
+
+&lt;p&gt;(通过引用返回的对象，你没有所有权)&lt;/p&gt;
+
+&lt;p&gt;Cocoa中的一些方法是通过指定引用来返回对象(即，这些方法接收ClassName **或者id *类型的参数)。常见的情形就是当出现错误时，一个NSError对象来承载错误的信息。比如initWithContentsOfURL:options:error:和initWithContentsOfFile:encoding:error:。&lt;/p&gt;
+
+&lt;p&gt;在这些情形下，我们前面说的规则依然有效，当你调用这类方法的时候，你没有创建NSError对象，所以你没有对它的所有权，也不必release它。如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSString *fileName = &amp;lt;#Get a file name#&amp;gt;;
+NSError *error;
+NSString *string = [[NSString alloc] initWithContentsOfFile:fileName
+                                                   encoding:NSUTF8StringEncoding error:&amp;amp;error];
+if (string == nil) {
+    // Deal with error...
+}
+// ...
+[string release];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;implement-dealloc-to-relinquish-ownership-of-objects&#34;&gt;Implement dealloc to Relinquish Ownership of Objects&lt;/h2&gt;
+
+&lt;p&gt;(实现dealloc来放弃对象的所有权)&lt;/p&gt;
+
+&lt;p&gt;NSObject类定义了一个名为dealloc的方法，这个方法在对象没有所有者，内存回收的时候会由系统自动调用。用Cocoa的术语就是freed或者deallocated。dealloc方法的作用就是释放对象的内存，并弃掉它持有的任何资源&amp;ndash;以及它对其他任何实例变量对象的所有权。&lt;/p&gt;
+
+&lt;p&gt;下面的例子示范了你应该如何实现Person类的dealloc方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface Person : NSObject
+@property (retain) NSString *firstName;
+@property (retain) NSString *lastName;
+@property (assign, readonly) NSString *fullName;
+@end
+
+@implementation Person
+// ...
+- (void)dealloc
+[_firstName release];
+[_lastName release];
+[super dealloc];
+}
+@end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;重要：&lt;/strong&gt;永远不要直接调用另一个对象的dealloc方法。你必须在尾部调用super类的实现。你不可以把系统的资源和对象的生命周期进行绑定，参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW13&#34;&gt; Don’t Use dealloc to Manage Scarce Resources &lt;/a&gt;(就是说你不能等到对象dealloc时才放弃对关键系统资源的独占，后面就是原因)。当一个应用程序终止时，对象可能不会发送dealloc消息。因为进程的内存在退出时会自动回收，与调用所有对象的内存管理的方法的方式比起来，操作系统的这种做法是高效率的。&lt;/p&gt;
+
+&lt;h2 id=&#34;core-foundation-uses-similar-but-different-rules&#34;&gt;Core Foundation Uses Similar but Different Rules&lt;/h2&gt;
+
+&lt;p&gt;(Core Foundation使用类似但却不同的规则)&lt;/p&gt;
+
+&lt;p&gt;Core Foundation的对象采用了类似的内存管理方式(参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFMemoryMgmt/CFMemoryMgmt.html#//apple_ref/doc/uid/10000127i&#34;&gt; Memory Management Programming Guide for Core Foundation &lt;/a&gt;)。Cocoa和Core Foundation在命名规则上是不同的。具体说，Core Foundation的创建规则不适用于返回Objective-C对象的那些方法。比如下面的代码片段中，你没有责任或义务来释放对myInstance的所有权：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MyClass *myInstance = [MyClass createInstance];
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Advanced Memory Management Programming Guide - Introduction</title>
+      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---introduction/</link>
+      <pubDate>Sun, 28 Feb 2016 15:02:20 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---introduction/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011-SW1&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;说明：网上能找到《iOS高级内存管理编程指南》，主要就是参考的这篇。基本上也就是照着这篇把原文过了一遍，做了一些整理。&lt;/p&gt;
+
+&lt;h1 id=&#34;about-memory-management&#34;&gt;About Memory Management&lt;/h1&gt;
+
+&lt;p&gt;(关于内存管理)&lt;/p&gt;
+
+&lt;p&gt;应用程序的内存管理是一个在程序运行时进行内存分配、使用、结束时释放内存的过程。一个书写良好的应用程序会尽可能少的使用内存。在Objective-C中，这个过程也是一个在很多代码片段或者数据中传播有限内存资源的“所有权”的方式。在完成本指南之后，你可以“显式地”管理对象的生命周期，并在不用的时候释放他们。&lt;/p&gt;
+
+&lt;p&gt;尽管内存管理通常认为是在单个独立对象层面上考虑，但是我们的任务实际上是管理“对象图”。你需要确保除了你真的需要的对象之外，内存中没有其它的对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/MemoryManagementProgrammingGuideIntroduction/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;at-a-glance&#34;&gt;At a Glance&lt;/h2&gt;
+
+&lt;p&gt;(概览)&lt;/p&gt;
+
+&lt;p&gt;Objective-C提供了两种应用程序内存管理方式：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在本指南中描述的方式被称为“manual retain-release”或者MRR，你通过跟踪你拥有的对象显式地管理内存。这种方式通过“引用计数”模型来实现，该模型由Foundation框架的NSObject类和运行时环境共同提供。&lt;/li&gt;
+&lt;li&gt;自动引用计数，或ARC，使用于MRR相同的引用计数系统，但是在编译时插入了内存管理的方法。对于新的项目强烈建议使用ARC。如果你使用ARC，你就不需要明白文档中描述的底层实现了，尽管在有些情形下很有用。更多关于ARC的信息，参见&lt;a href=&#34;https://developer.apple.com/library/ios/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011226&#34;&gt; Transitioning to ARC Release Notes &lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;good-practices-prevent-memory-related-problems&#34;&gt;Good Practices Prevent Memory-Related Problems&lt;/h3&gt;
+
+&lt;p&gt;(防止内存泄漏的最佳实践)&lt;/p&gt;
+
+&lt;p&gt;错误的内存管理主要包含两类：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;释放或者覆盖正在使用中的数据。造成内存异常，通常导致程序崩溃，甚至导致数据损坏。&lt;/li&gt;
+&lt;li&gt;不用的数据不释放，导致内存泄漏。内存泄漏就是分配了内存，但是不释放，尽管再也不会使用。内存泄漏导致你的应用程序占用越来越多的内存，可能会导致系统性能下降，或导致应用程序被终止。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果你总是考虑内存管理的实现细节，而不是你实际的管理目标，那么你会感觉到从“引用计数”的角度理解内存管理实际是极其困难的。所以，你真正应该考虑的是对象的所有权以及对象图。&lt;/p&gt;
+
+&lt;p&gt;当一个方法所返回的对象，其所有权属于你的时候，Cocoa用一种非常直接的命名规范来告诉你。参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmRules.html#//apple_ref/doc/uid/20000994-BAJHFBGH&#34;&gt; Memory Management Policy &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;尽管基础的策略很直接，有一些有效的做法可以让内存管理更加容易，从而帮助你实现程序的稳定性和健壮性，从而使其占用更少的资源。参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW1&#34;&gt; Practical Memory Management &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;自动释放池使你可以用一种不同的方式来发送release消息。当你想放弃对一个对象的所有权，但又不想让这个对象的释放立即生效(比如，你在方法中要返回这个对象)，这种机制就很有用了。有几种情况你应该需要使用自动释放池。参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmAutoreleasePools.html#//apple_ref/doc/uid/20000047-CJBFBEDI&#34;&gt; Using Autorelease Pool Blocks &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;use-analysis-tools-to-debug-memory-problems&#34;&gt;Use Analysis Tools to Debug Memory Problems&lt;/h3&gt;
+
+&lt;p&gt;(使用分析工具来调试内存问题)&lt;/p&gt;
+
+&lt;p&gt;为了在编译时定位你代码的问题，你可以使用Xcode内建的Clang Static Ananlyzer工具。&lt;/p&gt;
+
+&lt;p&gt;如果内存管理问题依然存在，还有其他的工具和技术可以帮助你分析问题。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;这些工具和书籍在技术文章TN2239，&lt;a href=&#34;https://developer.apple.com/library/ios/technotes/tn2239/_index.html#//apple_ref/doc/uid/DTS40010638&#34;&gt; iOS Debugging Magic &lt;/a&gt;中描述。更确切的说，是使用NSZombie来发现release过多的对象。&lt;/li&gt;
+&lt;li&gt;你可以使用Instruments来跟踪引用计数事件，并寻找内存泄漏。参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/DeveloperTools/Conceptual/InstrumentsUserGuide/TheInstrumentsWorkflow.html#//apple_ref/doc/uid/TP40004652-CH5&#34;&gt; Collecting Data on Your App &lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

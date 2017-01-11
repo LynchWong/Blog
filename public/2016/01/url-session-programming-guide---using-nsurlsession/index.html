@@ -1,0 +1,1229 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>URL Session Programming Guide - Using NSURLSession</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="官方文档
+">
+    <meta property="og:description" content="官方文档
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="URL Session Programming Guide - Using NSURLSession">
+    <meta property="og:url" content="/2016/01/url-session-programming-guide---using-nsurlsession/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="官方文档
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      URL Session Programming Guide - Using NSURLSession
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2016-01-29T14:10:55Z">
+    
+  
+  
+  
+  
+    2016-01-29 14:10:55
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/%e7%bc%96%e7%a8%8b%e6%8c%87%e5%8d%97">编程指南</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW26">官方文档</a>
+</p>
+
+<h1 id="using-nsurlsession">Using NSURLSession</h1>
+
+<p>(使用NSURLSession)</p>
+
+<p>NSURLSession及其相关的类提供了通过HTTP协议下载内容的API。这些API提供了丰富的代理方法支持认证，并且让你的应用程序在没有运行(在iOS中即是挂起时)时具有后台执行下载任务的能力。</p>
+
+<p>为了使用NSURLSession的API，你的应用程序创建了一系列的会话，每一个会话都协调了一组数据传输相关的任务。比如，如果你在开发一个web浏览器，你的应用程序可能会每个标签或者窗口创建一个会话。对于每个会话，你的应用程序可能会添加一系列的任务到会话中，每个任务表示了一个特定URL的请求(以及任何返回的HTTP重定向)。</p>
+
+<p>类似于大多数网络请求API，NSURLSession的API是高度异步的。如果你使用默认的NSURLSession，系统会提供代理，你必须提供一个处理完成的Block，用来在传输成功完成或者发生了错误时给你的应用程序返回数据。另外，如果你提供了你自己自定义的代理对象，任务对象在接收来自服务器的数据后调用这些代理的方法。</p>
+
+<p><strong>注意</strong>：完成回调主要用来当作一种可替代的自定义代理。如果你使用接收完成回调的方法创建了一个任务，那么用来传输响应和数据的代理方法就不会被调用。</p>
+
+<p>NSURLSession的API提供了状态和进度属性，除了将这些信息传递给代理。它也支持取消，重新开始(恢复)，挂起任务，也提供了恢复挂起，取消，或者下载失败的任务的能力。</p>
+
+<h2 id="understanding-url-session-concepts">Understanding URL Session Concepts</h2>
+
+<p>(理解URL Session的概念)</p>
+
+<p>在一个会话中，任务的行为依赖于三件事情：会话的类型(取决于创建会话时使用的配置对象)，任务的类型，以及任务创建时应用程序是否在前台。</p>
+
+<h3 id="types-of-sessions">Types of Sessions</h3>
+
+<p>(会话类型)</p>
+
+<p>NSURLSession的API支持三种类型的会话，由创建会话时配置对象的类型决定：</p>
+
+<ul>
+<li>Default类型的会话的行为类似于其它用来下载URL内容的Foundation方法。使用持久化的基于磁盘的缓存和存储在用户钥匙串理的凭证。</li>
+<li>Ephemeral类型的会话不会存储任何数据到磁盘；所有的缓存，凭证等等都保存在内存中，与会话绑定。因此，当你的应用程序无效的时候，他们也被自动抹去了。</li>
+<li>Background类型的会话类似于Default类型，除了一个分开的进程处理所有的数据传输。Background会话有些额外的限制，在<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW44"> Background Transfer Considerations </a>中描述了。</li>
+</ul>
+
+<h3 id="types-of-tasks">Types of Tasks</h3>
+
+<p>(任务类型)</p>
+
+<p>对于会话，NSURLSession类支持三种类型的任务：data tasks，download tasks，and upload tasks。</p>
+
+<ul>
+<li>Data tasks使用NSData对象发送和接收数据。Data tasks主要针对你应用程序中那些与服务器短的、经常交互的请求。Data tasks能够一次返回一小段数据，或者通过完成处理句炳一次返回。</li>
+<li>Download tasks在文件形式中检索数据，支持在应用程序没有运行时进行后台下载任务。</li>
+<li>Upload tasks以文件形式发送数据，支持在应用程序没有运行时进行后台上传任务。</li>
+</ul>
+
+<h3 id="background-transfer-considerations">Background Transfer Considerations</h3>
+
+<p>(后台传输的注意事项)</p>
+
+<p>NSURLSession类支持应用程序被挂起时后台传输。只有使用后台会话的配置对象创建的NSURLSession对象才支持后台传输(使用<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionConfiguration_class/index.html#//apple_ref/occ/clm/NSURLSessionConfiguration/backgroundSessionConfiguration:"> backgroundSessionConfiguration: </a>创建后台会话的配置对象)。</p>
+
+<p>因为实际传输在分开的进程中处理，以及重启你应用程序的进程是相对昂贵的，所以一些功能无法实现，导致了如下所示的限制：</p>
+
+<ul>
+<li>会话必须给每一个传输提供一个代理。(对于上传和下载，代理的行为类似于处理传输。)</li>
+<li>只有HTTP和HTTPS协议支持(自定义协议不支持)。</li>
+<li>始终遵循重定向。</li>
+<li>只支持基于文件的上传任务(基于数据对象和流的上传任务在程序退出时就会失败)。</li>
+<li>如果后台传输是应用程序在后台时初始化的，那么配置对象的<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionConfiguration_class/index.html#//apple_ref/occ/instp/NSURLSessionConfiguration/discretionary"> discretionary </a>属性应该设置为<strong>true</strong>。</li>
+</ul>
+
+<p><strong>注意</strong>：在iOS8和OS X 10.10之前，Data tasks不支持后台会话。</p>
+
+<p>iOS和OS X重新启动应用程序的行为有一些不一样。</p>
+
+<p>在iOS中，当一个后台传输完成或者需要凭证，如果你的应用程序没有在运行，iOS在后台自动重启你的应用程序然后在应用程序的UIApplicationDelegate对象上调用<strong>application:handleEventsForBackgroundURLSession:completionHandler:</strong>方法。这个方法提供了导致你应用程序重启的会话的identifier。你的应用程序应该存储完成处理句柄，使用这个相同的identifier创建一个后台配置对象，然后使用这个后台配置对象创建一个会话。新的会话会自动与后台活动的关联。之后，当会话完成了最后一个后台下载任务，它会给会话的代理发送一个<strong>URLSessionDidFinishEventsForBackgroundURLSession:</strong>消息。你的会话代理应该调用存储的完成句柄。</p>
+
+<p>在iOS和OS X中，当用户重启了你的应用程序，你的应用程序应该立即使用相同的identifier为应用程序最后运行的任务创建后台配置的对象，然后为每一个配置对象创建一个会话。这些新的会话会自动与后台活动的关联。</p>
+
+<p><strong>注意</strong>：每个identifier只能创建一个会话(创建配置对象的时候指定)。多个会话共享同一个identifier的行为是不确定。</p>
+
+<p>当应用程序挂起的时候，有任务完成，代理的<strong>URLSession:downloadTask:didFinishDownloadingToURL:</strong>方法会被调用，以及与新的下载文件相关的任务和URL。</p>
+
+<p>类似的，如果任务需要凭证，NSURLSession对象调用代理的<strong>URLSession:task:didReceiveChallenge:completionHandler:</strong>方法或者<strong>URLSession:didReceiveChallenge:completionHandler:</strong>方法。</p>
+
+<p>后台会话中的上传和下载的任务在网络错误后，URL加载系统会自动重试。所以没有必要使用reachability的API来侦测网络确定何时重试失败的任务。</p>
+
+<p>NSURLSession后台传输的例子，参见<strong>Simple Background Transfer</strong>。</p>
+
+<h3 id="life-cycle-and-delegate-interaction">Life Cycle and Delegate Interaction</h3>
+
+<p>(声明周期和代理交互)</p>
+
+<p>取决于你使用NSURLSession类做什么，了解会话完整的生命周期可能很有帮助，包括和代理的交互，以及代理调用的顺序，当服务器返回重定向的时候会发生什么，以及当你的应用程序恢复一个下载失败的任务时发生了什么，等等。</p>
+
+<p>关于会话生命周期的完整描述，参见<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/NSURLSessionConcepts/NSURLSessionConcepts.html#//apple_ref/doc/uid/10000165i-CH2-SW1"> Life Cycle of a URL Session </a>。</p>
+
+<h3 id="nscopying-behavior">NSCopying Behavior</h3>
+
+<p>(NSCopying行为)</p>
+
+<p>会话和任务对象按照如下适配<strong>NSCopying</strong>协议：</p>
+
+<ul>
+<li>当你的应用程序复制会话或者任务对象时，你会得到同一个对象。</li>
+<li>当你的应用程序复制一个配置对象，你会得到一个新的拷贝的对象，便于你可以独立的修改。</li>
+</ul>
+
+<h2 id="sample-delegate-class-interface">Sample Delegate Class Interface</h2>
+
+<p>(简单的代理类接口)</p>
+
+<p>接下来的代码片段基于Listing 1-1所示的类接口。</p>
+
+<p>Listing 1-1  Sample delegate class interface</p>
+
+<pre><code>#import &lt;Foundation/Foundation.h&gt;
+
+
+typedef void (^CompletionHandlerType)();
+
+@interface MySessionDelegate : NSObject &lt;NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate, NSURLSessionDownloadDelegate&gt;
+
+@property NSURLSession *backgroundSession;
+@property NSURLSession *defaultSession;
+@property NSURLSession *ephemeralSession;
+
+#if TARGET_OS_IPHONE
+@property NSMutableDictionary *completionHandlerDictionary;
+#endif
+
+- (void) addCompletionHandler: (CompletionHandlerType) handler forSession: (NSString *)identifier;
+- (void) callCompletionHandlerForSession: (NSString *)identifier;
+
+
+@end
+</code></pre>
+
+<h2 id="creating-and-configuring-a-session">Creating and Configuring a Session</h2>
+
+<p>(创建配置会话)</p>
+
+<p>NSURLSession的API提供了广泛的配置选项：</p>
+
+<ul>
+<li>支持给单个的会话指定私有的缓存，Cookie，凭证，和协议。</li>
+<li>依赖于特定请求(task)或者一组请求(session)的认证。</li>
+<li>通过URL上传和下载文件，鼓励数据(文件内容)和源数据分离。</li>
+<li>配置每个主机的最大连接数。</li>
+<li>如果一整个资源在一定的时间下不能下载就会触发每个资源超时。</li>
+<li>最低和最高的TLS版本支持。</li>
+<li>自定义的代理字典。</li>
+<li>控制Cookie策略。</li>
+<li>控制HTTP管道行为。</li>
+</ul>
+
+<p>因为大部分设置都包含在一个分开的配置对象里，你可以重用相同的设置。当你初始化一个会话对象时，按照如下：</p>
+
+<ul>
+<li>一个配置对象，管理会话和任务的行为。</li>
+<li>一个可选的代理对象，用来处理接收的数据以及处理指定给会话和任务的其它事件，比如服务器认证，确定资源请求是否应该被转换成下载等。</li>
+</ul>
+
+<p>如果你没有提供代理对象，NSURLSession对象会使用系统提供的代理。通过这种方式，你可以很容易的使用NSURLSession来替换已经存在的使用<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html#//apple_ref/occ/clm/NSURLConnection/sendAsynchronousRequest:queue:completionHandler:"> sendAsynchronousRequest:queue:completionHandler: </a>方法的代码。</p>
+
+<p><strong>注意</strong>：如果的应用程序需要执行后台传输，你必须提供一个自定义的代理。</p>
+
+<p>在你初始化一个会话对象后，你不能改变配置或者代理，除了重新创建一个新的会话。</p>
+
+<p>Listing 1-2展示了如何创建一个normal， ephemeral， 和 background的会话的例子。</p>
+
+<p>Listing 1-2  Creating and configuring sessions</p>
+
+<pre><code>#if TARGET_OS_IPHONE
+self.completionHandlerDictionary = [NSMutableDictionary dictionaryWithCapacity:0];
+#endif
+
+/* Create some configuration objects. */
+
+NSURLSessionConfiguration *backgroundConfigObject = [NSURLSessionConfiguration backgroundSessionConfiguration: @&quot;myBackgroundSessionIdentifier&quot;];
+NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+NSURLSessionConfiguration *ephemeralConfigObject = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+
+
+/* Configure caching behavior for the default session.
+ Note that iOS requires the cache path to be a path relative
+ to the ~/Library/Caches directory, but OS X expects an
+ absolute path.
+ */
+#if TARGET_OS_IPHONE
+NSString *cachePath = @&quot;/MyCacheDirectory&quot;;
+
+NSArray *myPathList = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+NSString *myPath    = [myPathList  objectAtIndex:0];
+
+NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+
+NSString *fullCachePath = [[myPath stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:cachePath];
+NSLog(@&quot;Cache path: %@\n&quot;, fullCachePath);
+#else
+NSString *cachePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@&quot;/nsurlsessiondemo.cache&quot;];
+
+NSLog(@&quot;Cache path: %@\n&quot;, cachePath);
+#endif
+
+
+
+
+
+NSURLCache *myCache = [[NSURLCache alloc] initWithMemoryCapacity: 16384 diskCapacity: 268435456 diskPath: cachePath];
+defaultConfigObject.URLCache = myCache;
+defaultConfigObject.requestCachePolicy = NSURLRequestUseProtocolCachePolicy;
+
+/* Create a session for each configurations. */
+self.defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
+self.backgroundSession = [NSURLSession sessionWithConfiguration: backgroundConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
+self.ephemeralSession = [NSURLSession sessionWithConfiguration: ephemeralConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
+</code></pre>
+
+<p>除了后台配置，你可以重用其他的配置对象创建额外的会话。(你不能重用后台会话配置，因为两个后台会话对象共享相同的identifier的行为不确定的。)</p>
+
+<p>任何时候修改配置对象都是安全的。当你创建会话的时候，会话会对配置对象执行深拷贝，所以修改只会影响新创建的会话，不会影响已经存在的。比如，你可能创建了第二个会话，只在Wi-Fi连接下才获取内容，如Listing 1-3所示。</p>
+
+<p>Listing 1-3  Creating a second session with the same configuration object</p>
+
+<pre><code>ephemeralConfigObject.allowsCellularAccess = NO;
+
+// ...
+
+NSURLSession *ephemeralSessionWiFiOnly = [NSURLSession sessionWithConfiguration: ephemeralConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
+</code></pre>
+
+<h2 id="fetching-resources-using-system-provided-delegates">Fetching Resources Using System-Provided Delegates</h2>
+
+<p>(使用系统提供的代理获取资源)</p>
+
+<p>使用NSURLSession的最直接的方法就是使用NSURLSession上的方法替换<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html#//apple_ref/occ/clm/NSURLConnection/sendAsynchronousRequest:queue:completionHandler:"> sendAsynchronousRequest:queue:completionHandler: </a>方法。使用这种方法，你只需要完成两部分代码：</p>
+
+<ul>
+<li>创建一个配置对象，然后使用配置对象创建一个会话。</li>
+<li>当数据完全接受后的处理句柄。</li>
+</ul>
+
+<p>使用系统提供的代理，你可以只使用一行代码就能发起获取特定URL的请求。Listing 1-4演示了这个简单的例子。</p>
+
+<p><strong>注意</strong>：系统提供的代理只在自定义网络行为的时候有限制。如果你的应用程序需要除了基本请求之外的特别行为，比如自定义的认证或者后台下载，这种技术就不太适合。对于你必须实现完整代理的情形，参见<strong>Life Cycle of a URL Session</strong>。</p>
+
+<p>Listing 1-4  Requesting a resource using system-provided delegates</p>
+
+<pre><code>NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+
+[[delegateFreeSession dataTaskWithURL: [NSURL URLWithString: @&quot;http://www.example.com/&quot;]
+                    completionHandler:^(NSData *data, NSURLResponse *response,
+                                        NSError *error) {
+                        NSLog(@&quot;Got response %@ with error %@.\n&quot;, response, error);
+                        NSLog(@&quot;DATA:\n%@\nEND DATA\n&quot;,
+                              [[NSString alloc] initWithData: data
+                                                    encoding: NSUTF8StringEncoding]);
+                    }] resume];
+</code></pre>
+
+<h2 id="fetching-data-using-a-custom-delegate">Fetching Data Using a Custom Delegate</h2>
+
+<p>(使用自定义代理获取数据)</p>
+
+<p>如果你使用自定义代理获取数据，你的代理至少要实现如下方法：</p>
+
+<ul>
+<li><a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDataDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDataDelegate/URLSession:dataTask:didReceiveData:"> URLSession:dataTask:didReceiveData: </a>方法提供了从请求中获取的数据，每次一小段。</li>
+<li><a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didCompleteWithError:"> URLSession:task:didCompleteWithError: </a>方法向你的任务指示数据是否完全接收了。</li>
+</ul>
+
+<p>如果你的应用程序需要使用URLSession:dataTask:didReceiveData:方法返回的数据，那么你的代码负责存储这些数据。</p>
+
+<p>比如，一个Web浏览器可能在接收到数据的时候就要呈现数据。要做到这一点，你可能会使用一个字典映射一个任务对象和存储结果的NSMutableData，然后使用NSMutableData对象的<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSMutableData_Class/index.html#//apple_ref/occ/instm/NSMutableData/appendData:"> appendData: </a>方法拼接新的接收的数据。</p>
+
+<p>Listing 1-5展示了创建和开始一个data task。</p>
+
+<p>Listing 1-5  Data task example</p>
+
+<pre><code>NSURL *url = [NSURL URLWithString: @&quot;http://www.example.com/&quot;];
+
+NSURLSessionDataTask *dataTask = [self.defaultSession dataTaskWithURL: url];
+[dataTask resume];
+</code></pre>
+
+<h2 id="downloading-files">Downloading Files</h2>
+
+<p>(下载文件)</p>
+
+<p>在更高层级上来说，下载文件类似于接收数据。你的应用程序应该实现如下代理方法：</p>
+
+<ul>
+<li><a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDownloadDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDownloadDelegate/URLSession:downloadTask:didFinishDownloadingToURL:"> URLSession:downloadTask:didFinishDownloadingToURL: </a>方法给你的应用程序提供了一个URL，这个URL是临时存储的下载文件的URL。
+<strong>重要</strong>：在这方法返回之前，你必须打开文件然后读取文件或者将文件移动到一个永久的地址。当这个方法返回之后，如果这个临时文件还在原来的位置就会被删除。</li>
+<li><a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDownloadDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDownloadDelegate/URLSession:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:"> URLSession:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite: </a>方法给你的应用程序提供下载进度的状态信息。</li>
+<li><a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDownloadDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDownloadDelegate/URLSession:downloadTask:didResumeAtOffset:expectedTotalBytes:"> URLSession:downloadTask:didResumeAtOffset:expectedTotalBytes: </a>方法告诉你的应用程序尝试恢复之前下载失败的任务是否成功。</li>
+<li><a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didCompleteWithError:"> URLSession:task:didCompleteWithError: </a>告诉你的应用程序是否下载失败。</li>
+</ul>
+
+<p>如果你在后台会话上执行下载，当你应用程序没有下载的时候仍然会继续执行。如果你在默认或者短暂(ephemeral)的会话上运行，下载必须在你应用程序启动后重新开始。</p>
+
+<p>在与服务器传输数据期间，如果用户告诉应用程序暂停下载，你的应用程序可以调用<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDownloadTask_class/index.html#//apple_ref/occ/instm/NSURLSessionDownloadTask/cancelByProducingResumeData:"> cancelByProducingResumeData: </a>方法来取消任务。之后，你的应用程序可以传递已经下载好的数据给<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/downloadTaskWithResumeData:"> downloadTaskWithResumeData: </a>或者<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/downloadTaskWithResumeData:completionHandler:"> downloadTaskWithResumeData:completionHandler: </a>方法来创建一个继续之前下载的新的下载任务。</p>
+
+<p>如果传输失败，你的代理的调用<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didCompleteWithError:"> URLSession:task:didCompleteWithError: </a>方法，并传递一个NSError对象。如果任务是可恢复的，对象的userInfo字典的<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/c/data/NSURLSessionDownloadTaskResumeData"> NSURLSessionDownloadTaskResumeData </a>键会包含一个已经下载了数据的值。你的应用程序可以传递这个已经下载好的数据给<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/downloadTaskWithResumeData:"> downloadTaskWithResumeData: </a>或者<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/downloadTaskWithResumeData:completionHandler:"> downloadTaskWithResumeData:completionHandler: </a>方法创建一个新的下载任务，重新开始下载。</p>
+
+<p>Listing 1-6提供了一个下载中等文件大小的例子。Listing 1-7提供了下载任务代理方法的例子。</p>
+
+<p>Listing 1-6  Download task example</p>
+
+<pre><code>NSURL *url = [NSURL URLWithString: @&quot;https://developer.apple.com/library/ios/documentation/Cocoa/Reference/&quot;
+              &quot;Foundation/ObjC_classic/FoundationObjC.pdf&quot;];
+
+NSURLSessionDownloadTask *downloadTask = [self.backgroundSession downloadTaskWithURL: url];
+[downloadTask resume];
+</code></pre>
+
+<p>Listing 1-7  Delegate methods for download tasks</p>
+
+<pre><code>-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
+{
+    NSLog(@&quot;Session %@ download task %@ finished downloading to URL %@\n&quot;,
+          session, downloadTask, location);
+
+#if 0
+    /* Workaround */
+    [self callCompletionHandlerForSession:session.configuration.identifier];
+#endif
+
+#define READ_THE_FILE 0
+#if READ_THE_FILE
+    /* Open the newly downloaded file for reading. */
+    NSError *err = nil;
+    NSFileHandle *fh = [NSFileHandle fileHandleForReadingFromURL:location
+                                                           error: &amp;err];
+
+    /* Store this file handle somewhere, and read data from it. */
+    // ...
+
+#else
+    NSError *err = nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *cacheDir = [[NSHomeDirectory()
+                           stringByAppendingPathComponent:@&quot;Library&quot;]
+                          stringByAppendingPathComponent:@&quot;Caches&quot;];
+    NSURL *cacheDirURL = [NSURL fileURLWithPath:cacheDir];
+    if ([fileManager moveItemAtURL:location
+                             toURL:cacheDirURL
+                             error: &amp;err]) {
+
+        /* Store some reference to the new URL */
+    } else {
+        /* Handle the error. */
+    }
+#endif
+
+}
+
+-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+    NSLog(@&quot;Session %@ download task %@ wrote an additional %lld bytes (total %lld bytes) out of an expected %lld bytes.\n&quot;,
+          session, downloadTask, bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+}
+
+-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
+{
+    NSLog(@&quot;Session %@ download task %@ resumed at offset %lld bytes out of an expected %lld bytes.\n&quot;,
+          session, downloadTask, fileOffset, expectedTotalBytes);
+}
+</code></pre>
+
+<h2 id="uploading-body-content">Uploading Body Content</h2>
+
+<p>(上传正文内容)</p>
+
+<p>你的应用程序可以有三种方式给HTTP POST请求提供请求的正文内容(Body Content)：作为一个NSData对象，文件或者流。通常来说，你的应用程序应该：</p>
+
+<ul>
+<li>使用NSData对象，如果你的内存中已经有了数据并且没有理由去处理它。</li>
+<li>如果你上传的内容已经在磁盘文件中，如果你使用后台传输，或者将数据写入磁盘减少内存对你的应用程序有好处，那么你就使用文件。</li>
+<li>如果你通过网络接收数据，使用流。或者转换提供给NSURLConnection请求正文的流的代码。</li>
+</ul>
+
+<p>不管你选择哪种方式，如果你的应用程序提供了自定义的会话代理，代理需要实现<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:"> URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend: </a>代理方法来获得上传进度的信息。</p>
+
+<p>另外，如果你的应用程序使用流提供请求正文，必须提供一个自定义会话代理，实现<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:needNewBodyStream:"> URLSession:task:needNewBodyStream: </a>方法，更多详细内容，参见<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW23"> Uploading Body Content Using a Stream </a>。</p>
+
+<h3 id="uploading-body-content-using-an-nsdata-object">Uploading Body Content Using an NSData Object</h3>
+
+<p>(使用NSData对象上传正文内容)</p>
+
+<p>使用NSData对象上传正文内容，你的应用程序调用<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/uploadTaskWithRequest:fromData:"> uploadTaskWithRequest:fromData: </a>或者<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/uploadTaskWithRequest:fromData:completionHandler:"> uploadTaskWithRequest:fromData:completionHandler: </a>方法创建一个上传任务，然后通过fromData参数提供请求的正文数据。</p>
+
+<p>会话对象会基于数据对象的大小来计算Content-Length首部字段。</p>
+
+<p>你的应用程序必须提供服务器要求的额外的首部字段信息，比如内容类型(content type)，作为URL请求对象的一部分。</p>
+
+<h3 id="uploading-body-content-using-a-file">Uploading Body Content Using a File</h3>
+
+<p>(使用文件上传正文内容)</p>
+
+<p>使用文件上传正文内容，你的应用程序可以调用<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/uploadTaskWithRequest:fromFile:"> uploadTaskWithRequest:fromFile: </a>和<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/uploadTaskWithRequest:fromFile:completionHandler:"> uploadTaskWithRequest:fromFile:completionHandler: </a>方法创建上传任务，然后提供一个文件的URL，上传任务会从这个URL读取正文内容。</p>
+
+<p>会话对象根据数据对象计算首部字段Content-Length的值。如果你的应用程序没有为首部字段提供Content-Type的值，会话对象也会提供一个。</p>
+
+<p>你的应用程序应该提供服务器要求的首部字段信息，作为URL请求对象的一部分。</p>
+
+<h3 id="uploading-body-content-using-a-stream">Uploading Body Content Using a Stream</h3>
+
+<p>(使用流上传正文内容)</p>
+
+<p>使用流上传正文内容，调用<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/uploadTaskWithStreamedRequest:"> uploadTaskWithStreamedRequest: </a>方法创建一个上传任务。你应用程序提供一个请求对象，这个对象与流相关联，上传任务会从流里面读取正文内容。</p>
+
+<p>你的应用程序必须提供服务器要求的首部字段的信息，内容类型和内容长度，作为URL请求对象的一部分。</p>
+
+<h3 id="uploading-a-file-using-a-download-task">Uploading a File Using a Download Task</h3>
+
+<p>(使用下载任务(Download Task)上传文件)</p>
+
+<p>为下载任务(download task)上传正文内容，你的应用程序必须提供NSData对象或者流作为URL请求对象的一部分，然后用这个请求创建下载请求。</p>
+
+<p>如果你使用流提供数据，你的应用程序必须提供一个<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:needNewBodyStream:"> URLSession:task:needNewBodyStream: </a>代理方法在认证失败的事件中来提供新的内容流。这个方法的详细信息，参见<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW23"> Uploading Body Content Using a Stream </a>。</p>
+
+<p>下载任务(download task)的行为类似于数据任务(data task)，除了返回数据的方式不一样。</p>
+
+<h2 id="handling-authentication-and-custom-tls-chain-validation">Handling Authentication and Custom TLS Chain Validation</h2>
+
+<p>(处理认证以及自定义TLS链验证)</p>
+
+<p>如果远程服务器返回了一个状态码指示需要认证，如果认证要求一个连接级别的挑战(比如SSL客户端证书)，NSURLSession调用认证的代理方法。</p>
+
+<ul>
+<li>对于会话级别的挑战－<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtectionSpace_Class/index.html#//apple_ref/c/data/NSURLAuthenticationMethodNTLM"> NSURLAuthenticationMethodNTLM </a>，<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtectionSpace_Class/index.html#//apple_ref/c/data/NSURLAuthenticationMethodNegotiate"> NSURLAuthenticationMethodNegotiate </a>，<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtectionSpace_Class/index.html#//apple_ref/c/data/NSURLAuthenticationMethodClientCertificate"> NSURLAuthenticationMethodClientCertificate </a>， 或者 <a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtectionSpace_Class/index.html#//apple_ref/c/data/NSURLAuthenticationMethodServerTrust"> NSURLAuthenticationMethodServerTrust </a>－NSURLSession对象调用会话的<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDelegate/URLSession:didReceiveChallenge:completionHandler:"> URLSession:didReceiveChallenge:completionHandler: </a>代理方法。如果你的应用程序不提供会话代理方法，NSURLSession对象会调用任务的<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didReceiveChallenge:completionHandler:"> URLSession:task:didReceiveChallenge:completionHandler: </a>代理方法来处理挑战。</li>
+<li>对于非会话级别的挑战(其他所有情况)，NSURLSession对象会调用会话代理的<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didReceiveChallenge:completionHandler:"> URLSession:task:didReceiveChallenge:completionHandler: </a>方法处理挑战。如果你的应用提供会话代理以及你需要处理认证，那么你必须在任务级别处理认证或者提供一个任务级别的处理器处理每个会话处理的显示调用。会话的代理方法<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDelegate/URLSession:didReceiveChallenge:completionHandler:"> URLSession:didReceiveChallenge:completionHandler: </a>在非会话级别是不会调用的。</li>
+</ul>
+
+<p><strong>注意</strong>：Kerberos认证的处理是透明的。</p>
+
+<p>当一个基于流的上传任务的认证失败时，任务不能回退且安全的重用流。相反，NSURLSession对象会调用代理的<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:needNewBodyStream:"> URLSession:task:needNewBodyStream: </a>方法去获得一个新的NSInputStream对象，给新的请求提供数据。(如果上传任务是基于文件或者NSData对象，会话对象就不会调用这个方法。)</p>
+
+<p>关于NSURLSession代理中的认证的方法的更多信息，参见<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW1"> Authentication Challenges and TLS Chain Validation </a>。</p>
+
+<h2 id="handling-ios-background-activity">Handling iOS Background Activity</h2>
+
+<p>(处理iOS后台活动)</p>
+
+<p>如果你在iOS中使用NSURLSession，当下载完成时应用程序会自动重启。你应用程序的app delegate的<a href="https://developer.apple.com/library/prerelease/tvos/documentation/UIKit/Reference/UIApplicationDelegate_Protocol/index.html#//apple_ref/occ/intfm/UIApplicationDelegate/application:handleEventsForBackgroundURLSession:completionHandler:"> application:handleEventsForBackgroundURLSession:completionHandler: </a>方法会负责重新创建合适的会话，存储完成处理器，当会话调用会话代理的<a href="https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDelegate/URLSessionDidFinishEventsForBackgroundURLSession:"> URLSessionDidFinishEventsForBackgroundURLSession: </a>方法时会调用那个处理器。</p>
+
+<p>Listing 1-8 和 Listing 1-9分开展示会话及app delegate的方法。</p>
+
+<p>Listing 1-8  Session delegate methods for iOS background downloads</p>
+
+<pre><code>#if TARGET_OS_IPHONE
+-(void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
+{
+    NSLog(@&quot;Background URL session %@ finished events.\n&quot;, session);
+
+    if (session.configuration.identifier)
+        [self callCompletionHandlerForSession: session.configuration.identifier];
+}
+
+- (void) addCompletionHandler: (CompletionHandlerType) handler forSession: (NSString *)identifier
+{
+    if ([ self.completionHandlerDictionary objectForKey: identifier]) {
+        NSLog(@&quot;Error: Got multiple handlers for a single session identifier.  This should not happen.\n&quot;);
+    }
+
+    [ self.completionHandlerDictionary setObject:handler forKey: identifier];
+}
+
+- (void) callCompletionHandlerForSession: (NSString *)identifier
+{
+    CompletionHandlerType handler = [self.completionHandlerDictionary objectForKey: identifier];
+
+    if (handler) {
+        [self.completionHandlerDictionary removeObjectForKey: identifier];
+        NSLog(@&quot;Calling completion handler.\n&quot;);
+
+        handler();
+    }
+}
+#endif
+</code></pre>
+
+<p>Listing 1-9  App delegate methods for iOS background downloads</p>
+
+<pre><code>- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
+{
+    NSURLSessionConfiguration *backgroundConfigObject = [NSURLSessionConfiguration backgroundSessionConfiguration: identifier];
+
+    NSURLSession *backgroundSession = [NSURLSession sessionWithConfiguration: backgroundConfigObject delegate: self.mySessionDelegate delegateQueue: [NSOperationQueue mainQueue]];
+
+    NSLog(@&quot;Rejoining session %@\n&quot;, identifier);
+
+    [ self.mySessionDelegate addCompletionHandler: completionHandler forSession: identifier];
+}
+</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/nsurlsession/">NSURLSession</a>
+
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/nsurlconnection/">NSURLConnection</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurlconnection/" data-tooltip="URL Session Programming Guide - Using NSURLConnection">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/url-session-programming-guide---introduction/" data-tooltip="URL Session Programming Guide - Introduction">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---using-nsurlsession%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---using-nsurlsession%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---using-nsurlsession%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurlconnection/" data-tooltip="URL Session Programming Guide - Using NSURLConnection">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/url-session-programming-guide---introduction/" data-tooltip="URL Session Programming Guide - Introduction">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---using-nsurlsession%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---using-nsurlsession%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---using-nsurlsession%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---using-nsurlsession%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---using-nsurlsession%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2furl-session-programming-guide---using-nsurlsession%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2016\/01\/url-session-programming-guide---using-nsurlsession\/';
+          
+            this.page.identifier = '\/2016\/01\/url-session-programming-guide---using-nsurlsession\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

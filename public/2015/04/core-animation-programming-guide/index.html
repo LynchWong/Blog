@@ -1,0 +1,1879 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Core Animation Programming Guide</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="官方文档
+Core Animation编程指南
+">
+    <meta property="og:description" content="官方文档
+Core Animation编程指南
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Core Animation Programming Guide">
+    <meta property="og:url" content="/2015/04/core-animation-programming-guide/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="官方文档
+Core Animation编程指南
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Core Animation Programming Guide
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-04-27T14:43:47Z">
+    
+  
+  
+  
+  
+    2015-04-27 14:43:47
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/%e7%bc%96%e7%a8%8b%e6%8c%87%e5%8d%97">编程指南</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514-CH1-SW1">官方文档</a>
+<a href="http://blog.csdn.net/mad2man/article/details/16928891">Core Animation编程指南</a>
+</p>
+
+<h1 id="简介">简介</h1>
+
+<h2 id="关于core-animation">关于Core Animation</h2>
+
+<p>Core Animation是iOS与OS X平台上负责图形渲染与动画的基础设施。Core Animation可以动画你应用程序的视图和其他的可视元素。Core Animation为你完成了实现动画所需的大部分绘帧工作。你只需在配置少量的动画参数（如开始点位置和结束点位置）就可启动Core Animation。Core Animation将大部分实际的绘图任务交给了图形硬件处理，图形硬件会加速图形渲染的速度。这种自动化的图形加速让动画具有更高的帧率且更加平滑，但这并不会增加CPU的负担而导致影响你应用的运行速度。</p>
+
+<p>如果你正在开发一个iOS应用，你就已经使用到了Core Animation；如果你开发的是OS X应用，你仅需小小的付出就可以利用Core Animation的强大功能。如下图，Core Animation位于AppKit和UIKit的底层。它被紧密的集成到了Cocoa和Cocoa Touch视图工作流中。虽然被紧密的集成，Core Animation也存在扩展功能的接口，这些接口暴露给了应用的视图。使用这些接口能让你更细粒度地控制应用中的动画。</p>
+
+<p><img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/1.png" alt="alt text" /></p>
+
+<h2 id="概览">概览</h2>
+
+<p>你可能从不需要直接使用Core Animation，但是当你使用Core Animation，你应该了解Core Animation是你app基础设施中的一部分。</p>
+
+<h3 id="core-animation管理着你应用的内容">Core Animation管理着你应用的内容</h3>
+
+<p>Core Animation自身并不是一个绘图系统。它只是一个负责在硬件上合成和操纵应用内容的基础构件。Core Animation的核心是图层对象，图层对象用于管理和操控你的应用内容。图层将捕获的内容放到一副位图中，图形硬件能够非常容易的操控你的位图。在大部分应用中，图层被作为一种管理视图内容的方式，但是你也可以创建单独的图层，这取决于你自身的需要。</p>
+
+<h3 id="更改图层属性会触发动画">更改图层属性会触发动画</h3>
+
+<p>你使用Core Animation创建的大部分动画都包含对图层属性的更改。像视图一样，图层对象也具有边框矩形、坐标原点、尺寸、不透明度、变换矩阵以及许多其他面向可视的属性，这些属性都可以被修改。大部分这些属性的值发生了变化都将会触发隐式动画被创建。隐式动画是一种从旧属性值动画到新属性值的动画形式。如果需要全面掌控动画行为，你可以考虑使用显式动画这些属性。</p>
+
+<h3 id="有组织的图层层级">有组织的图层层级</h3>
+
+<p>有组织的图层之间存在着父子关系。图层的组织会影响到图层的可见内容。可见内容的管理与视图的管理方法相似。附到视图上的图层集合的层级镜像对应视图层级。你可以将独立图层添加到图层的层级以扩充你的视图的可视内容。</p>
+
+<h3 id="使用动作对象改变图层的默认行为">使用动作对象改变图层的默认行为</h3>
+
+<p>通过动作对象可以做到隐式的图层动画。动作对象是实现了一个预定义接口的常规对象。Core Animation使用动作对象实现与图层关联的常规的默认动画集合。你可以创建属于你自己的动作对象，以实现自定义的动画或者实现其他行为类型，然后你将动作对象赋值给图层的某一属性。当属性发生变化，Core Animation检索你的动作对象并告诉动作对象执行对应的动作。</p>
+
+<h2 id="怎样使用该文档">怎样使用该文档</h2>
+
+<p>该文档为那些需要更全面的控制动画效果或打算利用图层提升绘图性能的开发者。该文档也介绍了iOS和OS X对图层和视图的合成。图层和视图的合成在iOS和OS X平台上是不同的，理解这些不同对于创建高效的动画至关重要。</p>
+
+<h2 id="预备知识">预备知识</h2>
+
+<p>你应该了解你的目标平台的视图架构，以及熟悉如何创建基于视图的动画。如果你还未到该阶段，请阅读以下两篇文档：</p>
+
+<ul>
+<li>对于iOS应用开发，你应该理解<a href="https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009503">View Programming Guide for iOS</a>中关于视图架构的描述。</li>
+<li>对于OS X应用开发，你应该理解《视图编程指南》中关于视图架构的描述。</li>
+</ul>
+
+<h1 id="core-animation基础">Core Animation基础</h1>
+
+<p>Core Animation为动画视图和其他可视元素提供了一个通用的系统。Core Animation并不是视图的替代品，相反，它是一种和视图相集成的技术。由于位图可以直接由图形硬件直接操控，通过将视图的内容缓存到位图中, 该技术可获得更优的性能且支持动画视图内容。除了缓存视图内容，Core Animation也定义了指定任意可视内容，然后将内容和视图集成，最后动画视图和其他可视元素的方式。</p>
+
+<p>使用Core Animation让视图和可视对象的变化能以动画的形式呈现。大部分变化都与可视对象属性的更改相关。比如Core Animation能让视图的位置、尺寸或者透明度的变化以动画的形式呈现。当你更改了这些属性的值， Core Animation在当前属性值和最新指定的属性值之间进行动画。你一般不需要像卡通片那样，完成每秒60次的视图内容替换。相反，你应该利用Core Animation提供的移动视图、淡入淡出视图、对视图应用任意的变换、改变视图的其他可视属性的方式完成动画 。</p>
+
+<h2 id="图层是绘图与动画的基础">图层是绘图与动画的基础</h2>
+
+<p>图层对象是组织在三维空间的二维平面，它是使用Core Animation执行任何操作的核心构件。和视图一样，图层的可管理信息包括几何结构、内容、可视属性；不同于视图，图层没有定义它自己的外观，图层仅管理周围位图的状态信息。位图可以是视图的绘图结果或者一张图片。因此主要的图层被认为是模型对象，因为它们主要是用于管理数据。此概念务必记住，因为它影响到动画的行为。</p>
+
+<h3 id="基于图层的绘图模型">基于图层的绘图模型</h3>
+
+<p>大部分图层不做实际的绘图操作。相反，图层捕获应用的内容并缓存它们到位图中。位图有时也被称为储备（backing store）。当你随后改变了一个图层的属性值，你做的所有只是改变了与图层对象相关联的状态信息。当你的更改触发了一个动画，Core Animation传递图层的位图和图层的状态给图形处理硬件。图形处理器所做的工作是使用获得的信息渲染位图，如图1-1所示，用图形处理硬件操纵位图要比图形处理软件能获得更高的动画效果。</p>
+
+<p>Figure 1-1  How Core Animation draws content
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/2.png" alt="alt text" /></p>
+
+<p>因为操纵的是静态的位图，基于图层的绘图和基于视图的绘图在技术上有明显的不同。对基于视图的绘图，对视图的改变经常会触发调用视图的drawRect：方法以重绘视图内容。但是此种方式的代价相对较高，因为它是CPU在主线程上的操作。Core Animation通过尽可能的使用图形硬件操纵缓存后的位图来避免了这种开销，从而完成相同或相似的效果。
+虽然Core Animation尽可能的使用缓存后的内容，但也必须提供初始内容并不时地更新它。这里有几种方法能够为你的应用程序提供一个带有内容的图层对象，详见<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/SettingUpLayerObjects/SettingUpLayerObjects.html#//apple_ref/doc/uid/TP40004514-CH13-SW4">Providing a Layer’s Contents</a>。</p>
+
+<h3 id="基于图层的动画">基于图层的动画</h3>
+
+<p>图层的数据和状态信息是从图层内容的可视呈现中被分离了出来的。这种分离性给了Core Animation介入以及从旧的属性值动画到新的属性值的机会。例如改变一个图层的position属性会引起Core Animation将图层从当前的位置移动到新的具体位置。对其他属性做相似的改变将引起适当的动画效果。图1-2展示了一些可以执行在图层上的动画类型。可以触发动画的图层属性列表，详见<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/AnimatableProperties/AnimatableProperties.html#//apple_ref/doc/uid/TP40004514-CH11-SW1">Animatable Properties</a>。</p>
+
+<p>Figure 1-2  Examples of animations you can perform on layers
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/3.png" alt="alt text" /></p>
+
+<p>在动画运行期间，Core Animation使用硬件帮你完成每一帧的绘制工作。你只需要指定动画的开始点和结束点，剩下的交由Core Animation完成。如若需要，你也可以指定自定义时间信息和动画参数，如果你没有指定， Core Animation会提供适当的默认值。</p>
+
+<p>关于如何初始化动画以及配置动画的参数，详见<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/CreatingBasicAnimations/CreatingBasicAnimations.html#//apple_ref/doc/uid/TP40004514-CH3-SW1">Animating Layer Content</a>。</p>
+
+<h2 id="图层对象定义了自己的几何结构">图层对象定义了自己的几何结构</h2>
+
+<p>图层的其中一项任务就是管理自身内容的可视几何。可视几何包含关于图层内容边界、在屏幕上的位置，是否图层已被旋转、缩放，或应用了某种变换。与视图类似，一个图层有一个frame和bound属性，你可以使用这两个属性来定位图层和它的内容。图层也有一些视图所没有的属性，比如anchor属性，任何变换操作都是围绕该点运转的（可以理解为一个按在图层上的图钉）。图层的某些几何概念的指定方式与视图信息的指定方式也有不同。</p>
+
+<h3 id="图层使用两种类型的坐标系统">图层使用两种类型的坐标系统</h3>
+
+<p>图层利用基于点的坐标系统和单位坐标系统指定内容的布局。坐标系统的选择依赖于被传达的信息类型。当指定的值是直接映射到屏幕或相对于其他图层的坐标，比如图层的position属性,则使用基于点的坐标系统。当指定的值是相对于一些其他的值，与屏幕坐标不相关联，则使用单位坐标。比如图层的anchorPoint属性，anchorPoint属性指定了相对于图层边界的一个点。anchorPoint属性可以更改。</p>
+
+<p>基于点的坐标最常用于指定图层的尺寸和位置。可通过图层的bounds和postion属性设定图层的尺寸和位置。bound定义了图层自身的坐标系统并包含图层在屏幕上的尺寸。position属性定义了图层相对于父坐标系统的位置。虽然图层有一个frame属性，该属性实际上是从bounds和position属性派生而来，极少被使用。</p>
+
+<p>图层的bounds和frame矩形的方向始终与底层平台的默认方向相匹配。图1-3显示了iOS和OS X平台上边界矩形的默认方向。在iOS中，默认情况下边界矩形的原点在图层的左上角。而OS X上边界矩形的原点则在左下角。如果你在iOS和OS X版本的app之间共享Core Animation代码，一定要对此种情况做区别对待。</p>
+
+<p>Figure 1-3  The default layer geometries for iOS and OS X
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/4.png" alt="alt text" /></p>
+
+<p>注意到图1-3中position属性被定位在图层的中间位置。position属性的变化参照图层的anchorPoint属性。</p>
+
+<p>锚点是使用单位坐标系统的属性之一。Core Animation中使用单位坐标表示的属性值可能会因为图层的尺寸变化而发生改变。你可以把单位坐标当做是总数的百分比。在单位坐标系统空间中每一个坐标的取值范围在0.0和1.0之间。比如说，沿着x轴，左侧是0.0，右侧是1.0.沿着y轴，单位坐标值方向的不同依赖于具体的平台。如图1-4所示。</p>
+
+<p>Figure 1-4  The default unit coordinate systems for iOS and OS X
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/5.png" alt="alt text" /></p>
+
+<p>注意：直到OS X 10.8才出现了geometryFlipped属性，该属性可以改变默认图层y坐标的方向。当翻转变换被调用时，使用该属性来调整图层的方向有的时候是必需的。如果父视图使用了翻转变换，它的子视图内容（以及它对应的图层）将经常被颠倒。在这种情况下，设置子图层的geometryFlipped属性为YES是一种修正该问题最简单的方法。在OS X 10.8及以上版本，AppKit负责管理该属性，你不应该更改它。对于iOS app，不推荐使用geometryFlipped属性。</p>
+
+<p>所有的坐标值，无论是点还是单位坐标都以浮点数指定。使用浮点数允许你更精确的指定可能落在整数坐标值之间的点。特别是打印或向retina屏幕绘图，浮点值都会很方便。浮点值允许你忽略底层设备的分辨率，而你只需要指定值的精度。</p>
+
+<h3 id="锚点影响几何结构的操作">锚点影响几何结构的操作</h3>
+
+<p>图层的几何操是相对于图层的锚点进行的，anchorPoint属性可以访问图层的锚点值。当改变图层的postion和transform属性值，锚点的影响就很明显。position属性是相对于图层的锚点被指定。并且任何你对图层阴影的变换操作也是相对于锚点。</p>
+
+<p>图1-5说明了改变锚点对图层position属性的影响。尽管图层没有在它的父边界内移动，将锚点从中心点移动到图层边界的原点将改变position属性值。</p>
+
+<p>Figure 1-5  How the anchor point affects the layer’s position property
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/6.png" alt="alt text" /></p>
+
+<p>图1-6显示了锚点的变化是如何影响到应用在图层上的变换。当你对图层应用了一个旋转变换，图层将围绕中心点旋转。因为默认情况下，锚点被设定在图层的中心位置。一般创建这类旋转行为正是你所期望的。然而如果你改变了锚点值，旋转的结果也会发生变化。</p>
+
+<p>Figure 1-6  How the anchor point affects layer transformations
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/7.png" alt="alt text" /></p>
+
+<h3 id="图层可在三维空间中操作">图层可在三维空间中操作</h3>
+
+<p>图层有两个操控图层和内容的变换矩阵，transform和sublayerTransform属性。CALayer的transform属性用来指定应用到图层和它内嵌的子层上的变换。通常当你想更改图层本身则使用该属性。比方说，你可能使用该属性缩放或旋转图层，或是临时的改变图层的位置。sublayerTransform属性定义了仅应用在子层上的变换以及给场景内容添加透视效果。</p>
+
+<p>变换行为由多个坐标确定，这些坐标通过一个数字矩阵来获取，获取的坐标结果是原始点被变换后的版本。因为Core Animation的值可在三维空间中指定，每个坐标点有四个值，这四个值需要和一个4*4的矩阵相乘。如图1-7所示。在Core Animation中，图中的变换由CATransform3D类型表示。幸运的是，你不需要直接更改这个结构中的域值来执行标准变换。Core Animation为创建缩放、平移、旋转矩阵以及矩阵比较提供了综合的函数集。除了使用函数操纵变换。Core Animation扩展了键值编码以支持你使用键路径更改一个变换操作。</p>
+
+<p>Figure 1-7  Converting a coordinate using matrix math
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/8.png" alt="alt text" /></p>
+
+<p>图1-8显示了对一些常见的变换矩的配置。任何坐标与单位矩阵相乘将返回完全相同的坐标。坐标如何被更改完全依赖于你变化的矩阵因子。比如，为了仅在X轴上平移，你只需对变换矩阵的tx因子应用一个非零值，并让ty和tz值为0。如果是旋转，应用一个旋转角度的正弦和余弦值。</p>
+
+<p>Figure 1-8  Matrix configurations for common transformations
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/9.png" alt="alt text" /></p>
+
+<h2 id="不同的图层树反映了不同的动画状态">不同的图层树反映了不同的动画状态</h2>
+
+<p>使用Core Animation的app拥有三个图层对象集合。每一个图层对象集合在呈现app内容上都扮演着不同的角色。
+* 模型图层树中的对象（或简称“图层树”）用的最多。在这个树中的对象是模型对象，模型对象负责存储所有动画的目标值。无论何时改变图层的属性值，你使用的始终是某一个模型对象。
+* 呈现树中的对象包含所有运行中的动画的瞬时值。图层树对象包含的是动画的目标值，而呈现树中的对象代表显示在屏幕上动画的当前值。你不应该更改这个树中的对象。相反，你使用这些对象来读取当前动画的值，可能用于创建开始于这些值的新的动画。
+* 在渲染树中的对象执行实际的动画，并且对Core Animation是不公开的。</p>
+
+<p>每一个图层对象集合被组织在一个层次结构中，类似于app中的视图。事实上，在一个所有视图都支持图层功能的app来说，每一个树的初始结构完全与图层的层次相匹配。一个app可以添加另外的图层对象，因此图层与视图是不相关联的。可以按照需求将图层对象插入到指定的视图层级中。你可能为了优化app内容的性能而选择加入图层对象而非视图，原因在于图层的开销要比视图低。图1-9展示了出现在一个简单iOS app的图层分解图。在示例中窗口包含了一个内容视图，内容视图包含了一个按钮视图和两个独立的图层对象。每一个视图拥有一个相对应的构成图层层次的图层对象。</p>
+
+<p>Figure 1-9  Layers associated with a window
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/10.png" alt="alt text" /></p>
+
+<p>在图层树中的每一个对象，在渲染树和呈现树中也存在一个与之匹配的对象。如图1-10所示。正如之前提到过的，app主要与图层树中的对象进行交互，但可能有时会访问呈现树中的对象。具体地，访问图层树中对象的presentationLayer属性将返回一个在呈现树中相对应的对象。你可能会通过该对象获取在动画执行过程中的某一时刻的属性值。</p>
+
+<p>Figure 1-10  The layer trees for a window
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/11.png" alt="alt text" /></p>
+
+<p>重要：只在动画运行时访问呈现树中的对象。当动画在进行中，呈现树就包含了图层显示在屏幕上的那一刻的值。该行为与图层树不同，图层树永远只表示最终的目标值。</p>
+
+<h2 id="图层与视图之间的关系">图层与视图之间的关系</h2>
+
+<p>图层不是视图的替代品。因此无法创建一个基于单一图层对象的可视界面。图层是视图的基础设施。具体地，图层让视图的绘图和动画更简单和高效，并且能在绘图和动画时保持高帧率。然而许多事情图层无法做到。图层不能处理事件、绘制内容，特别是在响应链中，或是做一些其他的事情。因此，每个app必须有一个或多个视图来处理这类交互。</p>
+
+<p>在iOS中，每一个视图有一个相对应的图层对象。但在OS X中，你必须决定哪一个视图拥有图层。OS X 10.8以及之前的版本中，添加图层到所有视图上也许是有意义的。然而你不必这样做，你仍可以关闭图层防止不必要以及无根据的开销。图层在某种程度上减少了程序的内存开销，图层的这些优点远远超出它的缺点。所以最好是在禁用图层支持之前测试你app的性能。</p>
+
+<p>当你的视图支持图层后，此时该视图被称为layer-backed视图。对于layer-backed视图，系统负责创建底层的图层对象，并保持与视图的同步。所以iOS视图都是支持图层的并且在OS X中的大部分视图也是如此。但是在OS X中，你也可以创建图层托管（layer-hosting view）视图，该视图的图层对象由你来提供。</p>
+
+<p>注意：对于layer-backed视图，建议只操作视图而不是图层。iOS中视图仅仅是对图层对象的精简包装，所以任何你对图层的操作通常都会正常工作。但是iOS和OS X平台上操纵图层而不是视图可能不会取得预期的结果。该文档会尽可能的指出这些陷阱并提供一种方式让你可以与它们工作。</p>
+
+<p>除了与视图相关的图层，你也可以创建独立的图层对象。你可以嵌入这些独立图层对象到任何其他图层对象中，包括与视图相关的图层。你一般使用图层对象作为具体优化方法的一部分。比如说，如果你想使用相同的图片在多个地方，你可以只加载图片一次，然后将图片和多个独立的图层对象相关联，最后添加这些图层对象到图层树中。每一个图层只会引用源图片而不是尝试在内存中创建自身对图片的拷贝。</p>
+
+<h1 id="构建图层对象">构建图层对象</h1>
+
+<p>图层是Core Animation的核心。图层管理着应用程序的可视内容，图层提供了更改内容样式与可视外观的选项。iOS是自动支持图层的，而如果你是一名OS X开发者，那你必须手动开启图层支持。一旦开启了图层支持，你必须理解如何配置和操控图层以获得你想要的效果。</p>
+
+<h2 id="开启对core-animation的支持">开启对Core Animation的支持</h2>
+
+<p>在iOS app中，Core Animation总是开启的，视图也都是支持图层的。而在OS X中，app必须显示地通过以下方式开启对Core Animation的支持：
+* 链接QuartzCore框架（如果iOS app显式地使用了Core Animation则必须链接此框架）。
+* 你可选择以下任意一种方式为NSView开启图层支持：
+  1. 在你的nib文件中，使用View Effect检视面板让视图支持图层。检视面板会对选中的视图和它的子视图显示一个复选框。推荐做法是尽可能的在窗口的内容视图中开启图层支持。
+  2.  对于使用代码创建的视图，调用视图的setWantsLayer：方法，并传入一个YES值以表明当前的视图是支持图层的。</p>
+
+<p>使用上面所提到的方式开启图层支持可创建一个支持图层的视图。系统负责创建视图底层的图层对象，并保持对图层的更新。在OS X中，也可以创建图层托管视图，该视图底层的图层由你的app创建和管理（你不能在iOS中创建图层托管视图）。</p>
+
+<h2 id="改变与视图相关联的图层对象">改变与视图相关联的图层对象</h2>
+
+<p>支持图层的视图默认会创建一个CALayer实例，一般情况下你可能不需要不同类型的图层对象。但是Core Animation提供了一些不同类型的图层类，每个图层类型都拥有特殊的功能。选择某个图层类可能会提升app的性能或者能以简单的方式支持指定的内容类型。比如CATiledLayer类在显示大图片上将更加高效。</p>
+
+<h3 id="改变视图自有的图层类">改变视图自有的图层类</h3>
+
+<p>你可以通过覆盖iOS视图中的layerClass方法并返回一个需要的图层类对象。大部分的iOS视图通过创建一个CALayer对象，使用该对象储备视图的内容。使用默认的图层类型是个不错的选择，但在某些情况下，你可能需要使用特定特性的图层对象。比如在下述情况下你需要改变图层的类型：
+* 视图的绘图内容是由OpenGL ES实现，此种情况你需要使用CAEAGLLayer对象。
+* 特殊的图层让你拥有更强的表现性能。
+* 需要利用某些特殊的Core Animation类，比如粒子发射器或者拷贝器。</p>
+
+<p>改变一个视图的图层类型非常的简单；所有你需要做得只是覆盖layerClass方法并返回一个你想要替代的类对象。如清单2-1所示，视图调用layerClass方法并使用返回的类为其创建新的图层对象。一旦创建完成，视图的图层对象将不可改变。</p>
+
+<p>Listing 2-1  Specifying the layer class of an iOS view</p>
+
+<pre><code>+ (Class) layerClass {
+    return [CAMetalLayer class];
+}
+</code></pre>
+
+<p>说明：这里有两个小节省略了，是讲解OS X的，请自行参阅。</p>
+
+<h3 id="不同的图层拥有特定的行为">不同的图层拥有特定的行为</h3>
+
+<p>Core Animation定义了许多标准的图层类，每一个图层类都有着各自的应用场景。CALayer类是所有图层对象的根类，它定义了所有图层对象必须支持的行为，它也是图层支持的视图的默认图层类型。你可以指定表2-1中的某一个图层类以改变默认的图层类型。</p>
+
+<p>Table 2-1  CALayer subclasses and their uses
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/12.png" alt="alt text" /></p>
+
+<h2 id="提供图层的内容">提供图层的内容</h2>
+
+<p>图层是管理app内容的数据对象。图层的内容由包含可视数据的位图构成。使用下述三种方式之一可给图层提供内容：
+* 直接赋值一个UIImage对象给图层对象contents属性。（这个技术适用于图层内容从不或几乎不改变的情形。）
+* 赋值一个代理给图层，由代理负责绘制图层内容。（该技术适用于图层内容可能偶尔改变，且内容可由外部对象提供，比如视图。）
+* 定义一个CALayer的子类并覆盖类的绘图方法，由覆盖的方法返回图层的内容。（该技术适用于你需要创建自定义图层的子类，或者你想改变图层基本的绘图行为。）</p>
+
+<p>你需要为提供图层内容而担心的时刻仅在手动创建图层对象。如果你的app中只包含支持图层的视图。那你不需要担心使用刚刚提到的这些提供图层的方法提供图层内容。支持图层的视图会使用尽可能高效的方式为与之相关的图层提供内容。</p>
+
+<h3 id="使用图片为图层提供内容">使用图片为图层提供内容</h3>
+
+<p>因为一个图层仅是管理位图图片的容器，所以你可以直接赋值一个图片给图层的contents属性。赋值一个图片给图层很简单，只需要指定一张你想显示在屏幕上的具体的图片就可以了。图层将直接使用你提供的图片对象，并不会尝试创建自己的图片拷贝。当你的应用使用相同的图片在多个地方时，该行为可以节省许多内存。</p>
+
+<p>你赋值的图片类型必须是CGImageRef类型（在OS X 10.6或之前版本，你也可以赋值一个NSImage对象。）当赋值图片时，记住提供的图片的分辨率要与本地设备的分辨率相匹配。对于Retina显示设备，这可能也需要你去调整图片的contentsScale属性。</p>
+
+<h3 id="使用代理提供图层的内容">使用代理提供图层的内容</h3>
+
+<p>如果图层的内容是动态改变的，你可以使用一个代理对象在需要的时候提供图层并更新内容。图层显示的时候，图层调用你的代理方法以提供需要的内容：
+* 如果你的代理实现了displayLayer：方法，实现方法负责创建位图并赋值给contents属性。
+* 如果你的代理实现的是drawLayer：inContext：方法，Core Animation创建一个位图，创建一个用于绘制位图的上下文，并调用代理方法填充该位图。你的代理方法所要做的是将内容画在图形上下文上。</p>
+
+<p>代理对象必须实现displayLayer：或者drawLayer：inContext方法之一。如果代理对象把这两个方法都实现了，图层只调用displayLayer：方法。</p>
+
+<p>覆盖displayLayer：方法在当你的app更倾向于载入或创建想要显示的位图的情况下适用。清单2-3显示了一个实现displayLayer：代理方法的示例代码。在这个例子中，代理使用了一个辅助对象来加载和显示它需要的图片。代理方法根据内部的状态选择哪张图片用于显示。例子中得displayYesImage是一个自定义属性。</p>
+
+<p>Listing 2-3  Setting the layer contents directly</p>
+
+<pre><code>- (void)displayLayer:(CALayer *)theLayer {
+    // Check the value of some state property
+    if (self.displayYesImage) {
+        // Display the Yes image
+        theLayer.contents = [someHelperObject loadStateYesImage];
+    }
+    else {
+        // Display the No image
+        theLayer.contents = [someHelperObject loadStateNoImage];
+    }
+}
+</code></pre>
+
+<p>如果你没有预渲染的图片或者辅助对象来创建位图。代理对象可以使用drawLayer：inContext：方法动态的绘制内容。清单2-4显示了一个对drawLayer：inContext方法实现的例子。在该例子中，代理对象使用了固定的宽度和当前的渲染颜色绘制了一个简单的曲线路径。</p>
+
+<p>Listing 2-4  Drawing the contents of a layer</p>
+
+<pre><code>- (void)drawLayer:(CALayer *)theLayer inContext:(CGContextRef)theContext {
+    CGMutablePathRef thePath = CGPathCreateMutable();
+
+    CGPathMoveToPoint(thePath,NULL,15.0f,15.f);
+    CGPathAddCurveToPoint(thePath,
+        NULL,
+        15.f,250.0f,
+        295.0f,250.0f,
+        295.0f,15.0f);
+
+    CGContextBeginPath(theContext);
+    CGContextAddPath(theContext, thePath);
+
+    CGContextSetLineWidth(theContext, 5);
+    CGContextStrokePath(theContext);
+
+    // Release the path
+    CFRelease(thePath);
+}
+</code></pre>
+
+<p>带有自定义内容并支持图层的视图，你应该去覆盖视图的绘图方法。一个支持图层的视图自动创建它自己为图层代理并实现需要的代理方法，你不应该改变这个配置。相反，你应该实现你视图的drawRect：方法以绘制你的内容。</p>
+
+<p>在OS X 10.8和之后的版本中，绘图的另外方法是通过覆盖你视图的wantsUpdateLayer和updateLayer方法提供一个位图。覆盖wantsUpdateLayer并返回YES会引起NSView类调用替换的渲染路径。相对于调用drawRect：方法，视图调用你的updateLayer：方法，方法的实现必须直接赋值一个位图给图层的contents属性。这个AppKit期望你直接设置视图的图层对象内容的一种方案。</p>
+
+<h3 id="由子类提供图层的内容">由子类提供图层的内容</h3>
+
+<p>如果你实现了一个自定义的图层类，你可以覆盖图层类的绘图方法完成任何绘图的操作。用这种方法生成图层对象的自定义内容是罕见的,但是某些图层却拥有管理显示的内容能力。如CATiledLayer类通过将大图片拆成更小的可管理、可独立渲染的碎片来管理大的图片。因为只有图层知道在某一时刻哪一个碎片需要被渲染，图层会直接管理绘图的行为。</p>
+
+<p>当子类化图层类，你可使用下述的两种方式绘制你的图层内容：
+* 覆盖图层的display方法并使用在方法中直接设置图层的contents属性。
+* 覆盖图层的drawInContext：方法并将需要的内容绘制到提供的图形上下文中。</p>
+
+<p>选择何种方法依赖于在绘图过程中你需要多少的控制。display方法是更新图层内容的主要入口点，所以覆盖这个方法让你处于完全的过程控制中。覆盖display方法也意味你需要负责contents属性创建CGImageRef对象。如果你只是想绘制内容（或让你的图层管理绘图操作），你可以覆盖drawInContext：方法并让图层为你创建内容储备。</p>
+
+<h3 id="调整提供的内容">调整提供的内容</h3>
+
+<p>当给图层的contents属性赋值一个图片，图层的contentsGravity属性确定图片如何适合当前的边界。默认情况下，如果一个图片大于小于当前的边界，图层对象缩放图片以适应有效的空间。如果图层的长宽比和图片的长宽比不一致，这会导致图片被扭曲。所以你可以使用contentsGravity属性来确定你的内容以最佳的方式被呈现。
+你可以向contentsGravity属性赋予的值分为两个分类：
+* 基于位置的引力约束允许你固定你的图片到图层矩形边界的一个特殊的边缘或角落，不会缩放图片。
+* 基于缩放的引力约束允许你伸缩图片使用多个选项之一，某些选项保留长宽比，有些则不保留。</p>
+
+<p>图2-1 显示了基于位置的引力设置如何影响你的图片。除了kCAGravityCenter约束，每一个约束都将图片固定在图层矩形边界的某个边缘或角落。kCAGravityCenter约束将图片居中在图层中。基于位置的引力约束没有一个选项会缩放图片。所以图片总是和它原始的尺寸一样的情况下被渲染。如果你的图片大于图层的边界，这可能导致部分图片被裁减；如果图片小于矩形边界，如果设置了背景颜色的话，则图片没有覆盖到得区域则显示图层的背景颜色。</p>
+
+<p>Figure 2-1  Position-based gravity constants for layers
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/13.png" alt="alt text" /></p>
+
+<p>图2-2显示了基于缩放的引力约束如何影响你的图片。如果图片不是准确匹配图层矩形边界范围内，所有这些约束都会缩放你的图片。这些模式选项之间所不同的是如何处理图片原始的长宽比。一些模式保留原始图片的长宽比，有些则不保留。默认情况是，图层的contentsGravity属性被设置为kCAGravityResize常量值，它是唯一一个不保留图片的长宽比的选项。</p>
+
+<p>Figure 2-2  Scaling-based gravity constants for layers
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/14.png" alt="alt text" /></p>
+
+<h3 id="使用高分辨率的图片">使用高分辨率的图片</h3>
+
+<p>图层并不知道当前设备的分辨率信息。图层只是简单的存储一个指向位图的指针，并用给定的有效像素以最佳的方式显示。如果你赋值一个图片给图层的contents属性，你必须给图层的contentsScale属性设置一个正确的值以告诉Core Animation关于图片的分辨率。默认的属性值为1.0，对于在标准分辨率的屏幕上显示图片是正确的。如果你的图片要在Retina屏幕上显示，该值需要设定为2.0。使用[[UIScreen mainScreen] scale]可获取正确的缩放率。</p>
+
+<p>仅在直接赋值一副位图给图层才需要改变contentScale属性的值。在UIKit或AppKit中,一个支持图层的视图会被自动设置基于屏幕分辨率的图层缩放因子，并且图层内容由视图管理。</p>
+
+<p>在OS X中，基于位置的引力约束影响图片呈现的方式。从NSImage对象选择赋值给图层。因为这些实例不会引起图片的缩放。Core Animation依靠contentsScale属性以最佳的像素密度呈现图片。</p>
+
+<p>在OS X中，图层的代理可以实现layer：shouldInheritContentScale：fromWindow：方法，使用该方法响应对缩放因子的改变。可能因为窗口会在标准分辨率和高分辨率屏幕之间移动，AppKit会在窗口分辨率变化时自动调用代理的实现方法。如果代理支持图层的图片分辨率的变化，则此方法返回YES。当需要反映分辨率的变化，该方法会更新图层的内容。</p>
+
+<h2 id="调整图层的可视样式和外观">调整图层的可视样式和外观</h2>
+
+<p>图层对象拥有内建的可视装饰，如边框、背景色。你可以使用这些装饰对图层的主内容进行补充。因为这些可视的装饰不需要任何渲染。装饰让图层在一些情况下让图层成为独立的实体成为可能。你只需设置图层的属性，图层自会处理必要的绘图工作，包括动画。</p>
+
+<h3 id="图层拥有自己的背景和边框">图层拥有自己的背景和边框</h3>
+
+<p>图层除了可以显示基于图片的内容，还可以显示被填充的背景、描边的边框。背景被渲染在图层的内容图片的后方，边框被渲染在内容图片的前方。如图2-3显示。如果图层包含子层，子层也会显示在边框的下方。因为背景颜色是处在图片的后方的，背景会从图片的任何透明的地方透射出来。</p>
+
+<p>Figure 2-3  Adding a border and background to a layer
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/15.png" alt="alt text" /></p>
+
+<p>清单2-5显示了设置图层的边框和背景颜色代码。所有的这些属性都是可动画的。</p>
+
+<p>Listing 2-5  Setting the background color and border of a layer</p>
+
+<pre><code>myLayer.backgroundColor = [NSColor greenColor].CGColor;
+myLayer.borderColor = [NSColor blackColor].CGColor;
+myLayer.borderWidth = 3.0;
+</code></pre>
+
+<p>注意：你可以将图层的背景设置成任何颜色，包括支持透明的颜色或使用模式图片。使用模式图片时,渲染是由Core Graphics完成，它使用的是标准坐标系统。标准坐标系统和iOS的坐标系统是不一样的。所以，图片在iOS上得渲染结果是颠倒的。可以使用[backgroundLayer setTransform:CATransform3DMakeScale(1.0, -1.0, 1.0)];解决该问题。</p>
+
+<p>如果你将图层的背景颜色设置为不透明。考虑将图层的opaque属性设置为YES。当合成屏幕上的图层时可以提升系能，同时也会消除图层的后备存储管理alpha通道的要求。如果你给图层设置了非零的圆角半径，则不可以将图层标记为不透明类型。</p>
+
+<h3 id="图层支持圆角半径">图层支持圆角半径</h3>
+
+<p>你可以通过给图层添加一个圆角半径来创建一个圆角矩形。圆角半径是一个可视的装饰，它遮罩了图层边界矩形的部分区域以允许底层内容的显示。如图2-4所示，因为它包括了应用一个透明蒙版，圆角半径不影响图层的contents属性中得图片，除非masksToBounds属性被设置为YES。然而，圆角半径总是影响图层的背景颜色和边框的绘图方式。</p>
+
+<p>Figure 2-4  A corner radius on a layer
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/16.png" alt="alt text" /></p>
+
+<p>为了设置圆角半径，只需要为图层的cornerRadius属性设置一个值。你指定的半径值是以点衡量的，并且圆角半径会应用到图层的四个角上。</p>
+
+<h3 id="图层内建支持阴影">图层内建支持阴影</h3>
+
+<p>CALayer类包括若干个配置阴影的属性。阴影让图层更加有深度，好像图层浮起来了。阴影也是另一种装饰。在具体的环境你会发现阴影非常的有用。使用图层你可以控制阴影的颜色，相对于图层内容的位置，透明度以及形状。</p>
+
+<p>图层阴影的阴影透明度shadowOpacity默认被设置为0，这有效地隐藏了阴影。改变透明度为非0值将引起Core Animaiton绘制阴影。因为默认情况下，阴影被直接定位在图层的下方。所以你可能为了能够看到阴影而改变阴影的偏移量。你指定的偏移量被应用到图层上使用的是图层的本地坐标系。本地坐标系在iOS和OS X上的表现是不同的。如图2-5所示，图中显示了一个带有偏下偏右阴影的图层。在iOS中，这需要指定一个正值，而在OS X中需要指定一个负值。</p>
+
+<p>Figure 2-5  Applying a shadow to a layer
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/17.png" alt="alt text" /></p>
+
+<p>当给图层添加阴影，阴影就是图层内容的一部分，但实际上阴影扩展到了图层边界矩形的外围。结果是，如果你启用了图层的masksToBounds属性，围绕边缘的阴影将被裁减掉。如果你的图层中含有任何透明的内容，这将引起一个古怪的效果，图层下方的阴影部分依然可以看见，但是超出图层边界的部分就没有了。如果既想要阴影又要启用maskToBounds为YES，那么你可以使用两个图层。第一个是包含内容的图层，将该图层的maskToBounds属性设置为YES，然后创建一个相同尺寸且含有阴影效果的第二个图层，最后调用第二个图层的addSublayer方法将第一个图层嵌入到第二个图层中就可以了。</p>
+
+<p><strong>Filters Add Visual Effects to OS X Views</strong>和<strong>The Layer Redraw Policy for OS X Views Affects Performance</strong>这两小节省略，请参考原文。</p>
+
+<h2 id="给图层添加自定义属性">给图层添加自定义属性</h2>
+
+<p>CAAnimation和CALayer类扩展了键值编码以对自定义属性进行支持。你可以使用该行为给图层添加数据并使用你定义的键检索对应的值。你甚至可以给你的自定义属性关联动作，当该属性的值发生变化，对应的动画将会被执行。</p>
+
+<p>详情参见<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Key-ValueCodingExtensions/Key-ValueCodingExtensions.html#//apple_ref/doc/uid/TP40004514-CH12-SW3">Key-Value Coding Compliant Container Classes</a>以及<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/ReactingtoLayerChanges/ReactingtoLayerChanges.html#//apple_ref/doc/uid/TP40004514-CH7-SW1">Changing a Layer’s Default Behavior</a>。</p>
+
+<h2 id="打印图层支持的视图内容">打印图层支持的视图内容</h2>
+
+<p>在打印过程中，当需要适应打印环境时，图层将重绘它们的内容。尽管当向屏幕上做渲染的时Core Animation一般是依赖缓存位图。但在打印时它将重绘这些内容。特别情况下，如果支持图层的视图使用drawRect：方法提供图层内容，Core Animation将再次调用drawRect：方法以生成可打印的图层内容。</p>
+
+<h1 id="动画图层的内容">动画图层的内容</h1>
+
+<p>Core Animation提供的基础设施让轻松创建复杂图层动画变得异常简单，Core Animation扩展了所有拥有图层的视图。例如改变图层框架矩形的尺寸，改变其在屏幕上的位置，应用旋转变换，改变它的透明度。使用Core Animation初始化一个动画和改变属性一样简单，但你也可以显式的创建一个动画并设置动画的参数。</p>
+
+<h2 id="用简单的动画表现图层属性的变化">用简单的动画表现图层属性的变化</h2>
+
+<p>你可以以显式或隐式的执行简单的动画。隐式动画使用默认的定时器和动画属性展现动画。而显式动画需要你为动画对象配置一些参数。所以当默认的定时器能够很好的为你服务并且你所要的动画效果不需要太多代码时，隐式动画则非常的适合你。</p>
+
+<p>简单的动画包括改变一个图层的属性，以及随着时间的推移，让Core Animation以动画的形式展现这些属性的变化。图层定义了许多会影响图层可视外观的属性。改变这些属性是以动画方式展现外观变化的一种方式。例如将图层的透明度从1.0修改为0.0，这将引起图层的淡出特效，最后图层变为透明。</p>
+
+<p>重要：虽然你可以使用Core Animation接口直接让图层支持的视图产生动画，但这样做经常需要额外的步骤。</p>
+
+<p>为了触发隐式动画，你所要做的是更新图层对象的属性。当更改的目标是图层树中的图层对象，更改将立即反映到对象上。而图层对象的可视外观并不会立即发生变化，Core Animation将图层对象属性的变化当做是一个触发器，用以创建和安排一个或多个可执行的隐式动画。如清单3-1那样修改图层对象属性，将引起Core Animation为你创建动画对象，动画对象将被安排在下一次更新周期运行。</p>
+
+<p>Listing 3-1  Animating a change implicitly</p>
+
+<pre><code>theLayer.opacity = 0.0;
+</code></pre>
+
+<p>为了显式地使用动画对象呈现相同的变化，创建一个CABasicAnimation对象并配置该对象的动画参数。在添加动画到图层之前，你可以设置动画的开始值与结束值，改变持续时间，或任何其他动画参数。你指定你想要动画的属性的键路径，接着设置动画参数。为了执行一个动画，你使用addAnimation：forKey：方法将动画对象添加到你想要展现动画的图层上。</p>
+
+<p>Listing 3-2  Animating a change explicitly</p>
+
+<pre><code>CABasicAnimation* fadeAnim = [CABasicAnimation animationWithKeyPath:@&quot;opacity&quot;];
+fadeAnim.fromValue = [NSNumber numberWithFloat:1.0];
+fadeAnim.toValue = [NSNumber numberWithFloat:0.0];
+fadeAnim.duration = 1.0;
+[theLayer addAnimation:fadeAnim forKey:@&quot;opacity&quot;];
+
+// Change the actual data value in the layer to the final value.
+theLayer.opacity = 0.0;
+</code></pre>
+
+<p>注意：创建一个显示动画，推荐是赋值一个值给动画对象的fromValue属性。如果你没有为该属性指定值，Core Animation将使用图层的当前值作为开始值。如果已经更新了属性作为它的最终值，这将致使fromValue属性值遭到干扰，结果可能并不是你想要的。</p>
+
+<p>不同于隐式动画，隐式动画会更新图层对象的值。而显示动画不会更改图层树中的数据。显示动画仅是创建了一个动画。在动画结束之后，Core Animation从图层中移除该动画对象并使用当前的数据值重绘图层。如果你想让显示动画的改变成为永久性的，如你在之前的例子中看到的，你必须更新图层属性。</p>
+
+<p>隐式和显示动画都会在当前运行循环周期结束之后开始执行，并且当前的线程必须拥有一个用于执行动画的运行循环。如果你改变了图层的动画属性或者给图层添加了多个动画对象。所有这些动画将会同时被执行。例如将图层移动到屏幕之外的时候添加渐隐动画，这两个动画是同时运行的。然而你可以让动画对象在一个特殊的时间开始执行。</p>
+
+<h2 id="用关键帧动画表现一个图层属性的变化">用关键帧动画表现一个图层属性的变化</h2>
+
+<p>尽管一个基于属性的动画是从开始值到结束值改变一个属性，一个CAKeyfarmeAnimation对象让你通过一个目标集合产生动画，在某种程度上，动画可能是线性的或者非线性。一个关键帧动画由一个目标数据值集合组成。每个值的时间应该是可达的。最简单的配置是你使用一个数组指定值和时间。对于一个图层位置的变化，你可以有一个跟随路径的变化。动画对象使用你指定的关键帧并通过在某个值到另一个在给定时间区间内插值的方式构建动画。</p>
+
+<p>图3-1显示了一个图层position属性的5秒动画。position是动画跟随一个路径。使用一个CGPathRef数据类型指定的。这个动画的代码如清单3-3所示。</p>
+
+<p>Figure 3-1  5-second keyframe animation of a layer’s position property
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/18.png" alt="alt text" /></p>
+
+<p>Listing 3-3  Creating a bounce keyframe animation</p>
+
+<pre><code>// create a CGPath that implements two arcs (a bounce)
+CGMutablePathRef thePath = CGPathCreateMutable();
+CGPathMoveToPoint(thePath,NULL,74.0,74.0);
+CGPathAddCurveToPoint(thePath,NULL,74.0,500.0,
+    320.0,500.0,
+    320.0,74.0);
+CGPathAddCurveToPoint(thePath,NULL,320.0,500.0,
+    566.0,500.0,
+    566.0,74.0);
+
+CAKeyframeAnimation * theAnimation;
+
+// Create the animation object, specifying the position property as the key path.
+theAnimation=[CAKeyframeAnimation animationWithKeyPath:@&quot;position&quot;];
+theAnimation.path=thePath;
+theAnimation.duration=5.0;
+
+// Add the animation to the layer.
+[theLayer addAnimation:theAnimation forKey:@&quot;position&quot;];
+</code></pre>
+
+<h3 id="指定关键帧的值">指定关键帧的值</h3>
+
+<p>关键帧的值是关键帧动画中最重要的部分。这些值定义了动画在整个执行期间内的行为。指定关键帧值的主要方式以对象数组作为它的值。但是对于包含CGPoint数据类型（比如图层的anchorPoint属性和position属性），你可以指定一个CGPathRef数据类型替代。</p>
+
+<p>当指定一个关键帧值数组，你放到数组中内容依赖于属性需要的数据类型。你可以直接添加一些对象到数组中。然而一些对象必须在添加到数组中之前被转换为id类型，所有标量类型或结构体必须被包装为对象，比如：
+* 对于属性类型为CGRect（例如bounds和frame属性），使用NSValue对象包装每一个矩形。
+* 对于图层的变换属性，使用NSValue包装每一个CATransform3D矩阵。动画这个属性将引起关键帧动画给图层轮流应用每个变换矩阵。
+*  对于borderColor属性，在添加到数组之前，转换CGColorRef数据类型为id类型。
+* 对于属性为CGFlot类型，在添加到数组之前，使用NSNumber包装每个值。
+* 为了动画图层的内容属性，指定一个CGImageRef数据类型属性。</p>
+
+<p>对于一个CGPoint数据类型的属性，你可以创建一个点（使用NSValue对象包装）数组，或者使用CGPathRef对象指定跟踪的路径。当你指定一个点数组，关键帧动画对象在每一个连续的点之间绘制一条线，并沿着这些线移动。当你指定一个CGPathRef对象，动画起始于路径的开始点并跟随路径线移动，这包括沿着任何曲面。你可以使用开放的或者封闭的路径。</p>
+
+<h3 id="指定关键帧动画的定时器">指定关键帧动画的定时器</h3>
+
+<p>关键帧动画的定时与步调比基本动画来的要复杂。以下是几个用于控制定时和步调的属性：
+* calculationMode属性定义了计算动画定时的算法。该属性值会影响其他与定时相关属性的使用方式。
+  1. 线性和曲线动画，动画的calculationMode属性被设置为kCAAnimationLinear或CAAnimationCubic，属性值被用于提供定时器信息以生成动画。这些模式值让你最大化控制动画的定时器。
+  2. 节奏动画，动画的calculationMode属性被设置为kCAAnimationPaced或kCAAnimationCubicPaced，这些属性值不依赖由keyTimes或timingFunctions属性提供的额外定时器值。相反，定时器值被隐式地计算以提供一个常速率动画。
+  3. 离散动画，动画的calculationMode属性被设置为kCAAnimationDiscrete，该值将引起动画属性从一个关键帧跳到另一个没有任何补间动画的下一个关键帧。计算模式使用keyTimes属性值，但忽略timingFunctions属性。
+* keyTimes属性为应用在每一关键帧指定应用到每一个关键帧上的计时器。该属性只在calculationMode属性被设置为kCAAnimationLinear，kCAAnimaitonDiscrete，kCAAnimationCubic时被使用。它不使用在节奏动画中。
+* timingFunctions属性指定使用在每一个关键帧部分的定时曲线(该属性替换了继承的timingFunction属性)。</p>
+
+<p>如果你想自己处理动画的定时，可以使用kCAAnimationLinear或kCAAnimaitonCubic模式与keyTimes和timingFunctions属性。keyTimes定义了应用在每一关键帧的时间点。所有中间值的定时由定时函数控制，定时函数允许你对各个部分应用缓入或缓出曲线定时。如果你不指定任何定时函数，动画将会是线性的。</p>
+
+<h2 id="停止一个显式动画的运行">停止一个显式动画的运行</h2>
+
+<p>动画通常直到运行结束才会停止，但是你也可以根据需要使用以下技术提前停止动画：
+* 为了从图层上移除单独的动画对象，调用图层的removeAnimationForKey：方法移除你的动画对象。该方法使用的键要与调用addAnimation：forKey：方法传入的键一致。你指定的键必须不为nil。
+* 为了移除图层的所有动画对象。调用图层的removeAllAnimations方法。该方法立即会移除所有进行中的动画，并使用图层当前的状态信息重绘图层。</p>
+
+<p>注意：你不能直接移除图层的隐式动画。</p>
+
+<p>当你从图层上移除一个动画，Core Animation通过使用图层当前的值重绘图层做出响应。因为当前的值通常是动画的结束值，这可能会引起图层的外观突然的跳跃。如果你想图层的外观仍然在动画最后一帧出现的地方。你可以检索在呈现树中的对象的最终值，并设置这些值到图层树中的对象。</p>
+
+<p>关于暂停动画，详见<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/AdvancedAnimationTricks/AdvancedAnimationTricks.html#//apple_ref/doc/uid/TP40004514-CH8-SW14">Listing 5-4</a>。</p>
+
+<h2 id="同时动画多个属性变化">同时动画多个属性变化</h2>
+
+<p>如果你想同时给一个图层对象应用多个动画，你可以使用CAAnimationGroup对象将这些动画放在一个组里。通过使用单独的配置点，使用组对象简化了对多个动画对象的管理。应用于动画组的定时器和持续值将使用相同的值覆盖单个动画对象。</p>
+
+<p>清单3-4显示了如何使用相同定时和持续时间的动画组执行两个与边框相关的动画。</p>
+
+<p>Listing 3-4  Animating two animations together</p>
+
+<pre><code>// Animation 1
+CAKeyframeAnimation* widthAnim = [CAKeyframeAnimation animationWithKeyPath:@&quot;borderWidth&quot;];
+NSArray* widthValues = [NSArray arrayWithObjects:@1.0, @10.0, @5.0, @30.0, @0.5, @15.0, @2.0, @50.0, @0.0, nil];
+widthAnim.values = widthValues;
+widthAnim.calculationMode = kCAAnimationPaced;
+
+// Animation 2
+CAKeyframeAnimation* colorAnim = [CAKeyframeAnimation animationWithKeyPath:@&quot;borderColor&quot;];
+NSArray* colorValues = [NSArray arrayWithObjects:(id)[UIColor greenColor].CGColor,
+(id)[UIColor redColor].CGColor, (id)[UIColor blueColor].CGColor,  nil];
+colorAnim.values = colorValues;
+colorAnim.calculationMode = kCAAnimationPaced;
+
+// Animation group
+CAAnimationGroup* group = [CAAnimationGroup animation];
+group.animations = [NSArray arrayWithObjects:colorAnim, widthAnim, nil];
+group.duration = 5.0;
+
+[myLayer addAnimation:group forKey:@&quot;BorderChanges&quot;];
+</code></pre>
+
+<p>对于分组动画的更高级的方式是使用一个事务对象。事务提供了更加灵活的方式，允许你创建内嵌的动画集合以及给每一个动画赋值不同的动画参数。详见<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/AdvancedAnimationTricks/AdvancedAnimationTricks.html#//apple_ref/doc/uid/TP40004514-CH8-SW3">Explicit Transactions Let You Change Animation Parameters</a>。</p>
+
+<h2 id="检测一个动画的结束">检测一个动画的结束</h2>
+
+<p>Core Animaiton提供对动画开始与结束的检测支持。这些通知是执行所有与动画相关的内务处理的最佳时刻。比如说你可能使用开始通知设置一些相关状态信息，使用对应的结束通知清理这些状态。</p>
+
+<p>有两种不同的方式获取关于动画状态的通知：
+* 使用setCompletionBlock：方法添加一个完成块给当前的事务。当事务中的所有动画完成后，事务将执行你的完成块。
+* 给CAAnimaiton对象赋值一个代理，该代理实现了animationDidStart：方法和animaitonDidStop：finished：代理方法。</p>
+
+<p>如果你想将两个动画链接在一起，使得当第一个动画结束之后启动第二个动画。不要使用动画通知。相反，使用动画对象的beginTime属性在希望的时间启动动画。为了将两个动画链接在一起，设置第二个动画的开始时间为第一个动画的结束时间。</p>
+
+<h2 id="如何动画有图层支持视图">如何动画有图层支持视图</h2>
+
+<p>如果一个图层属于一个图层支持视图，创建动画的推荐做法是使用由UIKit或AppKit提供的基于视图的动画接口。有几种使用Core Animation接口直接动画图层的方式，但如何创建这些动画依赖于目标平台。</p>
+
+<h3 id="ios中图层更改的规则">iOS中图层更改的规则</h3>
+
+<p>因为iOS视图底层总有一个图层，UIView类从图层对象派生了大部分的数据。因此，对图层属性的更改会通过视图对象自动表现出来。此行为代表你可以使用Core Animation或UIVIew接口完成对图层属性的更改。</p>
+
+<p>如果你想使用Core Animation初始化动画，你必须在一个基于视图的动画块内部执行所有Core Animaiton调用。UIView类默认是关闭图层动画的，你在动画块之外所做的改变都不是动画，但是你可在动画块中重新启用图层动画。清单3-5展示了一个关于如何隐式改变图层opacity和显式改变图层的position例子，在例子中myNewPosition变量被事先计算并被块所捕获。两个动画都开始于相同的时间，但透明度动画使用默认的定时，而位置动画使用动画对象指定的定时。</p>
+
+<p>Listing 3-5  Animating a layer attached to an iOS view</p>
+
+<pre><code>[UIView animateWithDuration:1.0 animations:^{
+    // Change the opacity implicitly.
+    myView.layer.opacity = 0.0;
+
+    // Change the position explicitly.
+    CABasicAnimation* theAnim = [CABasicAnimation animationWithKeyPath:@&quot;position&quot;];
+    theAnim.fromValue = [NSValue valueWithCGPoint:myView.layer.position];
+    theAnim.toValue = [NSValue valueWithCGPoint:myNewPosition];
+    theAnim.duration = 3.0;
+    [myView.layer addAnimation:theAnim forKey:@&quot;AnimateFrame&quot;];
+}];
+</code></pre>
+
+<p>OS X的省略，自行参考原文。</p>
+
+<h3 id="记住将更新视图约束作为动画的一部分">记住将更新视图约束作为动画的一部分</h3>
+
+<p>如果你使用基于约束的布局规则管理你的视图位置，你必须移除任何可能对动画的配置部分造成干扰的约束。约束将影响所有你对视图的位置和尺寸的改变。也会影响到视图和它的子视图的关系。如果你正在动画改变所有这些项目，你可以移除这些约束后再做改变，接着应用需要的新约束。</p>
+
+<p>关于自动布局，详见<a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/AutolayoutPG/index.html">Auto Layout Guide</a>。</p>
+
+<h1 id="构建图层层级">构建图层层级</h1>
+
+<p>大多数时候，使用图层的最佳方式是联合使用图层和视图对象。你可能需要向视图添加另外的图层对象以增加视图层级。你可能为了获得更佳的性能或者单独使用视图实现你需要的功能会比较困难的情况下而选择使用图层。因此你需要知道如何管理你创建的图层的层次。</p>
+
+<p>重要：在OS X 10.8及之后的版本中，推荐的做法是最小化图层层次的使用，尽量使用支持图层的视图。引进图层重绘策略的OS X版本让你可以自定义支持图层的视图的行为以及获得与之前使用独立图层的那种性能。</p>
+
+<h2 id="将图层排列为图层层级">将图层排列为图层层级</h2>
+
+<p>图层层级在许多方式上都与视图的层级相似。你嵌入一个图层到另一个图层中，在嵌入的图层（称为sublayer）与父图层（称为superlayer）之间将创建了一个父子关系。这个父子关系会影响许多子图层的许多方面。比如当图层的内容位于它的父级内容之上，他的位置则被指定为相对于它父级的坐标系统，并且也会被任何应用于父级的变换所影响。</p>
+
+<h3 id="添加-插入-移除子图层">添加、插入、移除子图层</h3>
+
+<p>每个图层对象都拥有添加、插入和移除子图层的方法。表4-1是对这些方法和行为的总结。</p>
+
+<p>Table 4-1  Methods for modifying the layer hierarchy
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/19.png" alt="alt text" /></p>
+
+<p>当需要操作图层对象时你可以使用前述的这些方法。你不能使用这些方法去排列属于layer-backed视图的图层。然而，一个layer-backed视图可以作为你创建的独立图层的父图层。</p>
+
+<h3 id="子图层的位置与尺寸">子图层的位置与尺寸</h3>
+
+<p>当添加和插入一个子图层，在它显示到屏幕之前你必须设置子图层的尺寸和位置。你可以在子图层被添加到图层层次之后更改其位置与尺寸，但应该养成在创建图层的时候就设置这些值的习惯。</p>
+
+<p>你使用bounds属性设置一个子图层的尺寸，使用position属性设置子图层在它的父图层内的位置。边界矩形的原点几乎总是（0，0），尺寸可以是任何尺寸值。Position属性被解释为相对于图层的锚点，默认是锚点被定为在图层的中心。如果你不给这些属性赋值，Core Animation将设置图层的初始宽和高都为0，图层的position属性值为（0，0）。</p>
+
+<pre><code>myLayer.bounds = CGRectMake(0,0,100,100);
+myLayer.position = CGPointMake(200,200);
+</code></pre>
+
+<p>重要：你的图层宽和高总是设置整型数。</p>
+
+<h3 id="图层层级对动画的影响">图层层级对动画的影响</h3>
+
+<p>一些superlayer属性会影响应用到它的子图层的动画的行为。speed属性即是如此的属性。对于动画来说，speed是一个倍增器。默认该属性的值被设为1.0，但将该值改为2.0将引起动画运行速度是原始速度的两倍，因此花费一半的时间就动画就结束了。该属性影响的不仅仅是设置该属性的图层也会影响图层的子图层。像这样的改变也会倍增。如果子图层和它的父图层都拥有2.0的速度，则在子图层上动画的运行将是它的原始速度的4倍。</p>
+
+<p>图层的大部分属性的变化仅影响所有被它包含的子图层。比如对图层应用一个旋转变换将旋转该图层以及所有它的子图层。相似地，改变一个图层的透明度也会改变它的子图层透明度。</p>
+
+<h2 id="调整你的图层层次的布局">调整你的图层层次的布局</h2>
+
+<p>Core Animation对调整子图层的尺寸和位置有多个选项，以应对它的子图层的改变。在iOS中，layer-backed视图的普遍使用，使得图层层次的创建变得次要。仅仅是手动布局被支持。对于OS X，有多种轻松管理你的视图层次的选项可用。</p>
+
+<p>图层级的布局仅仅相关与如果你正在构建的图层层次使用的是你创建的独立图层。如果你的app的图层都是与图层相关，使用基于图层的布局支持对你的视图尺寸与位置的更新，以应对尺寸与位置的变化。</p>
+
+<p>接下来的两小节是关于OS X的，这里就直接跳过省略了，请自行参考原文。</p>
+
+<h3 id="手动规划你的图层层次">手动规划你的图层层次</h3>
+
+<p>在iOS和OS X中，你可以通过在父图层的代理对象上实现layoutSublayersOfLayer:方法手动处理布局。你使用该方法调整任何当前内嵌到图层中的子图层的位置和尺寸。当手动布局更新时，对每个子图层的位置执行必要的计算取决于你。</p>
+
+<p>如果你实现一个自定义图层子类，你的子类可以覆盖layoutSublayers方法并使用该方法（而不是代理）去处理任何布局任务。如果你需要对在你自定义的图层类内的子图层的定位进行完全的控制的情况下，你只需要覆盖这个方法。</p>
+
+<h2 id="子图层与裁剪">子图层与裁剪</h2>
+
+<p>与视图不同的，一个父图层不会自动地裁剪超出其边界的子图层的内容。相反，默认情况下，父图层允许他的子图层完全的被显示。然而，通过设置图层的masksToBounds属性为YES，你可以重新启用裁减功能。</p>
+
+<p>如果圆角半径被指定的话，一个图层的裁减蒙版形状包括图层的圆角半径。图4-3说明了masksToBounds属性如何影响一个拥有圆角半径的图层。当masksToBounds属性被设置为NO，整个子图层被显示，尽管它已经超出了它的父图层的边界。将masksToBounds属性设为YES，将引起超出父图层的子图层内容被裁减掉。</p>
+
+<p>Figure 4-3  Clipping sublayers to the parent’s bounds
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/20.png" alt="alt text" /></p>
+
+<h2 id="在图层之间转换坐标值">在图层之间转换坐标值</h2>
+
+<p>你可能需要将某图层中的一个坐标值转换为屏幕坐标位置相同而处在不同图层的一个坐标值。CALayer提供了一组简单的转换方法以应对这种情况：
+* convertPoint：fromLayer：
+* convertPoint：toLayer：
+* convertRect：fromLayer：
+* convertRect：toLayer：</p>
+
+<p>除了转换点和矩形的值，你也可以在两个图层之间转换时间，使用convertTime：fromLayer：与convertTime：toLayer：方法。每个图层定义了自身的本地时空，使用本地时空与其他系统同步动画的开始和结束。这些时空默认被同步；然而，如果你改变了图层的动画速度，图层的时空也相应的发生变化。你可以使用时间转换方法考虑这样的因素，确保两个图层的时间是同步的。</p>
+
+<h1 id="高级动画技巧">高级动画技巧</h1>
+
+<p>有许多方式配置基于属性或关键帧的动画。如果需要同步和异步地执行多个动画，可以使用更高级的行为同步这些动画的定时或将它们链接在一起。你可以使用其他动画对象类型创建可视过渡，以及其他感兴趣的动画特效。</p>
+
+<h2 id="过渡动画支持改变图层的可视性">过渡动画支持改变图层的可视性</h2>
+
+<p>按字面上理解，一个过渡动画对象为图层创建一个可动画的可视过渡。最普遍的过渡对象用法是动画一个图层的显现和消失。与基于属性的动画不同，一个过渡动画操纵一个图层的缓存图片以创建可视效果，如果通过单独的改变属性实现会非常的困难，也许根本无法实现。标准的过渡类型包括：将旧视图移开显示新视图、推入、移动、淡入淡出动画。在OS X上，你也可以使用Core Image过滤器创建使用其他特效类型，比如擦除、翻页、波纹、或你设计的自定义特效的过渡。</p>
+
+<p>为了实现一个过渡动画，创建一个CATransition对象，然后添加该对象到包含过渡特效的图层上。你使用过渡对象指定所要执行的过渡类型以及过渡动画的开始点和结束点。你也可以不让过渡动画完整的执行。过渡对象让你指定动画运行的开始和结束进度值。这些值可以使动画在过渡的中间点开始或结束。</p>
+
+<p>清单5-1用于在两个视图之间创建一个可动画的推入过渡。在例子中，myView1和myView2被放置在相同父视图中的相同位置，但只有myView1是当前可视的。推入过渡引起myView1一边渐隐一边向左滑出，直到它被隐藏，而myView2从右侧滑入变成可视。更新两个视图的隐藏属性确保两个视图的可视性在动画的结尾是正确的。对一个图层应用推入过渡，第一个滑出的图层的使用当前的可视性，而右侧滑入的图层使用最后修改后的可视性。</p>
+
+<p>Listing 5-1  Animating a transition between two views in iOS</p>
+
+<pre><code>CATransition* transition = [CATransition animation];
+transition.startProgress = 0;
+transition.endProgress = 1.0;
+transition.type = kCATransitionPush;
+transition.subtype = kCATransitionFromRight;
+transition.duration = 1.0;
+
+// Add the transition animation to both layers
+[myView1.layer addAnimation:transition forKey:@&quot;transition&quot;];
+[myView2.layer addAnimation:transition forKey:@&quot;transition&quot;];
+
+// Finally, change the visibility of the layers.
+myView1.hidden = YES;
+myView2.hidden = NO;
+</code></pre>
+
+<p>当两个图层包含相同的过渡特效，你可以对两个图层应用同一个过渡对象。使用相同的过渡对象也简化了代码。然而，你也可以使用不同的过渡对象并且如果对每个图层过渡参数都是不同的，那么就肯定需要使用两个不同的过渡对象。</p>
+
+<p>清单5-2展示了在OS X平台上，如何使用Core Image过滤器实现一个过渡特效。配置带有你想要的参数的过滤器后，将过滤器赋值给过渡对象的filter属性，在完成这些之后，对动画的使用和其他类型的动画对象的使用是一样的。</p>
+
+<p>Listing 5-2  Using a Core Image filter to animate a transition on OS X</p>
+
+<pre><code>// Create the Core Image filter, setting several key parameters.
+CIFilter* aFilter = [CIFilter filterWithName:@&quot;CIBarsSwipeTransition&quot;];
+[aFilter setValue:[NSNumber numberWithFloat:3.14] forKey:@&quot;inputAngle&quot;];
+[aFilter setValue:[NSNumber numberWithFloat:30.0] forKey:@&quot;inputWidth&quot;];
+[aFilter setValue:[NSNumber numberWithFloat:10.0] forKey:@&quot;inputBarOffset&quot;];
+
+// Create the transition object
+CATransition* transition = [CATransition animation];
+transition.startProgress = 0;
+transition.endProgress = 1.0;
+transition.filter = aFilter;
+transition.duration = 1.0;
+
+[self.imageView2 setHidden:NO];
+[self.imageView.layer addAnimation:transition forKey:@&quot;transition&quot;];
+[self.imageView2.layer addAnimation:transition forKey:@&quot;transition&quot;];
+[self.imageView setHidden:YES];
+</code></pre>
+
+<p>注意：当在动画中使用Core Image过滤器时，配置过滤器是技巧性最强的地方。比方说，使用栏擦除过渡特效，指定一个输入角度，如果角度过大或过小可能导致没有过渡特效发生。如果你没有看到你期望的动画，尝试将你的过滤器参数调整为不同的值再运行查看。</p>
+
+<h2 id="自定义动画的定时">自定义动画的定时</h2>
+
+<p>时间系统是动画的一个重要部分。通过Core Animation方法和CAMediaTiming协议可为动画指定精确的时间信息。共有两个Core Animation类适配该协议。其中之一是CAAnimation类，所以你可以在动画对象中指定时间信息。其二是CALayer，你可以为隐式动画配置一些与时间相关的功能。虽然隐式事务对象包装了这些动画，通常优先使用所提供的默认时间信息。</p>
+
+<p>当考虑时间与动画的时候，理解图层对象如何与时间工作是重要的。每一个图层都有自己用于管理动画定时的本地时间系统。一般两个不同图层的本地时间系统足够的接近，你可以为每一个图层指定相同的时间值，用户不会察觉任何异样。然而，图层的本地时间系统可以被它的父图层或它自己的定时参数更改。比如说，改变图层的speed属性将引起图层或子图层上动画的持续时间成比例的变化。</p>
+
+<p>为了帮助你确定一个图层的适当时间值，CALayer类定义了convertTime：fromLayer：以及convertTime：toLayer：方法。你可以使用这些方法转化一个固定的时间值到一个图层的本地时间系统，或者将某一图层的时间值转换为另一个图层的时间值。这些方法将媒体定时属性考虑进去，这可能影响图层的本地时间系统，返回值用于其他图层。清单5-3展示了一个例子，你应该常规地使用获取一个图层的当前本地时间系统。CACurrentMediaTime函数是一个便利函数，返回计算机的当前时钟时间，该方法用于获取并转换至图层的本地时间。</p>
+
+<p>Listing 5-3  Getting a layer’s current local time</p>
+
+<pre><code>CFTimeInterval localLayerTime = [myLayer convertTime:CACurrentMediaTime() fromLayer:nil];
+</code></pre>
+
+<p>一旦你在图层的本地时间系统中有一个时间值，你可以使用该值更新与事件相关的动画对象或图层的属性。使用这些定时属性，你可以完成一些有趣的动画行为，包括：
+* 使用beginTime属性设置动画的开始时间。通常，动画开始于下一个更新循环周期。你可以使用beginTime参数延迟动画的开始几秒钟时间。该方式将链接在一起的两个动画设置某一个动画的开始时间为另一个动画的结束时间。
+如果你延时了动画的开始。你可能也想设置fillMode属性为kCAFillModeBackwards。该填充模式将引起图层显示动画的开始值，即使在图层树中的图层对象包含了一个不同的值。没有填充模式，你将看到动画在开始执行前发生一次到结束值的跳跃。
+* autoreverses属性引起一个动画在指定的持续时间内执行并返回到动画的开始值。你可以将此属性与repeatCount属性联合使用，让动画在开始与结束值之间反复来回。对自动返回动画设置重复计数为一个整数（比如1.0）将引起动画停止在动画的开始值。添加一个半拍值（比如重复计数为1.5）将引起动画停止在它的结束值。
+* 对动画组中的动画使用timeOffset属性，让动画一开始就出现在以后某时刻才会出现的状态。</p>
+
+<h2 id="暂停与恢复动画">暂停与恢复动画</h2>
+
+<p>为了暂停一个动画，你可以利用图层适配CAMediaTiming协议这一点，设置图层动画的速度为0.0.设置速度为0暂停动画直到你改变该属性值为一个非零值。清单5-4展示了一个简单的关于如何暂停和恢复动画的例子。</p>
+
+<p>Listing 5-4  Pausing and resuming a layer’s animations</p>
+
+<pre><code>-(void)pauseLayer:(CALayer*)layer {
+    CFTimeInterval pausedTime = [layer convertTime:CACurrentMediaTime() fromLayer:nil];
+    layer.speed = 0.0;
+    layer.timeOffset = pausedTime;
+}
+
+-(void)resumeLayer:(CALayer*)layer {
+    CFTimeInterval pausedTime = [layer timeOffset];
+    layer.speed = 1.0;
+    layer.timeOffset = 0.0;
+    layer.beginTime = 0.0;
+    CFTimeInterval timeSincePause = [layer convertTime:CACurrentMediaTime() fromLayer:nil] - pausedTime;
+    layer.beginTime = timeSincePause;
+}
+</code></pre>
+
+<h2 id="显式事务可以改变动画的参数">显式事务可以改变动画的参数</h2>
+
+<p>对图层属性的每次更改都是事务的一部分。CATransaction类管理动画的创建和分组并在适当的时间执行动画。在大部分情况下，你不需要创建你自己的事务。无论什么时候，给图层添加显式或隐式动画，Core Animation会自动创建一个隐式事务。然而你也可以创建显式事务以能够更精确的管理动画。</p>
+
+<p>使用CATransaction类提供的方法创建与管理事务。通过调用begin类方法,可以开始（或隐式地创建）一个新的事务；调用commit类方法可结束一个事务。两个方法之间的代码就是作为事务部分的变化。比如说，改变一个图层的两个属性，你可以使用清单5-5所示代码。</p>
+
+<p>Listing 5-5  Creating an explicit transaction</p>
+
+<pre><code>[CATransaction begin];
+theLayer.zPosition=200.0;
+theLayer.opacity=0.0;
+[CATransaction commit];
+</code></pre>
+
+<p>使用事务的主要一个原因是显式事务的限制内，你可以改变动画的持续时间，定时函数以及其他参数。你也可以赋值一个完成块给整个事务，这样当动画组完成后能够得到一个通知。改变动画参数须要在事务字典中使用setValue：forKey：方法更改适当的键。比如说，为了改变默认的持续时间为10秒，则你需要改变kCATransactionAnimationDuration键，如清单5-6所示。</p>
+
+<p>Listing 5-6  Changing the default duration of animations</p>
+
+<pre><code>[CATransaction begin];
+[CATransaction setValue:[NSNumber numberWithFloat:10.0f]
+    forKey:kCATransactionAnimationDuration];
+// Perform the animations
+[CATransaction commit];
+</code></pre>
+
+<p>在你想提供不同默认值给不同的动画集合的情况下你可以内嵌事务。为了一个事务中内嵌一个事务，仅需要再次调用begin类方法。每一个begin类方法必须有一个与之配对的commit类方法。仅在你提交了对最外层事务的变化之后，Core Animation开始相关的动画。</p>
+
+<p>清单5-7显式了一个事务中嵌套另一个事务的例子，内层的事务改变与外层的事务相同的动画属性，但是使用不同的值。</p>
+
+<p>Listing 5-7  Nesting explicit transactions</p>
+
+<pre><code>[CATransaction begin]; // Outer transaction
+
+// Change the animation duration to two seconds
+[CATransaction setValue:[NSNumber numberWithFloat:2.0f]
+    forKey:kCATransactionAnimationDuration];
+// Move the layer to a new position
+theLayer.position = CGPointMake(0.0,0.0);
+
+[CATransaction begin]; // Inner transaction
+// Change the animation duration to five seconds
+[CATransaction setValue:[NSNumber numberWithFloat:5.0f]
+    forKey:kCATransactionAnimationDuration];
+
+// Change the zPosition and opacity
+theLayer.zPosition=200.0;
+theLayer.opacity=0.0;
+
+[CATransaction commit]; // Inner transaction
+
+[CATransaction commit]; // Outer transaction
+</code></pre>
+
+<h2 id="给动画添加透视">给动画添加透视</h2>
+
+<p>你可以在三维空间中操纵图层。当只对简单的Core Animation显示层使用一个平行投影，平行投影本质上是将场景扁平化到二维平面。该默认行为引起相同尺寸不同zPosition的图层显式的尺寸相同，即使是图层离z坐标很远。你一般在三维场景中会有一个透视的检视口。你可以通过更改图层的变换矩阵改变这个行为，让动画包含透视信息。</p>
+
+<p>当更改一个场景的透视，你需要更改包含被观察的图层的父图层的sublayerTransform矩阵。更改父图层简化了你需要给所有子图层应用透视信息的代码。同时也保证了透视信息被正确的应用给不同平面互相覆盖的同胞子图层。</p>
+
+<p>清单5-8显示了一种为父图层创建简单透视变换的方式。自定义eyePosition变量是沿着z坐标从观察点到视图图层相对距离。通常为eyePosition指定一个正数让图层按照预期的方式调整。eyePosition越大，结果则是一个更加扁平的场景，而值越小将引起图层间更加戏剧性的视觉表现。</p>
+
+<p>Listing 5-8  Adding a perspective transform to a parent layer</p>
+
+<pre><code>CATransform3D perspective = CATransform3DIdentity;
+perspective.m34 = -1.0/eyePosition;
+
+// Apply the transform to a parent layer.
+myParentLayer.sublayerTransform = perspective;
+</code></pre>
+
+<p>给父图层配置的时候，你可以改变任何子图层的zPosition属性，然后基于这些子图层与视点的相对距离观察这些子图层尺寸的变化。</p>
+
+<h1 id="改变一个图层的默认行为">改变一个图层的默认行为</h1>
+
+<p>Core Animation使用动作对象为图层实现了隐式动画行为。动作对象服从CAAction协议并定义了一些运行于图层的相关行为。所有CAAnimation对象都实现了这个协议。无论何时，如果一个图层对象的属性发生变化，则这些动作对象将被分派执行。</p>
+
+<p>可动画属性是其中一种动作类型，你可以定义几乎任何你想要的动作。然而你需要定义你的动作对象并关联到你的图层对象。</p>
+
+<h2 id="自定义适配caaction协议的动作对象">自定义适配CAAction协议的动作对象</h2>
+
+<p>为了创建你自己的动作对象，你需要适配CAAction协议并实现runActionForKey：object：arguments：方法。在该方法中利用可用的信息执行任何你想要在图层上的动作。你可能使用该方法给图层添加动画对象或者你可能使用该方法执行另外的任务。</p>
+
+<p>当你定义了一个动作对象，你必须决定动作以何种方式被触发。动作的触发器定义了你用于注册动作的键。动作对象可在下面的情况下被触发：
+* 图层的某一个属性值被改变。这可以是图层的任何一个属性，不仅仅是可动画的属性。 （你也可以给添加到图层的自定义属性关联动作。）识别动作的键是属性名。
+* 图层变成可视或被加入到图层层次中。则识别动作的键为kCAOnOrderIn。
+* 图层从图层层次中被移除。则识别动作的键为kCAOnOrderOut。
+* 图层是即将包含一个变换动画。则识别动作的键为kCATransition。</p>
+
+<h2 id="动作对象设置给图层才产生效果">动作对象设置给图层才产生效果</h2>
+
+<p>在动作被执行之前，图层需要找到一个相应的动作对象。与图层相关的动作的键可以是被更改的属性名或一个特殊的识别动作的字符串。当一个适当的事件发生在图层上，图层调用它的actionForKey：方法搜索与键关联的动作对象。你的应用可以介入到搜索期间的几个关键点，并提供一个与键相关的动作对象。</p>
+
+<p>Core Animation以下面的顺序搜索动作对象：
+1. 如果图层有一个代理，并且代理实现了actionForLayer：forKey：方法，图层调用该方法。代理必须完成下面所述操作之一：
+   * 返回给定的键指定的动作对象。
+   * 如果代理不处理动作则返回nil，而搜索操作将继续。
+   * 返回NSNull对象，这将引起搜索操作立即结束。
+2. 图层在图层的action字典内搜索给定的键。
+3. 图层在style字典中查询一个包含键的动作字典。（换句话说，style字典包含一个actions键，它的值也是字典。图层在第二个字典中搜索给定的键。）
+4. 图层调用它的defaultActionForKey：类方法。
+5. 图层执行由Core Animation定义的隐式动作（如果有）。</p>
+
+<p>如果你在任何一个适当的搜索点提供了一个动作对象，图层将停止它的搜索并执行返回的动作对象。当它找到了一个动作对象，图层调用对象的runActionForKey：object：arguments：方法执行动作。如果你为一个给定的键定义的动作是一个CAAnimation类实例，你可以使用默认的方法实现执行动画。如果你自己定义了服从CAAction协议的对象，你必须使用你的对象的方法实现做任何适当的动作。</p>
+
+<p>设置动作对象的位置依赖于你打算如何更改图层。</p>
+
+<ul>
+<li>对于只应用在指定环境的动作，或对于已经使用代理对象的图层，提供一个代理和实现它的actionForLayer：forKey：方法。</li>
+<li>对于不使用代理的图层对象，添加动作到图层的actions字典。</li>
+<li>与定义在图层对象上的自定义属性相关的动作，包括动作在图层的style字典。</li>
+<li>对于那些是图层行为基础的动作，子类化图层并覆盖defaultActionForKey：方法。</li>
+</ul>
+
+<p>清单6-1 显示了一个用于给定动作对象的代理方法实现。在这种情况下，代理搜索图层contents属性的改变并将新内容转换为使用一个变换动画的位置。</p>
+
+<p>Listing 6-1  Providing an action using a layer delegate object</p>
+
+<pre><code>- (id&lt;CAAction&gt;)actionForLayer:(CALayer *)theLayer
+                        forKey:(NSString *)theKey {
+    CATransition *theAnimation=nil;
+
+    if ([theKey isEqualToString:@&quot;contents&quot;]) {
+
+        theAnimation = [[CATransition alloc] init];
+        theAnimation.duration = 1.0;
+        theAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+        theAnimation.type = kCATransitionPush;
+        theAnimation.subtype = kCATransitionFromRight;
+    }
+    return theAnimation;
+}
+</code></pre>
+
+<h2 id="使用catransaction类临时禁用动作">使用CATransaction类临时禁用动作</h2>
+
+<p>你可以使用CATransaction类临时禁用图层的动作。当你改变了一个图层的属性，Core Animation通常会为动画属性的改变创建一个隐式事务对象。如果你不想以动画的形式展现变化，你可以通过创建一个显示事务并设置它的kCATransactionDisableActions属性为True禁用隐式动画。清单6-2的代码片段 显示了将指定的图层从图层数中移除时禁用动画。</p>
+
+<p>Listing 6-2  Temporarily disabling a layer’s actions</p>
+
+<pre><code>[CATransaction begin];
+[CATransaction setValue:(id)kCFBooleanTrue
+    forKey:kCATransactionDisableActions];
+[aLayer removeFromSuperlayer];
+[CATransaction commit];
+</code></pre>
+
+<h1 id="提升动画的性能">提升动画的性能</h1>
+
+<p>Core Animation是提升based-app动画帧率的最佳方式 ，但使用Core Animation并不保证性能一定会得到提升。特别是在OS X中，你仍必须选择最有效的方式使用Core Animation的行为。跟所有和性能相关的问题一样，随着时间的推移，你应该使用Instruments测量和追踪你的应用的性能性能正在提升而不是在退化。</p>
+
+<p>关于OS X的两小节省略，请自行参考原文档。</p>
+
+<h2 id="常规的技巧和窍门">常规的技巧和窍门</h2>
+
+<p>有很多种方法可以让你的层运行的更加有效率（因为层是核心动画的基础）。就像任何优化一样，你应该先在优化前审查下现在的代码让动画表现如何，这个是基准，然后才能对比出优化有没有效果，效率是不是更高了。</p>
+
+<h3 id="尽可能使用不透明图层">尽可能使用不透明图层</h3>
+
+<p>设置opaque属性为YES可以让核心动画知道不需要给图层维持alpha通道，没有alpha通道意味着就不需要渲染这层的背景内容了，从而节省了渲染时间。然后这个属性主要是用于设置层或者以层为基础的视图的，也或者是用于核心动画创造的底层bitmap层的情况。如果把一张图像直接设置为层的contents属性，那么这个图像的alpha通道会被强制保留，无论你设不设定这个值。</p>
+
+<h3 id="将复杂路径拆分成简单路径">将复杂路径拆分成简单路径</h3>
+
+<p>CAShapeLayer类根据你提供的路径来渲染到bitmap图像，在合成的时候渲染成内容。这么做的优点是层总是在最佳分辨率绘制路径，但是这个优点会消耗额外的渲染时间。如果这个路径太复杂,渲染的代价就会很高，并且如果这个路径的尺寸经常改变（这会导致重绘也经常发生），用于绘画的时间也会增加，这会成为一个阻止最佳表现性能的瓶颈。</p>
+
+<p>有一个办法去降低绘制形状层的时间，就是把复杂的形状分拆成简单的形状。用更简单的路径和多层用于CAShapeLayer对象，这比绘制一个大的复杂路径时间快得多。因为绘制操作发生在CPU，合成工作发生在GPU，当然这种优化也取决于你的内容。因此，优化前以现有效果为基准很重要。</p>
+
+<h3 id="显式为相同的图层设置contents属性">显式为相同的图层设置contents属性</h3>
+
+<p>如果你在多个层对象上使用同一张图片，自己加载图像，把这个图像直接分派给这些层对象的contents属性。分配一个图像到contents属性可以预防分配用于内容储备的内存空间（UIView实际并不将自己绘制到屏幕上，而是先绘制到它的图层上，然后是图层显示在屏幕上，视图并不会频繁的重绘；相反，它的绘图结果会被缓存起来，而绘图的缓存版本（后备存储）将被用到适当的地方）。反而这个层用你提供的图像当做后备存储。当几个层用同样的图片，那么这些层就在共享一份内存而不是为自己再分配一个图片拷贝。</p>
+
+<h3 id="总是将图层的尺寸设置为整数值">总是将图层的尺寸设置为整数值</h3>
+
+<p>为了最好的效果，应该将层对象的宽和高设置为整数值，虽然你使用浮点数的形式设定图层边界的宽高，图层的边界最终用于创建一个bitmap图片。指定整型值的宽高会简化核心动画必要的创建和管理备份存储与其他图层信息的工作。</p>
+
+<h3 id="如果需要-可以使用异步的方式渲染图层">如果需要，可以使用异步的方式渲染图层</h3>
+
+<p>任何在代理方法drawLayer:inContext或视图的drawRect：方法中的绘制操作都默认是和主线程是同步的，在某种情况下，同步的绘制你的内容可能不会有最好的效果和表现。如果注意到动画执行的不好，可能就得试试drawsAsynchronously这个层的属性（iOS 6引入），让这些操作在后台线程中工作。如果你这么做了，得确定绘制代码是线程安全的，而且理所应当你应该在将异步绘图的代码置入你的产品代码之前总是测试异步绘图的性能。</p>
+
+<h3 id="当给图层添加一个阴影指定一个阴影路径">当给图层添加一个阴影指定一个阴影路径</h3>
+
+<p>让核心动画自己决定阴影的形状是个大的开销且影响app的表现。相比让它自己决定，应该用shadowPath属性明确地指定一个阴影形状。当你这么干的时候，核心动画用这个形状去绘制和缓存阴影特效。对那些从不改变或者很少改变形状的层，这是一个很好的效果提升通过减少渲染数量。</p>
+
+<h1 id="图层样式属性动画">图层样式属性动画</h1>
+
+<p>在渲染处理期间，Core Animaiton持有图层的不同属性，并按顺序渲染这些属性。该顺序决定了图层最终的呈现。本章将说明通过设置不同的图层属性完成渲染的结果。</p>
+
+<p>注意：OS X和iOS中得图层样式属性是不同的，本章将有提及。</p>
+
+<h2 id="几何属性">几何属性</h2>
+
+<p>一个图层的几何属性指定它相对于它的父图层被显示的方式。几何属性也指定了图层圆角的半径以及应用到图层和它的子层的变换。图A-1显示了示例图层的边界矩形。</p>
+
+<p>Figure A-1  Layer geometry
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/21.png" alt="alt text" /></p>
+
+<p>下面列出的CALayer属性制定了一个图层的几何结构：
+* bounds
+* position
+* frame（根据bounds和position计算得出，该属性是不是一个可动画属性）
+* anchorPoint
+* cornerRadius
+* transform
+* zPosition</p>
+
+<p>注意：cornerRadius属性仅在iOS 3.0及以上被支持。</p>
+
+<h2 id="背景属性">背景属性</h2>
+
+<p>Core Animation首先会渲染图层的背景。你可以为背景指定一个颜色。在OS X中，你也可以指定一个应用到背景内容的Core Image过滤器。图A-2显示了2个示例图层的版本。在左边的图层设置了backgroundColor属性，而右边的没有设置背景颜色。但有一个边框和一个应用在图层backgroundFilters属性上的挤压变形滤镜。</p>
+
+<p>Figure A-2  Layer with background color
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/22.png" alt="alt text" /></p>
+
+<p>背景滤镜被应用到位于图层背后的内容上。该内容主要是由父图层的内容组成。你可能使用一个背景滤镜让前景图层内容突出；比如说，通过应用一个模糊滤镜。</p>
+
+<p>下面的CALayer属性会影响图层的背景显示：
+* backgroundColor
+* backgroundFilters（iOS不支持此属性）</p>
+
+<p>注意：在iOS中，backgroundFilters属性在CALayer类中是被暴露的,但复制到该属性的滤镜是被忽略的。</p>
+
+<h2 id="图层内容">图层内容</h2>
+
+<p>如果图层有任何的内容，该内容将被渲染在背景颜色的上面。你可以通过直接设置一副位图提供图层内容，或使用一个代理指定内容，或是子类化图层并直接绘制内容。并且你可以使用许多不同的绘图技术（包括Quartz、OpernGL、Quartz合成器）提供内容。图A-3显示了一个示例图层，它的内容是通过直接设置一副位图。位图内容由一个右下角是一个机器人图标的大透明空间构成。</p>
+
+<p>Figure A-3  Layer displaying a bitmap image
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/23.png" alt="alt text" /></p>
+
+<p>带有圆角半径的图层不会自动裁剪它们的内容；然而，设置图层的masksToBounds属性为YES将引起图层裁减掉圆角以外的内容。</p>
+
+<p>下面的CALayer属性影响一个图层的内容的显示：
+* contents
+* contentsGravity
+* masksToBounds</p>
+
+<h2 id="子图层的内容">子图层的内容</h2>
+
+<p>图层可能包含一个或更多的孩子图层，孩子图层被称为子图层（sublayer）。子图层被递归地渲染并相对于父图层的边界矩形进行定位。另外，Core Animation应用父图层的sublayerTransform给每一个子图层，sublayerTransform相对于父图层的锚点。你可以使用子图层变换应用透视，应用于所有图层的其他效果也是一样的。图A-4显示了一个含有2个子图层的示例图层。左边的版本包含了背景颜色，右边的版本没有背景颜色。</p>
+
+<p>Figure A-4  Layer displaying the sublayers content
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/24.png" alt="alt text" /></p>
+
+<p>设置图层的masktSToBounds属性为YES将引起超出图层边界的任何子图层被裁减掉。</p>
+
+<p>下面的CALayer属性将影响一个图层的子图层的显示：
+* sublayers
+* masksToBounds
+* sublayerTransform</p>
+
+<h2 id="边框属性">边框属性</h2>
+
+<p>一个图层可以使用一个指定的颜色和宽显示一个可选的边框。边框按照图层的边界矩形，并会将圆角半径值考虑进去。图A-5显示了一个添加了边框的示例图层。</p>
+
+<p>Figure A-5  Layer displaying the border attributes content
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/25.png" alt="alt text" /></p>
+
+<p>下面的CALayer属性将影响图层边框的显示
+* borderColor
+* borderWidth</p>
+
+<p>平台注意点：borderColor和borderWidth属性仅在iOS 3.0及以上得到支持</p>
+
+<h2 id="滤镜属性">滤镜属性</h2>
+
+<p>在OS X平台，或许你可能为图层内容应用滤镜效果。使用自定义的合成滤镜指定图层的内容与它的底部图层内容的混合方法。图A-6显示了一个应用了Core Image的分色器滤镜图层。</p>
+
+<p>Figure A-6  Layer displaying the filters properties
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/26.png" alt="alt text" /></p>
+
+<p>下面的CALayer属性指定一个图层内容的滤镜：
+* filters
+* compositingFilter</p>
+
+<p>平台注意点：在iOS中，图层忽略任何你赋值给他的滤镜值</p>
+
+<h2 id="阴影属性">阴影属性</h2>
+
+<p>图层可以显示阴影效果，并且可以配置阴影的形状、透明度、偏移、模糊半径。如果你不指定一个自定义的阴影形状，阴影是在图层的部分基础上，阴影并不是完全透明的。图A-7显示了相同图层应用红色阴影的多种不同版本的结果。</p>
+
+<p>左边和中间的版本包含一个背景颜色，所以阴影仅是显示在图层边框的周围。然而，右边的版本不包括背景颜色，在这种情况下，阴影将应用于图层的内容、边框以及子图层。</p>
+
+<p>Figure A-7  Layer displaying the shadow properties
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/27.png" alt="alt text" /></p>
+
+<p>下面的CALayer属性影响图层阴影的显示：
+* shadowColor
+* shadowOffset
+* shadowOpacity
+* shadowRadius
+* shaodwPath</p>
+
+<p>平台注意点：shadowColor、shadowOffest、shadowOpacity和shadowRedius属性在iOS3.2+中才得到支持。shadowPath属性在iOS3.2及以上得到支持，OS X中10.7及以上得以支持。</p>
+
+<h2 id="不透明度属性">不透明度属性</h2>
+
+<p>一个图层的不透明度属性决定了多少背景内容透过图层被显示。图A-8显示了一个示例图层，它的不透明度被设置为0.5。这将允许部分背景图片穿透显示出来。</p>
+
+<p>Figure A-8  Layer including the opacity property
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/28.png" alt="alt text" /></p>
+
+<p>下面的CALyaer属性指定图层的不透明度：
+* opacity</p>
+
+<h2 id="蒙版属性">蒙版属性</h2>
+
+<p>你可以使用一个蒙版遮蔽所有或部分图层内容。蒙版本身是一个图层对象，它的alpha通道被用于决定被遮蔽的内容和被透射的内容。蒙版图层内容的不透明区域允许下方的图层内容穿透显示 而透明区域部分或完全地遮蔽了下方的内容（类似于PS里面的蒙版白的为显示区域，黑的为隐藏区域）。图A-9显示了由一个蒙版图层和两个不同的背景合成的示例图层。左边的版本，图层的透明度设置为1.0。右边的版本，图层的透明度为0.5，导致穿透图层蒙版部分的背景内容数量减少。</p>
+
+<p>Figure A-9  Layer composited with the mask property
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/29.png" alt="alt text" /></p>
+
+<p>下面的CALayer属性用于指定一个图层的蒙版：
+* mask</p>
+
+<p>平台注意：蒙版属性在iOS3.0及以上版本得以支持。</p>
+
+<h1 id="可动画属性">可动画属性</h1>
+
+<p>大部分的CALayer与CIFilter的属性是可动画的。该附录列出了这些属性，以及默认使用的动画。</p>
+
+<h2 id="calayer可动画属性">CALayer可动画属性</h2>
+
+<p>表B-1 列出了你可能考虑动画的CALayer类的属性。表中也列出了每一个属性的默认动画对象类型，默认的动画对象被创建以执行一个隐式动画。</p>
+
+<p>Table B-1  Layer properties and their default animations
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/30.png" alt="alt text" /></p>
+
+<p>表B-2 列出了用于默认的基于属性的动画的动画属性</p>
+
+<p>Table B-2  Default Implied Basic Animation
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/31.png" alt="alt text" /></p>
+
+<p>表B-3列出了默认基于过渡动画的动画对象的配置</p>
+
+<p>Table B-3  Default Implied Transition
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/32.png" alt="alt text" /></p>
+
+<h2 id="cifilter可动画属性">CIFilter可动画属性</h2>
+
+<p>Core Animation添加下面的可动画属性到Core Image的CIFilter类中。这些属性仅在OS X中有效。
+* name
+* enabled</p>
+
+<h1 id="键值编码扩展">键值编码扩展</h1>
+
+<p>Core Animation扩展了NSKeyValueCoding协议,因为它与CAAnimation、CALayer有关。扩展包括为一些键添加了默认的值、扩展了包装转换，并加入了对CGPoint、CGRect、CGSize和CATransform3D类型的键路径支持。</p>
+
+<h2 id="键值编码适应的容器类">键值编码适应的容器类</h2>
+
+<p>CAAnimation和CALayer是键值编码适应的容器类，容器类的意思是你可以为任意的键设置值。即使有些键在CALayer中没有声明，你仍然可以像下面一样设置值：</p>
+
+<pre><code>[theLayer setValue:@50 forKey:@”someKey”];
+</code></pre>
+
+<p>你可以像检索其他键路径一样检索任意键的值。比如为了检索之前设置的someKey键的值，可以像下面代码一样操作：</p>
+
+<pre><code>someKeyValue = [theLayer valueForKey:@”someKey”];
+</code></pre>
+
+<h2 id="支持的默认值">支持的默认值</h2>
+
+<p>依靠一个类为没有设置值的键提供一个默认值，Core Animation为键值编码加入了一层转换操作。CAAnimation和CALayer类支持这层转换，你可以使用defaultValueForKey：类方法。</p>
+
+<p>为了为键提供默认值，创建一个待操作类的子类，并覆盖它的defaultValueForKey：方法。在该方法内你应该检测传入的键参数，并返回适当的值。清单C-1给出了一个defaultValueForKey：方法的实现，该方法是为一个图层对象的maskToBounds键提供默认的值。</p>
+
+<p>Listing C-1  Example implementation of defaultValueForKey:</p>
+
+<pre><code>+ (id)defaultValueForKey:(NSString *)key
+{
+    if ([key isEqualToString:@&quot;masksToBounds&quot;])
+    return [NSNumber numberWithBool:YES];
+
+    return [super defaultValueForKey:key];
+}
+</code></pre>
+
+<h2 id="包装转换">包装转换</h2>
+
+<p>当键的值的数据类型是一个标量或C语言的结构体，你必须在将值赋值到图层之前将值包装成对象。当访问这类类型的值的时候，你必须将检索到得对象使用正确的类的扩展，将对象解包为正确的值。表C-1列出了常用的C语言数据类型以及包装这些类型的Objective-C类。</p>
+
+<p>Table C-1  Wrapper classes for C types
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/33.png" alt="alt text" /></p>
+
+<h2 id="键路径对结构体的支持">键路径对结构体的支持</h2>
+
+<p>CAAnimation和CALayer类可以使用键路径访问已选择的结构体域。该功能让指定结构体的域变得非常方便。你也联合使用setValue：forKeyPath：和valueForKeyPath：方法设置和获取结构体的域。</p>
+
+<h3 id="catransform3d键路径">CATransform3D键路径</h3>
+
+<p>可以使用键路径支持检索包含一个CATransform3D数据类型的属性的指定变换值。为了为一个图层的变换指定完整的键路径，你可使用字符串值transform或sublayerTransform，后面再跟上表C-2中其中一个域作为键路径。比如，为了指定一个围绕图层z轴的旋转因子，你可以指定一个transform.rotation.z的键路径。</p>
+
+<p>Table C-2  Transform field value key paths
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/34.png" alt="alt text" /></p>
+
+<p>接下来的例子显示了如何使用setValue：forKeyPath方法更改一个图层。该例子设置x轴的平移因子为10点，图层将按指定的坐标轴方向平移给定的点数量。</p>
+
+<pre><code>[myLayer setValue:[NSNumber numberWithFloat:10.0] forKeyPath:@&quot;transform.translation.x&quot;];
+</code></pre>
+
+<p>注意：使用键路径设置值与使用Objective-c属性设置并不完全一样。你不能使用属性符号设置变换值。你必须使用带有之前介绍的参数的setValue：forKeyPath：方法。</p>
+
+<h3 id="cgpoint键路径">CGPoint键路径</h3>
+
+<p>如果给定的属性的值是CGPoint数据类型，你可以选择表C-3其中的一个域名追加给属性以获得值或设置值 。比如说，为了改变图层position属性的x域，你可以将键路径写成position.x。</p>
+
+<p>Table C-3  CGPoint data structure fields
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/35.png" alt="alt text" /></p>
+
+<h3 id="cgsize键路径">CGSize键路径</h3>
+
+<p>如果给定的属性值是一个CGSize数据类型，你可以选择表C-4中其中一个域名追加给属性以获得值或设置值。</p>
+
+<p>Table C-4  CGSize data structure fields
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/36.png" alt="alt text" /></p>
+
+<h3 id="cgrect键路径">CGRect键路径</h3>
+
+<p>如果给定的属性是CGRect数据类型值，你可以选择表C-5中其中一个域名追加给属性以获取或设置值。比如，为了改变一个图层边界属性的宽度属性，你可以将键路径写成bounds.size.width。</p>
+
+<p>Table C-5  CGRect data structure fields
+<img src="http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/37.png" alt="alt text" /></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/%E6%A0%B8%E5%BF%83%E5%8A%A8%E7%94%BB/">核心动画</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/objective-c-runtime-programming-guide/" data-tooltip="Objective-C Runtime Programming Guide">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/event-handling-guide-for-ios/" data-tooltip="Event Handling Guide for iOS">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fcore-animation-programming-guide%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fcore-animation-programming-guide%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fcore-animation-programming-guide%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/objective-c-runtime-programming-guide/" data-tooltip="Objective-C Runtime Programming Guide">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/event-handling-guide-for-ios/" data-tooltip="Event Handling Guide for iOS">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fcore-animation-programming-guide%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fcore-animation-programming-guide%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fcore-animation-programming-guide%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fcore-animation-programming-guide%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fcore-animation-programming-guide%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fcore-animation-programming-guide%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/04\/core-animation-programming-guide\/';
+          
+            this.page.identifier = '\/2015\/04\/core-animation-programming-guide\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

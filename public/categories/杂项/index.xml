@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>杂项 on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/categories/%E6%9D%82%E9%A1%B9/index.xml</link>
+    <description>Recent content in 杂项 on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/categories/%E6%9D%82%E9%A1%B9/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Svn</title>
+      <link>http://lynchwong.com/blog/2014/12/svn/</link>
+      <pubDate>Sat, 13 Dec 2014 17:04:27 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2014/12/svn/</guid>
+      <description>&lt;p&gt;从开始做iOS开发后就一直用的Git，代码托管在Github上。而之前是做.Net开发，用的VS2010。团队协作，代码托管都是用的TFS，不知道是不是叫这个，已经是很久之前的事了。
+&lt;/p&gt;
+
+&lt;p&gt;TFS用起来还是挺方便的，但是后来换了公司。新公司架构师是做Ruby的，大家都知道最开始将代码托管在Github的那群人就是Ruby社区的。所以公司所有的代码都托管在Github上。&lt;/p&gt;
+
+&lt;p&gt;刚转到Git时，各种不适应，但公司其他人都是命令行操作，所以也只能硬着头皮学了。熟悉了之后还是觉得挺好用的，用了没多久又换公司了，所以你懂的，这次的公司是用Svn的。&lt;/p&gt;
+
+&lt;h3 id=&#34;svn常用命令&#34;&gt;Svn常用命令&lt;/h3&gt;
+
+&lt;h5 id=&#34;1-将文件checkout到本地目录&#34;&gt;1、将文件checkout到本地目录&lt;/h5&gt;
+
+&lt;p&gt;svn checkout path（path是服务器上的目录）&lt;/p&gt;
+
+&lt;p&gt;简写：svn co&lt;/p&gt;
+
+&lt;h5 id=&#34;2-往版本库中添加新的文件&#34;&gt;2、往版本库中添加新的文件&lt;/h5&gt;
+
+&lt;p&gt;svn add file&lt;/p&gt;
+
+&lt;h5 id=&#34;3-将改动的文件提交到版本库&#34;&gt;3、将改动的文件提交到版本库&lt;/h5&gt;
+
+&lt;p&gt;svn commit -m “LogMessage” [-N] [&amp;ndash;no-unlock] PATH(如果选择了保持锁，就使用–no-unlock开关)&lt;/p&gt;
+
+&lt;p&gt;简写：svn ci&lt;/p&gt;
+
+&lt;h5 id=&#34;4-加锁-解锁&#34;&gt;4、加锁/解锁&lt;/h5&gt;
+
+&lt;p&gt;svn lock -m “LockMessage” [&amp;ndash;force] PATH&lt;/p&gt;
+
+&lt;p&gt;svn unlock PATH&lt;/p&gt;
+
+&lt;h5 id=&#34;5-更新到某个版本&#34;&gt;5、更新到某个版本&lt;/h5&gt;
+
+&lt;p&gt;svn update -r m path&lt;/p&gt;
+
+&lt;p&gt;简写：svn up&lt;/p&gt;
+
+&lt;h5 id=&#34;6-查看文件或者目录状态&#34;&gt;6、查看文件或者目录状态&lt;/h5&gt;
+
+&lt;p&gt;1）svn status path（目录下的文件和子目录的状态，正常状态不显示）&lt;/p&gt;
+
+&lt;p&gt;2）svn status -v path(显示文件和子目录状态)&lt;/p&gt;
+
+&lt;p&gt;简写：svn st&lt;/p&gt;
+
+&lt;h5 id=&#34;7-删除文件&#34;&gt;7、删除文件&lt;/h5&gt;
+
+&lt;p&gt;svn delete path -m “delete test fle”&lt;/p&gt;
+
+&lt;p&gt;简写：svn (del, remove, rm)&lt;/p&gt;
+
+&lt;h5 id=&#34;8-查看日志&#34;&gt;8、查看日志&lt;/h5&gt;
+
+&lt;p&gt;svn log path&lt;/p&gt;
+
+&lt;h5 id=&#34;9-查看文件详细信息&#34;&gt;9、查看文件详细信息&lt;/h5&gt;
+
+&lt;p&gt;svn info path&lt;/p&gt;
+
+&lt;h5 id=&#34;10-比较差异&#34;&gt;10、比较差异&lt;/h5&gt;
+
+&lt;p&gt;svn diff path(将修改的文件与基础版本比较)&lt;/p&gt;
+
+&lt;p&gt;svn diff -r m:n path(对版本m和版本n比较差异)&lt;/p&gt;
+
+&lt;p&gt;简写：svn di&lt;/p&gt;
+
+&lt;h5 id=&#34;11-将两个版本之间的差异合并到当前文件&#34;&gt;11、将两个版本之间的差异合并到当前文件&lt;/h5&gt;
+
+&lt;p&gt;svn merge -r m:n path&lt;/p&gt;
+
+&lt;h5 id=&#34;12-svn-帮助&#34;&gt;12、SVN 帮助&lt;/h5&gt;
+
+&lt;p&gt;svn help&lt;/p&gt;
+
+&lt;p&gt;svn help ci&lt;/p&gt;
+
+&lt;h5 id=&#34;13-svn-cleanup&#34;&gt;13、svn cleanup&lt;/h5&gt;
+
+&lt;p&gt;当Subversion修改你的工作副本时（或者任何在.svn中的信息），它尝试尽可能做到安全。在改变一个工作副本前，Subversion把它的意 图写到一个日志文件中。接下来它执行日志文件中的命令来应用要求的修改。最后，Subversion删除日志文件。从架构上来说，这与一个日志文件系统 （journaled filesystem）类似。如果一个 Subversion操作被打断（例如，进程被杀掉了，或机器当掉了）了，日志文件仍在硬盘上。重新执行日志文件，Subversion可以完成先前开始 的操作，这样你的工作副本能回到一个可靠的状态。&lt;/p&gt;
+
+&lt;p&gt;以下是svn cleanup所做的：它搜索你的工作副本并执行所有遗留的日志，在这过程中删除锁。如果Subversion曾告诉你你的工作副本的一部分被“锁定”了，那么你应该执行这个命令。另外， svn status会在锁定的项前显示L。&lt;/p&gt;
+
+&lt;p&gt;$ svn status&lt;/p&gt;
+
+&lt;p&gt;L    somedir&lt;/p&gt;
+
+&lt;p&gt;M   somedir/foo.c&lt;/p&gt;
+
+&lt;p&gt;$ svn cleanup&lt;/p&gt;
+
+&lt;p&gt;$ svn status&lt;/p&gt;
+
+&lt;p&gt;M      somedir/foo.c&lt;/p&gt;
+
+&lt;h5 id=&#34;14-svn-import&#34;&gt;14、svn import&lt;/h5&gt;
+
+&lt;p&gt;使用svn import是把未版本化的文件树复制到资料库的快速办法，它需要创建一个临时目录。&lt;/p&gt;
+
+&lt;p&gt;$ svnadmin create /usr/local/svn/newrepos&lt;/p&gt;
+
+&lt;p&gt;$ svn import mytree file:///usr/local/svn/newrepos/some/project&lt;/p&gt;
+
+&lt;p&gt;Adding         mytree/foo.c&lt;/p&gt;
+
+&lt;p&gt;Adding         mytree/bar.c&lt;/p&gt;
+
+&lt;p&gt;Adding         mytree/subdir&lt;/p&gt;
+
+&lt;p&gt;Adding         mytree/subdir/quux.h&lt;/p&gt;
+
+&lt;p&gt;Committed revision 1.&lt;/p&gt;
+
+&lt;p&gt;上面的例子把在some/project目录下mytree目录的内容复制到资料库中。&lt;/p&gt;
+
+&lt;p&gt;$ svn list file:///usr/local/svn/newrepos/some/project
+bar.c
+foo.c
+subdir/&lt;/p&gt;
+
+&lt;p&gt;注意在导入完成后，原来的树没有被转化成一个工作副本。为了开始工作，你仍然需要svn checkout这个树的一个新的工作副本。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Git</title>
+      <link>http://lynchwong.com/blog/2014/12/git/</link>
+      <pubDate>Fri, 12 Dec 2014 17:04:15 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2014/12/git/</guid>
+      <description>&lt;p&gt;Git是分布式版本控制系统，相信很多同学都知道这个。类似的东西Svn，说是类似，其实有很大区别。这里推荐给大家两个地址，是学习Git很好的资料。当然还有其他优秀的资料，就不列举了。
+&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000&#34;&gt;Git教程&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;http://git.oschina.net/progit/&#34;&gt;Pro Git(中文版)&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;所以这篇博文不会讲解什么原理，也不会跟其他版本控制系统进行对比探讨孰优孰劣。当遇到需要使用更高级的命令时，知道可以来这里查找，这篇博文就是通向答案的一把钥匙，一盏指路的灯，而不是答案本身。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

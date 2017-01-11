@@ -1,0 +1,1185 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Swift之字符串和字符</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Swift之字符串和字符">
+    <meta property="og:url" content="/2015/01/swift%E4%B9%8B%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Swift之字符串和字符
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-01-25T20:19:35Z">
+    
+  
+  
+  
+  
+    2015-01-25 20:19:35
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p></p>
+
+<p>String 是例如&rdquo;hello, world&rdquo;,&ldquo;albatross&rdquo;这样的有序的 Character (字符)类型的值的集合,通过 String 类型来表示。Swift 的 String 和 Character 类型提供了一个快速的,兼容 Unicode 的方式来处理代码中的文本。创建和操作字符串的语法与 C 语言中字符串操作相似,轻量并且易读。字符串连接操作只需要简单地通过 + 符号将两个字符串相连即可。与 Swift 中其他值一样,能否更改字符串的值,取决于其被定义为常量还是变量。尽管语法简易,但 String 类型是一种快速、现代化的字符串实现。每一个字符串都是由编码无关的 Unicode 字符组成,并支持访问字符的多种 Unicode 表示形式(representations)。 你也可以在常量、变量、字面量和表达式中进行字符串插值操作,这可以帮助你轻松创建用于展示、存储和打印的自定义字符串。</p>
+
+<p>注意:Swift 的 String 类型与 Foundation NSString 类进行了无缝桥接。就像 AnyObject 类型中提到的一样,在使用 Cocoa 中的 Foundation 框架时,您可以将创建的任何字符串的值转换成 NSString,并调用任意的 NSString API。您也可以在任意要求传入 NSString 实例作为参数的 API 中用 String 类型的值代替。更多关于在 Foundation 和 Cocoa 中使用 String 的信息请查看 Using Swift with Cocoa and Objective-C。</p>
+
+<h2 id="字符串字面量-string-literals">字符串字面量(String Literals)</h2>
+
+<p>您可以在您的代码中包含一段预定义的字符串值作为字符串字面量。字符串字面量是由双引号 ( &ldquo;&rdquo; ) 包裹着的具有固定顺序的文本字符集。字符串字面量可以用于为常量和变量提供初始值:</p>
+
+<pre><code>let someString = &quot;Some string literal value&quot;
+</code></pre>
+
+<p>注意 someString 常量通过字符串字面量进行初始化,Swift 会推断该常量为 String 类型。</p>
+
+<p>注意:更多关于在字符串字面量中使用特殊字符的信息,请查看 字符串字面量的特殊字符。</p>
+
+<h2 id="初始化空字符串-initializing-an-empty-string">初始化空字符串 (Initializing an Empty String)</h2>
+
+<p>要创建一个空字符串作为初始值,可以将空的字符串字面量赋值给变量,也可以初始化一个新的 String 实例:</p>
+
+<pre><code>var emptyString = &quot;&quot; // 空字符串字面量
+var anotherEmptyString = String() // 初始化方法
+// 两个字符串均为空并等价。
+</code></pre>
+
+<p>您可以通过检查其 Boolean 类型的 isEmpty 属性来判断该字符串是否为空:</p>
+
+<pre><code>if emptyString.isEmpty {
+    println(&quot;Nothing to see here&quot;)
+}
+// 打印 &quot;Nothing to see here&quot;
+</code></pre>
+
+<h2 id="字符串可变性-string-mutability">字符串可变性 (String Mutability)</h2>
+
+<p>您可以通过将一个特定字符串分配给一个变量来对其进行修改,或者分配给一个常量来保证其不会被修改:</p>
+
+<pre><code>var variableString = &quot;Horse&quot;
+variableString += &quot; and carriage&quot;
+// variableString 现在为 &quot;Horse and carriage&quot;
+
+let constantString = &quot;Highlander&quot;
+constantString += &quot; and another Highlander&quot;
+// 这会报告一个编译错误 (compile-time error) - 常量字符串不可以被修改。
+</code></pre>
+
+<p>注意:在 Objective-C 和 Cocoa 中,您需要通过选择两个不同的类( NSString 和 NSMutableString )来指定字符串是否可以被修改。</p>
+
+<h2 id="字符串是值类型-strings-are-value-types">字符串是值类型(Strings Are Value Types)</h2>
+
+<p>Swift 的 String 类型是值类型。如果您创建了一个新的字符串,那么当其进行常量、变量赋值操作,或在函数/方法中传递时,会进行值拷贝。任何情况下,都会对已有字符串值创建新副本,并对该新副本进行传递或赋值操作。值类型在结构体和枚举是值类型中进行了详细描述。</p>
+
+<p>注意:与 Cocoa 中的 NSString 不同,当您在 Cocoa 中创建了一个 NSString 实例,并将其传递给一个函数/方法,或者赋值给一个变量,您传递或赋值的是该 NSString 实例的一个引用,除非您特别要求进行值拷贝,否则字符串不会生成新的副本来进行赋值操作。</p>
+
+<p>Swift 默认字符串拷贝的方式保证了在函数/方法中传递的是字符串的值。很明显无论该值来自于哪里,都是您独自拥有的。您可以确信传递的字符串不会被修改,除非你自己去修改它。</p>
+
+<p>在实际编译时,Swift 编译器会优化字符串的使用,使实际的复制只发生在绝对必要的情况下,这意味着您将字符串作为值类型的同时可以获得极高的性能。</p>
+
+<h2 id="使用字符-working-with-characters">使用字符(Working with Characters)</h2>
+
+<p>您可通过 for-in 循环来遍历字符串中的 characters 属性来获取每一个字符的值:</p>
+
+<pre><code>for character in &quot;Dog!?&quot;.characters {
+    print(character)
+}
+// D
+// o
+// g
+// !
+// ?
+</code></pre>
+
+<p>for-in 循环在 For Loops 中进行了详细描述。</p>
+
+<p>另外,通过标明一个 Character 类型并用字符字面量进行赋值,可以建立一个独立的字符常量或变量:</p>
+
+<pre><code>let exclamationMark: Character = &quot;!&quot;
+</code></pre>
+
+<p>字符串可以通过传递一个值类型为 Character 的数组作为自变量来初始化:</p>
+
+<pre><code>let catCharacters: [Character] = [&quot;C&quot;, &quot;a&quot;, &quot;t&quot;, &quot;!&quot;, &quot;?&quot;]
+let catString = String(catCharacters)
+print(catString)
+// 打印输出:&quot;Cat!?&quot;
+</code></pre>
+
+<h2 id="连接字符串和字符-concatenating-strings-and-characters">连接字符串和字符 (Concatenating Strings and Characters)</h2>
+
+<p>字符串可以通过加法运算符( + )相加在一起(或称“连接”)创建一个新的字符串:</p>
+
+<pre><code>let string1 = &quot;hello&quot;
+let string2 = &quot; there&quot;
+var welcome = string1 + string2
+// welcome 现在等于 &quot;hello there&quot;
+</code></pre>
+
+<p>您也可以通过加法赋值运算符 ( += ) 将一个字符串添加到一个已经存在字符串变量上:</p>
+
+<pre><code>var instruction = &quot;look over&quot; instruction += string2
+// instruction 现在等于 &quot;look over there&quot;
+</code></pre>
+
+<p>您可以用 append() 方法将一个字符附加到一个字符串变量的尾部:</p>
+
+<pre><code>let exclamationMark: Character = &quot;!&quot;
+welcome.append(exclamationMark)
+// welcome 现在等于 &quot;hello there!&quot;
+</code></pre>
+
+<p>注意:您不能将一个字符串或者字符添加到一个已经存在的字符变量上,因为字符变量只能包含一个字符。</p>
+
+<h2 id="字符串插值-string-interpolation">字符串插值 (String Interpolation)</h2>
+
+<p>字符串插值是一种全新的构建字符串的方式,可以在其中包含常量、变量、字面量和表达式。您插入的字符串字面量的每一项都被包裹在以反斜线为前缀的圆括号中:</p>
+
+<pre><code>let multiplier = 3
+let message = &quot;\(multiplier) times 2.5 is \(Double(multiplier) * 2.5)&quot;
+// message is &quot;3 times 2.5 is 7.5&quot;
+</code></pre>
+
+<p>在上面的例子中,multiplier 作为 (multiplier) 被插入到一个字符串字面量中。当创建字符 串执行插值计算时此占位符会被替换为 multiplier 实际的值。</p>
+
+<p>multiplier 的值也作为字符串中后面表达式的一部分。该表达式计算 Double(multiplier) * 2.5 的值并将结果 (7.5) 插入到字符串中。在这个例子中,表达式写为 (Double(multiplier) * 2.5)并包含在字符串字面量中。</p>
+
+<p>注意:您插值字符串中写在括号中的表达式不能包含非转义双引号 (&ldquo;) 和反斜杠 () 并且不能包含回车或换行符。</p>
+
+<h2 id="unicode">Unicode</h2>
+
+<p>Unicode 是一个国际标准,用于文本的编码和表示。 它使您可以用标准格式表示来自任意语言几乎所有的字 符,并能够对文本文件或网页这样的外部资源中的字符进行读写操作。 Swift 的 String 和 Character 类型是完 全兼容 Unicode 标准的。</p>
+
+<h3 id="unicode-标量-unicode-scalars">Unicode 标量(Unicode Scalars)</h3>
+
+<p>Swift 的 String 类型是基于 Unicode 标量 建立的。 Unicode 标量是对应字符或者修饰符的唯一的21位数 字,例如 U+0061 表示小写的拉丁字母( LATIN SMALL LETTER A )(&rdquo; a &ldquo;), U+1F425 表示小鸡表情( FRON T-FACING BABY CHICK ) (&rdquo; ? &ldquo;)。</p>
+
+<p>注意: Unicode 码位(code poing) 的范围是 U+0000 到 U+D7FF 或者 U+E000 到 U+10FFFF 。Unicode 标量不包括 Unicode 代理项(surrogate pair) 码位,其码位范围是 U+D800 到 U+DFFF 。</p>
+
+<p>注意不是所有的21位 Unicode 标量都代表一个字符,因为有一些标量是留作未来分配的。已经代表一个典型字符 的标量都有自己的名字,例如上面例子中的 LATIN SMALL LETTER A 和 FRONT-FACING BABY CHICK 。</p>
+
+<h3 id="字符串字面量的特殊字符-special-characters-in-string-literals">字符串字面量的特殊字符 (Special Characters in String Literals)</h3>
+
+<p>字符串字面量可以包含以下特殊字符:</p>
+
+<ul>
+<li>转义字符 \0 (空字符)、 \ (反斜线)、 \t (水平制表符)、 \n (换行符)、 \r (回车符)、 \&rdquo; (双引号)、 \&rsquo; (单引 号)。</li>
+<li>Unicode 标量,写成 \u{n} (u为小写),其中 n 为任意一到八位十六进制数且可用的 Unicode 位码。</li>
+</ul>
+
+<p>下面的代码为各种特殊字符的使用示例。 wiseWords 常量包含了两个双引号。 dollarSign 、 blackHeart 和 s parklingHeart 常量演示了三种不同格式的 Unicode 标量:</p>
+
+<p>let wiseWords = &ldquo;\&ldquo;Imagination is more important than knowledge\&rdquo; - Einstein&rdquo; // &ldquo;Imageination is more important than knowledge&rdquo; - Enistein
+let dollarSign = &ldquo;\u{24}&rdquo; // $, Unicode 标量 U+0024
+let blackHeart = &ldquo;\u{2665}&rdquo; // ?, Unicode 标量 U+2665
+let sparklingHeart = &ldquo;\u{1F496}&rdquo; // ?, Unicode 标量 U+1F496</p>
+
+<h3 id="可扩展的字形群集-extended-grapheme-clusters">可扩展的字形群集(Extended Grapheme Clusters)</h3>
+
+<p>每一个 Swift 的 Character 类型代表一个可扩展的字形群。一个可扩展的字形群是一个或多个可生成人类可读的字符 Unicode 标量的有序排列。举个例子,字母 é 可以用单一的 Unicode 标量 é (
+LATIN SMALL LETTERE WITH ACUTE , 或者 U+00E9 )来表示。然而一个标准的字母 é 或者 U+0065 ) 加上一个急促重音( COMBINING ACTUE ACCENT )的标量( U+0301 ),这样一对标量就表示了同样的字母 é 。 这个急促重音的标量形象的将 e 转换成了 é 。</p>
+
+<p>在这两种情况中,字母 é 代表了一个单一的 Swift 的 Character 值,同时代表了一个可扩展的字形群。 在第一种情况,这个字形群包含一个单一标量;而在第二种情况,它是包含两个标量的字形群:</p>
+
+<pre><code>let eAcute: Character = &quot;\u{E9}&quot; // é
+let combinedEAcute: Character = &quot;\u{65}\u{301}&quot; // e 后面加上 ?
+// eAcute 是 é, combinedEAcute 是 e?
+</code></pre>
+
+<p>可扩展的字符群集是一个灵活的方法,用许多复杂的脚本字符表示单一的 Character 值。 例如,来自朝鲜语字母表的韩语音节能表示为组合或分解的有序排列。在 Swift 都会表示为同一个单一的 Character 值:</p>
+
+<pre><code>let precomposed: Character = &quot;\u{D55C}&quot; // ?
+let decomposed: Character = &quot;\u{1112}\u{1161}\u{11AB}&quot; // ?, ?, ?
+// precomposed 是 ?, decomposed 是 ???
+</code></pre>
+
+<p>可拓展的字符群集可以使包围记号(例如 COMBINING ENCLOSING CIRCLE 或者 U+20DD )的标量包围其他 Unicode 标量,作为一个单一的 Character 值:</p>
+
+<pre><code>let enclosedEAcute: Character = &quot;\u{E9}\u{20DD}&quot;
+// enclosedEAcute 是 é?
+</code></pre>
+
+<p>局部的指示符号的 Unicode 标量可以组合成一个单一的 Character 值,例如 REGIONAL INDICATOR SYMBOL LETTER U (U + 1F1FA) 和 REGIONAL INDICATOR SYMBOL LETTER S (U + 1F1F8):</p>
+
+<pre><code>let regionalIndicatorForUS: Character = &quot;\u{1F1FA}\u{1F1F8}&quot;
+// regionalIndicatorForUS 是 ??
+</code></pre>
+
+<h2 id="计算字符数量-counting-characters">计算字符数量 (Counting Characters)</h2>
+
+<p>如果想要获得一个字符串中 Character 值的数量,可以使用字符串的 characters 属性的 count 属性:</p>
+
+<pre><code>let unusualMenagerie = &quot;Koala ?, Snail ?, Penguin ?, Dromedary ?&quot;
+print(&quot;unusualMenagerie has \(unusualMenagerie.characters.count) characters&quot;)
+// 打印输出 &quot;unusualMenagerie has 40 characters&quot;
+</code></pre>
+
+<p>注意在 Swift 中,使用可拓展的字符群集作为 Character 值来连接或改变字符串时,并不一定会更改字符串的字 符数量。</p>
+
+<p>例如,如果你用四个字符的单词 cafe 初始化一个新的字符串,然后添加一个 COMBINING ACTUE ACCENT (U + 0301) 作为字符串的结尾。最终这个字符串的字符数量仍然是 4 ,因为第四个字符是 e ,而不是 e :</p>
+
+<p>var word = &ldquo;cafe&rdquo;
+print(&ldquo;the number of characters in (word) is (word.characters.count)&ldquo;) // 打印输出 &ldquo;the number of characters in cafe is 4&rdquo;
+word += &ldquo;\u{301}&rdquo; // COMBINING ACUTE ACCENT, U+0301
+print(&ldquo;the number of characters in (word) is (word.characters.count)&ldquo;) // 打印输出 &ldquo;the number of characters in café is 4&rdquo;</p>
+
+<p>注意:可扩展的字符群集可以组成一个或者多个 Unicode 标量。这意味着不同的字符以及相同字符的不同表示方式可能需要不同数量的内存空间来存储。所以 Swift 中的字符在一个字符串中并不一定占用相同的内存空间数量。因此在没有获取字符串的可扩展的字符群的范围时候,就不能计算出字符串的字符数量。如果您正在处理一个长字符串,需要注意 characters 属性必须遍历全部的 Unicode 标量,来确定字符串的字符数量。</p>
+
+<p>另外需要注意的是通过 characters 属性返回的字符数量并不总是与包含相同字符的 NSString 的 length 属性相同。 NSString 的 length 属性是利用 UTF-16 表示的十六位代码单元数字,而不是 Unicode 可扩展的字符群集。作为佐证,当一个 NSString 的 length 属性被一个Swift的 String 值访问时,实际上是调用了 utf16Count。</p>
+
+<h2 id="访问和修改字符串-accessing-and-modifying-a-string">访问和修改字符串 (Accessing and Modifying a String)</h2>
+
+<p>你可以通过字符串的属性和方法来访问和读取它,当然也可以用下标语法完成。</p>
+
+<h3 id="字符串索引-string-indices">字符串索引 (String Indices)</h3>
+
+<p>每一个 String 值都有一个关联的索引(index)类型, String.Index ,它对应着字符串中的每一个 Character 的位置。</p>
+
+<p>前面提到,不同的字符可能会占用不同数量的内存空间,所以要知道 Character 的确定位置,就必须从 String 开头遍历每一个 Unicode 标量直到结尾。因此,Swift 的字符串不能用整数(integer)做索引。</p>
+
+<p>使用 startIndex 属性可以获取一个 String 的第一个 Character 的索引。使用 endIndex 属性可以获取最后一个 Character 的后一个位置的索引。因此, endIndex 属性不能作为一个字符串的有效下标。如果 String 是空串, startIndex 和 endIndex 是相等的。</p>
+
+<p>通过调用 String.Index 的 predecessor() 方法,可以立即得到前面一个索引,调用 successor() 方法可以立即得到后面一个索引。任何一个 String 的索引都可以通过锁链作用的这些方法来获取另一个索引,也可以调用 ancedBy(_:) 方法来获取。但如果尝试获取出界的字符串索引,就会抛出一个运行时错误。</p>
+
+<p>你可以使用下标语法来访问 String 特定索引的 Character 。</p>
+
+<pre><code>let greeting = &quot;Guten Tag!&quot;
+greeting[greeting.startIndex]
+// G greeting[greeting.endIndex.predecessor()]
+
+// !
+greeting[greeting.startIndex.successor()]
+// u
+let index = greeting.startIndex.advancedBy(7) greeting[index]
+// a
+</code></pre>
+
+<p>试图获取越界索引对应的 Character ,将引发一个运行时错误。</p>
+
+<pre><code>greeting[greeting.endIndex] // error
+greeting.endIndex.successor() // error
+</code></pre>
+
+<p>使用 characters 属性的 indices 属性会创建一个包含全部索引的范围( Range ),用来在一个字符串中访问单个字符。</p>
+
+<pre><code>for index in greeting.characters.indices {
+    print(&quot;\(greeting[index]) &quot;, terminator: &quot;&quot;)
+}
+// 打印输出 &quot;G u t e n T a g !&quot;
+</code></pre>
+
+<h3 id="插入和删除-inserting-and-removing">插入和删除 (Inserting and Removing)</h3>
+
+<p>调用 insert(_:atIndex:) 方法可以在一个字符串的指定索引插入一个字符。</p>
+
+<pre><code>var welcome = &quot;hello&quot;
+welcome.insert(&quot;!&quot;, atIndex: welcome.endIndex)
+// welcome now 现在等于 &quot;hello!&quot;
+</code></pre>
+
+<p>调用 insertContentsOf(_:at:) 方法可以在一个字符串的指定索引插入一个字符串。</p>
+
+<pre><code>welcome.insertContentsOf(&quot; there&quot;.characters, at: welcome.endIndex.predecessor())
+// welcome 现在等于 &quot;hello there!&quot;
+</code></pre>
+
+<p>调用 removeAtIndex(_:) 方法可以在一个字符串的指定索引删除一个字符。</p>
+
+<pre><code>welcome.removeAtIndex(welcome.endIndex.predecessor())
+// welcome 现在等于 &quot;hello there&quot;
+</code></pre>
+
+<p>调用 removeRange(_:) 方法可以在一个字符串的指定索引删除一个子字符串。</p>
+
+<pre><code>let range = welcome.endIndex.advancedBy(-6)..&lt;welcome.endIndex
+welcome.removeRange(range)
+// welcome 现在等于 &quot;hello&quot;
+</code></pre>
+
+<h2 id="比较字符串">比较字符串</h2>
+
+<p>Swift 提供了三种方式来比较文本值:字符串字符相等、前缀相等和后缀相等。</p>
+
+<h3 id="字符串-字符相等-string-and-character-equality">字符串/字符相等 (String and Character Equality)</h3>
+
+<p>字符串/字符可以用等于操作符( == )和不等于操作符( != ),详细描述在比较运算符:</p>
+
+<pre><code>let quotation = &quot;We're a lot alike, you and I.&quot;
+let sameQuotation = &quot;We're a lot alike, you and I.&quot;
+if quotation == sameQuotation {
+    print(&quot;These two strings are considered equal&quot;)
+}
+// 打印输出 &quot;These two strings are considered equal&quot;
+</code></pre>
+
+<p>如果两个字符串(或者两个字符)的可扩展的字形群集是标准相等的,那就认为它们是相等的。在这个情况 下,即使可扩展的字形群集是有不同的 Unicode 标量构成的,只要它们有同样的语言意义和外观,就认为它们标准相等。</p>
+
+<p>例如, LATIN SMALL LETTER E WITH ACUTE (U + 00E9) 就是标准相等于 LATIN SMALL LETTER E (U + 0065)后面加上 COMBINING ACUTE ACCENT (U + 0301)。这两个字符群集都是表示字符 é 的有效方式,所以它们被认为是标准相等的:</p>
+
+<pre><code>// &quot;Voulez-vous un café?&quot; 使用 LATIN SMALL LETTER E WITH ACUTE
+let eAcuteQuestion = &quot;Voulez-vous un caf\u{E9}?&quot;
+// &quot;Voulez-vous un cafe??&quot; 使用 LATIN SMALL LETTER E and COMBINING ACUTE ACCENT
+let combinedEAcuteQuestion = &quot;Voulez-vous un caf\u{65}\u{301}?&quot;
+if eAcuteQuestion == combinedEAcuteQuestion {
+    print(&quot;These two strings are considered equal&quot;)
+}
+// 打印输出 &quot;These two strings are considered equal&quot;
+</code></pre>
+
+<p>相反,英语中的 LATIN CAPITAL LETTER A (U + 0041，或者 A )不等于俄语中的 CYRILLIC CAPITAL LETTERA (U + 0410， 或者 A )。两个字符看着是一样的,但却有不同的语言意义:</p>
+
+<pre><code>let latinCapitalLetterA: Character = &quot;\u{41}&quot;
+let cyrillicCapitalLetterA: Character = &quot;\u{0410}&quot;
+if latinCapitalLetterA != cyrillicCapitalLetterA {
+    print(&quot;These two characters are not equivalent&quot;)
+}
+// 打印 &quot;These two characters are not equivalent&quot;
+</code></pre>
+
+<p>注意: 在 Swift 中,字符串和字符并不区分区域。</p>
+
+<h3 id="前缀-后缀相等">前缀/后缀相等</h3>
+
+<p>通过调用字符串的 hasPrefix(<em>:)/hasSuffix(</em>:) 方法来检查字符串是否拥有特定前缀/后缀,两个方法均接收一个 String 类型的参数,并返回一个布尔值。</p>
+
+<p>下面的例子以一个字符串数组表示莎士比亚话剧《罗密欧与朱丽叶》中前两场的场景位置:</p>
+
+<pre><code>let romeoAndJuliet = [
+    &quot;Act 1 Scene 1: Verona, A public place&quot;,
+    &quot;Act 1 Scene 2: Capulet's mansion&quot;,
+    &quot;Act 1 Scene 3: A room in Capulet's mansion&quot;,
+    &quot;Act 1 Scene 4: A street outside Capulet's mansion&quot;, &quot;Act 1 Scene 5: The Great Hall in Capulet's mansion&quot;, &quot;Act 2 Scene 1: Outside Capulet's mansion&quot;,
+    &quot;Act 2 Scene 2: Capulet's orchard&quot;,
+    &quot;Act 2 Scene 3: Outside Friar Lawrence's cell&quot;,
+    &quot;Act 2 Scene 4: A street in Verona&quot;,
+    &quot;Act 2 Scene 5: Capulet's mansion&quot;,
+    &quot;Act 2 Scene 6: Friar Lawrence's cell&quot;
+]
+</code></pre>
+
+<p>您可以调用 hasPrefix(_:) 方法来计算话剧中第一幕的场景数:</p>
+
+<pre><code>var act1SceneCount = 0
+for scene in romeoAndJuliet {
+    if scene.hasPrefix(&quot;Act 1 &quot;) {
+        ++act1SceneCount
+    }
+}
+print(&quot;There are \(act1SceneCount) scenes in Act 1&quot;)
+// 打印输出 &quot;There are 5 scenes in Act 1&quot;
+</code></pre>
+
+<p>相似地,您可以用 hasSuffix(_:) 方法来计算发生在不同地方的场景数:</p>
+
+<pre><code>var mansionCount = 0
+var cellCount = 0
+for scene in romeoAndJuliet {
+    if scene.hasSuffix(&quot;Capulet's mansion&quot;) {
+        ++mansionCount
+    } else if scene.hasSuffix(&quot;Friar Lawrence's cell&quot;) {
+        ++cellCount
+    }
+}
+print(&quot;\(mansionCount) mansion scenes; \(cellCount) cell scenes&quot;) // 打印输出 &quot;6 mansion scenes; 2 cell scenes&quot;
+</code></pre>
+
+<p>注意: hasPrefix(<em>:) 和 hasSuffix(</em>:) 方法都是在每个字符串中逐字符比较其可扩展的字符群集是否标准相 等,详细描述在字符串/字符相等。</p>
+
+<h2 id="字符串的-unicode-表示形式-unicode-representations-of-strings">字符串的 Unicode 表示形式(Unicode Representations of Strings)</h2>
+
+<p>当一个 Unicode 字符串被写进文本文件或者其他储存时,字符串中的 Unicode 标量会用 Unicode 定义的几种编码格式编码。每一个字符串中的小块编码都被称为代码单元。这些包括 UTF-8 编码格式(编码字符串为8位的代码单元), UTF-16 编码格式(编码字符串位16位的代码单元),以及 UTF-32 编码格式(编码字符串32位的代码单元)。</p>
+
+<p>Swift 提供了几种不同的方式来访问字符串的 Unicode 表示形式。 您可以利用 for-in 来对字符串进行遍历,从而以 Unicode 可扩展的字符群集的方式访问每一个 Character 值。 该过程在使用字符 中进行了描述。</p>
+
+<p>另外,能够以其他三种 Unicode 兼容的方式访问字符串的值:</p>
+
+<ul>
+<li>UTF-8 代码单元集合 (利用字符串的 utf8 属性进行访问)</li>
+<li>UTF-16 代码单元集合 (利用字符串的 utf16 属性进行访问)</li>
+<li>21位的 Unicode 标量值集合,也就是字符串的 UTF-32 编码格式 (利用字符串的 unicodeScalars 属性进行访问)</li>
+</ul>
+
+<p>下面由 D<code>o</code>g``?(DOUBLE EXCLAMATION MARK, Unicode 标量 U+203C )和 ? (DOG FACE, Unicode 标量为 U+1F436 )组成的字符串中的每一个字符代表着一种不同的表示:</p>
+
+<pre><code>let dogString = &quot;Dog??&quot;
+</code></pre>
+
+<h3 id="utf-8-表示">UTF-8 表示</h3>
+
+<p>您可以通过遍历 String 的 utf8 属性来访问它的 UTF-8 表示。 其为 String.UTF8View 类型的属性, UTF8View 是无符号8位 ( UInt8 ) 值的集合,每一个 UInt8 值都是一个字符的 UTF-8 表示:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSStringsandCharacters/1.png" alt="alt text" /></p>
+
+<pre><code>for codeUnit in dogString.utf8 {
+    print(&quot;\(codeUnit) &quot;, terminator: &quot;&quot;)
+}
+print(&quot;&quot;)
+// 68 111 103 226 128 188 240 159 144 182
+</code></pre>
+
+<p>上面的例子中，前三个10进制 codeUnit 值(68, 111, 103)代表了字符D、o 和 g，他们的UTF－8表示与ASCII表示相同。接下来三个10进制 codeUnit 值(226, 128, 188)是 DOUBLE EXCLAMATION MARK 的3字节UTF－8表示。最后的四个 codeUnit 值(240, 159 144, 182)是 DOG FACE 的4字节UTF－8表示。</p>
+
+<h3 id="utf-16-表示">UTF-16 表示</h3>
+
+<p>您可以通过遍历 String 的 utf16 属性来访问它的 UTF-16 表示。 其为 String.UTF16View 类型的属性, UTF16View 是无符号16位 ( UInt16 ) 值的集合,每一个 UInt16 都是一个字符的 UTF-16 表示:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSStringsandCharacters/2.png" alt="alt text" /></p>
+
+<pre><code>for codeUnit in dogString.utf16 {
+    print(&quot;\(codeUnit) &quot;, terminator: &quot;&quot;)
+}
+print(&quot;&quot;)
+// 68 111 103 8252 55357 56374
+</code></pre>
+
+<p>同样,前三个 codeUnit 值 ( 68 , 111 , 103) 代表了字符D、o 和 g，他们的UTF－16和UTF－8 完全相同(因为这些 Unicode 标量表示 ASCII 字符)。</p>
+
+<p>第四个 codeUnit 值 ( 8252 ) 是一个等于十六进制 203C 的的十进制值。这个代表了 DOUBLE EXCLAMATION MARK 字符的 Unicode 标量值 U+203C 。这个字符在 UTF-16 中可以用一个代码单元表示。</p>
+
+<p>第五和第六个 codeUnit 值 ( 55357 和 56374 ) 是 DOG FACE 字符的 UTF-16 表示。 第一个值为 U+D83D (十进制值为 55357 ),第二个值为 U+DC36 (十进制值为 56374 )。</p>
+
+<h3 id="unicode-标量表示-unicode-scalars-representation">Unicode 标量表示 (Unicode Scalars Representation)</h3>
+
+<p>您可以通过遍历 String 值的 unicodeScalars 属性来访问它的 Unicode 标量表示。其为 UnicodeScalarView 类型的属性, UnicodeScalarView 是 UnicodeScalar 的集合。 UnicodeScalar 是21位的 Unicode 代码点。</p>
+
+<p>每一个 UnicodeScalar 拥有一个 value 属性,可以返回对应的21位数值,用 UInt32 来表示:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSStringsandCharacters/3.png" alt="alt text" /></p>
+
+<pre><code>for scalar in dogString.unicodeScalars {
+    print(&quot;\(scalar.value) &quot;, terminator: &quot;&quot;)
+}
+print(&quot;&quot;)
+// 68 111 103 8252 128054
+</code></pre>
+
+<p>前三个 UnicodeScalar 值( 68 , 111 , 103 )的 value 属性仍然代表字符 D 、 o 和 g 。 第四个 codeUnit 值( 8252 )仍然是一个等于十六进制 203C 的十进制值。这个代表了 DOUBLE EXCLAMATION MARK 字符的 Unicode 标量 U+203C 。</p>
+
+<p>第五个 UnicodeScalar 值的 value 属性, 128054 ,是一个十六进制 1F436 的十进制表示。其等同于 DOG FACE 的 Unicode 标量 U+1F436 。</p>
+
+<p>作为查询它们的 value 属性的一种替代方法,每个 UnicodeScalar 值也可以用来构建一个新的 String 值,比如在字符串插值中使用:</p>
+
+<pre><code>for scalar in dogString.unicodeScalars {
+    print(&quot;\(scalar) &quot;)
+}
+// D
+// o
+// g
+// ?
+// ?
+</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B/" data-tooltip="Swift之集合类型">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/" data-tooltip="Swift之基本运算符">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%25AD%2597%25E7%25AC%25A6%25E4%25B8%25B2%25E5%2592%258C%25E5%25AD%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%25AD%2597%25E7%25AC%25A6%25E4%25B8%25B2%25E5%2592%258C%25E5%25AD%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%25AD%2597%25E7%25AC%25A6%25E4%25B8%25B2%25E5%2592%258C%25E5%25AD%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B/" data-tooltip="Swift之集合类型">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/01/swift%E4%B9%8B%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/" data-tooltip="Swift之基本运算符">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%25AD%2597%25E7%25AC%25A6%25E4%25B8%25B2%25E5%2592%258C%25E5%25AD%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%25AD%2597%25E7%25AC%25A6%25E4%25B8%25B2%25E5%2592%258C%25E5%25AD%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%25AD%2597%25E7%25AC%25A6%25E4%25B8%25B2%25E5%2592%258C%25E5%25AD%2597%25E7%25AC%25A6%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%25AD%2597%25E7%25AC%25A6%25E4%25B8%25B2%25E5%2592%258C%25E5%25AD%2597%25E7%25AC%25A6%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%25AD%2597%25E7%25AC%25A6%25E4%25B8%25B2%25E5%2592%258C%25E5%25AD%2597%25E7%25AC%25A6%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f01%2fswift%25E4%25B9%258B%25E5%25AD%2597%25E7%25AC%25A6%25E4%25B8%25B2%25E5%2592%258C%25E5%25AD%2597%25E7%25AC%25A6%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/01\/swift%E4%B9%8B%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6\/';
+          
+            this.page.identifier = '\/2015\/01\/swift%E4%B9%8B%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

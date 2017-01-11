@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Corebluetooth on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/corebluetooth/index.xml</link>
+    <description>Recent content in Corebluetooth on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/corebluetooth/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>iOS蓝牙，CoreBluetooth框架简介及入门使用</title>
+      <link>http://lynchwong.com/blog/2014/12/ios%E8%93%9D%E7%89%99corebluetooth%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Mon, 15 Dec 2014 09:27:30 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2014/12/ios%E8%93%9D%E7%89%99corebluetooth%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8/</guid>
+      <description>&lt;p&gt;做过两三个和硬件交互的项目，可能重点和难点就是交互的协议这块。而协议的选取大部分都需要硬件来决定，比如：
+&lt;/p&gt;
+
+&lt;p&gt;第一个项目是和路由器交互，那么对开发者来说Http协议是不错的选择；&lt;/p&gt;
+
+&lt;p&gt;第二个项目是和玩具交互，是我接手的项目，其实谈不上交互，iOS端只是单方面的发送指令，硬件不发送数据，iOS端也不需要接收数据。即通过超声波来发送指令给硬件，硬件接收到超声波指令后做出相应的响应。&lt;/p&gt;
+
+&lt;p&gt;第三个项目，即现在进行的项目，是通过蓝牙和硬件连接后进行交互。&lt;/p&gt;
+
+&lt;p&gt;所以这篇博文主要是自己的一个学习过程的记录，也是归纳和总结。文章最后我会放上参考资料的链接，大家也可以参考其他博主的博文。&lt;/p&gt;
+
+&lt;h2 id=&#34;ios蓝牙开发简介&#34;&gt;iOS蓝牙开发简介&lt;/h2&gt;
+
+&lt;p&gt;说实话，在一两年前给iOS做蓝牙开发是比较蛋疼的事，特别是需要用蓝牙和硬件交互的App。即蓝牙 4.0出现之前，蓝牙 2.0时只有iOS设备和苹果认证的MFI设备才可以被iOS设备检索到。蓝牙 4.0之后（硬件要4S，系统要iOS6以上才支持蓝牙 4.0），苹果开放了BLE通道，没有MFI认证的蓝牙设备也可以连接非越狱的iOS设备了。以上这些的范围都是在非越狱的情形下。&lt;/p&gt;
+
+&lt;p&gt;现在的情形就是我们的硬件没有MFI认证，如果你要去做MFI认证也是可以的，怎么做我就不知道了。根据公司给的硬件以及其他因素来考虑该选用什么方案。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;首先是公司硬件支持蓝牙 4.0；&lt;/li&gt;
+&lt;li&gt;其次不考虑越狱的iOS设备，即不关注，不会针对越狱的iOS设备做App优化；&lt;/li&gt;
+&lt;li&gt;项目要发布到App Store；&lt;/li&gt;
+&lt;li&gt;项目版本适配只做iOS7 和 iOS8，设备类型是4S以上。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;所以，综合以上所有条件，我们选择蓝牙 4.0，确切到iOS编程方面就是通过CoreBluetooth框架来完成蓝牙的操作。&lt;/p&gt;
+
+&lt;p&gt;另外实现iOS设备间的蓝牙通信还有其他的方法，比如GameKit，这里就不赘述了，博主也没去了解学习过，大家自行搜索学习吧。同时考虑到iOS7 和 iOS8的份额已经很高（非越狱的设备中统计的），同时4S以前的设备也越来越少，所以我们只适配iOS7、8，设备只支持4S。如果大家需要支持4S以前的设备，你就只能用蓝牙 2.0的标准，如果你有MFI认证的蓝牙模块，那么不越狱的设备都能用，iOS设备全兼容，且能发布到App Store；如果你没有MFI认证的蓝牙模块，你就只能使用私有的API连接设备，也只能越狱的手机用，iOS设备全兼容，且不能发布到App Store。具体怎么做还请大家自行学习、了解。&lt;/p&gt;
+
+&lt;h2 id=&#34;corebluetooth框架&#34;&gt;CoreBluetooth框架&lt;/h2&gt;
+
+&lt;p&gt;所以现在就要来说说CoreBluetooth框架了，同时介绍一些专有名词和概念。大家也可以直接查看苹果的文档，打开Xcode－&amp;gt; Window -&amp;gt; Documentation and API Reference 搜索“Core Bluetooth Overview”查看官方关于CoreBluetooth框架的介绍。&lt;/p&gt;
+
+&lt;p&gt;蓝牙 4.0标准将低功耗简称为BLE，而iOS开放了BLE通道。CoreBluetooth框架能够让你的iOS和Mac App能够和支持BLE的设备进行通信。比如，你的应用程序可以发现、搜索、以及和这些支持BLE的外围设备进行交互，比如心率监测器、数字温控器，甚至其他的iOS设备。&lt;/p&gt;
+
+&lt;p&gt;该框架是对于蓝牙 4.0规范的一个抽象，即该框架向用户和开发者隐藏了很多底层实现的细节，使开发者开发那些通过蓝牙与外围设备（支持BLE的设备）交互的App更简单。因为该框架就是基于蓝牙 4.0规范的，来自规范里面的一些概念、术语、已经在该框架中采用。接下来将会介绍你开始用CoreBluetooth进行开发时需要知道的一些概念和术语。&lt;/p&gt;
+
+&lt;h3 id=&#34;中央和外围设备以及它们之间蓝牙通信的规则&#34;&gt;中央和外围设备以及它们之间蓝牙通信的规则&lt;/h3&gt;
+
+&lt;p&gt;主要有两个角色参与低功耗蓝牙通信：中央(Central) 和 外围(Peripheral).基于传统的客户端－服务端的架构模型，外围通常是拥有数据同时是被其他设备需要的一方；中央通常使用外围提交上来的数据来完成一些特定的任务。如下图所示，比如，一个心率监测器也许有一些有用的信息，而这些信息正好就是你App需要的，通过这些信息然后使用一种友好的方式来向用户展示用户的心率。
+&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/centralandperipheral.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;中央发现和连接到外围&#34;&gt;中央发现和连接到外围&lt;/h4&gt;
+
+&lt;p&gt;外围会广播一些广告包里面的数据。广告包(advertising packet,不知道翻译的对不对)就是一个相对较小的、捆绑了外围可能包含的有用信息且必须提供的数据包，比如外围的名字和主要的功能。比如，一个数字温控器可能广播它能提供当前房间的温度。在低功耗蓝牙通信中，广播是告诉别人外围存在的主要方式。&lt;/p&gt;
+
+&lt;p&gt;中央，另一方面，可以扫描和监听任何它感兴趣且正在广播的外围设备，如下图所示，中央可以询问任何它发现广播的外围是否可以连接。
+&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/Advertising.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;外围的数据是什么样的结构&#34;&gt;外围的数据是什么样的结构&lt;/h4&gt;
+
+&lt;p&gt;连接到外围设备的目的是为了探索和交互其提供的数据。在开始这些之前，了解外围的数据是什么样的结构对你是有帮助的。&lt;/p&gt;
+
+&lt;p&gt;外围可能包含一个或者多个服务，或者提供连接的信号强度的有用信息。一个服务是为了完成外围设备的一个功能(或者设备部分功能)，且该服务收集了数据和相关的行为。比如，一个心率监测器的服务也许暴露了从心率传感器那里获得的心率数据。&lt;/p&gt;
+
+&lt;p&gt;服务本身是由特征或者包含其他服务(即，其他服务的引用)来组成的。一个特征提供了外围服务更多的细节。比如，刚才上面描述的心率服务也许包含一个描述心率传感器位置信息的特征和另外一个传送测量心率数据的特征（即这个服务包含了两个特征）。如下图阐述了一个心率监测器的服务和特征的数据可能的结构和特点。
+&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/aperipheralsserviceandcharacteristics.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;中央分析-交互外围设备提供的数据&#34;&gt;中央分析、交互外围设备提供的数据&lt;/h4&gt;
+
+&lt;p&gt;在中央成功的和外围建立连接之后，中央可以发现外围提供的全方位的服务和特征(广播的数据里可能只包含一部分可用的服务)。&lt;/p&gt;
+
+&lt;p&gt;中央也可以通过读写外围服务的特征值与外围设备进行交互。比如，你的应用程序也许会从数字温控器那里请求当前房间的温度，或者应用程序向数字温控器提供一个值从而来设置当前房间的温度。&lt;/p&gt;
+
+&lt;h3 id=&#34;中央-外围-以及外围的数据是怎么表示的&#34;&gt;中央，外围，以及外围的数据是怎么表示的&lt;/h3&gt;
+
+&lt;p&gt;在低功耗蓝牙通信中的主要角色(即前面提到的中央和外围)及其数据通过简单、直接的方法映射到了CoreBluetooth框架中。&lt;/p&gt;
+
+&lt;h4 id=&#34;中央这边的对象&#34;&gt;中央这边的对象&lt;/h4&gt;
+
+&lt;p&gt;当你用本地中央和远程外围交互的时候(这里本地和远程的意思就是，比如你拿着手机搜索其他的设备，那么你的手机就是本地中央这端，其他的设备是远程外围一端，这里的本地和远程是相对我们用户来说，表示空间距离，不是我们通常意义上的本地和远程，大家直接忽略本地和远程对理解也不会有什么影响)，在低功耗蓝牙通信中你通常扮演中央这端。除非你设置了本地外围用来响应其他中央的请求－大部分的蓝牙事务中你都是中央这端。&lt;/p&gt;
+
+&lt;p&gt;关于实现你的应用程序扮演中央角色的更多信息，请参考&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/PerformingCommonCentralRoleTasks/PerformingCommonCentralRoleTasks.html&#34;&gt;Performing Common Central Role Tasks&lt;/a&gt; 和 &lt;a href=&#34;https://developer.apple.com/library/ios/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/BestPracticesForInteractingWithARemotePeripheralDevice/BestPracticesForInteractingWithARemotePeripheralDevice.html&#34;&gt;Best Practices for Interacting with a Remote Peripheral Device&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h5 id=&#34;本地中央和远程外围&#34;&gt;本地中央和远程外围&lt;/h5&gt;
+
+&lt;p&gt;在中央这一端，本地中央设备用CBCentralManager对象来表示。这些对象用来管理发现或者连接到远程外围设备(用CBPeripheral对象来表示),包括扫描，发现，以及连接到正在广播的外围。下图展示了在CoreBluetooth框架中本地中央和远程外围的对象表示。
+&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/CoreBluetoothobjectsonthecentralside.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&#34;远程外围的数据用cbservice和cbcharacteristic对象来表示&#34;&gt;远程外围的数据用CBService和CBCharacteristic对象来表示&lt;/h5&gt;
+
+&lt;p&gt;当你在和远程外围(CBPeripheral对象表示)进行数据交互时，你其实是在处理外围的服务和特征。在CoreBluetooth框架中，远程外围的服务用对象CBService表示。相对的，特征用对象CBCharacteristic表示。下图阐述了远程外围服务及特征的基础结构。
+&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/Aremoteperipheralstreeofservicesandcharacteristics.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;外围这边的对象&#34;&gt;外围这边的对象&lt;/h4&gt;
+
+&lt;p&gt;在OS X 10.9和iOS6以后，Mac和iOS设备具有低功耗蓝牙外围的功能，能够提供数据给其他的设备，包括其他的Macs，iPhones，iPads。当设置你的设备实现外围角色时，你其实就是在扮演低功耗蓝牙通信中外围的这一端。&lt;/p&gt;
+
+&lt;h5 id=&#34;本地外围和远程中央&#34;&gt;本地外围和远程中央&lt;/h5&gt;
+
+&lt;p&gt;在外围这一端，本地外围设备是用CBPeripheralManager对象来表示。这些对象用本地外围设备的服务和特征的数据库来发布服务，广播给远程中央设备(用对象CBCentral表示)。同时也用来响应远程中央的读写请求。下图展示了本地外围和远程中央在CoreBluetooth框架中的表示。
+&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/CoreBluetoothobjectsontheperipheralside.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&#34;本地外围的数据用对象cbmutableservice和cbmutablecharacteristic来表示&#34;&gt;本地外围的数据用对象CBMutableService和CBMutableCharacteristic来表示&lt;/h5&gt;
+
+&lt;p&gt;当你建立与本地外围(用对象CBPeripheralManager表示)的数据交互，你其实是在处理服务和特征的可变版本。在CoreBluetooth框架中，本地外围的服务用CBMutableService对象表示，相应的CBMutableCharacteristic对象来表示特征。下图阐述了本地外围服务和特征的基本结构。
+&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/Alocalperipheralstreeofservicesandcharacteristics.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;关于实现你的应用程序扮演外围角色的更多信息，请参考&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/PerformingCommonCentralRoleTasks/PerformingCommonCentralRoleTasks.html&#34;&gt;Performing Common Central Role Tasks&lt;/a&gt; 和 &lt;a href=&#34;https://developer.apple.com/library/ios/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/BestPracticesForInteractingWithARemotePeripheralDevice/BestPracticesForInteractingWithARemotePeripheralDevice.html&#34;&gt;Best Practices for Interacting with a Remote Peripheral Device&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;代码示例&#34;&gt;代码示例&lt;/h2&gt;
+
+&lt;p&gt;上面关于CoreBluetooth框架的介绍都是翻译自苹果的开发文档，由于博主英文水平的限制，无法使翻译做到信雅达，建议大家可以去看英文原文文档，看起来可能会更明白。官方文档非常的详尽，完全翻译太花时间，这里翻译了基础知识，总的来说开发够用了。&lt;/p&gt;
+
+&lt;p&gt;通过上面的介绍，大家可能也发现了有两种情况，即本地中央、远程外围和本地外围、远程中央。所以我们来分析下我们是哪种情况，我们硬件是没有操作界面的，是等待我们去连接的，所以硬件是远程的外围设备；那么手机这边就是本地中央，需要去搜索发现外围设备，连接外围设备，向外围设备的服务写入特征值来控制硬件。所以我们的情况就是本地中央(App)，远程外围(硬件)。&lt;/p&gt;
+
+&lt;p&gt;编程环境及代码说明：
+* 10.10的OS X，Xcode6，开启ARC;
+* 版本适配iOS7和8，4S以上机型；
+* 代码适用情形是上面给出的情况；
+* 不会给出整个项目的代码，只会给出对CoreBlutooth框架的简单封装，实现的功能主要是搜索发现以及连接到外围设备，数据的交互没有实现；
+* 为了简单，代码质量不高，跟我自己项目里的代码不是完全一样的，请大家根据自己需求进行更改；
+* 其次搜索出来的外围设备的列表视图需要自己做，这里我也不会提供，使用tableview自定义一个视图就能够实现。&lt;/p&gt;
+
+&lt;p&gt;之前就说过CoreBluetooth框架向用户和开发者隐藏了底层实现的细节，所以，根据Objc和Cocoa的尿性，你需要做的就是实现一大坨的委托代理方法。&lt;/p&gt;
+
+&lt;p&gt;新建文件叫做BluetoothHelper，继承自NSObject，同时实现CBCentralManagerDelegate和CBPeripheralDelegate代理。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#import &amp;lt;Foundation/Foundation.h&amp;gt;
+#import &amp;lt;CoreBluetooth/CoreBluetooth.h&amp;gt;
+
+@class RACSubject;
+
+@interface BluetoothHelper : NSObject&amp;lt;CBCentralManagerDelegate, CBPeripheralDelegate&amp;gt;
+
+@property (nonatomic, strong) CBCentralManager *manager;//本地中央
+@property (nonatomic, strong) CBPeripheral *peripheral;//标示当前连接的外围
+@property (nonatomic, strong) CBService *service;//当前连接的外围需要的服务
+@property (nonatomic, strong) CBCharacteristic *writeCharacteristic;//写数据的特征
+
+@property (nonatomic, strong) NSMutableArray *nDevices;//搜索到外围设备
+@property (nonatomic, strong) NSArray *nServices;//外围的所有服务
+@property (nonatomic, strong) NSArray *nCharacteristics;//选中服务的所有特征
+
+@property (nonatomic, strong) RACSubject *devicesUpdateSignal;//当有新的外围设备发现时，会通知列表视图刷新，RAC里面的东西
+
+@property (nonatomic, assign) BOOL bluetoothConnectStatu;//当前蓝牙连接的状态，YES为连接，NO为没有连接
+
+//单列
++ (BluetoothHelper *)sharedInstance;
+
+//扫描搜索蓝牙
+- (void)scanForBluetooth;
+
+//停止扫描
+- (void)stopScanForBluetooth;
+
+//连接到指定的外围
+- (void)connectToPeripheral:(CBPeripheral *)peripheral;
+
+//写入数据，未实现
+- (void)writeData:(NSData *)data;
+
+@end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可能需要特别说明的就是&lt;code&gt;RACSubject&lt;/code&gt;，这个是&lt;code&gt;ReactiveCocoa&lt;/code&gt;里面的东西，这个框架建议大家学习使用，博主也在学习尝试使用这个框架，用在项目里感觉超棒，特别是配合MVVM，那感觉简直不敢相信。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ReactiveCocoa&lt;/code&gt;这个框架博主实在是讲不出什么东东来，现在还处于入门学习的阶段，等到后面熟悉、了解后可能会写些博文。&lt;/p&gt;
+
+&lt;p&gt;这里简单说下&lt;code&gt;RACSubject&lt;/code&gt;的作用，大家都知道蓝牙搜索时的那个界面，如果有外围设备不断的被发现搜索到，那么那个界面的列表就会不断的刷新增加行来显示新发现的外围设备。而&lt;code&gt;ReactiveCocoa&lt;/code&gt;这个东西是什么呢，就是函数响应式编程Objc的实现，是Github那些大神做Mac客户端时的附属产物，据说是根据微软的Rx来的。其实iOS开发中都是在等待事件的发生，而究其事件发生的本质其实就是值的改变，值的改变就是程序状态的改变，Cocoa通过KVO，通知，代理，Action等来检测值及实现状态的改变。所以&lt;code&gt;RACSubject&lt;/code&gt;的作用就是当nDevices改变的时候刷新界面。&lt;/p&gt;
+
+&lt;p&gt;.m实现文件太长了，所以会把方法分开讲解。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; + (BluetoothHelper *)sharedInstance
+{
+    static dispatch_once_t once;
+    static id sharedInstance;
+    dispatch_once(&amp;amp;once, ^{
+        sharedInstance = [[self alloc] init];
+    });
+
+    return sharedInstance;
+}
+
+- (instancetype)init
+{
+    if ((self = [super init])) {
+        self.manager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+        self.nDevices = [[NSMutableArray alloc] init];
+        self.devicesUpdateSignal = [[RACSubject subject] setNameWithFormat:@&amp;quot;BluetoothHelper devicesUpdateSignal&amp;quot;];
+    }
+    return self;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面是单列方法和初始化的方法，&lt;code&gt;[BluetoothHelper sharedInstance]&lt;/code&gt;时会返回BluetoothHelper的一个实例。这里我觉得做成单列模式挺好的，不过也可以自行更改。&lt;/p&gt;
+
+&lt;p&gt;初始化方法中&lt;code&gt;self.manager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];&lt;/code&gt;初始化了&lt;code&gt;CBCentralManager&lt;/code&gt;，并且设置代理为&lt;code&gt;self&lt;/code&gt;，所以接下来就会调用代理方法了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)centralManagerDidUpdateState:(CBCentralManager *)central
+{
+    NSLog(@&amp;quot;centralManagerDidUpdateState&amp;quot;);
+    switch (central.state) {
+        case CBCentralManagerStateUnknown:
+            NSLog(@&amp;quot;Central Manager state CBCentralManagerStateUnknown&amp;quot;);
+            self.bluetoothConnectStatu = NO;
+            self.peripheral = nil;
+            self.nDevices = nil;
+            [self.devicesUpdateSignal sendNext:self.nDevices];
+            break;
+        case CBCentralManagerStateUnsupported:
+            NSLog(@&amp;quot;Central Manager state CBCentralManagerStateUnsupported&amp;quot;);
+            self.bluetoothConnectStatu = NO;
+            self.peripheral = nil;
+            self.nDevices = nil;
+            [self.devicesUpdateSignal sendNext:self.nDevices];
+            break;
+        case CBCentralManagerStateUnauthorized:
+            NSLog(@&amp;quot;Central Manager state CBCentralManagerStateUnauthorized&amp;quot;);
+            self.bluetoothConnectStatu = NO;
+            self.peripheral = nil;
+            self.nDevices = nil;
+            [self.devicesUpdateSignal sendNext:self.nDevices];
+            break;
+        case CBCentralManagerStateResetting:
+            NSLog(@&amp;quot;Central Manager state CBCentralManagerStateResetting&amp;quot;);
+            self.bluetoothConnectStatu = NO;
+            self.peripheral = nil;
+            self.nDevices = nil;
+            [self.devicesUpdateSignal sendNext:self.nDevices];
+            break;
+        case CBCentralManagerStatePoweredOff:
+            NSLog(@&amp;quot;Central Manager state CBCentralManagerStatePoweredOff&amp;quot;);
+            self.bluetoothConnectStatu = NO;
+            self.peripheral = nil;
+            self.nDevices = nil;
+            [self.devicesUpdateSignal sendNext:self.nDevices];
+            break;
+        case CBCentralManagerStatePoweredOn:
+            NSLog(@&amp;quot;CBCentralManagerStatePoweredOn&amp;quot;);
+            [self.manager scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey:@YES}];
+            break;
+        default:
+            NSLog(@&amp;quot;Central Manager default&amp;quot;);
+            break;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的方法即是调用的第一个代理方法，该方法里就应该检测蓝牙的状态，然后开发者根据不同的状态来进行不同的操作。当手机没有开启蓝牙时，会弹出alertview让你开启蓝牙。当进入了&lt;code&gt;CBCentralManagerStatePoweredOn&lt;/code&gt;的case分支时，你就可以通过以下代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; [self.manager scanForPeripheralsWithServices:nil
+                                     options:@{CBCentralManagerScanOptionAllowDuplicatesKey:@YES}];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;来开始发现搜索蓝牙。这里需要说明的就是上面这个方法的两个参数，说明之前还有个知识点需要知道。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;每一个服务和特征都需要用一个UUID（unique identifier）去标识，UUID是一个16bit或者128bit的值。如果你要创建你的中央-周边App，你需要创建你自己的128bit的UUID。你必须要确定你自己的UUID不能和其他已经存在的服务冲突。如果你正要创建一个自己的设备，需要实现标准委员会需求的UUID；如果你只是创建一个中央-周边App（就像我们现在做的这样），我建议你打开Mac OS X的Terminal.app，用uuidgen命令生成一个128bit的UUID。你应该用该命令两次，生成两个UUID，一个是给服务用的，一个是给特征用的。然后，你需要添加他们到中央和周边App中。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;LightBlue这个iOS App对你开发是有帮助的，可以下载下来帮助开发。&lt;/p&gt;
+
+&lt;p&gt;第一个参数是UUID的数组，用来搜索发现你指定了UUID的服务的外围，所以我们用nil，不限制外围。第二个参数类型是NSDictionary，这里让我偷个懒，大家自行查阅是干嘛的，或者直接在Xcode里面option左键点击方法查看相关的信息。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)centralManager:(CBCentralManager *)central
+ didDiscoverPeripheral:(CBPeripheral *)peripheral
+     advertisementData:(NSDictionary *)advertisementData
+                  RSSI:(NSNumber *)RSSI
+{
+    NSLog(@&amp;quot;self.nDevices.count %lu&amp;quot;, (unsigned long)self.nDevices.count);
+    NSLog(@&amp;quot;didDiscoverPeripheral %@&amp;quot;, peripheral);
+    BOOL isContained = NO;
+    for (CBPeripheral *cbPeripheral in self.nDevices) {
+        if (cbPeripheral == peripheral) {
+            isContained = YES;
+        }
+    }
+    if (!isContained) {
+        NSLog(@&amp;quot;add Devices&amp;quot;);
+//        [self.nDevices addObject:peripheral];
+        self.nDevices = [NSMutableArray arrayWithObject:peripheral];
+        [self.devicesUpdateSignal sendNext:self.nDevices];
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当发现了外围的时候就会调用上面的代理方法，在这里我做了一些处理，比如nDevices里面没有发现这个外围的时候就会把这个外围加入到nDevices里，并且会刷新蓝牙的界面。&lt;code&gt;[self.devicesUpdateSignal sendNext:self.nDevices];&lt;/code&gt; 这行代码的作用就是更新界面，即值有变化的时候，界面响应值的变化做出相应的刷新。&lt;/p&gt;
+
+&lt;p&gt;那么现在用户操作就是在盯着程序的界面看，而程序则是在一直不停的(因为我们没有停止搜索蓝牙)发现和搜索外围，当有新的外围被发现时就刷新界面。如果用户发现界面列表里面有自己感兴趣或者说就是需要的那个外围的时候，那么用户就会点击这个外围进行蓝牙的连接。所以我们的下一步操作大家可能就很清楚怎么做了，比如之前说这个界面应该用tableview实现。那么点击的操作肯定会调用tableviewde代理方法&lt;code&gt;- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath&lt;/code&gt;，在方法中处理选中的外围，所以接下来就要实&lt;code&gt;BluetoothHelper&lt;/code&gt;现的&lt;code&gt;- (void)connectToPeripheral:(CBPeripheral *)peripheral&lt;/code&gt;方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; - (void)connectToPeripheral:(CBPeripheral *)peripheral
+{
+    self.peripheral = peripheral;
+    [self.manager connectPeripheral:peripheral options:nil];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实现方法如上，连接成功之后便会调用如下的代理方法，在方法中我们将蓝牙的连接状态改为YES，同时停止扫描，给连接的外围设置代理，调用外围的&lt;code&gt;discoverServices&lt;/code&gt;方法。外围发现服务后便会调用下面的方法，方法内的处理比较类似，方法中我们通过UUID来刷选我们需要的服务，通过&lt;code&gt;[self.peripheral discoverCharacteristics:nil forService:service];&lt;/code&gt;方法来发现服务下的特征。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; - (void)centralManager:(CBCentralManager *)central
+  didConnectPeripheral:(CBPeripheral *)peripheral
+{
+    NSLog(@&amp;quot;Connected to peripheral %@&amp;quot;, peripheral);
+    self.bluetoothConnectStatu = YES;
+    [self.manager stopScan];
+    [self.peripheral setDelegate:self];
+    [self.peripheral discoverServices:nil];
+}
+
+- (void)peripheral:(CBPeripheral *)aPeripheral
+didDiscoverServices:(NSError *)error
+{
+    if (error) {
+        NSLog(@&amp;quot;Error discovering service: %@&amp;quot;, [error localizedDescription]);
+        return;
+    }
+    NSLog(@&amp;quot;service count : %lu&amp;quot;, (unsigned long)aPeripheral.services.count);
+    self.nServices = aPeripheral.services;
+    for (CBService *service in aPeripheral.services) {
+        // Discovers the characteristics for a given service
+        if ([service.UUID isEqual:[CBUUID UUIDWithString:kServiceUUID]]) {
+            self.service = service;
+            NSLog(@&amp;quot;Service found with UUID: %@&amp;quot;, service.UUID);
+            [self.peripheral discoverCharacteristics:nil
+                                          forService:service];
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;到这里基本上 发现搜索，连接都已经完成了，剩下的就只剩数据的交互。由于硬件蓝牙模块一直没到，所以数据的交互这块就没有做。通过下面代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[self.peripheral writeValue:[[NSData dataWithBytes:&amp;amp;data length:1] copy]
+          forCharacteristic:self.writeCharacteristic
+                       type:CBCharacteristicWriteWithResponse];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以向蓝牙模块写入数据，也有个回调的代理方法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)peripheral:(CBPeripheral *)peripheral
+didWriteValueForCharacteristic:(CBCharacteristic *)characteristic
+             error:(NSError *)error
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
+
+&lt;p&gt;文章到这里基本上就结束了，博主水平有限，文章难免可能会有一些错误的地方，还请读者注意。
+&lt;code&gt;CoreBluetooth&lt;/code&gt;框架参考资料：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.csdn123.com/html/mycsdn20140110/cd/cd6188a01d661488625bba1fef182ef4.html&#34;&gt;资料一&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.csdn.net/chenli522/article/details/17114417&#34;&gt;资料二&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.csdn.net/chenli522/article/details/17114933&#34;&gt;资料三&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

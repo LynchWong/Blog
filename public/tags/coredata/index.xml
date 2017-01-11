@@ -1,0 +1,1812 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Coredata on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/coredata/index.xml</link>
+    <description>Recent content in Coredata on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/coredata/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>CoreData: Multiple Managed Object Contexts</title>
+      <link>http://lynchwong.com/blog/2015/07/coredata-multiple-managed-object-contexts/</link>
+      <pubDate>Sat, 25 Jul 2015 13:27:53 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/coredata-multiple-managed-object-contexts/</guid>
+      <description>&lt;p&gt;之前就有一篇讲&lt;a href=&#34;http://lynchwong.com/2015/06/09/CoreData%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/&#34;&gt; CoreData多线程处理 &lt;/a&gt;。和&lt;a href=&#34;http://www.raywenderlich.com/store/core-data-by-tutorials?source=matthewmorey&#34;&gt;《Core Data by Tutorials: iOS 8 and Swift Edition》&lt;/a&gt;的&lt;strong&gt;Chapter 10: Multiple Managed Object Contexts&lt;/strong&gt; 感觉上类似的，内容差不了太多。
+&lt;/p&gt;
+
+&lt;p&gt;本篇博文也只讲讲结论以及一些编程实践，同样也没有Demo实例，推荐大家看英文原版。&lt;/p&gt;
+
+&lt;p&gt;如果我们使用Xcode给我们生成的CoreData模板，使用的都是单个的&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;。大部分操作都是在主线程中完成，我们也知道UI更新的操作也是在主线程中进行的，所以有时候必然会造成界面卡顿的现象。比如我们需要执行一个耗时的任务，如果只有单个的在主线程上执行的&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;，那么就会造成UI卡顿，导致用户体验很不好。&lt;/p&gt;
+
+&lt;h1 id=&#34;doing-work-in-the-background&#34;&gt;Doing work in the background&lt;/h1&gt;
+
+&lt;p&gt;假如我们的App需要将数据导出到一个CSV文件中，如果我们使用的是单个的在主线程上执行的&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;。当数据量很庞大的时候就会造成界面好几秒的卡顿，让用户无法操作，以为程序已经死掉了。&lt;/p&gt;
+
+&lt;p&gt;我们可以如下的代码模板来进行操作，这样便不会造成界面无法响应的情况。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//新建一个NSManagedObjectContext，设置为PrivateQueueConcurrencyType类型
+let privateContext = NSManagedObjectContext(
+  concurrencyType: .PrivateQueueConcurrencyType)
+privateContext.persistentStoreCoordinator =
+  coreDataStack.context.persistentStoreCoordinator
+
+privateContext.performBlock { () -&amp;gt; Void in
+
+  //获取数据
+  var fetchRequestError:NSError? = nil
+  let results = privateContext.executeFetchRequest(
+    fetchRequest,
+      error: &amp;amp;fetchRequestError)
+  if results == nil {
+    println(&amp;quot;ERROR: \(fetchRequestError)&amp;quot;)
+  }
+
+  //写入数据到CSV文件
+
+  //返回主线程更新界面
+  dispatch_async(dispatch_get_main_queue(), { () -&amp;gt; Void in
+    //提醒用户操作结果
+  })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先我们创建了一个新的&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;，类型为&lt;strong&gt;PrivateQueueConcurrencyType&lt;/strong&gt;，叫做privateContext。这个context和一个私有的队列关联了起来。一旦你创建了新的context，将main managed object context的persistent store coordinator赋值给它。然后调用performBlock，这个方法会在context的队列里面异步执行block里面的代码。最后更新UI，值得注意的是根UI相关的所有操作，总是应该在主线程上执行，否则会出现无法预测的结果。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;总共有三种concurrencyType可以使用。ConfinementConcurrencyType已经废弃不再使用，剩下的两种基本覆盖了所有的使用情况。PrivateQueueConcurrencyType会将context跟私有的队列进行关联，而不是主线程的队列，所以不会阻塞UI。MainQueueConcurrencyType是默认的类型，我们之前&lt;strong&gt;CoreDataStack&lt;/strong&gt;都是这种类型，我们之所有没有感觉的卡顿是因为数据量太少，无法察觉到卡顿，之前我们也有提过。为table view创建fetched results controller必须使用这种类型的context。&lt;/p&gt;
+
+&lt;h1 id=&#34;editing-on-a-scratchpad&#34;&gt;Editing on a scratchpad&lt;/h1&gt;
+
+&lt;p&gt;有时候我们需要编辑修改一个实体的时候或者需要修改大量数据的时候，我们可以使用child context。原理可以参考&lt;a href=&#34;http://lynchwong.com/2015/06/09/CoreData%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/&#34;&gt; CoreData多线程处理 &lt;/a&gt;。简单说一下，我们可以创建一个临时的&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;，temporary Context，然后将它的&lt;strong&gt;parentContext&lt;/strong&gt;属性设置为main managed object context。然后在temporary Context执行save操作，改变并没有影响到parent context。这些改变并没有发送到persistent store coordinator，直到parent context也执行了save操作。&lt;/p&gt;
+
+&lt;p&gt;下面是代码模板，和&lt;a href=&#34;http://lynchwong.com/2015/06/09/CoreData%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/&#34;&gt; CoreData多线程处理 &lt;/a&gt;是类似的，直接复制了，是OC版本的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSMangedObjectContext *temporaryContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+temporaryContext.parentContext = mainMOC;
+
+[temporaryContext performBlock:^{
+   // do something that takes some time asynchronously using the temp context
+
+   // push to parent
+   NSError *error;
+   if (![temporaryContext save:&amp;amp;amp;error])
+   {
+      // handle error
+   }
+
+   // save parent to disk asynchronously
+   [mainMOC performBlock:^{
+      NSError *error;
+      if (![mainMOC save:&amp;amp;amp;error])
+      {
+         // handle error
+      }
+   }];
+}];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码中有注释，简单说下。&lt;/p&gt;
+
+&lt;p&gt;首先我们创建一个临时的temporaryContext，然后设置了他的parentContext属性为mainMOC。然后执行performBlock进行需要的操作，然后执行save操作。最后将改变push到mainMOC，最后mainMOC执行save操作将数据保存到数据库进行持久化。&lt;/p&gt;
+
+&lt;p&gt;我们将本篇提到的两种模板进行对比下。其实最开始在后台执行的操作也可以使用这种模板。因为我们第一种模板并没有修改数据，只是简单的获取数据，所以我们只要把第二种模板的所有保存操作取消即可，这样就能实现第一种需求了。&lt;/p&gt;
+
+&lt;p&gt;写的比较简单，不知道有没有叙述清楚，还请参看原文以及之前的那篇博文。以上&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CoreData: Measuring and Boosting Performance</title>
+      <link>http://lynchwong.com/blog/2015/07/coredata-measuring-and-boosting-performance/</link>
+      <pubDate>Sat, 25 Jul 2015 13:27:29 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/coredata-measuring-and-boosting-performance/</guid>
+      <description>&lt;p&gt;很显然的一件事情就是我们应该努力的优化我们开发的程序性能。一个性能低下的应用程序最好的情况可能就只是收到差的评价，最坏的情况就是无法响应以及崩溃。
+&lt;/p&gt;
+
+&lt;p&gt;在CoreData的应用程序里，我们更应该进行优化。CoreData的大部分实现速度都很快，也很轻量，得益于CoreData内部的不断优化。&lt;/p&gt;
+
+&lt;p&gt;CoreData的灵活性让其成为了一个伟大的工具，但是你在一些方面的使用仍然会让CoreData在性能方面遭受到负面的影响。&lt;/p&gt;
+
+&lt;p&gt;本章就讲解如何优化CoreData的性能。本章没有实例代码，仅将一些结论及代码实践。&lt;/p&gt;
+
+&lt;p&gt;性能即是平衡，内存与速度之间的平衡。我们应用程序中的数据存在于两个地方：内存或者磁盘上。访问内存中数据比磁盘要快的多，但是设备的内存容量要比磁盘小的多。&lt;/p&gt;
+
+&lt;p&gt;你加载到内存中的数据越多，你程序的速度就越快，但是消耗的内存就越多。你可以减少内存的使用，但是你程序的速度就会变慢，因为数据都在磁盘上。&lt;/p&gt;
+
+&lt;p&gt;#Measure,change,verify&lt;/p&gt;
+
+&lt;p&gt;应用程序中哪里有性能瓶颈不是猜测出来的，通过测量应用程序的性能能够节省你大量的时间。Xcode为我们提供了大量的工具。&lt;/p&gt;
+
+&lt;p&gt;理想的情况下，你应该先测量性能，然后进行改进，最后再次测量验证你的改进提升了性能。你应该多次重复测量-改进-验证的过程直到你的应用程序达到你所要求的性能。&lt;/p&gt;
+
+&lt;p&gt;本章不提供Demo，简单叙述下。有两个实体A和B，它们之间是一对多的关系。A有个属性是Binary Data的类型，用来存放图片。应用程序启动时将A实体的所有数据加载到UITableView里面进行显示。&lt;/p&gt;
+
+&lt;p&gt;接下来优化这个程序，按照前面提到的测量-改进-验证这个过程进行。&lt;/p&gt;
+
+&lt;p&gt;##测量&lt;/p&gt;
+
+&lt;p&gt;在Xcode中我们可以看到我们应用程序的内存占用情况。如果我们运行前面提到的那个App，内存占用一定会很大。因为实体中有存储图片的二进制数据，图片数据会被加载到内存中。所以如果我们A的实体记录比较多的话，在程序启动的时候就要加载A的数据到UITableView中进行显示，那么内存就会消耗的很多。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataPerformance/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在前面的章节我们也提到过，即使我们只是要修改A的一个属性，与这个图片属性无关，二进制数据也会全部加载到内存中，然而我们根本就用不到。&lt;/p&gt;
+
+&lt;p&gt;所以这里我们应该改进我们的数据模型。&lt;/p&gt;
+
+&lt;p&gt;##改进&lt;/p&gt;
+
+&lt;p&gt;我们应该再新增一个实体C，添加一个Binary Data类型的属性，然后勾选&lt;strong&gt;Allows External Storage&lt;/strong&gt;，这个选项我们之前也提到过。通常情况下二进制数据存放在数据库中，当你勾选了这个选项，CoreData会自动决定是当做分离的文件存储在磁盘上还是存放在数据库中。将A和C设为一对一的关系，A中使用缩略图，当点击查看大图的时候通过与C一对一的关系来加载图片。&lt;/p&gt;
+
+&lt;p&gt;##验证&lt;/p&gt;
+
+&lt;p&gt;没有Demo，没有截图，真是不好意思。&lt;/p&gt;
+
+&lt;p&gt;理论上来说，内存占用会减少很多。因为A实体使用了缩略图，大图和小图内存占用当然不一样啦。&lt;/p&gt;
+
+&lt;p&gt;#Fetching and performance&lt;/p&gt;
+
+&lt;p&gt;任何时候我们要访问数据，都需要使用fetch request来查询。我们不应该获取我们需要之外的数据。&lt;/p&gt;
+
+&lt;p&gt;##Fetch batch size&lt;/p&gt;
+
+&lt;p&gt;CoreData的fetch requests包含fetchBatchSize属性，让我们能够简单的获取足够的数据，但是又不会太多。&lt;/p&gt;
+
+&lt;p&gt;如果你不设置batch size，CoreData会使用默认的0值，即不使用batching。&lt;/p&gt;
+
+&lt;p&gt;设置一个非零的正值batch size让你限制返回的batch size。&lt;/p&gt;
+
+&lt;p&gt;在Xcode中⌘I，选择Core Data，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataPerformance/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后点击红点进行记录，一段时间后，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataPerformance/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;看最后一列。这列包含了Objective-C版本的调用者，获取数据的条数，以及操作的时间(微秒)。&lt;/p&gt;
+
+&lt;p&gt;回到我们之前假设的ABC。每次启动的时候都会加载所有的A实体的数据。这里我们应该设置&lt;code&gt;fetchRequest.fetchBatchSize = 10&lt;/code&gt;。这样我们获取的数据一次就是10条，当需要的时候CoreData会再自动获取数据。这个值应该设置为多大，通常来说，我们在UITableView显示数据。假如我们一屏能显示5条数据，那么应该设置为显示条数的两倍，即10。如果是10条，就设置为20。&lt;/p&gt;
+
+&lt;p&gt;##Advanced fetching&lt;/p&gt;
+
+&lt;p&gt;这一小节主要涉及到&lt;strong&gt;NSFetchRequest&lt;/strong&gt;，之前我们有讲过，这里就不在详细讲解了。&lt;/p&gt;
+
+&lt;p&gt;举两个简单的例子。比如获取结果的条数的时候，我们可以设置&lt;strong&gt;NSFetchRequest&lt;/strong&gt;的resultType属性为&lt;strong&gt;NSCountResultType&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;还记得之前获取所有商品价格总和吗，同理设置resultType为&lt;strong&gt;NSDictionaryResultType&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;详细参见&lt;a href=&#34;http://lynchwong.com/2015/07/22/CoreData-Fetching/&#34;&gt; CoreData: Fetching &lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;这一章写的比较粗糙，主要赶时间。推荐大家去看英文原版，有完整的Demo及更详细的讲解。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.raywenderlich.com/store/core-data-by-tutorials?source=matthewmorey&#34;&gt;《Core Data by Tutorials: iOS 8 and Swift Edition》&lt;/a&gt;的&lt;strong&gt;Chapter 9: Measuring and Boosting Performance&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CoreData: Unit Testing</title>
+      <link>http://lynchwong.com/blog/2015/07/coredata-unit-testing/</link>
+      <pubDate>Sat, 25 Jul 2015 13:26:18 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/coredata-unit-testing/</guid>
+      <description>&lt;p&gt;本章是讲CoreData单元测试的，涉及到&lt;strong&gt;XCTest&lt;/strong&gt;框架。
+&lt;/p&gt;
+
+&lt;p&gt;同iCloud数据同步那篇类似，现在对我来说需求不是最优先的，当然单元测试也很重要。&lt;/p&gt;
+
+&lt;p&gt;所以后面空了再补上，先完成了其它内容之后再来弄。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CoreData: Syncing with iCloud</title>
+      <link>http://lynchwong.com/blog/2015/07/coredata-syncing-with-icloud/</link>
+      <pubDate>Fri, 24 Jul 2015 20:42:04 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/coredata-syncing-with-icloud/</guid>
+      <description>&lt;p&gt;使用iCloud在多个设备间进行数据同步是很好的解决方案，但是这种方法有局限性，只适用于苹果的设备。所以并不能做到通用、跨平台。
+&lt;/p&gt;
+
+&lt;p&gt;所以大多数的解决方案都是使用自己的Web Service，实现自己的数据同步方案。&lt;/p&gt;
+
+&lt;p&gt;所以iCloud数据同步先留个坑，后面有时间了再写。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CoreData: Versioning and Migration</title>
+      <link>http://lynchwong.com/blog/2015/07/coredata-versioning-and-migration/</link>
+      <pubDate>Fri, 24 Jul 2015 20:10:27 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/coredata-versioning-and-migration/</guid>
+      <description>&lt;p&gt;什么时候迁移是必须的？早期的答案就是当你需要改变数据模型的时候。
+&lt;/p&gt;
+
+&lt;p&gt;然而有些情况你也可以避免迁移。比如你使用CoreData只是用作离线缓存，当你更新你的程序的时候，你完全可以删除存储的数据。在其他情况下，你都需要安全的保护你用户的数据。&lt;/p&gt;
+
+&lt;p&gt;有时候大部分程序设计或者功能需求都离不开要修改数据模型，所以你需要创建新版本的数据模型而且提供迁移的途径。&lt;/p&gt;
+
+&lt;p&gt;To be continue&amp;hellip;&lt;/p&gt;
+
+&lt;h1 id=&#34;a-lightweight-migration&#34;&gt;A lightweight migration&lt;/h1&gt;
+
+&lt;h1 id=&#34;a-manual-migration&#34;&gt;A manual migration&lt;/h1&gt;
+
+&lt;h1 id=&#34;a-complex-mapping-model&#34;&gt;A complex mapping model&lt;/h1&gt;
+
+&lt;h1 id=&#34;migrating-non-sequential-versions&#34;&gt;Migrating non-sequential versions&lt;/h1&gt;</description>
+    </item>
+    
+    <item>
+      <title>CoreData: NSFetchedResultsController</title>
+      <link>http://lynchwong.com/blog/2015/07/coredata-nsfetchedresultscontroller/</link>
+      <pubDate>Thu, 23 Jul 2015 13:34:02 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/coredata-nsfetchedresultscontroller/</guid>
+      <description>&lt;p&gt;使用&lt;strong&gt;UITableView&lt;/strong&gt;来展示CoreData的数据已经是标配了，&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;能够简化我们的操作，就像是CoreData与&lt;strong&gt;UITableView&lt;/strong&gt;之间的桥梁。
+&lt;/p&gt;
+
+&lt;h1 id=&#34;begins&#34;&gt;begins&lt;/h1&gt;
+
+&lt;p&gt;在&lt;strong&gt;ViewController&lt;/strong&gt;添加了如下所示的属性：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var fetchedResultsController : NSFetchedResultsController!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后在&lt;strong&gt;viewDidLoad()&lt;/strong&gt;里面设置刚才添加的属性：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let fetchRequest = NSFetchRequest(entityName: &amp;quot;Good&amp;quot;)
+
+fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+    managedObjectContext: managedContext, sectionNameKeyPath: nil, cacheName: nil)
+
+var error: NSError?
+if !fetchedResultsController.performFetch(&amp;amp;error) {
+    println(&amp;quot;Error: \(error?.localizedDescription)&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上代码所示，我们还是需要创建&lt;strong&gt;NSFetchRequest&lt;/strong&gt;的实例，然后传递给&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;。&lt;code&gt;sectionNameKeyPath&lt;/code&gt;和&lt;code&gt;cacheName&lt;/code&gt;先不细说。最后调用&lt;strong&gt;performFetch()&lt;/strong&gt;方法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;不仅包装了请求查询，而且它也是请求查询结果的容器。&lt;/p&gt;
+
+&lt;p&gt;这里查询获取数据是完成了，接下来我们就要展示数据，所以要实现&lt;strong&gt;UITableViewDataSource&lt;/strong&gt;的一些方法，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func numberOfSectionsInTableView(tableView: UITableView) -&amp;gt; Int {
+    return fetchedResultsController.sections!.count
+}
+
+func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -&amp;gt; Int {
+    let sectionInfo = fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
+    return sectionInfo.numberOfObjects
+}
+
+func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -&amp;gt; UITableViewCell {
+    let identifier = &amp;quot;Cell&amp;quot;
+
+    var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? UITableViewCell
+    if cell == nil {
+        cell = UITableViewCell(style: .Default, reuseIdentifier: identifier)
+    }
+    let good = fetchedResultsController.objectAtIndexPath(indexPath) as! Good
+    cell?.textLabel?.text = good.name
+    return cell!
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你现在运行，程序会崩溃，Xcode打印的原因如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;reason: &#39;An instance of NSFetchedResultsController requires a fetch request with sort descriptors&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你想这样使用&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;，那么不能将一个基本的&lt;strong&gt;NSFetchRequest&lt;/strong&gt;扔给它。因为基本的&lt;strong&gt;NSFetchRequest&lt;/strong&gt;不要求sort descriptor。然而&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;至少要求一个sort descriptor，不然怎么知道table view的顺序呢。&lt;/p&gt;
+
+&lt;p&gt;所以我回头添加了如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;fetchRequest.sortDescriptors = [NSSortDescriptor(key: &amp;quot;name&amp;quot;, ascending: true)]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行后的截图如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里我将前面的Demo进行了一些改造，而且已经初始化了一些数据。文章最后会给出源码地址，所以这里就不一一讲解了怎么实现了。&lt;/p&gt;
+
+&lt;h1 id=&#34;grouping-results-into-sections&#34;&gt;Grouping results into sections&lt;/h1&gt;
+
+&lt;p&gt;我们的商品属于不同的分类，比如蔬菜、水果、零食等。所以我们修改下&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;的初始化方法，记得之前提到的&lt;code&gt;sectionNameKeyPath&lt;/code&gt;参数吗？代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+    managedObjectContext: managedContext, sectionNameKeyPath: &amp;quot;category&amp;quot;, cacheName: nil)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里我们只是修改了下&lt;code&gt;sectionNameKeyPath&lt;/code&gt;参数，能够接收keyPath字符串。比如实体的属性名或者关系，比如&lt;strong&gt;warehouse.name&lt;/strong&gt;，所以这里的&lt;strong&gt;category&lt;/strong&gt;是&lt;strong&gt;Good&lt;/strong&gt;的一个属性。&lt;/p&gt;
+
+&lt;p&gt;除此之外，我们还要添加如下所示的方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -&amp;gt; String? {
+    let sectionInfo = fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
+    return sectionInfo.name
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后运行效果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里有一个&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;的疑难杂症，如果你使用keyPath将请求查询的结果分成了多个section，那么第一个sort descriptor的属性名必须与keyPath的属性名相匹配。&lt;/p&gt;
+
+&lt;p&gt;从上面的截图你能看出来，section对应的项是不对的，的确如此，我设置的华夫饼应该在零食里面，而番茄应该在蔬菜里面，全都乱了。所以我重新修改了sort descriptor，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;fetchRequest.sortDescriptors = [NSSortDescriptor(key: &amp;quot;category&amp;quot;, ascending: true)]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;重新运行，截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;现在看起来好像对了。&lt;/p&gt;
+
+&lt;h1 id=&#34;cache&#34;&gt;Cache&lt;/h1&gt;
+
+&lt;p&gt;你可以指定一个cache name来打开&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;在磁盘上的section cache。这就是你所有要做的工作。需要记住的是这个section cache与CoreData的persistent store是完全分开的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+    managedObjectContext: managedContext, sectionNameKeyPath: &amp;quot;category&amp;quot;, cacheName: &amp;quot;GoodCache&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;NSFetchedResultsController的section cache对fetch request的改变非常敏感。任何改变，比如不同的entity description或者sort descriptors都会给你一个不同的结果集合，完全无效的cache。如果你做了这样的改变，你必须使用deleteCacheWithName:删除已经存在的cache或者使用新的cache name。&lt;/p&gt;
+
+&lt;p&gt;在你的应用程序中，当你需要将结果组织到section中或者有大的数据集合或者在老机器上运行时考虑使用NSFetchedResultsController的cache。&lt;/p&gt;
+
+&lt;h1 id=&#34;modifying-data&#34;&gt;Modifying data&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图所示，每种商品都有对应的数量。现在我们要实现一个新的功能，点击对应的商品，然后数量增加1。添加如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    tableView.deselectRowAtIndexPath(indexPath, animated: true)
+
+    let good = fetchedResultsController.objectAtIndexPath(indexPath) as! Good
+    let number = good.number.integerValue
+    good.number = NSNumber(int: number + 1)
+
+    var error: NSError?
+    if !managedContext.save(&amp;amp;error) {
+        println(&amp;quot;Could not save: \(error)&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行点击，发现界面并没有变化，重启后发现数据有了变化。为了解决这个问题在方法最后添加如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tableView.reloadData()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;重新运行点击商品会发现界面会跟着变化了。但是这种方法相当的暴力，并不是最优的选择。接下来我们使用更好的方法来实现这个需求。&lt;/p&gt;
+
+&lt;h1 id=&#34;monitoring-changes&#34;&gt;Monitoring changes&lt;/h1&gt;
+
+&lt;p&gt;当数据改变时，我们使用&lt;code&gt;tableView.reloadData()&lt;/code&gt;来改变界面，这种方式很粗鲁。还有更好的方法，这一次又是&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;拯救了我们。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;能够监听结果集的变化，然后通知它的delegate，&lt;strong&gt;NSFetchedResultsControllerDelegate&lt;/strong&gt;。你可以使用这个delegate来刷新table view在任何时候，只要底层数据改变了。&lt;/p&gt;
+
+&lt;p&gt;首先添加&lt;strong&gt;NSFetchedResultsControllerDelegate&lt;/strong&gt;协议，然后设置&lt;code&gt;fetchedResultsController.delegate = self&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;NSFetchedResultsController只能监听初始化时指定的&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;造成的改变。如果你在应用程序的其他地方创建了一个&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;，你的delegate的方法不会被执行，直到这些改变被保存并且被&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;的context合并。&lt;/p&gt;
+
+&lt;p&gt;首先，从&lt;strong&gt;tableView(_:didSelectRowAtIndexPath:)&lt;/strong&gt;方法中移除&lt;code&gt;tableView.reloadData()&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NSFetchedResultsControllerDelegate&lt;/strong&gt;有四个方法，我们实现如下方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func controllerWillChangeContent(controller: NSFetchedResultsController) {
+    tableView.beginUpdates()
+}
+
+func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    switch type {
+        case .Insert:
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        case .Delete:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        case .Update:
+            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+        case .Move:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        default:
+            break
+    }
+}
+
+func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    tableView.endUpdates()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;重启运行App，点击商品进行测试，实现了同样的需求。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;controllerWillChangeContent:&lt;/strong&gt;这个delegate方法会提醒你改变将要发生了，你使用&lt;strong&gt;beginUpdates()&lt;/strong&gt;方法来准备好你的table view。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;controller(_:didChangeObject&amp;hellip;):&lt;/strong&gt;这个方法会告诉你哪个对象发生了改变，以及改变的类型，是插入数据、删除、更新、或者重新排序，以及影响的index paths。这个方法会将table view的数据与CoreData进行同步。不管底层数据发生了多大的改变，你的table view都会真实的展现出persistent store的变化。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;controllerDidChangeContent:&lt;/strong&gt;使用&lt;strong&gt;endUpdates()&lt;/strong&gt;方法来刷新界面。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;上面的这些代码都是由苹果的NSFetchedResultsControllerDelegate文档提供。请注意这些方法的顺序和性质。使用“begin updates- make changes-end updates”这种模式并不是一种巧合。&lt;/p&gt;
+
+&lt;p&gt;还剩一个&lt;strong&gt;NSFetchedResultsControllerDelegate&lt;/strong&gt;的方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+
+    let indexSet = NSIndexSet(index: sectionIndex)
+
+    switch type {
+        case .Insert:
+            tableView.insertSections(indexSet, withRowAnimation: .Automatic)
+        case .Delete:
+            tableView.deleteSections(indexSet, withRowAnimation: .Automatic)
+        default :
+            break
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法和&lt;strong&gt;didChangeObject&amp;hellip;&lt;/strong&gt;类似，只不过是提醒你sections的改变，而不是具体的对象的改变。上面方法只有创建新的section或者删除section的时候才会触发。&lt;/p&gt;
+
+&lt;p&gt;现在我们来思考下什么样的改变会触发这些通知。也许我新添加了一种类型的商品，比如服装。相反的情况是我删除了一个商品，而这个商品所属的类型的所有商品只有它自己，所以我就删除了这个section。接下来的小节让我们来实现这些需求。&lt;/p&gt;
+
+&lt;h1 id=&#34;inserting-data&#34;&gt;Inserting data&lt;/h1&gt;
+
+&lt;p&gt;在&lt;strong&gt;ViewController&lt;/strong&gt;里重写如下方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
+    if motion == UIEventSubtype.MotionShake {
+        addButton.enabled = true
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当摇晃手机的时候，“+” bar button item就变成可用的。接下来我们就要实现添加商品的方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@IBAction func add(sender: AnyObject) {
+    var alert = UIAlertController(title: &amp;quot;添加商品&amp;quot;, message: &amp;quot;新增商品&amp;quot;, preferredStyle: UIAlertControllerStyle.Alert)
+
+    alert.addTextFieldWithConfigurationHandler {
+        (textField: UITextField!) in
+        textField.placeholder = &amp;quot;名字&amp;quot;
+    }
+    alert.addTextFieldWithConfigurationHandler {
+        (textField: UITextField!) in
+        textField.placeholder = &amp;quot;数量&amp;quot;
+    }
+    alert.addTextFieldWithConfigurationHandler {
+        (textField: UITextField!) in
+        textField.placeholder = &amp;quot;类型&amp;quot;
+    }
+
+    alert.addAction(UIAlertAction(title: &amp;quot;保存&amp;quot;, style: .Default, handler: {
+        (action: UIAlertAction!) -&amp;gt; Void in
+            let nameTextField = alert.textFields![0] as! UITextField
+            let numberTextField = alert.textFields![1] as! UITextField
+            let categoryTextField = alert.textFields![2] as! UITextField
+
+            let entity = NSEntityDescription.entityForName(&amp;quot;Good&amp;quot;, inManagedObjectContext: self.managedContext)!
+            let good = Good(entity: entity, insertIntoManagedObjectContext: self.managedContext)
+            good.name = nameTextField.text
+            good.number = NSNumber(int: Int32(NSString(string: numberTextField.text).integerValue))
+            good.category = categoryTextField.text
+
+            self.managedContext.save(nil)
+    }))
+
+    alert.addAction(UIAlertAction(title: &amp;quot;取消&amp;quot;, style: .Default, handler: {
+        (action: UIAlertAction!) -&amp;gt; Void in
+            println(&amp;quot;Cancel&amp;quot;)
+    }))
+
+    presentViewController(alert, animated: true, completion: nil)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码很简单，这里就不讲解了。运行之后&lt;strong&gt;Command+Control+Z&lt;/strong&gt;来模拟摇晃事件来让“+” bar button item可用：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我新添加了一种类型的商品，最后效果如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;deleting-data&#34;&gt;Deleting data&lt;/h1&gt;
+
+&lt;p&gt;现在让我们来删除数据，添加或者修改如下方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    if editingStyle == UITableViewCellEditingStyle.Delete {
+        let good = fetchedResultsController.objectAtIndexPath(indexPath) as! Good
+        managedContext.deleteObject(good)
+
+        var error: NSError?
+        if !managedContext.save(&amp;amp;error) {
+            println(&amp;quot;Could not save: \(error)&amp;quot;)
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码也很简单，不讲解了。运行后最后效果如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图所示，我删除了卫衣这个商品，由于服装只有一个商品，所以这个section也被删除了，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/OwnCoreDataStack/tree/NSFetchedResultsController&#34;&gt; 完整源码 &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;这些源码由之前的Demo修改而来，也上传到了之前Demo的NSFetchedResultsController分支。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CoreData: Fetching</title>
+      <link>http://lynchwong.com/blog/2015/07/coredata-fetching/</link>
+      <pubDate>Wed, 22 Jul 2015 22:00:06 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/coredata-fetching/</guid>
+      <description>&lt;p&gt;前面我们从CoreData提取数据的时候都只是简单的使用了&lt;strong&gt;NSFetchRequest&lt;/strong&gt;，没有对数据进行精确的控制和刷选。&lt;/p&gt;
+
+&lt;p&gt;本章就讲讲&lt;strong&gt;NSFetchRequest&lt;/strong&gt;，但是没有Demo演示，大多都只是给出代码，相信大家都能看得懂，然后自己去尝试使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;nsfetchrequest&#34;&gt;NSFetchRequest&lt;/h1&gt;
+
+&lt;p&gt;从前面的章节我们得知，从CoreData获取数据的方法就是新建&lt;strong&gt;NSFetchRequest&lt;/strong&gt;的实例，然后进行你需要的配置，再交给&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;来完成操作。&lt;/p&gt;
+
+&lt;p&gt;看起来相当的简单，实际上，有四种方法来获取一个&lt;strong&gt;NSFetchRequest&lt;/strong&gt;。如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//1
+let fetchRequest1 = NSFetchRequest()
+let entity = NSEntityDescription.entityForName(&amp;quot;Warehouse&amp;quot;, inManagedObjectContext: managedContext)!
+fetchRequest1.entity = entity
+
+//2
+let fetchRequest2 = NSFetchRequest(entityName: &amp;quot;Warehouse&amp;quot;)
+
+//3
+let fetchRequest3 = managedObjectModel.fetchRequestTemplateForName(&amp;quot;FetchRequest&amp;quot;)
+
+//4
+let fetchRequest4 = managedObjectModel.fetchRequestFromTemplateWithName(&amp;quot;FetchRequest&amp;quot;, substitutionVariables: [&amp;quot;name&amp;quot; : &amp;quot;apple&amp;quot;])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上代码所示，第一种和第二种都很简单。第三种方法，我们从&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;里面检索了&lt;strong&gt;NSFetchRequest&lt;/strong&gt;。你可以在Xcode的数据模型编辑器里面存储你经常使用的一些&lt;strong&gt;NSFetchRequest&lt;/strong&gt;，后面我们会讲解。第四种方法和第三种是类似的，但是传递了参数，&lt;code&gt;substitutionVariables&lt;/code&gt;会用在谓词中来细化我们要获取的数据。&lt;/p&gt;
+
+&lt;h1 id=&#34;stored-fetch-requests&#34;&gt;Stored fetch requests&lt;/h1&gt;
+
+&lt;p&gt;正如之前提到的，我们可以将一些频繁使用的&lt;strong&gt;NSFetchRequest&lt;/strong&gt;存储到数据模型中。这样不仅便于我们访问，而且可视化的界面操作也便于我们设置参数。&lt;/p&gt;
+
+&lt;p&gt;打开&lt;strong&gt;.xcdatamodeld&lt;/strong&gt;文件，然后长按&lt;strong&gt;Add Entity&lt;/strong&gt;，然后选择&lt;strong&gt;Add Fetch Request&lt;/strong&gt;。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFetching/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;你可以从新设置名字，这里我使用了默认的名字。也增加了谓词，如图中所示。查找name是apple的Good。使用如下代码来获取这个FetchRequest，以及使用：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let fetchRequest = managedObjectModel.fetchRequestTemplateForName(&amp;quot;FetchRequest&amp;quot;)!
+var error: NSError?
+let results = managedContext.executeFetchRequest(fetchRequest, error: &amp;amp;error) as? [Good]
+if let fetchedResults = results {
+    let good = fetchedResults[0]
+    println(&amp;quot;result : \(good.name)&amp;quot;)
+} else {
+    println(&amp;quot;Could not fetch \(error), \(error!.userInfo)&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用方法和我们之前是类似的，只是获取的方式不一样。注意这里是使用的&lt;strong&gt;managedObjectModel&lt;/strong&gt;来获取的，即是我们之前&lt;strong&gt;CoreDataStack&lt;/strong&gt;里面的&lt;strong&gt;model&lt;/strong&gt;属性，&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;的实例。&lt;strong&gt;fetchRequestTemplateForName()&lt;/strong&gt;方法接收一个字符串参数，这个字符串必须与我们设置的FetchRequest的名字匹配，否侧程序会抛出异常然后崩溃。&lt;/p&gt;
+
+&lt;p&gt;如果你使用的是上一章节的Demo，那么你就需要在&lt;strong&gt;AppDelegate.swift&lt;/strong&gt;里设置&lt;strong&gt;ViewController.swift&lt;/strong&gt;时添加如下代码，同理还要在&lt;strong&gt;ViewController.swift&lt;/strong&gt;设置一个&lt;strong&gt;managedObjectModel&lt;/strong&gt;属性：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;viewController.managedObjectModel = coreDataStack.model
+
+var managedObjectModel: NSManagedObjectModel!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后输出结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;result : apple
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;fetching-different-result-types&#34;&gt;Fetching different result types&lt;/h1&gt;
+
+&lt;p&gt;感觉上&lt;strong&gt;NSFetchRequest&lt;/strong&gt;没有多大用处，实际上，&lt;strong&gt;NSFetchRequest&lt;/strong&gt;就像一把多功能瑞士军刀。你可以用它获取独立的数据，计算过后的数据，比如平均值、最小值、最大值等等。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NSFetchRequest&lt;/strong&gt;有一个&lt;strong&gt;resultType&lt;/strong&gt;属性，到目前为止，我们使用的都是默认的&lt;strong&gt;NSManagedObjectResultType&lt;/strong&gt;。如下列出了所有可能的值：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;NSManagedObjectResultType&lt;/strong&gt;：返回managed objects(默认值)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NSCountResultType&lt;/strong&gt;：返回结果的条数。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NSDictionaryResultType&lt;/strong&gt;：返回不同的计算结果。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NSManagedObjectIDResultType&lt;/strong&gt;：返回一个唯一的identifiers，而不是整个对象。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;nscountresulttype&#34;&gt;NSCountResultType&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;let fetchRequest = NSFetchRequest(entityName: &amp;quot;Good&amp;quot;)
+fetchRequest.resultType = .CountResultType
+var error: NSError?
+let results = managedContext.executeFetchRequest(fetchRequest, error: &amp;amp;error) as? [NSNumber]
+if let fetchedResults = results {
+    let number = fetchedResults[0]
+    println(&amp;quot;result : \(number.integerValue)&amp;quot;)
+} else {
+    println(&amp;quot;Could not fetch \(error), \(error!.userInfo)&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一旦你设置了resultType为&lt;strong&gt;NSCountResultType&lt;/strong&gt;，返回值就变成了包含单个&lt;strong&gt;NSNumber&lt;/strong&gt;对象的可选数组。因为没有添加谓词，所以应该会查询所有的Good，CoreData里面只有两条数据，最后输出如下：
+    result : 2&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;你可能会觉得我们不需设置为&lt;strong&gt;NSCountResultType&lt;/strong&gt;，只需使用默认值，然后使用数组的count属性就可以达到相同的目的。但是这样的话，返回值数组包含的是对象。假设我们有百万条数据，你觉得CoreData是给我们一个数值高效还是给我们百万条记录更高效，同时内存占用也完全不一样。&lt;/p&gt;
+
+&lt;h3 id=&#34;an-alternate-way-to-fetch-a-count&#34;&gt;An alternate way to fetch a count&lt;/h3&gt;
+
+&lt;p&gt;还有另外一种可以替代设置resultType为&lt;strong&gt;NSCountResultType&lt;/strong&gt;的方法，如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let fetchRequest = NSFetchRequest(entityName: &amp;quot;Good&amp;quot;)
+var error: NSError?
+let count = managedContext.countForFetchRequest(fetchRequest, error: &amp;amp;error)
+if count == NSNotFound {
+    println(&amp;quot;Could not fetch \(error), \(error!.userInfo)&amp;quot;)
+}
+println(&amp;quot;count : \(count)&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;nsdictionaryresulttype&#34;&gt;NSDictionaryResultType&lt;/h2&gt;
+
+&lt;p&gt;假设Good有个&lt;strong&gt;price&lt;/strong&gt;的属性，类型是&lt;strong&gt;Double&lt;/strong&gt;。现在我们有个新的需求，就是要得到所有商品的价格总和。实现这个需求并不难，我们可以把所有的商品查询出来，然后用一个循环把商品的价格加起来就实现了这个需求。幸运的是CoreData内建支持了大量不同的函数，比如求平均值的、总和的、最小值或最大值等等。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//1
+let fetchRequest = NSFetchRequest(entityName: &amp;quot;Good&amp;quot;)
+fetchRequest.resultType = .DictionaryResultType
+//2
+let sumExpressionDesc = NSExpressionDescription()
+sumExpressionDesc.name = &amp;quot;sumPrice&amp;quot;
+//3
+sumExpressionDesc.expression = NSExpression(forFunction: &amp;quot;sum:&amp;quot;, arguments:[NSExpression(forKeyPath: &amp;quot;price&amp;quot;)])
+sumExpressionDesc.expressionResultType = .Integer32AttributeType
+//4
+fetchRequest.propertiesToFetch = [sumExpressionDesc]
+//5
+var error: NSError?
+let result = managedContext.executeFetchRequest(fetchRequest, error: &amp;amp;error) as? [NSDictionary]
+if let resultArray = result {
+    let resultDict = resultArray[0]
+    let sumPrice: AnyObject? = resultDict[&amp;quot;sumPrice&amp;quot;]
+    println(&amp;quot;SumPrice : \(sumPrice!)&amp;quot;)
+} else {
+    println(&amp;quot;Could not fetch \(error), \(error!.userInfo)&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后输出结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SumPrice : 100
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我修改了下Good实体，添加了price属性，然后重新生成了NSManagedObject subclasses。然后在添加Good的方法里面设置所有添加的商品的price都为100。这里就不详细讲解怎么实现的了。&lt;/p&gt;
+
+&lt;p&gt;我们创建了&lt;strong&gt;NSExpressionDescription&lt;/strong&gt;来请求总和，然后设置&lt;strong&gt;name&lt;/strong&gt;属性为“sumPrice”。便于我们在后面字典里面获取这个值。然后我们指定了“sum:”这个函数以及需要求和的属性“price”；设置返回结果的类型，最后设置了propertiesToFetch属性wierd我们刚才创建的&lt;strong&gt;NSExpressionDescription&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;CoreData支持哪些函数，count, min, max, average, median, mode, absolute value等等，详见苹果官方文档的&lt;strong&gt;NSExpression&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;nsmanagedobjectidresulttype&#34;&gt;NSManagedObjectIDResultType&lt;/h2&gt;
+
+&lt;p&gt;当设置为这种类型的时候，返回值数组包含的是&lt;strong&gt;NSManagedObjectID&lt;/strong&gt;对象，而不是实体对象。&lt;strong&gt;NSManagedObjectID&lt;/strong&gt;是一个全局唯一的identifier，就像是数据库里面的主键一样。&lt;/p&gt;
+
+&lt;p&gt;在iOS5之前，是用IDs来fetching数据很流行，因为它适配了并发模型。而现在线程限制已在更现代的并发模型中被废弃了，所以没有再使用这种类型的理由了。&lt;/p&gt;
+
+&lt;h1 id=&#34;sorting-fetched-results&#34;&gt;Sorting fetched results&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;NSFetchRequest&lt;/strong&gt;另一个强大的功能就是对请求的数据进行排序，通过使用&lt;strong&gt;NSSortDescriptor&lt;/strong&gt;。排序发生在&lt;strong&gt;SQLite&lt;/strong&gt;层面，而不是在内存中。这让排序在CoreData中很高效。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;fetchRequest.sortDescriptors = [NSSortDescriptor(key: &amp;quot;warehouse.name&amp;quot;, ascending: true)]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用如上代码给&lt;strong&gt;NSFetchRequest&lt;/strong&gt;添加排序，支持key path。&lt;/p&gt;
+
+&lt;h1 id=&#34;asynchronous-fetching&#34;&gt;Asynchronous fetching&lt;/h1&gt;
+
+&lt;p&gt;到目前为止，我们执行的每一个&lt;strong&gt;NSFetchRequest&lt;/strong&gt;都会阻塞主线程，阻塞主线程会导致什么结果相信大家都很清楚。&lt;/p&gt;
+
+&lt;p&gt;在我们的Demo中没有感受到阻塞是因为我们的数据量太少，做的操作都很简单。&lt;/p&gt;
+
+&lt;p&gt;CoreData从一开始就提供了几种不同的技术在后台执行&lt;strong&gt;NSFetchRequest&lt;/strong&gt;。在iOS8，CoreData有了一个新的API，能够在后台长时间的执行&lt;strong&gt;NSFetchRequest&lt;/strong&gt;，然后在完成时进行回调。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let fetchRequest = NSFetchRequest(entityName: &amp;quot;Good&amp;quot;)
+let asyncFetchRequest = NSAsynchronousFetchRequest(fetchRequest: fetchRequest) {
+    [unowned self] (result: NSAsynchronousFetchResult! ) -&amp;gt; Void in
+        var goods = result.finalResult as! [Good]
+}
+var error: NSError?
+let results = managedContext.executeRequest(asyncFetchRequest, error: &amp;amp;error)
+if let persistentStoreResults = results {
+    //Returns immediately, cancel here if you want
+} else {
+    println(&amp;quot;Could not fetch \(error), \(error!.userInfo)&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;从代码中可以看到&lt;strong&gt;NSAsynchronousFetchRequest&lt;/strong&gt;，但是仍然需要&lt;strong&gt;NSFetchRequest&lt;/strong&gt;。这里需要注意的是&lt;strong&gt;executeFetchRequest()&lt;/strong&gt;被&lt;strong&gt;executeRequest()&lt;/strong&gt;方法替换了。
+&lt;strong&gt;注意：&lt;/strong&gt;你可以使用&lt;strong&gt;NSAsynchronousFetchRequest&lt;/strong&gt;的&lt;strong&gt;cancel()&lt;/strong&gt;方法来取消数据请求。
+除此之外还要修改&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;，在比如之前的Demo，我们需要修改&lt;strong&gt;CoreDataStack&lt;/strong&gt;中的&lt;strong&gt;context&lt;/strong&gt;，如下：
+    context = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;有三种concurrencyType。如果你不设置，默认的是&lt;strong&gt;.ConfinementConcurrencyType&lt;/strong&gt;，已经废弃了。还有一种是&lt;strong&gt;.PrivateQueueConcurrencyType&lt;/strong&gt;，后面的章节会讲解。&lt;/p&gt;
+
+&lt;h1 id=&#34;batch-updates-no-fetching-required&#34;&gt;Batch updates: no fetching required&lt;/h1&gt;
+
+&lt;p&gt;我们从CoreData里面获取数据就是为了要修改数据，大部分的操作也是基于此。如果你想要一次更新上百上千条数据怎么办呢？这需要大量的时间和内存开销，当然最普通的方法就是循环需要修改的数据，单着并不是最好的方法。&lt;/p&gt;
+
+&lt;p&gt;幸运的是在iOS8，苹果引进了batch updates，一种新的更新CoreData对象的方法，而不需要fetch任何东西到内存里。这种方式大大的减少了时间和内存的开销。代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let batchUpdate = NSBatchUpdateRequest(entityName: &amp;quot;Good&amp;quot;)
+batchUpdate.propertiesToUpdate = [&amp;quot;price&amp;quot;: NSNumber(double: 150)]
+batchUpdate.affectedStores = psc.persistentStores
+batchUpdate.resultType = .UpdatedObjectsCountResultType
+
+var batchError: NSError?
+let batchResult = managedContext.executeRequest(batchUpdate, error: &amp;amp;batchError) as? NSBatchUpdateResult
+
+if let result = batchResult {
+    println(&amp;quot;Records updated \(result.result)&amp;quot;)
+} else {
+    println(&amp;quot;Could not update \(batchError), \(batchError!.userInfo)&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;比如上面的代码，我将所有商品的价格都修改成了150。经典的使用场景就是一个邮件或者消息客户端有个“Mark all as read”的功能。&lt;/p&gt;
+
+&lt;p&gt;本章没有完整的演示Demo，大都只是提供代码，相信大家都能看懂，毕竟很多代码都是前面几章Demo涉及到的。&lt;/p&gt;
+
+&lt;p&gt;PS：最后两小节比较有局限性，只在iOS8中可用。到目前为止，整个App都只有单个的&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;，后面我们会涉及到多个&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;，以及在多线程间的同步问题。不过在学习这些之前还有些基础的知识需要了解学习，以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CoreData: The Core Data Stack</title>
+      <link>http://lynchwong.com/blog/2015/07/coredata-the-core-data-stack/</link>
+      <pubDate>Tue, 21 Jul 2015 21:48:02 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/coredata-the-core-data-stack/</guid>
+      <description>&lt;p&gt;到现在为止我们都是使用的Xcode生成的CoreData模板。使用Xcode来帮助我们并没有什么错，Xcode就是用来帮助我们提升开发效率的，而且在这些细节之处也体现了Xcode的优秀。一般情形下使用Xcode生成的CoreData模板就够用了，但是如果你想知道CoreData是如何工作的，那么你就必须创建自己的Core Data Stack。
+&lt;/p&gt;
+
+&lt;p&gt;这个Stack由四个Core Data类组成：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;NSManagedObjectModel&lt;/li&gt;
+&lt;li&gt;NSManagedObjectModel&lt;/li&gt;
+&lt;li&gt;NSPersistentStoreCoordinator&lt;/li&gt;
+&lt;li&gt;NSManagedObjectContext&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;之前我们已经接触过&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;了。但是其他的三个类都在场景后面给予&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;提供支持。&lt;/p&gt;
+
+&lt;h1 id=&#34;准备工作&#34;&gt;准备工作&lt;/h1&gt;
+
+&lt;p&gt;本章的示例不想弄的太复杂，我们还是使用最开始的那个仓库管理的例子，在这基础上再改进一下，比如仓库中有商品等。只不过这次我们不使用Xcode为我们生成的模板，而是创建自己的Stack。所以我们应该新开一个项目，只是在新建的时候不要勾选&lt;strong&gt;Use Core Data&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;在开始编码前，我们先来了解上面提及到的类。&lt;/p&gt;
+
+&lt;h1 id=&#34;the-managed-object-model&#34;&gt;The managed object model&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;表示你数据模型中的所有对象类型，它们能够拥有的属性，以及它们之间的关系。Stack使用这个模型去创建对象，存储属性以及保存数据。&lt;/p&gt;
+
+&lt;p&gt;你可以将&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;想象成数据库中的表视图。如果你的Stack在底层使用SQLite，那么&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;代表什么就很明显。&lt;/p&gt;
+
+&lt;p&gt;然而，SQLite只是CoreData中很多持久化存储类型之一，所以应该在一般情形下思考&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;你可能对&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;是怎样与数据模型编辑器联系起来的。可视的编辑器创建和编辑&lt;strong&gt;xcdatamodel&lt;/strong&gt;文件。那里有一个特殊的编译器(&lt;strong&gt;momc&lt;/strong&gt;)，这个编译器会将模型文件在&lt;strong&gt;momd&lt;/strong&gt;文件夹中编译成一个文件集合。就像Swift代码能够编译优化然后运行在设备上，编译后的模型能够在运行时被高效的访问。CoreData在运行时使用&lt;strong&gt;momd&lt;/strong&gt;文件夹中编译后的内容来初始化生成&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h1 id=&#34;the-persistent-store&#34;&gt;The persistent store&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;NSPersistentStore&lt;/strong&gt;会读取和写入数据，无论你决定使用哪个存储方法。CoreData提供了四种&lt;strong&gt;NSPersistentStore&lt;/strong&gt;的类型：3种原子的和1种非原子的。&lt;/p&gt;
+
+&lt;p&gt;原子的&lt;strong&gt;NSPersistentStore&lt;/strong&gt;在做任何读写操作前需要完全的反序列化然后加载到内存中。相反，非原子的&lt;strong&gt;NSPersistentStore&lt;/strong&gt;可以根据需要将自己的部分加载到内存中。&lt;/p&gt;
+
+&lt;p&gt;下面简述了这四种内置类型：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;NSQLiteStoreType&lt;/strong&gt;使用SQLite数据库存储。这是CoreData支持的唯一一种非原子的，轻量级的操作及高效的内存使用。让它成为了大部分iOS项目的最佳选择。Xcode的模板默认使用该类型。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NSXMLStoreType&lt;/strong&gt;使用XML文件存储，是所有类型中最具可读性的。该类型是原子的，所以会有大量的内存使用。该类型只在OS X中可用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NSBinaryStoreType&lt;/strong&gt;使用二进制数据文件存储。同样也是原子的，所以在操作之前你必须将所有的二进制数据加载到内存中。在现实世界中你基本很难找到使用该类型的应用程序。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NSInMemoryStoreType&lt;/strong&gt;在某种程度上来说，这种类型并不是真正的持久化。如果你终止应用程序或者关掉了你的手机，这些在内存中的数据就会消失。感觉上这违背了CoreData的目的，但是该类型在单元测试或者某种缓存中是很有用的。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;是否有JSON文件或者CSV文件来作为持久存储类型呢？好消息是你可以通过子类化&lt;strong&gt;NSIncrementalStore&lt;/strong&gt;来创建你自己的持久存储类型。&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/DataManagement/Conceptual/IncrementalStorePG/Introduction/Introduction.html&#34;&gt; 详见 &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h1 id=&#34;the-persistent-store-coordinator&#34;&gt;The persistent store coordinator&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;NSPersistentStoreCoordinator&lt;/strong&gt;是&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;与&lt;strong&gt;NSPersistentStore&lt;/strong&gt;的桥梁。在CoreData中它负责使用model和persistent stores来完成大部分繁重的工作。它明白&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;，知道怎样给它发送消息，以及从&lt;strong&gt;NSPersistentStore&lt;/strong&gt;获取信息。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NSPersistentStoreCoordinator&lt;/strong&gt;也隐藏了怎样配置persistent store或者stores的实现细节。这样很有用，主要有两个原因：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;不需要知道它保存的数据是保存在SQLite数据库，XML文件或者iCloud。&lt;/li&gt;
+&lt;li&gt;如果你有多个persistent stores，对于&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;来说，&lt;strong&gt;NSPersistentStoreCoordinator&lt;/strong&gt;提供了一个统一的接口。只要&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;关心，它总会表现成一个单一的聚合的persistent store。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&#34;the-managed-object-context&#34;&gt;The managed object context&lt;/h1&gt;
+
+&lt;p&gt;大多数情况下我们都是在和&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;打交道。基本上你只会在设置你的Stack或者做迁移的时候才会看见其他三个组件。&lt;/p&gt;
+
+&lt;p&gt;因此，明白它是如何工作的就很重要。下面这几点可能是到目前为止你学到的：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个context是存储managed objects的内存里面的暂存器。&lt;/li&gt;
+&lt;li&gt;使用context来处理所有CoreData对象的工作。&lt;/li&gt;
+&lt;li&gt;所有你做的改变并不会影响磁盘上的数据，直到你调用了context的save()方法。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这里还有另外的五点在之前没有提及，这些很重要，所以请注意：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;context管理它创建或者请求的对象的生命周期。这个生命周期管理包括一些强大的功能，比如断层，逆向关系处理以及验证。&lt;/li&gt;
+&lt;li&gt;一个managed object不能在context之外独立存在。事实上，一个managed object和它的context是紧密耦合的，所以所有的managed object都有它context的引用，可以像这样访问&lt;code&gt;let employeeContext = employee.managedObjectContext&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;context是非常有领域性的。一旦一个managed object与一个特定的context关联后，那么在它的生命周期中会一直保持这种连接。&lt;/li&gt;
+&lt;li&gt;一个应用程序可以使用不止一个的context，大部分比较复杂的CoreData应用程序都是这一类的。由于context是磁盘内容在内存中的暂存器，事实上你可以在同一时间加载相同的CoreData对象到两个不同的context。&lt;/li&gt;
+&lt;li&gt;context不是线程安全的，managed object也是。你可以在创建它们的那个线程上与context和managed objects进行交互。苹果提供了多种方式在多线程应用程序中与context交互(后面详解)。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&#34;creating-your-stack-object&#34;&gt;Creating your stack object&lt;/h1&gt;
+
+&lt;p&gt;我新建了一个项目，只是没有勾选要使用CoreData，这里就不详细讲解了。然后新建了一个Swift源文件，叫做&lt;code&gt;CoreDataStack&lt;/code&gt;，将内容替换成了如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import CoreData
+
+class CoreDataStack {
+    let context: NSManagedObjectContext
+    let psc: NSPersistentStoreCoordinator
+    let model: NSManagedObjectModel
+    var store: NSPersistentStore?
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是编译器会报错，说没有Initializers，我们先暂时不管。这里的四个属性对应了之前的组件。&lt;/p&gt;
+
+&lt;p&gt;我们继续添加如下方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func applicationDocumentsDirectory() -&amp;gt; NSURL {
+    let fileManager = NSFileManager.defaultManager()
+
+    let urls = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask) as! [NSURL]
+    return urls[0]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法返回了应用程序documents目录的URL。我们需要将SQLite数据库(就是一个文件)存放在这个documents目录内。这里是用来存放用户数据推荐的目录，不管你是否使用CoreData。&lt;/p&gt;
+
+&lt;p&gt;现在我们增加Initializer，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;init() {
+    //1
+    let bundle = NSBundle.mainBundle()
+    let modelURL = bundle.URLForResource(&amp;quot;&amp;quot;, withExtension: &amp;quot;momd&amp;quot;)!
+    model = NSManagedObjectModel(contentsOfURL: modelURL)!
+
+    //2
+    psc = NSPersistentStoreCoordinator(managedObjectModel: model)
+
+    //3
+    context = NSManagedObjectContext()
+    context.persistentStoreCoordinator = psc
+
+    //4
+    let documentsURL = applicationDocumentsDirectory()
+    let storeURL = documentsURL.URLByAppendingPathComponent(&amp;quot;&amp;quot;)
+
+    let options = [NSMigratePersistentStoresAutomaticallyOption: true]
+    var error: NSError?
+    store = psc.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil,
+        URL: storeURL, options: options, error: &amp;amp;error)
+
+    if store == nil {
+        println(&amp;quot;Error adding persistent store: \(error)&amp;quot;)
+        abort()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Initializer负责对Stack中每一个独立的组件进行配置：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;第一步是从磁盘加载managed object model到&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;对象。你通过得到包含&lt;strong&gt;.xcdatamodeld&lt;/strong&gt;文件编译后的版本的&lt;strong&gt;momd&lt;/strong&gt;目录的URL来完成这些操作。&lt;/li&gt;
+&lt;li&gt;一旦你初始化了&lt;strong&gt;NSManagedObjectModel&lt;/strong&gt;，下一步就是创建&lt;strong&gt;NSPersistentStoreCoordinator&lt;/strong&gt;。记住persistent store coordinator斡旋于persistent store与NSManagedObjectModel之间。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;的初始化器并不接受参数。然后在连接&lt;strong&gt;NSPersistentStoreCoordinator&lt;/strong&gt;之后并没有多少用。你可以设置context的persistentStoreCoordinator属性。&lt;/li&gt;
+&lt;li&gt;你并没有直接初始化创建一个persistent store。persistent store coordinator帮你处理了NSPersistentStore对象。你只需要简单的指定store type，store file的URL location以及一些配置选项。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;上面代码中的一些URL并没有设置，稍后设置。&lt;/p&gt;
+
+&lt;p&gt;继续添加如下方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func saveContext() {
+    var error: NSError?
+    if context.hasChanges &amp;amp;&amp;amp; !context.save(&amp;amp;error) {
+        println(&amp;quot;Could not save: \(error), \(error?.userInfo)&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法保存了Stack的managed object context，当错误发生时进行处理。&lt;/p&gt;
+
+&lt;p&gt;接下来到&lt;strong&gt;ViewController.swift&lt;/strong&gt;，替换为如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import UIKit
+import CoreData
+
+class ViewController: UIViewController {
+
+    var managedContext: NSManagedObjectContext!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后到&lt;strong&gt;AppDelegate.swift&lt;/strong&gt;进行设置，引入CoreData框架&lt;code&gt;import CoreData&lt;/code&gt;。然后在&lt;code&gt;var window: UIWindow?&lt;/code&gt;下面添加如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lazy var coreDataStack = CoreDataStack()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们将coreDataStack属性设置为延迟属性，表示Stack在第一次被访问时才会被初始化。然后在application(_:didFinishLaunchingWithOptions:)方法中添加如下代码，主要就是设置&lt;strong&gt;ViewController&lt;/strong&gt;的&lt;strong&gt;managedContext&lt;/strong&gt;属性：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let navigationController = window?.rootViewController as! UINavigationController
+
+let viewController = navigationController.topViewController as! ViewController
+viewController.managedContext = coreDataStack.context
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改如下方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func applicationDidEnterBackground(application: UIApplication) {
+    coreDataStack.saveContext()
+}
+
+func applicationWillTerminate(application: UIApplication) {
+    coreDataStack.saveContext()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这些方法保证了程序不管什么原因导致的进入后台或者被终结，都会将挂起的改变进行保存。&lt;/p&gt;
+
+&lt;h1 id=&#34;modeling-your-data&#34;&gt;Modeling your data&lt;/h1&gt;
+
+&lt;p&gt;现在我们就来创建数据模型，&lt;strong&gt;File\New\File&amp;hellip;&lt;/strong&gt;，选择&lt;strong&gt;iOS\Core Data\Data Model&lt;/strong&gt;，这里我使用了默认的名字，所以我的Data Model就叫做&lt;strong&gt;Model.xcdatamodeld&lt;/strong&gt;。现在我们回头去设置之前没有设置的一些URL。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let modelURL = bundle.URLForResource(&amp;quot;Model&amp;quot;, withExtension: &amp;quot;momd&amp;quot;)!
+let storeURL = documentsURL.URLByAppendingPathComponent(&amp;quot;Model&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;主要就是这两处代码。&lt;/p&gt;
+
+&lt;p&gt;现在我们就来设置实体，如之前就提到的，我们应该有Warehouse和Good这两个实体，那么我就一一设置。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如上所示，我设置了一个&lt;strong&gt;Warehouse&lt;/strong&gt;实体，有一个&lt;strong&gt;name&lt;/strong&gt;属性，是&lt;strong&gt;String&lt;/strong&gt;类型。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;同样的，设置了&lt;strong&gt;Good&lt;/strong&gt;这个实体，也只有&lt;strong&gt;name&lt;/strong&gt;属性，&lt;strong&gt;String&lt;/strong&gt;类型。&lt;/p&gt;
+
+&lt;p&gt;其实在现实世界中，这些实体之间都是有关系的，比如我们仓库中可能存放着许多的商品。那么我应该在&lt;strong&gt;Warehouse&lt;/strong&gt;实体中设置一个goods的属性，类型应该是数组或者集合的，但是我们发现属性类型里面根本就没有数组或者集合类型。其实这里我们不应该设置属性了，应该设置实体之间的关系。&lt;/p&gt;
+
+&lt;p&gt;如下图所示，我在&lt;strong&gt;Warehouse&lt;/strong&gt;实体的&lt;strong&gt;Relationships&lt;/strong&gt;这一栏设置了一个叫做&lt;strong&gt;goods&lt;/strong&gt;的关系，&lt;strong&gt;Destination&lt;/strong&gt;设置为了&lt;strong&gt;Good&lt;/strong&gt;实体。&lt;strong&gt;Destination&lt;/strong&gt;就可以想象成关系的末端。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;设置完成后，Xcode有一个警告，如下图，先不用管，还没设置完：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;每种关系刚开始都被默认设置成了&lt;strong&gt;to-one&lt;/strong&gt;(即一对一的关系)，在上面的示例中表示我们的仓库一次只能追踪一个商品，其实这是不对的，因为我们的仓库肯定不止一个商品。仓库和商品应该是一对多的关系，所以我们应该进行修改，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们选择&lt;strong&gt;Good&lt;/strong&gt;实体，同样也需要设置关系，设置了一个叫做&lt;strong&gt;warehouse&lt;/strong&gt;的关系，&lt;strong&gt;Destination&lt;/strong&gt;为&lt;strong&gt;Warehouse&lt;/strong&gt;，设置&lt;strong&gt;Inverse&lt;/strong&gt;为&lt;strong&gt;goods&lt;/strong&gt;。如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里默认的&lt;strong&gt;to-one&lt;/strong&gt;关系是正确的，因为一个商品不可能存在于多个仓库中。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Inverse&lt;/strong&gt;能够让模型进行逆向的寻找。比如给定了一条Good记录，你可以根据关系找到该商品的仓库。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;你可以切换Editor Style，如上图所示，你可以清晰的看出实体之间的关系。&lt;/p&gt;
+
+&lt;h1 id=&#34;adding-managed-object-subclasses&#34;&gt;Adding managed object subclasses&lt;/h1&gt;
+
+&lt;p&gt;之前我们已经创建过managed object subclasses了，到&lt;strong&gt;Editor\Create NSManagedObject Subclass&amp;hellip;&lt;/strong&gt;，勾选要需要创建的实体。&lt;/p&gt;
+
+&lt;p&gt;如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import Foundation
+import CoreData
+
+class Warehouse: NSManagedObject {
+
+    @NSManaged var name: String
+    @NSManaged var goods: NSOrderedSet
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如前面一样，name使用了String类型，但是goods关系使用了集合来表示。CoreData使表示一对多的关系时使用集合，而不是数组。因为我们让goods关系有序，所以是有序的集合。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：NSSet&lt;/strong&gt;看起来像是奇怪的选择。与数组不同，集合不是通过下标来访问它们的成员。事实上，集合是无序的。CoreData使用NSSet是因为集合保证了成员的唯一性。相同的对象在一对多的关系中不会存在多次。如果你想使用下标来访问独立的对象，你应该勾选上&lt;strong&gt;Ordered&lt;/strong&gt;，就如我们之前已经勾选上了一样。CoreData就会使用NSOrderedSet来表示这个关系。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Good&lt;/strong&gt;看起来如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import Foundation
+import CoreData
+
+class Good: NSManagedObject {
+
+    @NSManaged var name: String
+    @NSManaged var warehouse: Warehouse
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也许你的代码看起来不是这样的，而是&lt;code&gt;@NSManaged var warehouse: NSManagedObject&lt;/code&gt;，你可以重新执行一遍生成操作即可。&lt;/p&gt;
+
+&lt;p&gt;还要进行如下所示的设置，&lt;strong&gt;Good&lt;/strong&gt;也是类似：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;a-good-persistence-lane&#34;&gt;A good persistence lane&lt;/h1&gt;
+
+&lt;p&gt;尽量让实例程序简单点，在&lt;strong&gt;ViewController&lt;/strong&gt;的&lt;strong&gt;viewDidLoad&lt;/strong&gt;方法里面，我们根据仓库name来查找是否有叫&lt;code&gt;L&lt;/code&gt;的仓库，如果有就赋值给&lt;code&gt;currentWarehouse&lt;/code&gt;属性，没有我们就新建一个。如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func viewDidLoad() {
+    super.viewDidLoad()
+    // Do any additional setup after loading the view, typically from a nib.
+
+    let warehouseEntity = NSEntityDescription.entityForName(&amp;quot;Warehouse&amp;quot;, inManagedObjectContext: managedContext)!
+
+    let warehouseName = &amp;quot;L&amp;quot;
+    let fetchRequest = NSFetchRequest(entityName: &amp;quot;Warehouse&amp;quot;)
+    fetchRequest.predicate = NSPredicate(format: &amp;quot;name == %@&amp;quot;, warehouseName)
+
+    var error: NSError?
+    let result = managedContext.executeFetchRequest(fetchRequest, error: &amp;amp;error) as? [Warehouse]
+    if let warehouses = result {
+        if warehouses.count == 0 {
+            currentWarehouse = Warehouse(entity: warehouseEntity, insertIntoManagedObjectContext: managedContext)
+            currentWarehouse.name = warehouseName
+
+            if !managedContext.save(&amp;amp;error) {
+                println(&amp;quot;Could not save: \(error)&amp;quot;)
+            }
+        } else {
+            currentWarehouse = warehouses[0]
+        }
+    } else {
+        println(&amp;quot;Could not fetch: \(error)&amp;quot;)
+    }
+
+    navigationItem.title = currentWarehouse.name
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码很简单，就不讲解了。&lt;/p&gt;
+
+&lt;p&gt;和最开始的仓库管理类似，对ViewController进行了如下的设置，添加了UITableView以及UIBarButtonItem，设置了@IBOutlet和selector，这些就不详细讲解怎么弄了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;运行之后，模拟器截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;要在列表中显示这个仓库的商品，但是现在还没有商品，接下来就来添加商品。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@IBAction func add(sender: AnyObject) {
+    var alert = UIAlertController(title: &amp;quot;添加仓库&amp;quot;, message: &amp;quot;输入仓库名&amp;quot;, preferredStyle: .Alert)
+    let saveAction = UIAlertAction(title: &amp;quot;保存&amp;quot;, style: .Default) {
+        (action: UIAlertAction!) -&amp;gt; Void in
+        let textField = alert.textFields![0] as! UITextField
+        self.saveName(textField.text)
+        self.tableView.reloadData()
+    }
+    let cancelAction = UIAlertAction(title: &amp;quot;取消&amp;quot;, style: .Default) {
+        (action: UIAlertAction!) -&amp;gt; Void in
+    }
+
+    alert.addTextFieldWithConfigurationHandler {
+        (textField: UITextField!) -&amp;gt; Void in
+    }
+
+    alert.addAction(saveAction)
+    alert.addAction(cancelAction)
+
+    presentViewController(alert, animated: true, completion: nil)
+}
+
+func saveName(name: String) {
+    let entity = NSEntityDescription.entityForName(&amp;quot;Good&amp;quot;, inManagedObjectContext: managedContext)!
+    let good = Good(entity: entity, insertIntoManagedObjectContext: managedContext)
+    good.name = name
+
+    var goods = currentWarehouse.goods.mutableCopy() as! NSMutableOrderedSet
+    goods.addObject(good)
+
+    currentWarehouse.goods = goods.copy() as! NSOrderedSet
+
+    var error: NSError?
+    if !managedContext.save(&amp;amp;error) {
+        println(&amp;quot;Could not save: \(error)&amp;quot;)
+    }
+
+    tableView.reloadData()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;@IBAction方法就是之前的，没有变动。&lt;strong&gt;saveName()&lt;/strong&gt;方法也很简单，主要就是&lt;strong&gt;NSOrderedSet&lt;/strong&gt;的可变和不可变。&lt;/p&gt;
+
+&lt;p&gt;这里看起来好像设置一对多关系时还是有些复杂。如果你的关系是没有ordered的，那么你可以在&lt;strong&gt;one&lt;/strong&gt;这一端进行设置，比如&lt;code&gt;good.warehouse = currentWarehouse&lt;/code&gt;。然后CoreData能够根据Inverse关系来设置goods。&lt;/p&gt;
+
+&lt;p&gt;运行之后截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;你可以重启App进行检查，查看数据是否被持久化了。&lt;/p&gt;
+
+&lt;p&gt;PS：这里代码并没有给全，结束时会给出完整的代码。&lt;/p&gt;
+
+&lt;h1 id=&#34;deleting-objects-from-core-data&#34;&gt;Deleting objects from Core Data&lt;/h1&gt;
+
+&lt;p&gt;在&lt;strong&gt;ViewController&lt;/strong&gt;里面添加如下方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    if editingStyle == UITableViewCellEditingStyle.Delete {
+        let goodRemove = currentWarehouse.goods[indexPath.row] as! Good
+        let goods = currentWarehouse.goods.mutableCopy() as! NSMutableOrderedSet
+        goods.removeObjectAtIndex(indexPath.row)
+        currentWarehouse.goods = goods.copy() as! NSOrderedSet
+
+        managedContext.deleteObject(goodRemove)
+
+        var error: NSError?
+        if !managedContext.save(&amp;amp;error) {
+            println(&amp;quot;Could not save: \(error)&amp;quot;)
+        }
+
+        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行模拟器之后向左滑动Cell就会出现删除按钮，点击删除，如下所示删除了&lt;code&gt;water&lt;/code&gt;：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;同样你也可以重启App进行检查。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/OwnCoreDataStack&#34;&gt; 完整源码 &lt;/a&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CoreData: 子类化NSManagedObject</title>
+      <link>http://lynchwong.com/blog/2015/07/coredata-%E5%AD%90%E7%B1%BB%E5%8C%96nsmanagedobject/</link>
+      <pubDate>Tue, 21 Jul 2015 15:08:30 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/coredata-%E5%AD%90%E7%B1%BB%E5%8C%96nsmanagedobject/</guid>
+      <description>&lt;p&gt;在之前我们设置或者获取实体的属性时时通过KVC来实现的，其实你可以使用KVC来直接操纵NSManagedObject的所有东西，但不意味着你必须这样做。使用KVC时，涉及到大量的字符串，所以可能经常导致错误的拼写。&lt;/p&gt;
+
+&lt;p&gt;最好的替代方法就是为数据模型实体创建&lt;strong&gt;NSManagedObject&lt;/strong&gt;的子类。你可以像访问属性一样来访问或者设置实体的属性。
+&lt;/p&gt;
+
+&lt;h1 id=&#34;数据类型&#34;&gt;数据类型&lt;/h1&gt;
+
+&lt;p&gt;我们继续使用之前的项目，&lt;a href=&#34;https://github.com/LynchWong/WarehouseList&#34;&gt; 程序完整源码 &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;我们设置&lt;strong&gt;Warehouse&lt;/strong&gt;实体的&lt;strong&gt;name&lt;/strong&gt;属性的类型为&lt;strong&gt;String&lt;/strong&gt;，可以浏览下支持的类型。&lt;/p&gt;
+
+&lt;p&gt;Integer有不同长度可选，区别如下，根据需求来选择。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Range for 16-bit integer: -32768 to 32767
+Range for 32-bit integer: –2147483648 to 2147483647
+Range for 64-bit integer: –9223372036854775808 to 9223372036854775807
+&lt;strong&gt;Binary Data&lt;/strong&gt;类型可以存储二进制数据，比如图片，音乐文件等等。如果存储的二进制数据太大，会影响应用程序的性能。这就意味着你每次访问实体时都会将这个实体加载到内存中，包括这些二进制数据，即使你只是想要访问实体的其他属性，比如&lt;strong&gt;name&lt;/strong&gt;。
+幸运的是CoreData预计到了这个问题。你可以在&lt;strong&gt;Attributes&lt;/strong&gt;查看器里面选上&lt;strong&gt;Allows External Storage&lt;/strong&gt;，如下所示：
+&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/1.png&#34; alt=&#34;alt text&#34; /&gt;
+勾选上了&lt;strong&gt;Allows External Storage&lt;/strong&gt;之后，CoreData会依据每次的值来决定是直接存储到数据库还是存储分离文件的URI。
+&lt;strong&gt;注意：Allows External Storage&lt;/strong&gt;选项只在&lt;strong&gt;Binary Data&lt;/strong&gt;类型下可用。而且，如果打开了这个选项，CoreData就不能使用这个属性来进行查询。&lt;/p&gt;
+
+&lt;h1 id=&#34;任意类型的数据&#34;&gt;任意类型的数据&lt;/h1&gt;
+
+&lt;p&gt;你可以使用&lt;strong&gt;Transformable&lt;/strong&gt;来存储任意的数据类型，即使是你自定义的类型。只要该类型适配了&lt;strong&gt;NSCoding&lt;/strong&gt;协议。如果你想要保存你自定义的对象，你首先应该实现&lt;strong&gt;NSCoding&lt;/strong&gt;协议。&lt;/p&gt;
+
+&lt;h1 id=&#34;managed-object-subclasses&#34;&gt;Managed object subclasses&lt;/h1&gt;
+
+&lt;p&gt;如下所示我们让Xcode帮我们创建了&lt;strong&gt;NSManagedObject&lt;/strong&gt;的子类&lt;strong&gt;Warehouse&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/2.png&#34; alt=&#34;alt text&#34; /&gt;
+语言我们选择Swift，生成之后截图如下：
+&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/3.png&#34; alt=&#34;alt text&#34; /&gt;
+如果你之前在OC中使用过CoreData，你会发现有些不一样。与OC中&lt;strong&gt;@dynamic&lt;/strong&gt;属性是类似的，&lt;strong&gt;@NSManaged&lt;/strong&gt;属性通知Swift的编译器属性的实现和存储在运行时提供，而不是在编译时。正常模式下一个实例变量的属性存储在内存中。而managed object的属性不一样，由managed object context存储，所以源数据在编译时是不知道的。
+* String maps to String
+* Integer 16/32/64, Float, Double and Boolean map to NSNumber
+* Decimal maps to NSDecimalNumber
+* Date maps to NSDate
+* Binary data maps to NSData
+* Transformable maps to AnyObject
+CoreData会将对象图持久到磁盘，所以默认是和对象工作。所以像integers，doubles以及Booleans封装成了NSNumber。如果你想直接使用Double或者Int32这些基本类型，你可以在创建的时候勾选上&lt;strong&gt;Use scalar properties for primitive data types&lt;/strong&gt;，如下所示：
+&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/4.png&#34; alt=&#34;alt text&#34; /&gt;
+基于面向对象，建议还是不要勾选。
+接下来我们修改&lt;strong&gt;ViewController.swift&lt;/strong&gt;里面的代码，如下：
+    var warehouses = [Warehouse]()
+    let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &amp;amp;error) as? [Warehouse]
+    let warehouse = Warehouse(entity: entity!, insertIntoManagedObjectContext: managedContext)&lt;/p&gt;
+
+&lt;p&gt;主要是涉及到&lt;strong&gt;NSManagedObject&lt;/strong&gt;以及和KVC相关的一些代码，先清除掉与App相关的数据，删除App，然后Command+Shift+K清除数据。在运行之前还需要如下设置，在实体的查看器里面设置&lt;strong&gt;Class&lt;/strong&gt;，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/5.png&#34; alt=&#34;alt text&#34; /&gt;
+如果不这样设置，会出现警告，说找不到&lt;strong&gt;Warehouse&lt;/strong&gt;然后使用&lt;strong&gt;NSManagedObject&lt;/strong&gt;代替。&lt;/p&gt;
+
+&lt;h1 id=&#34;数据验证&#34;&gt;数据验证&lt;/h1&gt;
+
+&lt;p&gt;CoreData能够进行数据验证，比如我设置了一个&lt;strong&gt;number&lt;/strong&gt;的属性，类型是Integer32，然后设置了最大值和最小值，如下所示：
+&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/6.png&#34; alt=&#34;alt text&#34; /&gt;
+当你调用了managed object context的save操作后，验证会立即执行。managed object context会检查新值是否冲突了验证规则。如果验证出现错误，save操作就会失败。记得之前我们传递了&lt;strong&gt;NSError&lt;/strong&gt;的指针给save方法。发生错误时并没有做其他的事情，验证操作改变了这种情况。&lt;/p&gt;
+
+&lt;p&gt;如果save操作失败了，CoreData会将错误信息填充到你传递过来的引用里面，然后你要决定当错误发生时做什么。比如我们执行save操作时，实体的number属性设置的值大于了10，那么就会发生错误。如果我们将错误代码和信息打印出来就能看到具体的内容。
+    var error: NSError?
+    if !self.managedContext.save(&amp;amp;error) {
+        if error!.code == NSValidationNumberTooLargeError || error!.code == NSValidationNumberTooSmallError {
+            //错误处理
+        }
+    } else {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;所以我们应该做如上代码所示的处理。&lt;strong&gt;NSValidationNumberTooLargeError&lt;/strong&gt;这些是与错误码1610对应错误的枚举值。完整的CoreData错误码的定义，参见&lt;strong&gt;CoreDataErrors.h&lt;/strong&gt;，Xcode中Cmd点击&lt;strong&gt;NSValidationNumberTooLargeError&lt;/strong&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CoreData: 第一个CoreData应用</title>
+      <link>http://lynchwong.com/blog/2015/07/coredata-%E7%AC%AC%E4%B8%80%E4%B8%AAcoredata%E5%BA%94%E7%94%A8/</link>
+      <pubDate>Tue, 21 Jul 2015 09:14:43 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/07/coredata-%E7%AC%AC%E4%B8%80%E4%B8%AAcoredata%E5%BA%94%E7%94%A8/</guid>
+      <description>&lt;p&gt;在开发中使用过几次CoreData，还算是比较熟悉了，觉得有必要整理下。CoreData是非常重要的一个框架，功能丰富，想要完全的掌握还需要花时间。&lt;/p&gt;
+
+&lt;p&gt;该系列主要参考&lt;a href=&#34;http://www.raywenderlich.com/store/core-data-by-tutorials?source=matthewmorey&#34;&gt;《Core Data by Tutorials: iOS 8 and Swift Edition》&lt;/a&gt;，推荐购买正版看英文原版。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;CoreData是什么就不讲解了，最开始接触CoreData的时候感觉像个ORM框架，但是并没有这么简单。搜索自行了解CoreData是什么东西，下面我们就直接开始了。&lt;/p&gt;
+
+&lt;h1 id=&#34;开始&#34;&gt;开始&lt;/h1&gt;
+
+&lt;p&gt;首先我们先做个一个App，这个App很简单，用来显示我们的仓库的列表，我们可以添加仓库。&lt;/p&gt;
+
+&lt;p&gt;我们新建一个项目，如下所示，记得勾选&lt;strong&gt;Use Core Data&lt;/strong&gt;，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;新建完成后你可以看见比我们平时不使用Core Data的项目要多了一些东西，而且&lt;strong&gt;AppDelegate.swift&lt;/strong&gt;里面也多了不少的代码。这些东西都是Xcode的模板为我们自动生成了，这些配置对于大多数的App都够用了，后面我们会自己创建Core Data Stack，不使用Xcode为我们创建的。&lt;/p&gt;
+
+&lt;p&gt;先不讲解CoreData的这些东西，我们先完成这个简单的App。&lt;/p&gt;
+
+&lt;p&gt;将&lt;strong&gt;View Controller&lt;/strong&gt;包含在&lt;strong&gt;Navigation Controller&lt;/strong&gt;里面，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;给&lt;strong&gt;View Controller&lt;/strong&gt;添加如下所示的内容：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;请自行给Tableview设置约束。然后设置Tableview的dataSource，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里只需要设置dataSource即可，然后给Tableview设置@IBOutlet，以及设置Bar Button Item的selector，如下所示&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;View Controller&lt;/strong&gt;的代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import UIKit
+
+class ViewController: UIViewController, UITableViewDataSource {
+
+    @IBOutlet weak var tableView: UITableView!
+
+    var warehouses = [String]()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        title = &amp;quot;仓库管理&amp;quot;
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: &amp;quot;Cell&amp;quot;)
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    @IBAction func add(sender: AnyObject) {
+        var alert = UIAlertController(title: &amp;quot;添加仓库&amp;quot;, message: &amp;quot;输入仓库名&amp;quot;, preferredStyle: .Alert)
+        let saveAction = UIAlertAction(title: &amp;quot;保存&amp;quot;, style: .Default) { (action: UIAlertAction!) -&amp;gt; Void in
+            let textField = alert.textFields![0] as! UITextField
+            self.warehouses.append(textField.text)
+            self.tableView.reloadData()
+        }
+        let cancelAction = UIAlertAction(title: &amp;quot;取消&amp;quot;, style: .Default) {
+                (action: UIAlertAction!) -&amp;gt; Void in
+        }
+
+        alert.addTextFieldWithConfigurationHandler {
+                (textField: UITextField!) -&amp;gt; Void in
+        }
+
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+
+        presentViewController(alert, animated: true, completion: nil)
+    }
+
+    // MARK: UITableViewDataSource
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -&amp;gt; Int {
+        return warehouses.count
+    }
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -&amp;gt; UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier(&amp;quot;Cell&amp;quot;) as! UITableViewCell
+        cell.textLabel!.text = warehouses[indexPath.row]
+        return cell
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码很简单，就不一一讲解了。&lt;/p&gt;
+
+&lt;p&gt;运行后模拟器截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;点击添加可以添加新的仓库，但是这些数据并没有被保存起来，在程序运行期间存在于内存中。当我们重启设备或者退出(注意这里的退出不是指点击home键退出到主屏幕，而是从后台中清除)，这些数据就不会存在了。所以我们就需要CoreData来持久化数据，当然你也可以用其他的的持久化手段，比如使用SQLite或者读写文件等等。接下来我们就使用CoreData来持久化这些数据。&lt;/p&gt;
+
+&lt;h1 id=&#34;coredata&#34;&gt;CoreData&lt;/h1&gt;
+
+&lt;p&gt;以前做Web开发的时候，使用过ORM映射框架，比如&lt;strong&gt;NHibernate&lt;/strong&gt;，第一步就是映射模型。&lt;/p&gt;
+
+&lt;h2 id=&#34;模型化数据&#34;&gt;模型化数据&lt;/h2&gt;
+
+&lt;p&gt;所以我们先要创建&lt;strong&gt;managed object model&lt;/strong&gt;，Xcode自动为我们生成了数据模型文件，叫做&lt;strong&gt;WarehouseList.xcdatamodeld&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;点击&lt;strong&gt;Add Entity&lt;/strong&gt;，命名为&lt;strong&gt;Warehouse&lt;/strong&gt;，如上所示。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个&lt;strong&gt;entity&lt;/strong&gt;就是就是CoreData里面定义的类。典型的例子就是员工和公司。在关系型数据库中，一个&lt;strong&gt;entity&lt;/strong&gt;就对应一张表。&lt;/li&gt;
+&lt;li&gt;一个&lt;strong&gt;attribute&lt;/strong&gt;是与entity相关的部分信息。比如，员工entity就可能有员工名字，位置，薪水等attribute。在数据库中，一个attribute就对应表中的列。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;relationship&lt;/strong&gt;是多个entity之间的联系。在CoreData中，两个entity之间可以有&lt;strong&gt;to-one relationships&lt;/strong&gt;和&lt;strong&gt;to-many relationships&lt;/strong&gt;关系&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;现在我们给&lt;strong&gt;Warehouse&lt;/strong&gt;添加一个叫做&lt;strong&gt;name&lt;/strong&gt;的&lt;strong&gt;Attributes&lt;/strong&gt;，选择String类型，如下所示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;保存&#34;&gt;保存&lt;/h2&gt;
+
+&lt;p&gt;使用CoreData需要引入CoreData框架，在&lt;strong&gt;ViewController.swift&lt;/strong&gt;中添加如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import CoreData
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var warehouses = [NSManagedObject]()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们需要存储Warehouse的实体，所以我们需要修改为如上所示的代码。然后修改&lt;strong&gt;UITableViewDataSource&lt;/strong&gt;相关的方法，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// MARK: UITableViewDataSource
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -&amp;gt; Int {
+        return warehouses.count
+    }
+
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -&amp;gt; UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier(&amp;quot;Cell&amp;quot;) as! UITableViewCell
+        let warehouse = warehouses[indexPath.row]
+        cell.textLabel!.text = warehouse.valueForKey(&amp;quot;name&amp;quot;) as? String
+        return cell
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来我们就要修改添加仓库的方法，让CoreData将添加的数据持久化。修改&lt;strong&gt;add&lt;/strong&gt;方法中的&lt;strong&gt;saveAction&lt;/strong&gt;，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let saveAction = UIAlertAction(title: &amp;quot;保存&amp;quot;, style: .Default) {
+    (action: UIAlertAction!) -&amp;gt; Void in
+    let textField = alert.textFields![0] as! UITextField
+    self.saveName(textField.text)
+    self.tableView.reloadData()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;saveName&lt;/strong&gt;为保存操作，我们将单独提出来：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func saveName(name: String) {
+    //1
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let managedContext = appDelegate.managedObjectContext!
+
+    //2
+    let entity = NSEntityDescription.entityForName(&amp;quot;Warehouse&amp;quot;, inManagedObjectContext: managedContext)
+    let warehouse = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
+    //3
+    warehouse.setValue(name, forKey: &amp;quot;name&amp;quot;)
+    //4
+    var error: NSError?
+    managedContext.save(&amp;amp;error)
+    if error != nil {
+        println(&amp;quot;Could not save \(error), \(error!.userInfo)&amp;quot;) }
+    //5
+    warehouses.append(warehouse)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在你能够从CoreData存储里面保存或者查询很合数据之前，你首先需要一个&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;，你可以将managed object context想象成内存中的一个暂存器。保存一个新的managed object到CoreData中需要两步：第一，你将一个新的managed object插入到managed object context；然后，提交这些改变到managed object context保存到硬盘。因为我们使用了模板，所以我们使用app delegate里面的NSManagedObjectContext。&lt;/li&gt;
+&lt;li&gt;我们创建了一个新的managed object然后插入到了managed object context中。你可能会奇怪&lt;strong&gt;NSEntityDescription&lt;/strong&gt;是什么，&lt;strong&gt;NSManagedObject&lt;/strong&gt;就像一个变形者，能够代表任何的entity。&lt;strong&gt;NSEntityDescription&lt;/strong&gt;能够在运行时连接你定义在数据模型中实体的实例。&lt;/li&gt;
+&lt;li&gt;然后我们设置实体的属性。&lt;/li&gt;
+&lt;li&gt;最后调用managedContext的&lt;strong&gt;save&lt;/strong&gt;方法来保存数据，如果有错误则打印出来。&lt;/li&gt;
+&lt;li&gt;最后将新数据添加到数据源中。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;然后我们运行添加一个仓库，如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;但是当我们重启的时候会发现列表是空的，就不截图了，主要原因是因为我们并没有从CoreData中查询数据，所以，接下来我们就来查询数据。&lt;/p&gt;
+
+&lt;h2 id=&#34;查询&#34;&gt;查询&lt;/h2&gt;
+
+&lt;p&gt;我们在&lt;strong&gt;ViewController.swift&lt;/strong&gt;中添加如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func viewWillAppear(animated: Bool) {
+    super.viewWillAppear(animated)
+
+    //1
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let managedContext = appDelegate.managedObjectContext!
+
+    //2
+    let fetchRequest = NSFetchRequest(entityName: &amp;quot;Warehouse&amp;quot;)
+
+    //3
+    var error: NSError?
+
+    let fetchedResults = managedContext.executeFetchRequest(fetchRequest, error: &amp;amp;error) as? [NSManagedObject]
+
+    if let results = fetchedResults {
+        warehouses = results
+    } else {
+        println(&amp;quot;Could not fetch \(error), \(error!.userInfo)&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;我们仍然需要&lt;strong&gt;managed object context&lt;/strong&gt;，查询也不列外。&lt;/li&gt;
+&lt;li&gt;顾名思义&lt;strong&gt;NSFetchRequest&lt;/strong&gt;负责从CoreData中查询数据。功能强大且很灵活，你可以查询一些符合特定条件的数据集合(比如查询居住在威斯康辛州并且工龄至少3年的所有员工)等等。&lt;/li&gt;
+&lt;li&gt;然后managed object context执行&lt;strong&gt;executeFetchRequest(_:error:)&lt;/strong&gt;方法，返回了一个可选的数组。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;如果没有符合查询条件的数据，那么该方法就会返回一个没有数据的空的可选数组。如果发生了错误，这个方法就会返回nil。&lt;/p&gt;
+
+&lt;p&gt;现在让我们运行，截图如下所示，列表中就有了我之前添加的数据了：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/WarehouseList&#34;&gt; 程序完整源码 &lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>CoreData多线程处理</title>
+      <link>http://lynchwong.com/blog/2015/06/coredata%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/</link>
+      <pubDate>Tue, 09 Jun 2015 10:26:19 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/coredata%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/</guid>
+      <description>&lt;p&gt;首先要说明的是本篇博文不是教程，不会教你怎么从零构建使用CoreData，本篇博文主要讲的是多线程处理CoreData。
+&lt;/p&gt;
+
+&lt;p&gt;先说说之前开发项目的时候遇到的问题。由于项目的需求，需要多线程处理CoreData。我遇到的问题就是每次新开线程处理数据后，发现数据是有更新的；但是当我重启App之后再看发现数据变回原来的了。所以我大致猜测是CoreData多线程的问题，因为CoreData多线程是不安全的。其实做项目之前就考虑使用CoreData的时候就知道不是线程安全的，自己在开发的时候是有留意多线程这方面的。&lt;/p&gt;
+
+&lt;p&gt;在网上搜索了很多资料，感觉很多资料都没有说清楚；可能有的说清楚了博主难以理解。最后搜到了一篇博文解决了我的问题&lt;a href=&#34;http://www.cocoanetics.com/2012/07/multi-context-coredata/?utm_source=tuicool&#34;&gt; Multi-Context CoreData &lt;/a&gt;。该篇博文讲解了iOS5之前的Multi-Context方式和iOS5及之后。根据这篇博文，博主发现少做了一些步骤，所以导致我重启App数据后变回了原来的。得到的原因就是虽然是处理了数据，但是并没有更新存储到磁盘，所以再重启的时候取出的还是原来的数据。&lt;/p&gt;
+
+&lt;p&gt;该博文给出的iOS5及之后的方法就是：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSMangedObjectContext *temporaryContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+temporaryContext.parentContext = mainMOC;
+
+[temporaryContext performBlock:^{
+   // do something that takes some time asynchronously using the temp context
+
+   // push to parent
+   NSError *error;
+   if (![temporaryContext save:&amp;amp;amp;error])
+   {
+      // handle error
+   }
+
+   // save parent to disk asynchronously
+   [mainMOC performBlock:^{
+      NSError *error;
+      if (![mainMOC save:&amp;amp;amp;error])
+      {
+         // handle error
+      }
+   }];
+}];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;博主的问题就在于少了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// save parent to disk asynchronously
+[mainMOC performBlock:^{
+   NSError *error;
+   if (![mainMOC save:&amp;amp;amp;error])
+   {
+      // handle error
+   }
+}];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个步骤，加上了这个步骤博主的问题就解决了。&lt;/p&gt;
+
+&lt;p&gt;下面就翻译下这篇博文。&lt;/p&gt;
+
+&lt;h1 id=&#34;multi-context-coredata&#34;&gt;Multi-Context CoreData&lt;/h1&gt;
+
+&lt;p&gt;当你开始使用CoreData为你的应用程序做持久化操作时，是使用单个的managed object context (MOC，即&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;对象)。如果你创建项目的时候勾选了“Use Core Data”，Xcode自带的模板就是为你这样设置的，即单个的MOC。&lt;/p&gt;
+
+&lt;p&gt;使用CoreData和NSFetchedResultsController能够极大的简化我们处理要显示在table view里面的数据，比如说排序、刷选等。&lt;/p&gt;
+
+&lt;p&gt;有两种场景你可能需要拓展下范围，使用多个managed object contexts：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;简化 adding/editing 新数据项的操作。&lt;/li&gt;
+&lt;li&gt;防止阻塞了UI。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;本篇博文将会回顾设置你contexts的方式来达到你想要的效果。&lt;/p&gt;
+
+&lt;p&gt;首先，我们回顾下单一context的设置。你需要一个persistent store coordinator (PSC，持久化存储协调器)管理与磁盘上数据库文件的对话。所以那个PSC知道你需要模型的数据库的结构。这个模型是由所有定义包含在项目里面的模型合并而成的，告诉CoreData数据库的结构是怎样的。这个PSC通过属性设置给了MOC。需要记住的第一条规则就是：如果你调用MOC的&lt;strong&gt;saveContext&lt;/strong&gt;方法，PSC将会把数据写入磁盘。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataMultiContext/first.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;思考一下这张图。每当你在单个MOC中插入、更新或者删除实体类，这些改变将会通知给fetched results controller然后更新table view的内容。这些独立context的saving操作。你可以随心所欲的执行save操作。苹果给出的模板在每次添加了实体对象后以及在&lt;strong&gt;applicationWillTerminate&lt;/strong&gt;方法里都会执行save操作。&lt;/p&gt;
+
+&lt;p&gt;这种方法对于大多数基本情况来说都可以很好的完成工作，但是对于我们之前提到的那两个问题。第一个问题是关于添加新的实体。你可能想使用同一个view controller来添加和修改一个实体。所以你可能想在展示VC之前新建一个实体对象然后填充好这个VC。这就会触发一个fetched results controller的update notifications(更新通知)，等等。一个空的Cell将会在modal view controller完全展现之前短暂的出现。&lt;/p&gt;
+
+&lt;p&gt;第二个问题很明显，如果在&lt;strong&gt;saveContext&lt;/strong&gt;之前有大量的更新，那么save操作将会超过1/60分。所以在这种情况下，用户界面将会被阻塞直到save操作完成。这种情形就跟我们滚动视图的时候的那种卡顿、跳动感很像。&lt;/p&gt;
+
+&lt;p&gt;这些问题都能使用多个MOCs解决。&lt;/p&gt;
+
+&lt;h2 id=&#34;传统的multi-context方法&#34;&gt;传统的Multi-Context方法&lt;/h2&gt;
+
+&lt;p&gt;将每一个MOC想象成改变数据的临时暂存器。在iOS5之前你可能会监听其他MOCs的改变然后通过通知将改变合并到你的main MOC(主要的MOC)。一种典型的设置如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataMultiContext/second.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;你可能会创建一个temporary MOC(临时的MOC)给background queue(后台线程)使用。所以允许改变被保存，你应该设置跟main MOC相同的PSC给temporary MOC。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Marcus Zarra：尽管&lt;strong&gt;NSPersistentStoreCoordinator&lt;/strong&gt;也不是线程安全的，但是&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;知道在使用的时候如何加锁。然而，我们可以尽可能的多的将&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;对象使用同一个&lt;strong&gt;NSPersistentStoreCoordinator&lt;/strong&gt;而不必担心冲突。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在background MOC上调用&lt;strong&gt;saveContext&lt;/strong&gt;方法就会把改变写入到存储文件中同时也会触发一个&lt;strong&gt;NSManagedObjectContextDidSaveNotification&lt;/strong&gt;通知。&lt;/p&gt;
+
+&lt;p&gt;代码大致如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;dispatch_async(_backgroundQueue, ^{
+   // create context for background
+   NSManagedObjectContext *tmpContext = [[NSManagedObjectContext alloc] init];
+   tmpContext.persistentStoreCoordinator = _persistentStoreCoordinator;
+
+   // something that takes long
+
+   NSError *error;
+   if (![tmpContext save:&amp;amp;error])
+   {
+      // handle error
+   }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;创建一个temporary MOC是很快的，所以你不需要担心频繁的创建或者释放这些temporary MOCs。重点是设置与mainMOC相同的persistentStoreCoordinator，所以写入操作也可以发生在background(后台，上面代码中的_backgroundQueue)。&lt;/p&gt;
+
+&lt;p&gt;我可能会如下简单的设置CoreData stack(大部分开发者都是自己定义CoreData的堆栈，而不是使用Xcode模板生成的，原因可能就是单一的MOC，以及使AppDelegate文件很臃肿等等)：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)_setupCoreDataStack
+{
+   // setup managed object model
+   NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@&amp;quot;Database&amp;quot; withExtension:@&amp;quot;momd&amp;quot;];
+   _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+
+   // setup persistent store coordinator
+   NSURL *storeURL = [NSURL fileURLWithPath:[[NSString cachesPath] stringByAppendingPathComponent:@&amp;quot;Database.db&amp;quot;]];
+
+   NSError *error = nil;
+   _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:_managedObjectModel];
+
+   if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&amp;amp;amp;error]) 
+   {
+    // handle error
+   }
+
+   // create MOC
+   _managedObjectContext = [[NSManagedObjectContext alloc] init];
+   [_managedObjectContext setPersistentStoreCoordinator:_persistentStoreCoordinator];
+
+   // subscribe to change notifications
+   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_mocDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:nil];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们来考虑下接收到didSave notification(上文提及的&lt;strong&gt;NSManagedObjectContextDidSaveNotification&lt;/strong&gt;)通知时该如何处理。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)_mocDidSaveNotification:(NSNotification *)notification
+{
+   NSManagedObjectContext *savedContext = [notification object];
+
+   // ignore change notifications for the main MOC
+   if (_managedObjectContext == savedContext)
+   {
+      return;
+   }
+
+   if (_managedObjectContext.persistentStoreCoordinator != savedContext.persistentStoreCoordinator)
+   {
+      // that&#39;s another database
+      return;
+   }
+
+   dispatch_sync(dispatch_get_main_queue(), ^{
+      [_managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+   });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过第一个if判断我们需要避免合并自己的改变。如果我们同一个App里面有多个CoreData数据库，我们需要避免合并其他数据库的改变。我在自己的App里面遇到过这个问题，所以我回检查PSC。最后我们通过提供的**mergeChangesFromContextDidSaveNotification: **方法来合并改变。所有的改变都在notification的字典里面，这个方法知道如何将这些改变整合到MOC里面。&lt;/p&gt;
+
+&lt;h2 id=&#34;在contexts之间传递managed-objects&#34;&gt;在Contexts之间传递Managed Objects&lt;/h2&gt;
+
+&lt;p&gt;你从一个MOC获取的managed object是被严格禁止传递给另外一个MOC的。有一个简单的方法通过managed object的ObjectID来排序它的镜像。这个ObjectID是线程安全的，你总是可以从NSManagedObject的实例中获取然后在你想要传递给的MOC上调用objectWithID:。第二个MOC将会检索这个managed objects的拷贝来工作。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSManagedObjectID *userID = user.objectID;
+
+// make a temporary MOC
+dispatch_async(_backgroundQueue, ^{
+   // create context for background
+   NSManagedObjectContext *tmpContext = [[NSManagedObjectContext alloc] init];
+   tmpContext.persistentStoreCoordinator = _persistentStoreCoordinator;
+
+   // user for background
+   TwitterUser *localUser = [tmpContext objectWithID:userID];
+
+   // background work
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面描述的方法完整的反相兼容到最初介绍CoreData的iOS版本，iOS3。如果你App的deployment target是iOS5，有一种更现代的方式，下面讲解。&lt;/p&gt;
+
+&lt;h2 id=&#34;parent-child-contexts&#34;&gt;Parent/Child Contexts&lt;/h2&gt;
+
+&lt;p&gt;iOS5介绍了MOCs可以有parentContext的能力。调用&lt;strong&gt;saveContext&lt;/strong&gt;方法会将child context的改变push到parent而不需要求助于描述改变的字典来合并内容。苹果也为MOCs增加了自己专用的队列来执行同步或者异步的改变。&lt;/p&gt;
+
+&lt;p&gt;队列的类型在&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;新的初始化器&lt;strong&gt;initWithConcurrencyType&lt;/strong&gt;指定。注意在下面的插图中我增加了多个child MOCs，并且所有的parent都是同一个main queue MOC。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataMultiContext/third.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;每当child MOC执行save操作时，parent都会得知这些改变，在这种情形下，fetched results controllers也会知悉这些改变。然后这些数据还没有被持久化，因为background MOCs并不知道PSC。为了将数据写入磁盘你需要在main queue MOC上执行额外的&lt;strong&gt;saveContext:&lt;/strong&gt;操作。&lt;/p&gt;
+
+&lt;p&gt;首先我们需要改变main MOC的concurrency type(并发类型)为&lt;strong&gt;NSMainQueueConcurrencyType&lt;/strong&gt;。在上面提到的_setupCoreDataStack方法中修改初始化的那一行，然后merge notification(合并的通知)不再需要。如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;_managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+[_managedObjectContext setPersistentStoreCoordinator:_persistentStoreCoordinator];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;后台操作如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSMangedObjectContext *temporaryContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+temporaryContext.parentContext = mainMOC;
+
+[temporaryContext performBlock:^{
+   // do something that takes some time asynchronously using the temp context
+
+   // push to parent
+   NSError *error;
+   if (![temporaryContext save:&amp;amp;amp;error])
+   {
+      // handle error
+   }
+
+   // save parent to disk asynchronously
+   [mainMOC performBlock:^{
+      NSError *error;
+      if (![mainMOC save:&amp;amp;amp;error])
+      {
+         // handle error
+      }
+   }];
+}];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在每一个MOC都需要使用&lt;strong&gt;performBlock:&lt;/strong&gt; (async) 或者 &lt;strong&gt;performBlockAndWait:&lt;/strong&gt; (sync)来执行操作。这样就确保了block里面的操作在正确队列里面执行。上面的示例中的操作将在background queue里执行。一旦操作完成并且通过saveContext将改变push到parent之后，然后在mainMOC上执行异步的saving操作。同样的，这些操作被performBlock强制在正确的队列里面执行。&lt;/p&gt;
+
+&lt;p&gt;Child MOCs并不会自动的从它们的parents那里得到更新。你可以重新加载来得到这些更新，但是在大部分情况下它们都是临时的，所以并不需要困扰这个问题。只要main queue MOC得到了那些改变fetched results controllers就会更新，然后在main MOC执行saving操作做持久化。&lt;/p&gt;
+
+&lt;p&gt;这种方式简化了操作，你可以为任何有保存和取消按钮的view controller创建一个temporary MOC(as child)。如果你传递一个managed object(通过objectID)给temp context用来编辑。用户可以更新managed object的所有元素。如果用户点击了保存按钮，那么你就在temporary context上执行save操作。如果用户点击了取消，就不会有任何操作，而且所有的改变都与temporary MOC一同被废弃了。&lt;/p&gt;
+
+&lt;h2 id=&#34;asynchronous-saving-异步执行save操作&#34;&gt;Asynchronous Saving(异步执行save操作)&lt;/h2&gt;
+
+&lt;p&gt;Marcus Zarra向我展示了如下的方法，该方法构建在Parent/Child方法之上，但是增加了一个额外的context专门负责磁盘的写入。如之前提及的长时间的写入操作可能会阻塞主线程造成用户界面的卡顿。该方法很聪明的将写入操作放到自己的private queue里，然后保持用户界面操作很流畅。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataMultiContext/four.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;设置CoreData也很简单了。只需要将persistentStoreCoordinator移到我们新的用来写入的MOC，然后将main MOC作为它的child。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// create writer MOC
+_privateWriterContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+[_privateWriterContext setPersistentStoreCoordinator:_persistentStoreCoordinator];
+
+// create main thread MOC
+_managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+_managedObjectContext.parentContext = _privateWriterContext;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在我们必须为每一次更新执行3次save操作：temporary MOC，main UI MOC以及写入磁盘。如之前所示的那样，很简单。现在用户界面将不会被阻塞当我们在执行大量数据库操作(比如导入大量数据记录)的时候以及写入磁盘的时候。&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion-结论&#34;&gt;Conclusion(结论)&lt;/h2&gt;
+
+&lt;p&gt;iOS5极大的简化了在background queues处理CoreData的工作，以及parents分别从child MOCs得到改变。如果你仍然需要支持iOS 3/4那么这些对你来说远远不够。但是如果你的项目最低要求是iOS 5那么你可以立即根据上述Marcus Zarra的方法来设计。&lt;/p&gt;
+
+&lt;p&gt;Zach Waldowski指出使用private queue的并发类型来处理“editing view controllers”也许是杀鸡用牛刀。如果你使用&lt;strong&gt;NSContainmentConcurrencyType&lt;/strong&gt;替代child context那么你就不需要performBlock的包装了。但是你仍然需要在mainMOC上调用performBlock执行saving操作。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;confinement的并发类型使用“the old way”的方式来执行contexts，但是那并不意味着是旧的，遗留的。它简单的将context的操作绑到自己管理的线程模式。为每一个view controller创建一个新的private queue是很浪费的，不需要的，而且很慢。&lt;strong&gt;-performBlock:&lt;/strong&gt; 和 &lt;strong&gt;-performBlockAndWait:&lt;/strong&gt;不能与confinement的并发类型一起工作是有原因的，因为blocks和locking是必须的，当你在处理multiple contexts时，正如你在“editing” view controller里设置的方式一样。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;知道如何智能的保存和合并，因为main thread context 绑到main thread，合并总是被安全的执行。editing view controller被绑到了main thread正如main view controller；这就是为什么在这里使用confinement的并发类型是合适的。这个editing context从概念上来将并不是是什么“new”的，只是将改变推迟了，但是仍然允许你完全的废弃改变。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;所以它真的可以归结为你的个人喜好:private queue和performBlock或confinement。个人更倾向于private queues,因为使用它们时给我安全感。&lt;/p&gt;
+
+&lt;p&gt;有些地方翻译的不好，前面给出了原文地址，请自行参照原文阅读。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

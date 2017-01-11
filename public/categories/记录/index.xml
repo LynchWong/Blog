@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>记录 on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/categories/%E8%AE%B0%E5%BD%95/index.xml</link>
+    <description>Recent content in 记录 on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/categories/%E8%AE%B0%E5%BD%95/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>博客迁移后续</title>
+      <link>http://lynchwong.com/blog/2016/06/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E5%90%8E%E7%BB%AD/</link>
+      <pubDate>Thu, 02 Jun 2016 10:12:35 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E5%90%8E%E7%BB%AD/</guid>
+      <description>&lt;p&gt;上篇博客还在说从 Hexo 迁移到 Hugo，现在又换回来了，你门肯定在想：
+&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/MoveBlog/21.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我也觉得我是在发神经。换到Hugo后，折腾了好久，有些东西一直搞不定，毕竟对前端的东西不熟悉。本来都已经快弄好了，但是发现配置文件里的有些配置不起作用，导致了很大的BUG。&lt;strong&gt;disablePathToLower: true&lt;/strong&gt;，这个属性配置了没有效果，导致URL全部转成了小写，而我的博文名称都是大写的，在列表中能看到这篇博文，但是点击查看的时候却找不到页面，也就是404。然而新建的博文貌似没有这个问题，中文标题的博文也没有问题。有问题的都是我从Hexo转过来的英文标题的博文。上篇也说过博文MarkDown的格式也不一样，修改之后仍然有问题。其它主题又不满足我的需求，也不想从头一篇一篇的生成博文。所以最后只好放弃，花了一两天时间，加上前两天感冒、头痛，搞的头都要炸了。唉！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/MoveBlog/23.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;反正再换回Hexo又花不了什么时间，估计半小时就够了。所以就直接换回来了，继续换上了之前的主题：&lt;a href=&#34;http://theme-next.iissnan.com&#34;&gt; Next &lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;这个主题，我在Hugo那边也看到过。制作的人明确说了就是基于这个主题的，然而功能差的太多，我试用了下就抛弃了。&lt;/p&gt;
+
+&lt;p&gt;这个主题正如作者说的&amp;rdquo;精于心，简于形&amp;rdquo;。很喜欢这个主题，我用了蛮久了，正好换回之际发现这个主题已经升级了，而且有了自己的主页。文档也比之前更健全，功能也比之前更丰富了。增加了很多功能、以及第三方服务，非常棒，而且安装、配置都很简单。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/MoveBlog/8.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;总的来说，两个博客引擎都很不错。如果我从一开始就使用Hugo，可能就不会出现上面说的那些问题。不过Hexo用起来很方便，命令也很简单，发布也不需要我操作，只是速度慢点。罢了罢了，以后生成页面的时候我出去跑个10公里。&lt;/p&gt;
+
+&lt;p&gt;蛮久都没写博客了。之后会忠于博客的内容，其它都是浮云。&lt;/p&gt;
+
+&lt;p&gt;以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>博客迁移</title>
+      <link>http://lynchwong.com/blog/2016/05/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/</link>
+      <pubDate>Mon, 23 May 2016 08:03:33 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/05/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/</guid>
+      <description>&lt;p&gt;最近花了点时间把博客引擎从 &lt;strong&gt;Hexo&lt;/strong&gt; 换到了 &lt;strong&gt;Hugo&lt;/strong&gt;。感觉前者越来越慢了，其实我的文章不算多，但是生成的时候要花很久时间。换到 &lt;strong&gt;Hugo&lt;/strong&gt; 后，速度确实快。
+&lt;/p&gt;
+
+&lt;p&gt;新的博客引擎其实去年就有同事向我推荐过，而且还是Go写的。但是当时并没在意，&lt;strong&gt;Hexo&lt;/strong&gt; 用着还好，觉得没必要折腾来折腾去的。今年文章也不多，才100过头，还有好多是我挖的坑，都还没来得及填。&lt;strong&gt;Hexo&lt;/strong&gt; 确实很慢，而且最近又在研究Go了，所以很感兴趣，就换了 &lt;strong&gt;Hugo&lt;/strong&gt;。新的博客引擎以及它的主题设置这些都还不太熟，所以现在博客布局、导航跟之前差别很大，找文章也不是很方便，之后会修复这些问题。MarkDown的渲染引擎貌似有些不一样，所以时间基本都花在修改之前文章MarkDown格式上了，这点有点坑。貌似 &lt;strong&gt;Hugo&lt;/strong&gt;是能设置MarkDown渲染的，这点没有细究。&lt;/p&gt;
+
+&lt;p&gt;这里就不讲解怎么搭建 &lt;strong&gt;Hugo&lt;/strong&gt;了，跟 &lt;strong&gt;Hexo&lt;/strong&gt;都是类似的，也是托管在GitHub上的，基本没有差别。这里贴些链接，给需要的同学。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/spf13/hugo&#34;&gt; Hugo源码 - GitHub &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://gohugo.io&#34;&gt; Hugo &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.gohugo.org&#34;&gt; Hugo中文文档 &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>最近小结</title>
+      <link>http://lynchwong.com/blog/2016/05/%E6%9C%80%E8%BF%91%E5%B0%8F%E7%BB%93/</link>
+      <pubDate>Fri, 06 May 2016 18:29:07 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/05/%E6%9C%80%E8%BF%91%E5%B0%8F%E7%BB%93/</guid>
+      <description>&lt;p&gt;最近博客写的少了，编程指南也没怎么翻译。一是公司项目紧；二是调整了作息时间；三是懒癌发作了。
+&lt;/p&gt;
+
+&lt;h1 id=&#34;跑步对于我来说意味着什么&#34;&gt;跑步对于我来说意味着什么？&lt;/h1&gt;
+
+&lt;p&gt;以前读大学的时候，每个学年都要考1000米，从来没及格过，老师放水了30秒还要6分30秒才能跑完啊。准确的说不是跑完，中间我肯定走了一段。那时真的好辣鸡，讲真，那时候我根本不能跑完1000米，不管多慢，都不能&lt;strong&gt;&amp;lsquo;跑&amp;rsquo;&lt;/strong&gt;完。本屌就是这么争气，那时候就开始跑步了，每天晚上都去跑，坚持跑了一年，第二学年的时候1000米已经能到4分30秒了，还帮跑不过的同学去代跑。(那时候我还没戒烟，15岁开始抽烟，抽了差不多10年，14年10月戒掉了，之后写篇怎么戒烟的博文，感兴趣的朋友可以关注下)后来做毕业论文、找工作就没有跑了，那时候真的应该坚持下去，那还是11年底、12年左右。&lt;/p&gt;
+
+&lt;p&gt;14年10月戒烟后，就想着健身，也就自己在家做做俯卧撑啊什么的。直到去年，也就15年4月左右，觉得在家没什么效果，还是去健身房。但是健身房都太贵了，而且人有多，想想还是算了。&lt;/p&gt;
+
+&lt;p&gt;还是决定跑步，毕竟有基础，也不花钱(当时觉得这个决定真他妈机智，跑步不花钱，现在真是想抽了自己，跑鞋、运动衣、运动裤、各种装备。只有裸奔才不花钱)。大家都说有双鞋，有条路就可以了。所以从去年四月就开始跑步了，到现在差不多正好一年了。以前都是晚上下班了在小区里面跑，最近改为了早上跑。每天晚上10点就准备睡觉了，早上5点就起了，喝一小杯黑咖啡然后做做热身运动就出去跑步了。差不多一小时、11公里左右。跑完6点半，洗个澡泡碗麦片吃完就去公司了，到公司估计也就7点半左右。到公司基本就开始弄公司项目了，下班然后回到家差不多7点半左右。然后每天晚上还安排了阻力训练，所以实际上就没什么自由的时间了。阻力训练完差不多9点多，洗漱好差不多10点就睡觉了。&lt;/p&gt;
+
+&lt;p&gt;所以基本只有周末才有空闲时间，然而到了周末懒癌就发作了，还有就是在休息。&lt;/p&gt;
+
+&lt;p&gt;自从跑步以后根本停不下来，一天不跑都觉得空虚，要相信，那感觉跟很久没写博客一样失落。跑得多了就会去关注学习，刚开始也就是乱跑。后来发现会膝盖疼、会岔气、脚踝疼、肌肉拉伤、脚掌起泡，针对这些问题自己搜索学习解决。现在跑前都会做热身，跑后做拉伸，饭后两小时不跑步，合理安排跑量。但这些我现在觉得远远不够，跑步本身就是这样的，不断的挑战自己，总是需要新的目标。所以现在我的目标就是开始制定马拉松的训练计划，然后进行训练，到时希望能参加下半年的杭州马拉松。&lt;/p&gt;
+
+&lt;p&gt;我想我已经从程序员变为运动员了，哈哈。其实这一年跑步带给我的变化挺大的，现在每天去跑步对于我来说不是运动、不是习惯，而是我的为人。现在跑步对我来说很重要，如果我放弃了跑步，便是放弃了自己的为人。正是跑步造就了现在更好的我，对我来说跑步优先于其他事项，如果我不能跑步，我就是放弃了更好的自己，对于其他方面来说同样是损失，所以我让跑步优先于其他事项是可以的。就像许多跑者说的“当我跑步的时候，我觉得这个世界很简单，因为它就在我的脚下”；“跑步让我更专注”；“跑步是我的信仰”。跑步之于我，是信仰，更是我的为人。(看《哥谭》的时候老爷说&amp;rdquo;松林农场&amp;rdquo;不是负担，是他为人的时候。本屌真是感动了，不愧是老爷，本屌就是跟老爷学的。)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/Running/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这图是去年4月15日到现在(5月6号)，年初1月、2月停跑了一段时间，因为太冷了，装备又没搞好。快2000公里了，今年年底估计能到3000公里吧，我们到年底的时候再看吧，希望那时候已经参加并完成了一些马拉松。&lt;/p&gt;
+
+&lt;h1 id=&#34;vlc播放器&#34;&gt;VLC播放器&lt;/h1&gt;
+
+&lt;p&gt;最近也把去年发布到App Store的一个播放器重新做了，简单升级，顺便续费了苹果开发者。&lt;/p&gt;
+
+&lt;p&gt;这里就不详解这个播放器怎么做的了，主要是VLC，现在VLC的MobileVLCKit可以直接用CocoaPods来管理，最新版本已经是2.2.2了。添加完依赖直接编译貌似不能成功的，好像一定要添加一个.mm的文件，具体我也忘了，自行搜索。最后我会开源这个项目，到时在项目中会看到一个空的&lt;strong&gt;Empty.h&lt;/strong&gt;头文件和&lt;strong&gt;Empty.mm&lt;/strong&gt;文件。&lt;/p&gt;
+
+&lt;p&gt;项目App Store地址：
+&lt;a href=&#34;https://itunes.apple.com/us/app/jian-yi-bo-fang-qi-ji-jian/id1059131009?ls=1&amp;amp;mt=8&#34;&gt;简易播放器 - 极简播放器&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;项目源码：
+&lt;a href=&#34;https://github.com/LynchWong/ePlayer&#34;&gt; 项目源码(稍后更新地址) &lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>小记 - RxSwift</title>
+      <link>http://lynchwong.com/blog/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</link>
+      <pubDate>Sat, 23 Apr 2016 09:30:49 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</guid>
+      <description>&lt;p&gt;又有一个月没有写过博客了，真是罪过，深深的内疚的感觉。之前写完了&lt;a href=&#34;http://lynchwong.com/2016/03/19/Alamofire-源码学习-Request/&#34;&gt; Alamofire 源码学习 &lt;/a&gt;然后让另一个做iOS的同学看，他说看不懂，写的乱。
+&lt;/p&gt;
+
+&lt;p&gt;其实我看了下貌似是挺乱的，但是 Alamofire 的模式很简单，明白了就没什么东西了。大神的代码写的很简洁、简单，思路很清晰，结构很明朗。我觉得这样的代码就是最好的，特别是在公司里面，大家合作的时候，代码越简单、简洁，思路越清晰越好，这样才能降低维护的成本。&lt;/p&gt;
+
+&lt;p&gt;这段时间除了忙公司项目外，还在搞RxSwift。学习了下RxSwift，做了些小Demo，感觉用起来很爽。跟之前使用RAC相比，我感觉RxSwift更容易上手。RAC和RxSwift的源码都看了下，看懂了一小部分，后面会接着看。这两个框架的对比，网上有很多，之前我也用过RAC，项目里面也用过。但是RxSwift给我的感觉就是更顺，所以现在我更倾向于RxSwift。&lt;/p&gt;
+
+&lt;p&gt;这里贴一些RxSwift的学习资料，方便查阅：&lt;/p&gt;
+
+&lt;p&gt;ReactiveX社区，不仅仅是RxSwift，几乎包含了所有的编程语言：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://reactivex.io&#34;&gt; ReactiveX &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://mcxiaoke.gitbooks.io/rxdocs/content/&#34;&gt; ReactiveX文档中文翻译 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://rxmarbles.com&#34;&gt; RxMarbles 图解运算符 &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;讲解RxSwift的文章，以及一些Demo：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://realm.io/cn/news/slug-max-alexander-functional-reactive-rxswift/?hmsr=toutiao.io&#34;&gt; RxSwift 函数响应式编程 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.callmewhy.com/2015/11/01/moya-rxswift-argo-lets-go/&#34;&gt; 通过 Moya+RxSwift+Argo 完成网络请求 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.callmewhy.com/2015/09/21/rxswift-getting-started-0/&#34;&gt; RxSwift 入坑手册 Part0 - 基础概念 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.callmewhy.com/2015/09/23/rxswift-getting-started-1/&#34;&gt; RxSwift 入坑手册 Part1 - 示例实战 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://geek.csdn.net/news/detail/59759&#34;&gt; RxSwift的第一印象 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://t.swift.gg/d/2-rxswift&#34;&gt; RxSwift 学习指导索引 &lt;/a&gt;(列出的参考资源很好，很丰富)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;RAC和RxSwift的对比：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.cnblogs.com/andy-zhou/p/5321798.html&#34;&gt; iOS响应式编程：ReactiveCocoa vs RxSwift 选谁好 &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;RAC也好、RxSwift也好，都跟FRP有关，理解FRP的思想：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.infoq.com/cn/articles/functional-reactive-programming&#34;&gt; 函数式反应型编程(FRP) —— 实时互动应用开发的新思路 &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;隆重推荐最后这篇，超级棒。很多人学习了RxSwift，但是可能不知道在项目里怎么用，那么读了这篇你就明白了。讲解了如何以响应式编程的方式来思考：一切皆是流。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/hehonghui/android-tech-frontier/tree/master/androidweekly/那些年我们错过的响应式编程&#34;&gt; 那些年我们错过的响应式编程 &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当然看源码也是很好的，项目中的 Rx.playground 也是学习理解的好地方。&lt;/p&gt;
+
+&lt;p&gt;以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>小结</title>
+      <link>http://lynchwong.com/blog/2016/01/%E5%B0%8F%E7%BB%93/</link>
+      <pubDate>Sun, 10 Jan 2016 13:15:34 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/%E5%B0%8F%E7%BB%93/</guid>
+      <description>&lt;p&gt;最近比较忙，很少贴新的文章出来，之前的有些文章也是怎么简单怎么来。
+&lt;/p&gt;
+
+&lt;p&gt;这段时间虽说没有新的文章，但是回头整理了下之前的博文。主要就是把&lt;strong&gt;Swift&lt;/strong&gt;相关的都整理了下，&lt;strong&gt;Swift&lt;/strong&gt;也是升级到了2.x的版本，所以相当于是勘误了。我自己也相当于是从头到尾的又看了一遍&lt;strong&gt;Swift&lt;/strong&gt;，我也不知道是看的第几遍了。算算大概看了4、5遍了吧，每次看都有不一样的感觉和收获。表面上看起来&lt;strong&gt;Swift&lt;/strong&gt;很简单，上手容易；但是要精通、深入还是要花很多时间精力去研究的，其实&lt;strong&gt;Swift&lt;/strong&gt;的内容还是蛮多的，远超OC。现在我自己的项目首选都是&lt;strong&gt;Swift&lt;/strong&gt;，公司项目新的需求也是用&lt;strong&gt;Swift&lt;/strong&gt;，原来的还是OC，基本上是混编。不管是怎样，&lt;strong&gt;Swift&lt;/strong&gt;是迟早都要学的，还是早点学习吧。&lt;/p&gt;
+
+&lt;p&gt;之前说要Post几篇关于RAC的博文，但是时间有限就简单的搞了搞，贴了两片敲门砖。不过这段时间在闲暇之余看了看RAC4.0的源码，虽说没有全部看懂，但还是看懂了大半，收获还是蛮大的。4.0和2.5相比，现在UI这块比较弱，缺少双向绑定，感觉不好用。&lt;/p&gt;
+
+&lt;p&gt;除此之外，自己最近在构建一个代码库，包含我们开发中经常会使用到的一些代码，&lt;strong&gt;GitHub&lt;/strong&gt;地址：&lt;a href=&#34;https://github.com/MyPot/IWILLTools&#34;&gt; IWILLTools &lt;/a&gt;。代码库是用&lt;strong&gt;Swift&lt;/strong&gt;编写的，iOS8.0及以上，很多代码7.0应该也是没问题的。包括HTTP请求、文件操作、缓存、音频播放、以及很多拓展等等。有些功能是依赖于其它功能的，比如缓存依赖于HTTP请求和文件操作等。代码中注释尽量写的很详细了，有些可能的坑以及未实现的功能也提到了。所以最好还是不要当作Framework添加到项目中，当作参考比较好。&lt;/p&gt;
+
+&lt;p&gt;现在已经是2016年了，感觉2015年还是成长了很多，收获了很多，挺不错的。今年希望在各方面更上一层楼。估计今年还是会整理、翻译很多的编程指南，因为我觉得这个实在是太重要了，比任何资料都要好；也希望今年能完成一次半马、甚至是全马。去年总的跑了1300公里，希望今年能到2000公里；然而更重要的还是工作技能上的提升，不断的充实自己，让自己在iOS开发领域中成为一位真正的大牛，同时也要做好职业规划。最最重要的就是将这些付诸实践，制定完整的计划，然后一步一步的去实施。&lt;/p&gt;
+
+&lt;p&gt;希望到今年年底的时候是一个不一样的自己，那是我就可以将博客名改为 &lt;strong&gt;Nobodyknows+ 3.0&lt;/strong&gt; 了。&lt;/p&gt;
+
+&lt;p&gt;以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>新的开始</title>
+      <link>http://lynchwong.com/blog/2015/09/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</link>
+      <pubDate>Thu, 24 Sep 2015 16:27:33 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/09/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</guid>
+      <description>&lt;p&gt;上一篇博客还是8月9号Post的，算算都一个多月都没写博客了，心里真是充满了罪恶感。
+&lt;/p&gt;
+
+&lt;p&gt;接下来的工作还是先把之前挖的坑填了吧，现在回头看看，感觉就是天坑啊，不知道自己当时哪里来的勇气，我真是呵呵哒。之前的Go还有CoreData估计是没办法填了，还是先把编程指南的完成了再说吧。说实话，我自己蛮喜欢Go的，但是毕竟自己时间有限，也不是自己的专业，等到后面有自己的时间了一定补上，并且继续深入。至于CoreData，发现用的人实在是太少了，特别是国内的开发者，基本不用。CoreData最大的缺点应该就是迁移了，各版本之间的兼容，不过熟悉了应该也还好。所以这些就先放一放吧，除了编程指南之外还会Post一些最近开发遇到的问题和一些自己做的控件或者可重用的一些代码。&lt;/p&gt;
+
+&lt;p&gt;以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>继续</title>
+      <link>http://lynchwong.com/blog/2015/06/%E7%BB%A7%E7%BB%AD/</link>
+      <pubDate>Tue, 02 Jun 2015 10:42:52 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/06/%E7%BB%A7%E7%BB%AD/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;这段时间做了两个项目，一个是用Swift+SpriteKit做得小游戏；另外一个是用OC写得App。两个项目都不大，游戏已经发布审核通过了，App今天刚提交。所以现在应该比较空了，就来把之前许下的牛逼慢慢实现。做项目的这段时间也翻译了部分编程指南的文档，主要翻译的还是Objective-C编程指南，其他的列了下大纲什么的。做App的时候使用了CoreData，突然想起这个框架其实是iOS很重要的一个框架，所以也需要做些记录，特别是CoreData多线程安全方面，后面会补一篇CoreData的东西。&lt;/p&gt;
+
+&lt;p&gt;现阶段的还是先把编程指南翻译完，然后再继续其他的事情。开发App的时候服务端的接口是同学之前就写好得，就相当于App的用户数据都在同学的服务器上。那时就想自己重写服务器接口，原本做过.Net的开发，以前也用WCF给App写过服务端的接口。后来想想太耗时间，先开发App上线比较重要。所以就决定后面再使用Go语言重新开发服务端，使用Go语言是经过慎重考虑的，优缺点自行了解。所以后面可能会贴一些Go的学习文章，之前说的关于SpriteKit的东西可能就搁置了，很有可能就取消不做了。感觉一个人做游戏真是好难，还是主做App开发。&lt;/p&gt;
+
+&lt;p&gt;以上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>小憩</title>
+      <link>http://lynchwong.com/blog/2015/04/%E5%B0%8F%E6%86%A9/</link>
+      <pubDate>Wed, 29 Apr 2015 09:58:31 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/04/%E5%B0%8F%E6%86%A9/</guid>
+      <description>&lt;p&gt;博主近段时间感觉神经衰弱，平常空闲的时间都在写博客，这段时间想休息下。
+&lt;/p&gt;
+
+&lt;p&gt;SpriteKit主要还有物理引擎、粒子效果、瓷砖地图、UIKit整合、性能优化、游戏归档、以及SpriteKit特有的一些功能的博文没有写给大家。但是博主想先把苹果相关的一些编程指南做一下翻译、整理，因为这些东西是基础，但是也很重要。博主看过一些书和教程，但是从来没觉得有哪本书讲得有编程指南这么明白，都只会教你怎么怎么做，都是些快餐式的速成。然后有的时候翻译导致的误差也让我们难以理解，所以看英文原版的编程指南绝对是受益匪浅。所以博主开了几篇编程指南的博文，会在后面空闲的时间慢慢的一点一点的更新出来，可能速度会很慢。&lt;/p&gt;
+
+&lt;p&gt;博主看完SpriteKit之后一直都想做个自己的小游戏，所以近段时间也一直都在想这个事情。除了正常的工作时间，空闲时间的确比较少，所以博客这边权重会小一些。在开发自己游戏的这段时间会把已经开篇的博文完成，在完成开发之后就会继续完成SpriteKit这个系列。做完游戏，使用过SpriteKit之后再来写博文，理解应该会更深，质量应该会更高。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>开篇</title>
+      <link>http://lynchwong.com/blog/2014/12/%E5%BC%80%E7%AF%87/</link>
+      <pubDate>Fri, 12 Dec 2014 15:24:31 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2014/12/%E5%BC%80%E7%AF%87/</guid>
+      <description>&lt;p&gt;之前用Octopress搭建的博客，后来发现Hexo不错而且基本还没开始写博文，所以就果断换到了Hexo。按着网上的教程走了一遍就搭建好了，然后选了这个Pacman主题后基本就没管博客配置的问题了，博客里面的有些功能是否能用就不太清楚了。
+&lt;/p&gt;
+
+&lt;p&gt;很久之前就想写博客了，在Evernote里面记录不少的东西，有自己的，有别人的，有总结大家的。都怪自己太懒了，一直拖到现在才开始写博客。所以现阶段我觉得最重要的就是开始写博客，想让博客尽快的充实起来。&lt;/p&gt;
+
+&lt;p&gt;博主是做iOS开发的，所以博文主要涉及的东西就是iOS开发方面的东西。在这里有必要说明一下，如果有些iOS技术，我觉得别人写的很好，我可能就觉得没必要再写了，可能就只给出一些连接，推荐给大家；另外有些博文可能是总结的大家的博文；当然也会有自己原创的博文。&lt;/p&gt;
+
+&lt;p&gt;我觉得到后面可能就不仅仅是iOS开发方面的内容了，毕竟编码只是一部分，其他的东西，比如模式，架构这些东西。当然还有可能涉及到其他的领域，游戏就很有可能。请大家敬请期待&amp;hellip;&amp;hellip;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

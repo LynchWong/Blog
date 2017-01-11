@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Match on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/match/index.xml</link>
+    <description>Recent content in Match on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/match/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Fastlane - Match</title>
+      <link>http://lynchwong.com/blog/2016/06/fastlane---match/</link>
+      <pubDate>Tue, 28 Jun 2016 09:05:34 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/fastlane---match/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;说明：翻译的 &lt;code&gt;Match&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; 原文地址 &lt;/a&gt;。
+&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;match&#34;&gt;match&lt;/h1&gt;
+
+&lt;p&gt;在你的团队之间使用 Git 轻松的同步你的证书和配置文件。&lt;/p&gt;
+
+&lt;p&gt;iOS Code Signing 的新方法：在你的开发团队中共享一个 Code Signing identity，简化 CodeSigning 的设置工作，防止其它问题出现。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;match&lt;/code&gt; 是 &lt;a href=&#34;https://codesigning.guide&#34;&gt;https://codesigning.guide&lt;/a&gt; 概念的实现。&lt;code&gt;match&lt;/code&gt; 创建请求所有的证书和配置文件，然后存储在另外一个 Git Repository 中。团队中的每一个成员都可以访问这个 Repository，使用这些证书来 CodeSigning。&lt;code&gt;match&lt;/code&gt; 也会自动修复损坏的，过期的证书。&lt;code&gt;match&lt;/code&gt; 是在团队中共享签名证书的最简单方法。&lt;/p&gt;
+
+&lt;h1 id=&#34;为什么使用match&#34;&gt;为什么使用match？&lt;/h1&gt;
+
+&lt;p&gt;在开始使用 &lt;code&gt;match&lt;/code&gt; 前，确保已经阅读了 &lt;a href=&#34;https://codesigning.guide&#34;&gt;codesigning.guide&lt;/a&gt; 了。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;When deploying an app to the App Store, beta testing service or even installing it on a device, most development teams have separate code signing identities for every member. This results in dozens of profiles including a lot of duplicates.&lt;/p&gt;
+
+&lt;p&gt;You have to manually renew and download the latest set of provisioning profiles every time you add a new device or a certificate expires. Additionally this requires spending a lot of time when setting up a new machine that will build your app.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;新方法：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Share one code signing identity across your development team to simplify your setup and prevent code signing issues. What if there was a central place where your code signing identity and profiles are kept, so anyone in the team can access them during the build process?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;(这些我就不翻译了，就是说了一大堆团队成员之间证书管理混乱、各种revoke)&lt;/p&gt;
+
+&lt;h2 id=&#34;为什么不让-xcode-处理这些&#34;&gt;为什么不让 Xcode 处理这些？&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;让要发生的事情都完全在你控制中&lt;/li&gt;
+&lt;li&gt;你可以访问所有的证书和配置文件，这些都安全的存储在 Git 中&lt;/li&gt;
+&lt;li&gt;在团队中共享一个 Code Signing identity，少量的证书和配置文件&lt;/li&gt;
+&lt;li&gt;有时 Xcode 会 revoke(废除) 证书，打乱你的设置，导致项目构建失败&lt;/li&gt;
+&lt;li&gt;比起 &lt;code&gt;自动&lt;/code&gt; 设置，通过显式设置配置文件，构建项目时我们更能预测会发生什么&lt;/li&gt;
+&lt;li&gt;It just works™(这只是工作？ Xcode 只是有点作用，少了其它方面的考量？)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;match-为你做了什么工作&#34;&gt;&lt;code&gt;match&lt;/code&gt; 为你做了什么工作？&lt;/h2&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;match&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;在团队成员中使用 Git 自动同步你的 iOS Keys 和 Profiles&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;处理所有繁重的事情，比如创建存储你的证书和配置文件&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;一分钟就能在新机器上设置好 Code Signing&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;能够与你的应用的多个的 Targets 和 Bundle identity 很好的工作&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;你能够完全控制 Git Repo，没有第三方的服务参与&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;Provisioning Profile 始终与正确的 Certificate 匹配&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;如果你当前账户过期了或者 Profiles 无效，很方便的重置你已经存在的 Profiles 和 Certificates&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;使用 &lt;code&gt;--force&lt;/code&gt; 选项能够自动更新你的 Provisioning Profiles，会包含你所有的设备&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;支持多个苹果账户和多个团队&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;与 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; 紧密集成，与 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt;gym&lt;/a&gt; 等其它工具能够无缝衔接&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;更多关于概念上的信息，访问 &lt;a href=&#34;https://codesigning.guide&#34;&gt;codesigning.guide&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo gem install match
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;确保你已经安装了 Xcode 最新版本的命令行工具：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xcode-select --install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+
+&lt;h2 id=&#34;设置&#34;&gt;设置&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;创建一个&lt;strong&gt;新的私有 Git Repo&lt;/strong&gt;(比如在 &lt;a href=&#34;https://github.com/new&#34;&gt;GitHub&lt;/a&gt; 或者 &lt;a href=&#34;https://bitbucket.org/account/signin/?next=/repo/create&#34;&gt;BitBucket&lt;/a&gt; 上)命名为诸如 &lt;code&gt;certificates&lt;/code&gt; 这样的。&lt;strong&gt;重要：&lt;/strong&gt;确保 Repository 设置为了私有的。&lt;/li&gt;
+&lt;li&gt;可选：创建一个&lt;strong&gt;新的，共享的 Apple Developer Portal 账户&lt;/strong&gt;，诸如 &lt;code&gt;office@company。com&lt;/code&gt; ，现在开始团队共享这个帐号(更多信息访问 &lt;a href=&#34;https://codesigning.guide&#34;&gt;codesigning.guide&lt;/a&gt;)。&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;在项目文件夹中运行如下命令开始使用 &lt;code&gt;match&lt;/code&gt; ：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match init
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match_init.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;会要求你输入 Git Repo 的 URL。可以是 &lt;code&gt;https://&lt;/code&gt; 或者 &lt;code&gt;git&lt;/code&gt; URL。&lt;code&gt;match init&lt;/code&gt; 不会读取或者修改你的证书或者配置文件。&lt;/p&gt;
+
+&lt;p&gt;会在你当前目录(或者在你的 &lt;code&gt;./fastlane/&lt;/code&gt; 文件夹)创建 &lt;code&gt;Matchfile&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;示例内容(更多高级设置，查看 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match#fastlane&#34;&gt;fastlane section&lt;/a&gt;)：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git_url &amp;quot;https://github.com/fastlane/fastlane/tree/master/certificates&amp;quot;
+
+app_identifier &amp;quot;tools.fastlane.app&amp;quot;
+username &amp;quot;user@fastlane.tools&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;重要-每个团队使用一个-git-分支&#34;&gt;&lt;strong&gt;重要：每个团队使用一个 Git 分支&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;match&lt;/code&gt; 也支持在一个 Repo 中为多个团队存储证书，通过使用不同的分支。如果你在多个团队中工作，确保你为每个团队设置了唯一的 &lt;code&gt;git_branch&lt;/code&gt; 参数值。&lt;code&gt;match&lt;/code&gt; 会自动为创建使用指定的分支。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match(git_branch: &amp;quot;team1&amp;quot;, username: &amp;quot;user@team1.com&amp;quot;)
+match(git_branch: &amp;quot;team2&amp;quot;, username: &amp;quot;user@team2.com&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;运行&#34;&gt;运行&lt;/h2&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Before running match for the first time, you should consider clearing your existing profiles and certificates using the &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match#nuke&#34;&gt;match nuke command&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在运行 &lt;code&gt;match init&lt;/code&gt; 之后，你可以运行如下的命令来生成新的证书和配置文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match appstore
+match development
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match_appstore_small.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这回创建新的证书和配置文件(如果需要)然后存储在你的 Git Repo 中。如果你之前运行 &lt;code&gt;match&lt;/code&gt; ，它会自动安装 Git Repo 里已经存在的 Profiles 。&lt;/p&gt;
+
+&lt;p&gt;当 Certificates 和 Private keys 安装在 Keychain，Provisioning Profiles 安装在 &lt;code&gt;~/Library/MobileDevice/Provisioning Profiles&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;使用如下命令获得更详细的输出：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match --verbose
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;列出可用的选项：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match --help
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;处理多个-targets&#34;&gt;处理多个 Targets&lt;/h3&gt;
+
+&lt;p&gt;如果你有不同的 Bundle identifiers，多个 Targets，为它们的每一个调用 &lt;code&gt;match&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match appstore -a tools.fastlane.app
+match appstore -a tools.fastlane.app.watchkitapp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以使用 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/fastlane&#34;&gt;fastlane&lt;/a&gt; 让这过程更简单点：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lane :match do
+    match(app_identifier: &amp;quot;com.krausefx.app1&amp;quot;, readonly: true)
+    match(app_identifier: &amp;quot;com.krausefx.app2&amp;quot;, readonly: true)
+    match(app_identifier: &amp;quot;com.krausefx.app3&amp;quot;, readonly: true)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后所有团队需要做的就是 &lt;code&gt;fastlane match&lt;/code&gt;，然后为所有 targets 的 keys、certs 和 profiles 都会同步。&lt;/p&gt;
+
+&lt;h3 id=&#34;密码&#34;&gt;密码&lt;/h3&gt;
+
+&lt;p&gt;当在一台新机器上第一次运行 &lt;code&gt;match&lt;/code&gt; ，会询问你 Git Repository 的密码。这是一个额外的安全措施：所有的文件都会被 OpenSSL 加密。请务必记住密码，当你在不同机器上运行 &lt;code&gt;match&lt;/code&gt; 的时候你会需要。&lt;/p&gt;
+
+&lt;p&gt;使用环境变量来设置密码，使用 &lt;code&gt;MATCH_PASSWORD&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;h3 id=&#34;新机器&#34;&gt;新机器&lt;/h3&gt;
+
+&lt;p&gt;在新机器上设置证书和配置文件，使用如下命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match development
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你也可以运行 &lt;code&gt;match&lt;/code&gt; 的是使用 &lt;code&gt;readonly&lt;/code&gt; 确保不会创建新的证书或者配置文件。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match development --readonly
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;访问控制&#34;&gt;访问控制&lt;/h3&gt;
+
+&lt;p&gt;使用 &lt;code&gt;match&lt;/code&gt; 的一个好处就是你允许团队成员可以访问 Code Signing Certificates，而不需要给每个成员访问 Developer Portal 的权限：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;运行 &lt;code&gt;match&lt;/code&gt; 在 Git Repo 中存储证书&lt;/li&gt;
+&lt;li&gt;给开发人员授予访问 Git Repo 的权限，并给他们密码&lt;/li&gt;
+&lt;li&gt;开发人员现在可以运行 &lt;code&gt;match&lt;/code&gt; 安装最新版本的 Code Signing Profile，所以他们可以直接构建签名应用程序，而不需要去访问 Developer Portal&lt;/li&gt;
+&lt;li&gt;每次你运行 &lt;code&gt;match&lt;/code&gt; 更新 Profiles(比如 添加新设备)，所有的开发人员在运行 &lt;code&gt;match&lt;/code&gt; 时都会自动获取最新版本的 Profiles&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果你决定运行 &lt;code&gt;match&lt;/code&gt; 的时候不访问 Developer Portal，使用 &lt;code&gt;--readonly&lt;/code&gt; 选项，就不会询问你 Developer Portal 的密码。&lt;/p&gt;
+
+&lt;p&gt;这个方法的优势就是团队中的人不会因为手误废除(revoke)了证书。另外推荐安装 &lt;a href=&#34;https://github.com/neonichu/FixCode&#34;&gt;FixCode Xcode Plugin&lt;/a&gt; 禁用 &lt;code&gt;Fix Issue&lt;/code&gt; 按钮。&lt;/p&gt;
+
+&lt;h3 id=&#34;git-repo&#34;&gt;Git Repo&lt;/h3&gt;
+
+&lt;p&gt;在第一次运行 &lt;code&gt;match&lt;/code&gt; 之后，你的 Git Repo 会包含两个目录：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;certs&lt;/code&gt; 文件夹包含所有的 Certificates 和它们的 Private Keys&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;profiles&lt;/code&gt; 文件夹包含所有的 Provisioning Profiles&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;除此之外，&lt;code&gt;match&lt;/code&gt; 会为你创建一个漂亮的 Repo &lt;code&gt;README.md&lt;/code&gt;，方便新的团队成员登船(入坑，哈哈，开玩笑)：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/github_repo.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;fastlane&#34;&gt;fastlane&lt;/h3&gt;
+
+&lt;p&gt;添加 &lt;code&gt;match&lt;/code&gt; 到你的 &lt;code&gt;Fastfile&lt;/code&gt; ，使用 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; 自动获取最新版本的 Code Signing Certificates 。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match(type: &amp;quot;appstore&amp;quot;)
+
+match(git_url: &amp;quot;https://github.com/fastlane/fastlane/tree/master/certificates&amp;quot;,
+  type: &amp;quot;development&amp;quot;)
+
+match(git_url: &amp;quot;https://github.com/fastlane/fastlane/tree/master/certificates&amp;quot;,
+  type: &amp;quot;adhoc&amp;quot;,
+  app_identifier: &amp;quot;tools.fastlane.app&amp;quot;)
+
+# `match` should be called before building the app with `gym`
+gym
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;多个-targets&#34;&gt;多个 Targets&lt;/h3&gt;
+
+&lt;p&gt;如果你的应用程序有多个 Targets(比如 Today Widget or WatchOS Extension)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match(app_identifier: &amp;quot;tools.fastlane.app&amp;quot;, type: &amp;quot;appstore&amp;quot;)
+match(app_identifier: &amp;quot;tools.fastlane.app.today_widget&amp;quot;, type: &amp;quot;appstore&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;match&lt;/code&gt; 甚至可以为所有的 Bundle identifiers 使用同一个 Git Repository 。&lt;/p&gt;
+
+&lt;h2 id=&#34;设置-xcode-项目&#34;&gt;设置 Xcode 项目&lt;/h2&gt;
+
+&lt;p&gt;为了确保 Xcode 为每一个 target 使用了正确的 Provisioning Profile，请不要为选择 Profile 的功能使用 &lt;code&gt;Automatic&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;另外，推荐使用 &lt;a href=&#34;https://github.com/neonichu/FixCode&#34;&gt;FixCode Xcode Plugin&lt;/a&gt; 禁用 &lt;code&gt;Fix Issue&lt;/code&gt;按钮。&lt;code&gt;Fix Issue&lt;/code&gt; 按钮可以废除(revoke)你已经存在 Certificates，会使你的 Provisioning Profiles 无效。&lt;/p&gt;
+
+&lt;h3 id=&#34;使用-fastlane-https-fastlane-tools-从命令行构建&#34;&gt;使用 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; 从命令行构建&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;match&lt;/code&gt; 会使用正确的 Provisioning Profiles 的 UUID 来自动填充环境变量，准备在你的 Xcode 项目中使用。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/UDIDPrint.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;打开你的 target 设置，打开 &lt;code&gt;Provisioning Profile&lt;/code&gt; 选择 &lt;code&gt;Other&lt;/code&gt; ：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/XcodeProjectSettings.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Profile 环境变量以 &lt;code&gt;$(sigh_&amp;lt;bundle_identifier&amp;gt;_&amp;lt;profile_type&amp;gt;)&lt;/code&gt; 命名&lt;/p&gt;
+
+&lt;p&gt;比如 &lt;code&gt;$(sigh_tools.fastlane.app_development)&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;从-xcode-手动构建&#34;&gt;从 Xcode 手动构建&lt;/h3&gt;
+
+&lt;p&gt;当你使用 Development Profile 安装应用程序到设备上的时候非常有用。&lt;/p&gt;
+
+&lt;p&gt;你可以在 Xcode 项目中静态的选择正确的 Provisioning Profile(名字与 &lt;code&gt;Development tools.fastlane.app&lt;/code&gt; 匹配)。&lt;/p&gt;
+
+&lt;h2 id=&#34;持续集成&#34;&gt;持续集成&lt;/h2&gt;
+
+&lt;h3 id=&#34;访问-repo&#34;&gt;访问 Repo&lt;/h3&gt;
+
+&lt;p&gt;为了让 CI 系统和 &lt;code&gt;match&lt;/code&gt; 工作，只需要让 CI 系统能够访问 Repo。通常你只需要将 CI 系统的 public ssh key 当做 deploy key 添加到你的 &lt;code&gt;match&lt;/code&gt; Repo 中，但由于你的 CI 系统可能已经使用 public ssh key 来访问代码的 Repo，&lt;a href=&#34;https://help.github.com/articles/error-key-already-in-use/&#34;&gt;那你就不能那么做了。&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;有些 Repo Hosts 可能允许你为不同的 Repo 使用相同的 deploy 可以，但是 GitHub 不允许。如果你的 Host 也是，不需要担心，只需要将 CI 的 public ssh key 当做 deploy key 添加到你的 &lt;code&gt;match&lt;/code&gt; Repo 中，然后滚动到&amp;rdquo;Encryption password&amp;rdquo;。&lt;/p&gt;
+
+&lt;p&gt;大约有这几个方面：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在你的 Repo Host 上创建新的帐号，对于你的 &lt;code&gt;match&lt;/code&gt; Repo 只有 read-only 的访问权限。&lt;a href=&#34;http://devcenter.bitrise.io/docs/adding-projects-with-submodules&#34;&gt;这里有描述。&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;有些 CI 允许你手动上传 Signing Credientials，但是这就意味着 profiles/keys/certs 每次改变你都要重新上传。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;这两种解决方法都不完美。两种方法需要你的权衡。看你是更在意设置额外的账户还是更在意证书的同步。&lt;/p&gt;
+
+&lt;h3 id=&#34;加密密码&#34;&gt;加密密码&lt;/h3&gt;
+
+&lt;p&gt;一旦你决定使用哪种方法，所有剩下要做的就是设置你加密的密码作为秘密的环境变量，命名为 &lt;code&gt;MATCH_PASSWORD&lt;/code&gt; 。&lt;code&gt;match&lt;/code&gt; 在运行的时候会带上这个参数。&lt;/p&gt;
+
+&lt;h2 id=&#34;nuke&#34;&gt;Nuke&lt;/h2&gt;
+
+&lt;p&gt;如果你从来不再以 Code Signing，并且 Apple Developer 账户有大量无效的，过期的，Xcode管理的 profiles／certificates，你可以使用 &lt;code&gt;match nuke&lt;/code&gt; 命令来废除你的 Certificates 和 Provisioning Profiles。不要担心，已经在 App Store 里可用的应用程序仍然会继续工作。在 &lt;code&gt;nuke&lt;/code&gt; 你的账户之后，通过 TestFlight 构建的 distributed 就不能再用了，所以你必需重新上传新的构建。在清理了你的账户之后，你将会从干净的状态开始，然后你就可以运行 &lt;code&gt;match&lt;/code&gt; 再次生成 Certificates 和 Profiles。&lt;/p&gt;
+
+&lt;p&gt;对指定环境的 Certificates 和 Provisioning Profiles 废除：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match nuke development
+match nuke distribution
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match_nuke.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在删除 profiles / certificates 之前你必需确认。&lt;/p&gt;
+
+&lt;h2 id=&#34;修改密码&#34;&gt;修改密码&lt;/h2&gt;
+
+&lt;p&gt;修改你 Repo 的密码，加密和解密所有文件运行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;match change_password
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在你所有机器上下一次运行的时候会被询问新的密码。&lt;/p&gt;
+
+&lt;h2 id=&#34;手动解密&#34;&gt;手动解密&lt;/h2&gt;
+
+&lt;p&gt;如果你想手动解密文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;openssl aes-256-cbc -k &amp;quot;&amp;lt;password&amp;gt;&amp;quot; -in &amp;quot;&amp;lt;fileYouWantToDecryptPath&amp;gt;&amp;quot; -out &amp;quot;&amp;lt;decryptedFilePath&amp;gt;&amp;quot; -a -d
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;这个安全吗&#34;&gt;这个安全吗？&lt;/h1&gt;
+
+&lt;p&gt;你的 Keys 和 Provisioning Profiles 都使用了 OpenSSL 和 密码进行加密。&lt;/p&gt;
+
+&lt;p&gt;将 Private Keys 存储在 Git Repo 中第一次听起来倒胃口。我们进行了一次深层次的潜在安全问题的分析，然后得出如下结论：&lt;/p&gt;
+
+&lt;h2 id=&#34;如果某人偷取了-private-key-会发生什么&#34;&gt;如果某人偷取了 Private Key 会发生什么？&lt;/h2&gt;
+
+&lt;p&gt;如果攻击者有了你的 Certificate 和 Provisioning Profile，他们就可以使用跟你相同的 Bundle identifier 来签名应用。&lt;/p&gt;
+
+&lt;p&gt;对于每种类型的 Profile，最糟糕的情况是什么？&lt;/p&gt;
+
+&lt;h3 id=&#34;app-store-profiles&#34;&gt;App Store Profiles&lt;/h3&gt;
+
+&lt;p&gt;只要不是苹果重新签名的 App Store Profile 就没有任何的用处。而获取重新签名的唯一方法就是提交应用进行审核(将会花7天的时候左右)。攻击者只能提交应用进行审核，如果他们也获得了访问你 iTunes Connect 的 凭证(credentials，帐号？密码？)(这个凭证没有存储在 Git 中，而是在你本地的 Keychain 中)。另外，每一次的构建上传、取消，甚至是你的应用进入审核阶段之前你都会收到通知邮件。&lt;/p&gt;
+
+&lt;h3 id=&#34;development-and-ad-hoc-profiles&#34;&gt;Development and Ad Hoc Profiles&lt;/h3&gt;
+
+&lt;p&gt;通常来说这些 Profiles 是无害的，因为它们签名的应用程序只能安装在小部分的设备上。为了新增设备，攻击者也会需要你的 Apple Developer Portal 的凭证(这个凭证没有存储在 Git 中，而是在你本地的 Keychain 中)。&lt;/p&gt;
+
+&lt;h3 id=&#34;enterprise-profiles&#34;&gt;Enterprise Profiles&lt;/h3&gt;
+
+&lt;p&gt;攻击者可以使用 In-House Profile 来签名应用程序然后分发给潜在的没有数量限制的设备。所有的这些都运行在你的公司名下，最终会导致苹果撤销你的 In-House 账户。然而可以很容易的废除(revoke)证书，然后远程的破坏所有设备上的这个 App 。&lt;/p&gt;
+
+&lt;p&gt;因为 In-House Profile 潜在的危险性，所以我们决定不允许 &lt;code&gt;match&lt;/code&gt; 使用企业账户。&lt;/p&gt;
+
+&lt;p&gt;总结一下：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;你可以完全控制 Git Repo，没有第三方服务的参与&lt;/li&gt;
+&lt;li&gt;即使你的 Certificates 泄漏了，他们没有你的 iTunes Connect 登录凭证也无法引起任何损害&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;match&lt;/code&gt; 现在不支持 In-House Enterprise Profiles ，因为它们太难控制&lt;/li&gt;
+&lt;li&gt;如果你使用 GitHub 或者 Bitbucket 我们强烈鼓励你开启所有访问 Certificates Repo 账户的两部验证&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;match&lt;/code&gt; 的所有的源码都开源在了 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt;Git Hub&lt;/a&gt; 上&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;fastlane-工具链&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt; 工具链&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; &lt;code&gt;deliver&lt;/code&gt; &lt;/a&gt;：将你的应用、截图、元数据上传到App Store&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; &lt;code&gt;snapshot&lt;/code&gt; &lt;/a&gt;：将你iOS应用在每一种设备上进行本地化自动截图&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; &lt;code&gt;frameit&lt;/code&gt; &lt;/a&gt;：快速将你的截图放入到适合的设备框中&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; &lt;code&gt;pem&lt;/code&gt; &lt;/a&gt;：自动生成和更新你的推送通知证书&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; &lt;code&gt;produce&lt;/code&gt; &lt;/a&gt;：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; &lt;code&gt;cert&lt;/code&gt; &lt;/a&gt;：自动创建和维护iOS的 code signing certificates&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; &lt;code&gt;spaceship&lt;/code&gt; &lt;/a&gt;：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; &lt;code&gt;pilot&lt;/code&gt; &lt;/a&gt;：管理你TestFlight测试人员的最好方式，使用终端构建&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; &lt;code&gt;boarding&lt;/code&gt; &lt;/a&gt;：邀请你 TestFlight 的beta测试人员的最简单方式&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; &lt;code&gt;gym&lt;/code&gt; &lt;/a&gt;：构建你iOS应用程序&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; &lt;code&gt;scan&lt;/code&gt; &lt;/a&gt;：为你iOS和Mac应用运行测试的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/supply&#34;&gt; &lt;code&gt;supply&lt;/code&gt; &lt;/a&gt;：将你的Android应用和数据上传到 Google Play&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/screengrab&#34;&gt; &lt;code&gt;screengrab&lt;/code&gt; &lt;/a&gt;：Android版&lt;code&gt;snapshot&lt;/code&gt;，一样的功能&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;帮助&#34;&gt;帮助&lt;/h1&gt;
+
+&lt;p&gt;请提交 issue 到 GitHub，并提供你关于设置的信息。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

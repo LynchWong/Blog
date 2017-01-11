@@ -1,0 +1,996 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Concurrency Programming Guide - Migrating Away from Threads</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="官方文档
+">
+    <meta property="og:description" content="官方文档
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Concurrency Programming Guide - Migrating Away from Threads">
+    <meta property="og:url" content="/2016/01/concurrency-programming-guide---migrating-away-from-threads/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="官方文档
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Concurrency Programming Guide - Migrating Away from Threads
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2016-01-14T13:52:12Z">
+    
+  
+  
+  
+  
+    2016-01-14 13:52:12
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/%e7%bc%96%e7%a8%8b%e6%8c%87%e5%8d%97">编程指南</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW1">官方文档</a>
+</p>
+
+<h1 id="migrating-away-from-threads">Migrating Away from Threads</h1>
+
+<p>(从线程迁移)</p>
+
+<p>将现有线程代码迁移到GCD和操作对象有很多种方法。尽管不是所有的线程代码都能够迁移，但是迁移可能提升性能，并简化你的代码。使用调度队列和操作队列来代替线程拥有许多有点：</p>
+
+<ul>
+<li>不再需要存储线程堆栈到应用程序的内存空间。</li>
+<li>消除了创建和配置线程的代码。</li>
+<li>消除了管理和调度线程工作的代码。</li>
+<li>简化了你要编写的代码。</li>
+</ul>
+
+<p>本章提供了一些技巧和指引，如何使用调度队列和操作队列替换基于线程的代码，并且实现相同的行为。</p>
+
+<h2 id="replacing-threads-with-dispatch-queues">Replacing Threads with Dispatch Queues</h2>
+
+<p>(使用调度队列替换线程)</p>
+
+<p>首先考虑应用可能使用线程的几种方式：</p>
+
+<ul>
+<li>单一任务线程：创建一个线程执行一个单一的任务，当任务完成时释放线程。</li>
+<li>工作线程：创建一个或者多个工作线程执行特定的任务，定期分配任务给每个线程。</li>
+<li>创建一个通用线程池，为每一个线程设置<strong>run loops</strong>。当你有任务要执行的时候，从线程池中抓取一个线程，并分配任务给它。如果没有空闲线程可用，将任务入队列，等待可用的线程。</li>
+</ul>
+
+<p>尽管这些看起来像是不同的技术，但实际上只是相同原理的变种。这些线程都是应用程序用来执行任务的。唯一的区别就是管理线程和任务排队的代码。使用调度队列和操作队列，你可以消除线程和线程间通信的代码，让你专注于要执行的任务。</p>
+
+<p>如果你使用了上面其中一种线程模型，你应该非常了解你应用程序要执行的任务类型。不再是将任务提交到一个你自定义的线程，而是封装在一个操作对象里面或者Block对象里面，然后调度到合适的队列。对于那些没有争议，不需要使用锁的任务，你可以直接使用一下方法进行迁移：</p>
+
+<ul>
+<li>单一任务线程，将任务封装在Block或者操作对象里面，然后提交给并发队列。</li>
+<li>对于工作线程，你需要决定是使用串行的队列还是并发的队列。如果你需要工作线程将特定任务集同步的执行，使用串行队列。如果你使用工作线程执行具体的没有相互依赖的任务，使用并发队列。</li>
+<li>对于线程池，将任务封装到Block或者操作对象，调度给并发队列执行。</li>
+</ul>
+
+<p>当然，这种简单的替换并不适合所有的情形。如果你要执行的任务会争夺共享资源，理想的解决方案就是消除或者最小化资源的争夺。如果你可以重构代码或者重新架构代码来消除共享资源的依赖，这是最完美的。如果不能这样做，或者没有效果，你仍然可以使用队列。队列的一大优势就是提供了可供预测的代码执行。这里的可预测意味着你在不使用锁或者其它重量级的锁机制的情形下仍然可以同步的执行代码。你可以使用队列来替代锁执行一下任务：</p>
+
+<ul>
+<li>如果你的任务必须按照指定顺序执行，提交到串行调度队列。如果你更喜欢使用操作队列，请使用操作对象的依赖确保按照指定的顺序执行。</li>
+<li>如果你使用锁保护共享资源，使用串行队列来执行任何会修改资源的任务。串行队列替代的同步的锁的机制。关于更多摆脱锁的信息，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW3"> Eliminating Lock-Based Code </a>。</li>
+<li>如果你使用<strong>thread joins</strong>来等待后台任务的完成，你可以考虑使用<strong>dispatch groups</strong>替代。你也可以使用一个<strong>NSBlockOperation</strong>对象或者操作对象依赖来实现这些行为。更多关于如何跟踪组的任务执行，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW6"> Replacing Thread Joins </a>。</li>
+<li>如果你使用生产者－消费者算法来管理有限资源池，请考虑改变实现，参考<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW7"> Changing Producer-Consumer Implementations </a>。</li>
+<li>如果你使用线程从描述符读写数据，或者监控文件操作，使用<strong>dispatch sources</strong>，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1"> Dispatch Sources </a>。</li>
+</ul>
+
+<p>记住队列不是替代线程的万能药这点很重要。异步编程模型提供的队列适合延迟无关紧要的场合。虽然队列提供配置任务执行的优先级的方法，但更高的优先级也不能确保任务一定能在特定时间得到执行。因此，线程仍然是实现最小延迟的适当选择，例如音频和视频的播放。</p>
+
+<h2 id="eliminating-lock-based-code">Eliminating Lock-Based Code</h2>
+
+<p>(消除基于锁的代码)</p>
+
+<p>对于线程代码，锁不同线程间同步访问共享资源的一种方式。然而，锁会带来开销。即使不考虑开销的情形下，使用锁也会由性能损失。在竞争的情形下，一个或者多个线程会为了等待锁的释放而阻塞。</p>
+
+<p>使用队列替代锁，消除了锁带来的开销，并且简化了现有代码。你可以创建队列来串行的访问资源，而不是使用锁来保护共享资源。队列的开销和锁不一样。比如，将任务入队列并不会到内核中去获取互斥锁。</p>
+
+<p>当把任务入队列时，你做的主要决定就是同步还是异步。异步提交任务使当前线程在任务执行时继续执行。同步提交任务会阻塞当前线程直到任务完成。两种机制各有用途，不过异步优于同步，尽可能的异步提交。</p>
+
+<p>接下来展示了如何使用基于队列的代码来等价的替换已经存在的基于锁的代码。</p>
+
+<h3 id="implementing-an-asynchronous-lock">Implementing an Asynchronous Lock</h3>
+
+<p>(实现异步锁)</p>
+
+<p>异步锁保护共享资源，也不会阻塞任何修改资源的代码。当你代码的部分工作需要修改一个数据结构的时候你可能会使用异步锁。使用传统的线程，你的实现：获得共享资源的锁，做必要的修改，释放锁，然后继续任务的其它部分的工作。但是，使用调度队列，调用代码可以异步修改，而不需要等待这些修改完成。</p>
+
+<p>Listing 5-1展示了一个异步锁的实现。在这个例子中，受保护的资源定义了自己的串行队列。调用代码提交了一个Block对象到队列，Block包含了对资源必要的修改。因为这个队列是串行执行的，这个资源的修改可以确保按顺序进行；而且任务是异步执行的，调用线程不会阻塞。</p>
+
+<p>Listing 5-1  Modifying protected resources asynchronously</p>
+
+<pre><code>dispatch_async(obj-&gt;serial_queue, ^{
+    // Critical section
+});
+</code></pre>
+
+<h3 id="executing-critical-sections-synchronously">Executing Critical Sections Synchronously</h3>
+
+<p>(同步执行临界区)</p>
+
+<p>如果当前的代码无法继续直到给定的任务完成，你可以使用<strong>dispatch_sync</strong>函数同步提交任务。这个函数将任务添加到调度队列，然后阻塞当前线程，直到任务执行完成。根据你的需要这个队列可以是串行的或者并发的。因为这个函数会阻塞当前线程，所以只在需要的时候使用这个函数。Listing 5-2展示了使用<strong>dispatch_sync</strong>实现临界区的例子。</p>
+
+<p>Listing 5-2  Running critical sections synchronously</p>
+
+<pre><code>dispatch_sync(my_queue, ^{
+    // Critical section
+});
+</code></pre>
+
+<p>如果你已经使用串行队列来保护共享资源，同步提交并不会比异步提交更好的保护资源。同步提交的唯一理由就是阻止当前代码运行直到临界区执行完成。如果你想要马上使用共享资源的一些值，你可能会同步提交。如果当前代码不需要等待临界区执行完成，或者接下来可以简单的提交额外的任务到这个相同的串行队列，通常异步提交更好。</p>
+
+<h2 id="improving-on-loop-code">Improving on Loop Code</h2>
+
+<p>(改进循环代码)</p>
+
+<p>如果你的代码中有循环，每次循环迭代执行的任务是相互独立的，你可以考虑使用<strong>dispatch_apply</strong> 或者 <strong>dispatch_apply_f</strong>函数来替换循环代码。这些函数将循环的迭代分开，然后提交给调度队列处理。当使用并发队列时，可以并发的执行循环中的多个迭代。</p>
+
+<p>调用<strong>dispatch_apply</strong> 和 <strong>dispatch_apply_f</strong>函数是同步的，会阻塞当前线程直到循环所有的迭代都完成。当提交给并发队列时，循坏迭代的顺序是不确定的。运行每个迭代的线程可能会阻塞导致一个迭代在其它迭代之前或者之后完成。因此，你用于每个循环迭代的Block对象或者函数必须是可重入的。</p>
+
+<p>Listing 5-3展示了如何使用GCD等价的替换<strong>for</strong>循环。你传递给<strong>dispatch_apply</strong> 或 <strong>dispatch_apply_f</strong>函数的Block或者函数必须接收一个整型值的参数，用来指示当前的循环迭代。在这个例子中，简单的将循环的次数打印到控制台。</p>
+
+<p>Listing 5-3  Replacing a for loop without striding</p>
+
+<pre><code>queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+dispatch_apply(count, queue, ^(size_t i) {
+    printf(&quot;%u\n&quot;, i);
+});
+</code></pre>
+
+<p>尽管之前的例子很简单，演示了使用调度队列替换<strong>for</strong>循环的基本技术。虽然这是优化基于循环代码的好方法，但是你仍然需要明智的使用这项技术。虽然调度队列的开销非常小，但是在线程上调度每个循环迭代仍然是有开销的。因此，你的循环迭代必须由一定的工作量才能忽略这些开销。你应该使用性能工具找出到底需要执行多大的工作量。</p>
+
+<p>提升每次循环迭代的工作量的方法就是使用跨步。使用跨步时，重写原来的Block代码，执行多个循环迭代。从而减少了你指定给<strong>dispatch_apply</strong>函数的count值。Listing 5-4展示了使用跨步实现Listing 5-3的代码。Block仍然会打印出当前迭代循环的索引，当前跨步是137。(真实的跨步值应该由你基于工作量自己配置。)因为有余值，任何剩余的迭代内联执行。</p>
+
+<p>Listing 5-4  Adding a stride to a dispatched for loop</p>
+
+<pre><code>int stride = 137;
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+
+dispatch_apply(count / stride, queue, ^(size_t idx){
+    size_t j = idx * stride;
+    size_t j_stop = j + stride;
+    do {
+        printf(&quot;%u\n&quot;, (unsigned int)j++);
+    }while (j &lt; j_stop);
+});
+
+size_t i;
+for (i = count - (count % stride); i &lt; count; i++)
+printf(&quot;%u\n&quot;, (unsigned int)i);
+</code></pre>
+
+<p>使用跨步有明确的性能优势，特别是当循环迭代的次数很大的时候。调度少量的Block并发，意味着执行代码花的时间比调度它们的时间更多。正如任何性能指标，你应该多试几次跨步值，找到你代码最高效的那个跨步值。</p>
+
+<h2 id="replacing-thread-joins">Replacing Thread Joins</h2>
+
+<p>(替换Thread Joins)</p>
+
+<p>Thread Joins允许你生成一个或者多个线程，然后让当前线程等待这些线程完成。为了实现一个Thread Joins，父线程创建子线程时作为joinable的线程。如果父线程没有子线程的结果无法继续处理，就可以join子线程。会阻塞父线程直到子线程的任务完成后退出，这时候父线程可以获得子线程的结果然后继续它的工作。父线程可以一次join多个子线程。</p>
+
+<p><strong>Dispatch groups</strong>提供了类似于Thread Joins的语义，但是拥有一些额外的优势。和Thread Joins类似，<strong>Dispatch groups</strong>也能够阻塞一个线程直到一个或者多个子任务执行完成。但是不同于Thread Joins，<strong>Dispatch groups</strong>同时等待所有子任务。因为<strong>Dispatch groups</strong>使用调度队列执行任务，非常高效。</p>
+
+<p>使用<strong>Dispatch groups</strong>替换Thread Joins，步骤如下：</p>
+
+<ol>
+<li>使用<strong>dispatch_group_create</strong>函数创建一个新的<strong>dispatch group</strong>。</li>
+<li>使用<strong>dispatch_group_async</strong> 和 <strong>dispatch_group_async_f</strong>函数给组添加任务。每个提交到组的任务表示你使用joinable线程执行的普通任务。</li>
+<li>如果当前线程不能继续任何工作，调用<strong>dispatch_group_wait</strong>函数等待组。这个函数会阻塞当前线程直到组里所有的任务执行完成。</li>
+</ol>
+
+<p>如果你使用操作对象实现你的任务，你也可以使用依赖实现Thread Joins。不过这时候不是让父线程等待一个或者多个任务完成，而是将父线程的代码移到操作对象中。然后你就可以设置父的操作对象和任意数量的子操作对象之间的依赖，执行joinable线程执行的普通任务。因为父的操作对象在其它操作对象上有依赖，阻止了父操作对象在其它操作完成之前执行。</p>
+
+<p>关于如何使用<strong>dispatch groups</strong>，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW25"> Waiting on Groups of Queued Tasks </a>。关于操作对象之间设置依赖，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW17"> Configuring Interoperation Dependencies </a>。</p>
+
+<h2 id="changing-producer-consumer-implementations">Changing Producer-Consumer Implementations</h2>
+
+<p>(修改生产者－消费者实现)</p>
+
+<p>生产者－消费者模型可以让你管理有限的动态产生的资源。当生产者创建了一个新的资源，一个或者多个消费者等待并消耗这些资源。通常实现生产者－消费者的典型机制是条件或者信号量。</p>
+
+<p>使用条件时，生产者线程通常如下：</p>
+
+<ol>
+<li>使用<strong>pthread_mutex_lock</strong>锁住与条件相关联的mutex。</li>
+<li>产生要消费的资源或者工作。</li>
+<li>使用信号提醒条件变量有资源可以消费了(使用<strong>pthread_cond_signal</strong>)。</li>
+<li>使用<strong>pthread_mutex_unlock</strong>解锁mutex。</li>
+</ol>
+
+<p>对应的消费者线程如下：</p>
+
+<ol>
+<li>使用<strong>pthread_mutex_lock</strong>锁住条件相关的mutex。</li>
+<li>设置一个<strong>while</strong>循环做如下工作：
+
+<ul>
+<li>检查是否有真的有工作在做。</li>
+<li>如果没有工作做(或者没有资源可用)，调用<strong>pthread_cond_wait</strong>阻塞当前线程直到相应的信号触发。</li>
+</ul></li>
+<li>获得生产者提供的工作或资源。</li>
+<li>使用<strong>pthread_mutex_unlock</strong>解锁mutex。</li>
+<li>处理工作。</li>
+</ol>
+
+<p>使用调度队列，你只需要一个调用就可以实现生产者和消费者模型：</p>
+
+<pre><code>dispatch_async(queue, ^{
+    // Process a work item.
+});
+</code></pre>
+
+<p>当你的生产者有工作要做时，只需要将工作添加到队列，并让队列去处理该工作。唯一需要确定的就是队列的类型。如果生产者生成的任务需要特定的执行顺序。你可以使用串行队列。如果生产者生成的任务并发执行，使用并发队列，然后让系统同时尽可能多的执行。</p>
+
+<h2 id="replacing-semaphore-code">Replacing Semaphore Code</h2>
+
+<p>(替换信号量代码)</p>
+
+<p>如果你正在使用信号量来限制共享资源的访问，你应该考虑使用调度信号量来替换。传统的信号量总是需要调用内核来测试信号量。与此相反，调度信号量在用户空间快速测试信号状态，只有测试失败的时候才会调用内核，调用线程需要阻塞。在没有竞争的情形下，调度信号量的行为比传统信号量要快的多。在其它方面，两者的行为是类似的。</p>
+
+<p>关于如何使用调度信号量，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW24"> Using Dispatch Semaphores to Regulate the Use of Finite Resources </a>。</p>
+
+<h2 id="replacing-run-loop-code">Replacing Run-Loop Code</h2>
+
+<p>(替换Run-Loop代码)</p>
+
+<p>如果你使用Run-Loop来管理一个或多个线程执行的工作，你会发现使用队列来实现和维护任务要简单许多。设置一个自定义的Run-Loop需要同时设置底层线程和Run-Loop本身。Run-Loop代码需要包含设置一个或者多个run-loop sources然后编写回调处理到达这些sources上的事件。你可以简单的创建一个串行队列然后调度任务给它。你可以使用一行代码来替换你所有的小城和Run-Loop创建的代码：</p>
+
+<pre><code>dispatch_queue_t myNewRunLoop = dispatch_queue_create(&quot;com.apple.MyQueue&quot;, NULL);
+</code></pre>
+
+<p>因为队列自动执行添加进来的任务，不需要额外的代码来管理队列。你不需要创建或者配置一个线程，也不需要创建或者附加任何的run-loop sources。此外，你还可以通过简单的添加任务到这个队列上来执行其它类型的任务。使用Run-Loop来实现这一点，你需要修改现有的run loop source或者创建一个新的处理新的数据。</p>
+
+<p>Run-Loop的一个常用配置就是处理网络套接字异步到达的数据。为了替代这种行为类型的Run-Loop，你可以附加一个调度源到期望的队列上。调度源同样也提供了比传统run loop sources更多的选择来处理数据。除了处理定时器和网络端口的事件，你也可以使用调度源读写文件。监控文件系统对象，监控进程，以及信号。你甚至可以自定义调度源然后由你部分的异步代码来触发。关于设置调度源的更多信息，参见[ Dispatch Sources ]()。</p>
+
+<h2 id="compatibility-with-posix-threads">Compatibility with POSIX Threads</h2>
+
+<p>(与POSIX线程的兼容性)</p>
+
+<p>因为Grand Central Dispatch管理你提供的任务之间的关系以及运行任务的线程，通常你应该避免在任务代码中调用POSIX线程事务。如果由于一些原因你必须调用，你应该非常小心你调用的事务。接下来的部分给你提供了那些事务在你任务代码中调用是安全的，哪些是不安全的。这个列表是未完成的，但是应该提示你哪些调用是安全的，哪些不是。</p>
+
+<p>通常来说，你的应用程序不能删除或者改变不是自己创建的对象和数据结构。因此，调度队列执行的Block对象不能调用如下函数：</p>
+
+<pre><code>pthread_detach
+pthread_cancel
+pthread_join
+pthread_kill
+pthread_exit
+</code></pre>
+
+<p>虽然在任务运行的时候修改线程的状态是可以的，你必须在任务返回之前还原线程原来的状态。只要你还原了线程原来的状态，调用如下的函数就是安全的：</p>
+
+<pre><code>pthread_setcancelstate
+pthread_setcanceltype
+pthread_setschedparam
+pthread_sigmask
+pthread_setspecific
+</code></pre>
+
+<p>用来执行给定Block的底层线程在多次调用间会发生改变。因此，你的应用程序不应该依赖于如下函数与调用Block之间的返回值信息：</p>
+
+<pre><code>pthread_self
+pthread_getschedparam
+pthread_get_stacksize_np
+pthread_get_stackaddr_np
+pthread_mach_thread_np
+pthread_from_mach_thread_np
+pthread_getspecific
+</code></pre>
+
+<p><strong>重要</strong>：Block必须捕获和禁止任何在其中抛出的语言级别的异常。Block执行期间的其它错误也应该由Block处理或者通知应用程序。</p>
+
+<p>更多关于POSIX线程的信息以及这里提到的函数，参见<a href="https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man3/pthread.3.html#//apple_ref/doc/man/3/pthread"> pthread </a>主页。</p>
+
+<p>================= 结束 =================</p>
+
+<p>到这里就结束了，官方文档最后一章是名词解释，这里就不翻译了。<a href="https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Glossary/Glossary.html#//apple_ref/doc/uid/TP40008091-CH104-SW2"> Glossary </a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/url-session-programming-guide---introduction/" data-tooltip="URL Session Programming Guide - Introduction">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/concurrency-programming-guide---dispatch-sources/" data-tooltip="Concurrency Programming Guide - Dispatch Sources">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---migrating-away-from-threads%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---migrating-away-from-threads%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---migrating-away-from-threads%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/url-session-programming-guide---introduction/" data-tooltip="URL Session Programming Guide - Introduction">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2016/01/concurrency-programming-guide---dispatch-sources/" data-tooltip="Concurrency Programming Guide - Dispatch Sources">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---migrating-away-from-threads%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---migrating-away-from-threads%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---migrating-away-from-threads%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---migrating-away-from-threads%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---migrating-away-from-threads%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2016%2f01%2fconcurrency-programming-guide---migrating-away-from-threads%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2016\/01\/concurrency-programming-guide---migrating-away-from-threads\/';
+          
+            this.page.identifier = '\/2016\/01\/concurrency-programming-guide---migrating-away-from-threads\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

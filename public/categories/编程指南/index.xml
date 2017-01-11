@@ -1,0 +1,2552 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>编程指南 on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/categories/%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/index.xml</link>
+    <description>Recent content in 编程指南 on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/categories/%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Advanced Memory Management Programming Guide - Using Autorelease Pool Blocks</title>
+      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---using-autorelease-pool-blocks/</link>
+      <pubDate>Sun, 28 Feb 2016 15:03:32 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---using-autorelease-pool-blocks/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmAutoreleasePools.html#//apple_ref/doc/uid/20000047-CJBFBEDI&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;using-autorelease-pool-blocks&#34;&gt;Using Autorelease Pool Blocks&lt;/h1&gt;
+
+&lt;p&gt;(使用Autorelease池)&lt;/p&gt;
+
+&lt;p&gt;Autorelease池为你提供了延迟释放对象所有权的机制，避免了对象立即被dealloc(比如方法中返回的对象)。通常，你不需要创建你自己的Autorelease池，但个别情况下你必须或者最好这么做。&lt;/p&gt;
+
+&lt;h2 id=&#34;about-autorelease-pool-blocks&#34;&gt;About Autorelease Pool Blocks&lt;/h2&gt;
+
+&lt;p&gt;(关于Autorelease池)&lt;/p&gt;
+
+&lt;p&gt;Autorelease池的代码块用@autoreleasepool标识，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@autoreleasepool {
+    // Code that creates autoreleased objects.
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Autorelease池代码块的最后，对象会接收autorelease消息。&lt;/p&gt;
+
+&lt;p&gt;和其他代码块类似，Autorelease池代码块也可以被嵌套：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@autoreleasepool {
+    // . . .
+    @autoreleasepool {
+        // . . .
+    }
+    . . .
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(正常情况下你不会看见如上所示的代码，通常一个资源文件中的Autorelease池代码块中的代码会调用其他资源文件中的代码，这些代码可能包含了其他的Autorelease池代码块。)当发送autorelease消息时，发送autorelease消息的对应的Autorelease池的代码块会发送release消息。&lt;/p&gt;
+
+&lt;p&gt;Cocoa总是期望代码在Autorelease池代码块中执行，否则autorelease的对象不会被release导致你应用程序内存泄漏。(如果你在Autorelease池代码块之外发送autorelease消息，Cocoa会打印一个适当的错误消息。)AppKit和UIKit框架自动在每个消息循环的开始都创建一个池(比如鼠标按下事件、触摸事件)并在结尾处销毁这个池。正因为如此，你实际上不需要创建Autorelease池，甚至不需要知道创建Autorelease池的代码如何写。下面三种情形，你应该使用自己的Autorelease池：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;如果你写的程序，不是基于UI framework，比如命令行程序。&lt;/li&gt;
+&lt;li&gt;如果你写循环的时候创建了大量的临时对象。你可以在循环体内使用Autorelease池在下一次循环开始前销毁这些对象。这样可以减少你的应用程序对内存的占用峰值。&lt;/li&gt;
+&lt;li&gt;如果你发送了一个secondary线程(main线程之外的线程)。你必须在线程的最初执行代码中创建Autorelease池；否则你的应用程序就内存泄漏了。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;use-local-autorelease-pool-blocks-to-reduce-peak-memory-footprint&#34;&gt;Use Local Autorelease Pool Blocks to Reduce Peak Memory Footprint&lt;/h2&gt;
+
+&lt;p&gt;(使用本地Autorelease池减少内存占用峰值)&lt;/p&gt;
+
+&lt;p&gt;许多程序使用的临时对象都是autorelease的，这些对象是会占用内存的。要想减少对内存的占用峰值，就应该使用本地的Autorelease池。当池被销毁时，那些对象被release，进而系统占用内存情况得以改善。&lt;/p&gt;
+
+&lt;p&gt;下面的例子，在for循环中使用了本地Autorelease池：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSArray *urls = &amp;lt;# An array of file URLs #&amp;gt;;
+for (NSURL *url in urls) {
+
+    @autoreleasepool {
+        NSError *error;
+        NSString *fileContents = [NSString stringWithContentsOfURL:url
+                                                          encoding:NSUTF8StringEncoding error:&amp;amp;error];
+        /* Process the string, creating and autoreleasing more objects. */
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;for循环每次处理一个文件。任何对象(比如fileContents)在Autorelease池中都会发送一个autorelease消息，存放于池中。当池在单次循环结束时，进行销毁，这些对象也就release了。&lt;/p&gt;
+
+&lt;p&gt;在Autorelease池之后，那些曾经收到autorelease消息的对象，只能视为失效，而不要再给他们发消息，或者把他们作为返回值进行返回。如果你必须在Autorelease池代码块之后使用某个对象，你可以先发送一个retain消息，然后在Autorelease池代码块之后发送autorelease消息，如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;– (id)findMatchingObject:(id)anObject {
+
+    id match;
+    while (match == nil) {
+        @autoreleasepool {
+
+            /* Do a search that creates a lot of temporary objects. */
+            match = [self expensiveSearchForObject:anObject];
+
+            if (match != nil) {
+                [match retain]; /* Keep match around. */
+            }
+        }
+    }
+
+    return [match autorelease];   /* Let match go and return it. */
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Autorelease池代码块中给match发送retain，然后在Autorelease池代码块之后发送autorelease，这样延长了match的生命周期。允许match在循环之外接收消息，并且返回给findMatchingObject:方法的调用者。&lt;/p&gt;
+
+&lt;h2 id=&#34;autorelease-pool-blocks-and-threads&#34;&gt;Autorelease Pool Blocks and Threads&lt;/h2&gt;
+
+&lt;p&gt;(Autorelease池和线程)&lt;/p&gt;
+
+&lt;p&gt;Cocoa应用程序里的每一个线程都维护的自己的Autorelease池的栈。如果你写的程序仅仅是一个基于Foundation的程序，或者你要detach一个线程，你需要创建你自己的Autorelease池。&lt;/p&gt;
+
+&lt;p&gt;如果你的程序或者线程是长期运行，可能会产生大量的临时对象，你应该使用Autorelease池(就像AppKit和UIKit在主线程上做的那样)；否则autorelease对象就会积累并消耗掉大量内存。如果你detach线程不调用Cocoa，你就不必使用Autorelease池。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;如果你使用POSIX线程API创建secondary线程，而不是NSThread，你不能使用Cocoa，除非Cocoa处于多线程模式。Cocoa只有在detach它的第一个NSThread对象之后，才能进入多线程模式。为了在secondary POSIX线程上使用Cocoa，你的应用程序首先要做的是detach至少一个NSThread对象，然后立刻结束这个线程。你可以使用NSThread的类方法isMultiThreaded来检测Cocoa是否处于多线程模式。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Advanced Memory Management Programming Guide - Practical Memory Management</title>
+      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---practical-memory-management/</link>
+      <pubDate>Sun, 28 Feb 2016 15:03:11 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---practical-memory-management/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW1&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;practical-memory-management&#34;&gt;Practical Memory Management&lt;/h1&gt;
+
+&lt;p&gt;(内存管理实战)&lt;/p&gt;
+
+&lt;p&gt;我们前面介绍了内存管理策略的一些基本概念。这些概念非常简单直接，但有些实战方面的做法可以使得内存管理更加容易，进而保证你的应用稳定而健壮，减少对系统资源的占用。&lt;/p&gt;
+
+&lt;h2 id=&#34;use-accessor-methods-to-make-memory-management-easier&#34;&gt;Use Accessor Methods to Make Memory Management Easier&lt;/h2&gt;
+
+&lt;p&gt;(使用访问方法使得内存管理更加容易)&lt;/p&gt;
+
+&lt;p&gt;如果你的类的属性是对象，你必须保证这个对象的值在你使用它的时候没有被dealloc。所以你必须在设置值的时候获得该对象的所有权。你还必须保证对这些对象所有权的放弃。&lt;/p&gt;
+
+&lt;p&gt;这个工作看似非常枯燥乏味，如果你坚持用访问方法，那么内存管理出现问题的几率就大大减少了。如果你在代码中对成员变量到处用retain和release，那么你基本上是做错了。&lt;/p&gt;
+
+&lt;p&gt;我们假定有一个Counter对象，你用它来实现计数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface Counter : NSObject
+@property (nonatomic, retain) NSNumber *count;
+@end;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个属性声明了两个访问方法。通常而言，这些方法由编译器来合成，但如果你知道这些方法是如何实现的，还是会帮助你理解问题的。&lt;/p&gt;
+
+&lt;p&gt;在get访问器中，就是返回实例变量，所以没有retain或者release。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (NSNumber *)count {
+    return _count;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在set访问器中，如果其他的人和我们使用相同的规则，那么你必须假设新的count可能会随时被dealloc。因此你必须通过发送retain消息来取得新的count的所有权，进而确保dealloc不会发生。你还必须对旧值发送release消息。在Objective-C中给nil发送消息是没有问题的，因此就算没有设置_count，这个方法的实现仍旧可以工作。你必须在[newCount retain]之后对旧值发送release。如果新值和旧值是同一个对象，如果你先release了，然后再retain，恐怕为时已晚。因为对象已经dealloc了，retain没用了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)setCount:(NSNumber *)newCount {
+    [newCount retain];
+    [_count release];
+    // Make the new assignment.
+    _count = newCount;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;use-accessor-methods-to-set-property-values&#34;&gt;Use Accessor Methods to Set Property Values&lt;/h3&gt;
+
+&lt;p&gt;(使用访问器方法来设置属性的值)&lt;/p&gt;
+
+&lt;p&gt;假设你要实现一个方法来复位计数器。有好几个可行的方法。第一种方法就是使用alloc创建NSNumber实例，然后调用release，使引用计数平衡。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)reset {
+    NSNumber *zero = [[NSNumber alloc] initWithInteger:0];
+    [self setCount:zero];
+    [zero release];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;第二种方法是使用便利方法创建一个新的NSNumber对象。所以就不需要release和retain消息。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)reset {
+    NSNumber *zero = [NSNumber numberWithInteger:0];
+    [self setCount:zero];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意上面都用了set访问器。&lt;/p&gt;
+
+&lt;p&gt;下面的做法对于简单的情况而言肯定是没问题的。但是，它的实现绕开了set方法，这样做在特定情况下会导致内存泄漏(比如，当你忘了retain或者release，或者这个变量的内存管理发生了变化)。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)reset {
+    NSNumber *zero = [[NSNumber alloc] initWithInteger:0];
+    [_count release];
+    _count = zero;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;还需要注意的是，如果你使用key-value observing，那么这种对于值的复位就跟KVO不兼容了。&lt;/p&gt;
+
+&lt;h3 id=&#34;don-t-use-accessor-methods-in-initializer-methods-and-dealloc&#34;&gt;Don’t Use Accessor Methods in Initializer Methods and dealloc&lt;/h3&gt;
+
+&lt;p&gt;(不要在初始化方法和dealloc方法中使用访问器方法)&lt;/p&gt;
+
+&lt;p&gt;不允许使用访问器方法来设置实例变量的地方就是初始化方法和dealloc方法。我们使用一个表示零的number对象来初始化一个counter对象，你可能会如下实现init方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- init {
+    self = [super init];
+    if (self) {
+        _count = [[NSNumber alloc] initWithInteger:0];
+    }
+    return self;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了让counter初始化为非0值，你可以实现一个initWithCount:方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- initWithCount:(NSNumber *)startingCount {
+    self = [super init];
+    if (self) {
+        _count = [startingCount copy];
+    }
+    return self;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为Counter类有一个成员对象实例，你就必须实现dealloc方法。这个方法通过发release消息来放弃对于所有其他对象的所有权，然后，在最后时刻调用super的实现：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)dealloc {
+    [_count release];
+    [super dealloc];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;use-weak-references-to-avoid-retain-cycles&#34;&gt;Use Weak References to Avoid Retain Cycles&lt;/h2&gt;
+
+&lt;p&gt;(使用弱引用来避免retain环)&lt;/p&gt;
+
+&lt;p&gt;Retain一个对象实际上是对一个对象的强引用。一个对象在所有的强引用解除之前是不能被dealloc的，这导致一个“环形持有”的问题：两个对象相互强引用(可能是直接引用，也可能是通过其他对象间接地引用)。&lt;/p&gt;
+
+&lt;p&gt;下图的所示的对象关系就构成了一个环形持有。Document对象持有多个Page对象，每个Page对象又具有一个Document引用来指示它归属的文档。如果Document对象有Page的强引用，Page对象有Document的强引用，这样每个对象都不能被dealloc。在Page对象release之前Document对象的引用计数不能变为0，而如果Document对象存在，Page对象也无法被release。&lt;/p&gt;
+
+&lt;p&gt;Figure 1  An illustration of cyclical references&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/PracticalMemoryManagement/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;解决环形持有的问题就是使用弱引用。所谓的弱引用，就是一种非持有的关系，源对象不会对它引用的对象进行持有。&lt;/p&gt;
+
+&lt;p&gt;为了实现上面的对象图，肯定是需要强引用的(如果只有弱引用，那么Page和Paragraph就没有了拥有者，就会被dealloc)。Cocoa设定了一个规则，那就是：父对象建立对子对象的强引用，而子对象只对父对象建立弱引用。&lt;/p&gt;
+
+&lt;p&gt;所以，在Figure 1中，document对象有对page对象的强引用，但是page对象有对document对象的弱引用。&lt;/p&gt;
+
+&lt;p&gt;Cocoa中弱引用的例子包括但不局限于：table data sources，outline view items，notification observers，miscellaneous targets和delegates。&lt;/p&gt;
+
+&lt;p&gt;当给弱引用的对象发送消息时需要小心。如果你给一个dealloc的弱引用对象发送消息，应用程序会崩溃。因此你必须判断对象是否有效。多数情况下，被弱引用的对象是知道其他对象对它的弱引用(比如环形持有的情形)，所以需要通知其他对象它自己的dealloc。比如，当你向Notification Center注册一个对象时，Notification Center对这个对象是弱引用的，并且在有消息需要通知到这个对象时，就发送消息给这个对象。当这个对象dealloc的时候，你必须向Notification Center取消这个对象的注册。这样，这个Notification Center就不会再发送消息给这个不存在的对象了。同样，当一个delegate对象被dealloc的时候，必须向其他对象发送一个setDelegate:消息，并传递nil参数，从而将代理的关系撤销。这些消息通常在对象的dealloc方法中发出。&lt;/p&gt;
+
+&lt;h2 id=&#34;avoid-causing-deallocation-of-objects-you-re-using&#34;&gt;Avoid Causing Deallocation of Objects You’re Using&lt;/h2&gt;
+
+&lt;p&gt;(避免dealloc你正在使用的对象)&lt;/p&gt;
+
+&lt;p&gt;Cocoa的所有权策略时这么说的：返回的对象，在调用者的调用方法中，始终保持有效。所以说，在当前方法内部，不必担心你收到的返回对象会被dealloc。对于你的代码而言，通过getter方法收到的返回对象是一个被缓存的实例，还是计算出来的实例。这并不重要，重要的是这个对象在你使用它的时候会一直有效。&lt;/p&gt;
+
+&lt;p&gt;这个策略并非放之四海而皆准，在有些情况下是特列，特别是下面两种情况：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;当一个对象从fundamental的集合类中删除的时候。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;heisenObject = [array objectAtIndex:n];
+[array removeObjectAtIndex:n];
+// heisenObject could now be invalid.
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;当一个对象从集合中删除的时候，系统会立刻调用对象的release方法(而不是autorelease)。如果这时候，这个集合是该对象的唯一属主，那么这个对象(本例中的heisenObject)会立刻被dealloc。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;当父对象被dealloc的时候：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;id parent = &amp;lt;#create a parent object#&amp;gt;;
+// ...
+heisenObject = [parent child] ;
+[parent release]; // Or, for example: self.parent = nil;
+// heisenObject could now be invalid.
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;有时候你从一个对象获取另外一个对象，然后直接或者间接的release了父对象。如果对父对象的release造成了它被dealloc，且这时候该父对象恰好是子对象的唯一属主，那么子对象(本例中的heisenObject)会同时也被dealloc(这里我们假定在父对象的dealloc方法中，对子对象发送的是release消息，而非autorelease)。&lt;/p&gt;
+
+&lt;p&gt;在这些情况下，你retain接收的heisenObject对象，然后完成工作后release。比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;heisenObject = [[array objectAtIndex:n] retain];
+[array removeObjectAtIndex:n];
+// Use heisenObject...
+[heisenObject release];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;don-t-use-dealloc-to-manage-scarce-resources&#34;&gt;Don’t Use dealloc to Manage Scarce Resources&lt;/h2&gt;
+
+&lt;p&gt;(不要使用dealloc来管理稀缺资源)&lt;/p&gt;
+
+&lt;p&gt;通常，你不应该在dealloc方法中管理稀缺资源，比如文件句柄、网络连接、缓存等。更具体的说，你不可能设计出一个类，你想让系统什么时候调用dealloc，系统就什么时候调用(因为你能做的就是release，至于release是否会导致系统一定调用dealloc，还要看这个对象有没有其他属主)。因为系统性能的下降、系统自身的BUG，有可能dealloc的调用被推迟搁置。&lt;/p&gt;
+
+&lt;p&gt;正确的做法是，如果你的对象管理了稀缺资源，它就必须知道它什么时候不再需要这些资源，并在此时立即释放资源。通常情况下，此时你会调用release来dealloc，但是因为此前你已经释放了资源，这里就不会遇到任何问题。&lt;/p&gt;
+
+&lt;p&gt;如果你把资源管理的职能交给dealloc，那么会暴露很多问题，比如：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;对象图的拆除顺序。
+实际上，对象图的拆除是没有任何顺序保证的。也许你认为、你希望有一个具体明确的顺序，但事实是没有。如果对象被放到了autorelease池，这个拆除的过程也会发生变化，并导致你无法预见的后果。&lt;/li&gt;
+&lt;li&gt;系统稀缺资源不能回收。
+内存泄漏是BUG，应该被修复，但这个问题不是立即就暴露出来的。如果没有保留的时候，你认为某个资源已经释放，而实际上没有释放，你就会面临更加严重的问题了。比如，如果文件句柄被用光了，其结果将是你无法保存数据。&lt;/li&gt;
+&lt;li&gt;清除逻辑在错误的线程上执行。
+如果对象在一个不确定的时刻被放到了autorelease池中，它将被线程池中的线程来dealloc。这对于有些只能由单一线程来访问的资源而言，是致命的错误。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;collections-own-the-objects-they-contain&#34;&gt;Collections Own the Objects They Contain&lt;/h2&gt;
+
+&lt;p&gt;(集合拥有包含对象的所有权)&lt;/p&gt;
+
+&lt;p&gt;当你把一个对象添加到集合容器中(比如数组array、字典dictionary、集合set)，容器就会取得对象的所有权。当容器自己release的时候，或者对象从容器中删除时，容器会放弃该对象的所有权。比如，如果要建一个存放数字的数组，你可以按下面方法来做：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSMutableArray *array = &amp;lt;#Get a mutable array#&amp;gt;;
+NSUInteger i;
+// ...
+for (i = 0; i &amp;lt; 10; i++) {
+    NSNumber *convenienceNumber = [NSNumber numberWithInteger:i];
+    [array addObject:convenienceNumber];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这时你并没有使用alloc，因此你也不必使用release。你不需要调用新数值的retain，因为数组会这么做。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSMutableArray *array = &amp;lt;#Get a mutable array#&amp;gt;;
+NSUInteger i;
+// ...
+for (i = 0; i &amp;lt; 10; i++) {
+    NSNumber *allocedNumber = [[NSNumber alloc] initWithInteger:i];
+    [array addObject:allocedNumber];
+    [allocedNumber release];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这种做法，我们在for循环内部向allocedNumber发送了与alloc相对应的release消息。因为Array的addObject:方法实际上对这个对象做了retain处理，那么这个对象(allocedNumber)不会因此而被dealloc。&lt;/p&gt;
+
+&lt;p&gt;我们换位思考一下，假定你自己就是这个集合类的作者。你要确保加入的对象只要继续存在于集合里，就不应该被dealloc，因此你在添加这个对象时，向它发送了retain消息，删除这个对象时，向它发送了release消息。当你这个集合类自己dealloc时，对容器内所有的对象发送release消息。&lt;/p&gt;
+
+&lt;h2 id=&#34;ownership-policy-is-implemented-using-retain-counts&#34;&gt;Ownership Policy Is Implemented Using Retain Counts&lt;/h2&gt;
+
+&lt;p&gt;(所有权策略通过引用计数来实现)&lt;/p&gt;
+
+&lt;p&gt;所有权策略是通过引用计数来实现的，通常称之为“retain count”。每个对象都有一个retain count。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当你创建一个对象时，它的retain count为1。&lt;/li&gt;
+&lt;li&gt;当你给对象发送retain消息，它的retain count增加1。&lt;/li&gt;
+&lt;li&gt;当你给对象发送release消息，它的retain count减少1。当你给对象发送autorelease消息，它的retain count将在未来某个时候减1。&lt;/li&gt;
+&lt;li&gt;如果对象的retain count减少到0，它就会被dealloc。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;重要：&lt;/strong&gt;其实你应该没有理由想知道一个对象的retain count。这个数值有时候会对你造成误导：实际上你不知道哪些框架retain了你感兴趣的对象。在调试内存问题的时候，你只需要遵守所有权规则就行了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Advanced Memory Management Programming Guide - Memory Management Policy</title>
+      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---memory-management-policy/</link>
+      <pubDate>Sun, 28 Feb 2016 15:02:46 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---memory-management-policy/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmRules.html#//apple_ref/doc/uid/20000994-BAJHFBGH&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;memory-management-policy&#34;&gt;Memory Management Policy&lt;/h1&gt;
+
+&lt;p&gt;(内存管理策略)&lt;/p&gt;
+
+&lt;p&gt;通过引用计数来进行内存管理的基本模型是由NSObject协议中的方法以及标准的方法命名规范来提供的。NSObject还定义了一个dealloc方法，该方法会在对象需要析构的时候自动调用。本文描述了在Cocoa程序中正确管理内存的基本规则，并提供了正确的示例。&lt;/p&gt;
+
+&lt;h2 id=&#34;basic-memory-management-rules&#34;&gt;Basic Memory Management Rules&lt;/h2&gt;
+
+&lt;p&gt;(基本内存管理规则)&lt;/p&gt;
+
+&lt;p&gt;内存管理的模型是基于对象所有权的。任何对象都可以有一个或者多个所有者。当对象至少有一个所有者的时候，对象就会继续存在。如果一个对象没有所有者，运行时系统就会自动析构它。为了清晰的描述你何时拥有一个对象、何时放弃所有权，Cocoa遵循如下策略：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;你拥有你所创建的对象&lt;/strong&gt;：你如果用下面字幕作为开头的方法来创建对象，那么你拥有这个对象，alloc，new，copy，mutableCopy。比如，alloc、newObject、或者mutableCopy。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;你可以使用retain来实现对一个对象的所有权&lt;/strong&gt;：如果你在一个方法体中，得到了一个对象，那么这个对象在本方法内部是一直都有效的。而且你还可以在本方法中将这个对象作为返回值返回给方法的调用者。在下面两种情况下，你需要用retain：1.在访问方法(getter、setter)或者init方法中，你希望将得到的返回对象作为成员变量(property)来存储。2.在执行某些操作时，你担心在过程中对象变得无效。(在&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/20000043-1000922&#34;&gt; Avoid Causing Deallocation of Objects You’re Using &lt;/a&gt;中解释)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;当你不再需要一个对象时，你必须放弃对对象的所有权&lt;/strong&gt;：通过向对象发送release或者autorelease消息来放弃所有权。用Cocoa的术语说，所谓放弃所有权，就是release一个对象。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;你不能放弃你没有拥有的对象的所有权&lt;/strong&gt;：这一点跟上一条对应，无需多言。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;a-simple-example&#34;&gt;A Simple Example&lt;/h3&gt;
+
+&lt;p&gt;(简单例子)&lt;/p&gt;
+
+&lt;p&gt;下面的代码做了示范：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+    Person *aPerson = [[Person alloc] init];
+    // ...
+    NSString *name = aPerson.fullName;
+    // ...
+    [aPerson release];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里的Person对象使用alloc初始化，然后用release消息来释放。Person的name因为不是使用所有权的方法得来的，所以不必release。请注意，这里使用的是release，而非autorelease。&lt;/p&gt;
+
+&lt;h3 id=&#34;use-autorelease-to-send-a-deferred-release&#34;&gt;Use autorelease to Send a Deferred release&lt;/h3&gt;
+
+&lt;p&gt;(使用autorelease延时release)&lt;/p&gt;
+
+&lt;p&gt;当你需要延时release方式时，就需要autorelease了，特别是当你从方法中返回一个对象的时候，比如，你可以这样来实现fullName方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (NSString *)fullName {
+    NSString *string = [[[NSString alloc] initWithFormat:@&amp;quot;%@ %@&amp;quot;,
+                         self.firstName, self.lastName] autorelease];
+    return string;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你拥有alloc返回的string，所以你有该对象的所有权。为了遵守内存管理规则，你必须在失去引用前放弃该对象的所有权。如果你使用release，那么string在返回前就释放了(该方法就会返回一个无效的对象)。使用autorelease来声明(这里仅仅是一种意愿的表达，而非实际放弃的动作。)我们对所有权的放弃，但是同时允许fullName方法的调用者在返回的string释放前使用返回的string对象。&lt;/p&gt;
+
+&lt;p&gt;你也可以如下实现这个方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (NSString *)fullName {
+    NSString *string = [NSString stringWithFormat:@&amp;quot;%@ %@&amp;quot;,
+                        self.firstName, self.lastName];
+    return string;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据基本规则，你并不拥有stringWithFormat:方法返回的string，所以你可以安全的返回这个string。&lt;/p&gt;
+
+&lt;p&gt;下面的实现是错误的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (NSString *)fullName {
+    NSString *string = [[NSString alloc] initWithFormat:@&amp;quot;%@ %@&amp;quot;,
+                        self.firstName, self.lastName];
+    return string;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据方法的命名规范，从这个方法的名字(fullName)看不出fullName方法的调用者将拥有返回的对象(译者:因为它并没有以 alloc、 new、 init 等开头)。因此，该方法的调用者自然也没有理由来release这个返回的string。最终导致内存泄漏。&lt;/p&gt;
+
+&lt;h3 id=&#34;you-don-t-own-objects-returned-by-reference&#34;&gt;You Don’t Own Objects Returned by Reference&lt;/h3&gt;
+
+&lt;p&gt;(通过引用返回的对象，你没有所有权)&lt;/p&gt;
+
+&lt;p&gt;Cocoa中的一些方法是通过指定引用来返回对象(即，这些方法接收ClassName **或者id *类型的参数)。常见的情形就是当出现错误时，一个NSError对象来承载错误的信息。比如initWithContentsOfURL:options:error:和initWithContentsOfFile:encoding:error:。&lt;/p&gt;
+
+&lt;p&gt;在这些情形下，我们前面说的规则依然有效，当你调用这类方法的时候，你没有创建NSError对象，所以你没有对它的所有权，也不必release它。如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSString *fileName = &amp;lt;#Get a file name#&amp;gt;;
+NSError *error;
+NSString *string = [[NSString alloc] initWithContentsOfFile:fileName
+                                                   encoding:NSUTF8StringEncoding error:&amp;amp;error];
+if (string == nil) {
+    // Deal with error...
+}
+// ...
+[string release];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;implement-dealloc-to-relinquish-ownership-of-objects&#34;&gt;Implement dealloc to Relinquish Ownership of Objects&lt;/h2&gt;
+
+&lt;p&gt;(实现dealloc来放弃对象的所有权)&lt;/p&gt;
+
+&lt;p&gt;NSObject类定义了一个名为dealloc的方法，这个方法在对象没有所有者，内存回收的时候会由系统自动调用。用Cocoa的术语就是freed或者deallocated。dealloc方法的作用就是释放对象的内存，并弃掉它持有的任何资源&amp;ndash;以及它对其他任何实例变量对象的所有权。&lt;/p&gt;
+
+&lt;p&gt;下面的例子示范了你应该如何实现Person类的dealloc方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface Person : NSObject
+@property (retain) NSString *firstName;
+@property (retain) NSString *lastName;
+@property (assign, readonly) NSString *fullName;
+@end
+
+@implementation Person
+// ...
+- (void)dealloc
+[_firstName release];
+[_lastName release];
+[super dealloc];
+}
+@end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;重要：&lt;/strong&gt;永远不要直接调用另一个对象的dealloc方法。你必须在尾部调用super类的实现。你不可以把系统的资源和对象的生命周期进行绑定，参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW13&#34;&gt; Don’t Use dealloc to Manage Scarce Resources &lt;/a&gt;(就是说你不能等到对象dealloc时才放弃对关键系统资源的独占，后面就是原因)。当一个应用程序终止时，对象可能不会发送dealloc消息。因为进程的内存在退出时会自动回收，与调用所有对象的内存管理的方法的方式比起来，操作系统的这种做法是高效率的。&lt;/p&gt;
+
+&lt;h2 id=&#34;core-foundation-uses-similar-but-different-rules&#34;&gt;Core Foundation Uses Similar but Different Rules&lt;/h2&gt;
+
+&lt;p&gt;(Core Foundation使用类似但却不同的规则)&lt;/p&gt;
+
+&lt;p&gt;Core Foundation的对象采用了类似的内存管理方式(参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFMemoryMgmt/CFMemoryMgmt.html#//apple_ref/doc/uid/10000127i&#34;&gt; Memory Management Programming Guide for Core Foundation &lt;/a&gt;)。Cocoa和Core Foundation在命名规则上是不同的。具体说，Core Foundation的创建规则不适用于返回Objective-C对象的那些方法。比如下面的代码片段中，你没有责任或义务来释放对myInstance的所有权：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MyClass *myInstance = [MyClass createInstance];
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Advanced Memory Management Programming Guide - Introduction</title>
+      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---introduction/</link>
+      <pubDate>Sun, 28 Feb 2016 15:02:20 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---introduction/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011-SW1&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;说明：网上能找到《iOS高级内存管理编程指南》，主要就是参考的这篇。基本上也就是照着这篇把原文过了一遍，做了一些整理。&lt;/p&gt;
+
+&lt;h1 id=&#34;about-memory-management&#34;&gt;About Memory Management&lt;/h1&gt;
+
+&lt;p&gt;(关于内存管理)&lt;/p&gt;
+
+&lt;p&gt;应用程序的内存管理是一个在程序运行时进行内存分配、使用、结束时释放内存的过程。一个书写良好的应用程序会尽可能少的使用内存。在Objective-C中，这个过程也是一个在很多代码片段或者数据中传播有限内存资源的“所有权”的方式。在完成本指南之后，你可以“显式地”管理对象的生命周期，并在不用的时候释放他们。&lt;/p&gt;
+
+&lt;p&gt;尽管内存管理通常认为是在单个独立对象层面上考虑，但是我们的任务实际上是管理“对象图”。你需要确保除了你真的需要的对象之外，内存中没有其它的对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/MemoryManagementProgrammingGuideIntroduction/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;at-a-glance&#34;&gt;At a Glance&lt;/h2&gt;
+
+&lt;p&gt;(概览)&lt;/p&gt;
+
+&lt;p&gt;Objective-C提供了两种应用程序内存管理方式：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在本指南中描述的方式被称为“manual retain-release”或者MRR，你通过跟踪你拥有的对象显式地管理内存。这种方式通过“引用计数”模型来实现，该模型由Foundation框架的NSObject类和运行时环境共同提供。&lt;/li&gt;
+&lt;li&gt;自动引用计数，或ARC，使用于MRR相同的引用计数系统，但是在编译时插入了内存管理的方法。对于新的项目强烈建议使用ARC。如果你使用ARC，你就不需要明白文档中描述的底层实现了，尽管在有些情形下很有用。更多关于ARC的信息，参见&lt;a href=&#34;https://developer.apple.com/library/ios/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011226&#34;&gt; Transitioning to ARC Release Notes &lt;/a&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;good-practices-prevent-memory-related-problems&#34;&gt;Good Practices Prevent Memory-Related Problems&lt;/h3&gt;
+
+&lt;p&gt;(防止内存泄漏的最佳实践)&lt;/p&gt;
+
+&lt;p&gt;错误的内存管理主要包含两类：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;释放或者覆盖正在使用中的数据。造成内存异常，通常导致程序崩溃，甚至导致数据损坏。&lt;/li&gt;
+&lt;li&gt;不用的数据不释放，导致内存泄漏。内存泄漏就是分配了内存，但是不释放，尽管再也不会使用。内存泄漏导致你的应用程序占用越来越多的内存，可能会导致系统性能下降，或导致应用程序被终止。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果你总是考虑内存管理的实现细节，而不是你实际的管理目标，那么你会感觉到从“引用计数”的角度理解内存管理实际是极其困难的。所以，你真正应该考虑的是对象的所有权以及对象图。&lt;/p&gt;
+
+&lt;p&gt;当一个方法所返回的对象，其所有权属于你的时候，Cocoa用一种非常直接的命名规范来告诉你。参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmRules.html#//apple_ref/doc/uid/20000994-BAJHFBGH&#34;&gt; Memory Management Policy &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;尽管基础的策略很直接，有一些有效的做法可以让内存管理更加容易，从而帮助你实现程序的稳定性和健壮性，从而使其占用更少的资源。参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW1&#34;&gt; Practical Memory Management &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;自动释放池使你可以用一种不同的方式来发送release消息。当你想放弃对一个对象的所有权，但又不想让这个对象的释放立即生效(比如，你在方法中要返回这个对象)，这种机制就很有用了。有几种情况你应该需要使用自动释放池。参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmAutoreleasePools.html#//apple_ref/doc/uid/20000047-CJBFBEDI&#34;&gt; Using Autorelease Pool Blocks &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;use-analysis-tools-to-debug-memory-problems&#34;&gt;Use Analysis Tools to Debug Memory Problems&lt;/h3&gt;
+
+&lt;p&gt;(使用分析工具来调试内存问题)&lt;/p&gt;
+
+&lt;p&gt;为了在编译时定位你代码的问题，你可以使用Xcode内建的Clang Static Ananlyzer工具。&lt;/p&gt;
+
+&lt;p&gt;如果内存管理问题依然存在，还有其他的工具和技术可以帮助你分析问题。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;这些工具和书籍在技术文章TN2239，&lt;a href=&#34;https://developer.apple.com/library/ios/technotes/tn2239/_index.html#//apple_ref/doc/uid/DTS40010638&#34;&gt; iOS Debugging Magic &lt;/a&gt;中描述。更确切的说，是使用NSZombie来发现release过多的对象。&lt;/li&gt;
+&lt;li&gt;你可以使用Instruments来跟踪引用计数事件，并寻找内存泄漏。参见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/DeveloperTools/Conceptual/InstrumentsUserGuide/TheInstrumentsWorkflow.html#//apple_ref/doc/uid/TP40004652-CH5&#34;&gt; Collecting Data on Your App &lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>URL Session Programming Guide - Appendix A: Life Cycle of a URL Session</title>
+      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---appendix-a-life-cycle-of-a-url-session/</link>
+      <pubDate>Fri, 29 Jan 2016 14:14:22 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---appendix-a-life-cycle-of-a-url-session/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/NSURLSessionConcepts/NSURLSessionConcepts.html#//apple_ref/doc/uid/10000165i-CH2-SW1&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;life-cycle-of-a-url-session&#34;&gt;Life Cycle of a URL Session&lt;/h1&gt;
+
+&lt;p&gt;(URL Session的生命周期)&lt;/p&gt;
+
+&lt;p&gt;你可以有两种方式使用NSURLSession的API：使用系统提供的代理或者你自己的代理。通常，如果你的应用程序需要做如下任何事情时你必须使用自己的代理：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在应用程序没有运行的时候使用后台会话下载或者上传内容。&lt;/li&gt;
+&lt;li&gt;执行自定义的认证。&lt;/li&gt;
+&lt;li&gt;执行自定义的SSL证书验证。&lt;/li&gt;
+&lt;li&gt;决定传输的内容是应该下载到磁盘或者基于服务器返回的MIME类型或者类似标准来显示。&lt;/li&gt;
+&lt;li&gt;从body stream上传数据(而不是一个NSData对象)。&lt;/li&gt;
+&lt;li&gt;编程限制缓存。&lt;/li&gt;
+&lt;li&gt;编程限制HTTP重定向。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果你的应用程序不需要做以上任何事情，你的应用程序可以使用系统提供的代理。取决于你使用哪种技术，你应该阅读以下之一的章节：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/NSURLSessionConcepts/NSURLSessionConcepts.html#//apple_ref/doc/uid/10000165i-CH2-SW2&#34;&gt; Life Cycle of a URL Session with System-Provided Delegates &lt;/a&gt;提供了轻量级的关于如何创建和使用URL会话的代码。即使你尝试编写你自己的代理你也应该阅读这个章节，因为它给了一个你的代码配置使用对象的完整的模版。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/NSURLSessionConcepts/NSURLSessionConcepts.html#//apple_ref/doc/uid/10000165i-CH2-SW42&#34;&gt; Life Cycle of a URL Session with Custom Delegates &lt;/a&gt;提供了URL会话操作的每一个步骤的完整视图。你应该阅读本章节来帮助你明白会话是如何与代理交互的。具体来说，这章节解释了每个代理方法在何时调用。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;life-cycle-of-a-url-session-with-system-provided-delegates&#34;&gt;Life Cycle of a URL Session with System-Provided Delegates&lt;/h2&gt;
+
+&lt;p&gt;(使用系统提供代理的URL Session的生命周期)&lt;/p&gt;
+
+&lt;p&gt;如果你使用NSURLSession类而没有提供代理对象，系统提供的代理会帮你处理很多细节。这里是当你使用系统提供代理的NSURLSession调用方法的基本顺序：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;创建一个会话配置。对于后台会话，这个配置必须包含一个唯一标识。存储那个标识，如果你的应用程序崩溃或者终结或者挂起时使用这个标识与会话重新关联。&lt;/li&gt;
+&lt;li&gt;创建会话，指定一个配置对象和nil的代理。&lt;/li&gt;
+&lt;li&gt;使用会话创建一个任务对象来表示资源请求。每一个任务都以挂起的状态开始。当你应用程序调用了任务对象的resume方法后，它就会开始下载指定的资源。任务对象是NSURLSessionTask的子类，如NSURLSessionDataTask，NSURLSessionUploadTask，或者NSURLSessionDownloadTask，取决于你想实现的行为。这些对象类似于NSURLConnection对象，但是给你更多的控制和统一的代理模式。尽管你的应用程序可以(通常来说应该)添加不止一个任务给会话，为了简单起见，其余的步骤描述了单个任务的生命周期。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;重要&lt;/strong&gt;：如果你使用NSURLSession类而没有提供代理，那么你应用程序调用创建任务的方法必须传入completionHandler参数，否则你无法从类获取到数据。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;对于一个下载任务，在与服务器传输期间，如果你的用户告诉应用程序暂停下载，通过调用cancelByProducingResumeData:方法取消下载。之后可以传递返回的数据给downloadTaskWithResumeData:或者downloadTaskWithResumeData:completionHandler:方法来创建新的下载任务继续下载。&lt;/li&gt;
+&lt;li&gt;当任务完成时，NSURLSession对象会调用任务的完成处理句柄。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：NSURLSession不会通过error参数来报告服务器的错误。你应用程序通过这个错误接收到的都是客户端这边的错误，比如无法解析主机或者无法连接主机。错误码在&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Constants/index.html#//apple_ref/doc/constant_group/URL_Loading_System_Error_Codes&#34;&gt; URL Loading System Error Codes &lt;/a&gt;中描述。服务端的错误通过NSHTTPURLResponse对象里面的HTTP状态码来报告。更多信息，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSHTTPURLResponse_Class/index.html#//apple_ref/occ/cl/NSHTTPURLResponse&#34;&gt; NSHTTPURLResponse &lt;/a&gt;和&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLResponse_Class/index.html#//apple_ref/occ/cl/NSURLResponse&#34;&gt; NSURLResponse &lt;/a&gt;类的文档。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;当你的应用程序不再需要会话，通过调用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/invalidateAndCancel&#34;&gt; invalidateAndCancel &lt;/a&gt;(取消未完成的任务)或者&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/finishTasksAndInvalidate&#34;&gt; finishTasksAndInvalidate &lt;/a&gt;(允许未完成的任务完成之后再使会话无效)。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;life-cycle-of-a-url-session-with-custom-delegates&#34;&gt;Life Cycle of a URL Session with Custom Delegates&lt;/h2&gt;
+
+&lt;p&gt;(使用自定义代理的URL Session的生命周期)&lt;/p&gt;
+
+&lt;p&gt;你可以经常使用NSURLSession的API而无需提供代理。但是，如果你使用NSURLSession的API进行后台下载和上传，或者你需要以非缺省的方式处理认证和缓存，那么你必须提供一个适配了会话代理协议的代理，一个或者多个任务代理协议，或者这些协议的组合。这个代理服务于许多用途：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当使用下载任务时，NSURLSession对象会使用代理给你的应用程序提供一个文件URL来获取下载的数据。所有的后台下载和上传都要求代理。这些代理必须提供了&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDownloadDelegate_protocol/index.html#//apple_ref/occ/intf/NSURLSessionDownloadDelegate&#34;&gt; NSURLSessionDownloadDelegate &lt;/a&gt;协议的所有代理方法。&lt;/li&gt;
+&lt;li&gt;代理可以处理某些认证挑战。&lt;/li&gt;
+&lt;li&gt;代理为基于流上传数据到服务器的任务提供body streams。&lt;/li&gt;
+&lt;li&gt;代理决定是否遵循HTTP重定向。&lt;/li&gt;
+&lt;li&gt;NSURLSession对象使用代理为你的应用程序提供每个数据传输的状态。数据任务代理接收初始调用，你可以将请求转换成下载及后续调用，提供了从远程服务器接收的数据块。&lt;/li&gt;
+&lt;li&gt;代理是告诉你应用程序传输任务完成的方法之一。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果你的URL会话(要求后台任务)使用自定义的代理，那么URL会话的生命周期就很复杂。下面是使用自定义代理时基本的代理方法的调用顺序：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;创建一个会话配置。对于后台会话，这个配置必须包含一个唯一标识。存储那个标识，如果你的应用程序崩溃或者终结或者挂起时使用这个标识与会话重新关联。&lt;/li&gt;
+&lt;li&gt;创建会话，指定配置对象，可选的，一个代理。&lt;/li&gt;
+&lt;li&gt;使用会话创建一个任务对象来表示资源请求。每一个任务都以挂起的状态开始。当你应用程序调用了任务对象的resume方法后，它就会开始下载指定的资源。任务对象是NSURLSessionTask的子类，如NSURLSessionDataTask，NSURLSessionUploadTask，或者NSURLSessionDownloadTask，取决于你想实现的行为。这些对象类似于NSURLConnection对象，但是给你更多的控制和统一的代理模式。尽管你的应用程序可以(通常来说应该)添加不止一个任务给会话，为了简单起见，其余的步骤描述了单个任务的生命周期。&lt;/li&gt;
+&lt;li&gt;如果远程服务器返回一个状态码指示要求认证以及如果认证要求连接级别的挑战(比如SSL客户端证书)，NSURLSession就会调用认证挑战的代理方法。
+
+&lt;ul&gt;
+&lt;li&gt;对于会话级别的挑战，NSURLAuthenticationMethodNTLM，NSURLAuthenticationMethodNegotiate，NSURLAuthenticationMethodClientCertificate，或者NSURLAuthenticationMethodServerTrust，NSURLSession对象调用会话代理的URLSession:didReceiveChallenge:completionHandler:方法。如果你的应用程序没有提供会话代理方法，NSURLSession对象会调用任务代理的URLSession:task:didReceiveChallenge:completionHandler:方法来处理认证挑战。&lt;/li&gt;
+&lt;li&gt;对于非会话级别的挑战(其它所有情况)，NSURLSession对象会调用会话代理的URLSession:task:didReceiveChallenge:completionHandler:方法来处理挑战。如果你的应用程序提供了会话代理以及你需要处理认证，那么你必须在任务级别处理认证或者提供一个任务级别的处理器，显示调用每一个会话的处理器。会话的代理方法URLSession:didReceiveChallenge:completionHandler:对于非会话级别的挑战并不会调用。
+&lt;strong&gt;注意&lt;/strong&gt;：Kerberos认证是透明处理的。
+如果上传任务的认证失败，任务的数据由流来提供，NSURLSession对象调用代理的URLSession:task:needNewBodyStream:代理方法。代理必须提供一个新的NSInputStream对象来为新的请求提供新的数据。
+关于如何实现NSURLSession认证的代理方法，参阅&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW1&#34;&gt; Authentication Challenges and TLS Chain Validation &lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;根据接收到的HTTP重定向响应，NSURLSession对象会调用代理的URLSession:task:willPerformHTTPRedirection:newRequest:completionHandler:方法。代理方法会调用提供的完成处理器，一个新的NSURLRequest对象(重定向到不同的URL)，或者nil(将重定向的响应当作有效的效应然后作为结果返回)。
+
+&lt;ul&gt;
+&lt;li&gt;如果遵循重定向，会返回到步骤四(认证挑战处理)。&lt;/li&gt;
+&lt;li&gt;如果代理没有实现这些方法，重定向会遵循最大的重定向次数。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;对于调用downloadTaskWithResumeData:或者downloadTaskWithResumeData:completionHandler:方法重新创建的下载任务，NSURLSession会使用新的任务对象调用URLSession:downloadTask:didResumeAtOffset:expectedTotalBytes:方法。&lt;/li&gt;
+&lt;li&gt;对于一个数据任务，NSURLSession对象会调用代理的URLSession:dataTask:didReceiveResponse:completionHandler:方法。决定是否将数据任务转换成为下载任务，然后调用完成回调来接收数据或者下载数据。如果你的应用程序选择将数据任务转换成为下载任务，NSURLSession会使用新的下载任务当作参数调用代理的URLSession:dataTask:didBecomeDownloadTask:方法。在调用之后，代理不再接收来自数据任务更多的回调，然后接收来自下载任务的回调。&lt;/li&gt;
+&lt;li&gt;如果是uploadTaskWithStreamedRequest:方法创建的任务，NSURLSession会调用代理的URLSession:task:needNewBodyStream:方法来提供body data。&lt;/li&gt;
+&lt;li&gt;在初始化上传到服务器的内容期间，代理会定期的接收URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:回调来报告上传的进度。&lt;/li&gt;
+&lt;li&gt;在与服务器传输期间，任务的代理会定期的接收回调来报告上传的进度。对于一个下载任务，会话会调用代理的URLSession:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:方法，该方法会携带成功写入磁盘的比特数。对于数据任务，会话会调用代理的URLSession:dataTask:didReceiveData:方法，该方法懈怠了接收的数据块。对于一个下载任务，在与服务器传输期间，如果用户告诉应用程序暂停下载，通过调用cancelByProducingResumeData:方法来取消任务。之后，如果用户要求你应用程序恢复下载，你可以调用 ownloadTaskWithResumeData:或者downloadTaskWithResumeData:completionHandler:方法，传入返回的恢复数据来创建一个新的下载任务继续之前的下载，然后返回步骤3(创建恢复的任务对象)。&lt;/li&gt;
+&lt;li&gt;对于一个数据任务，NSURLSession对象会调用代理的URLSession:dataTask:willCacheResponse:completionHandler:方法。你的应用程序应该决定是否允许缓存。如果你没有实现这个方法，那么默认行为就是使用指定了会话配置对象的缓存策略。&lt;/li&gt;
+&lt;li&gt;如果一个下载任务成功完成，NSURLSession对象就会调用任务的URLSession:downloadTask:didFinishDownloadingToURL:方法，该方法会携带一个下载了数据的本地的临时文件。你的应用程序在该方法返回之前要么从文件中读取数据要么移动你应用程序沙盒中的永久的地址。&lt;/li&gt;
+&lt;li&gt;当任何任务完成时，NSURLSession对象会调用代理的URLSession:task:didCompleteWithError:方法，该方法会携带一个error对象或者nil(任务成功完成)。如果任务失败，大多数应用程序应该重新请求直到用户取消下载或者服务器返回错误指示请求永远都不会成功。你的应用程序不应该立即重试。相反的，你应该使用reachability的API来检测服务器是否是可达的，并且只有在接收到可达性改变的通知后发起一个新的请求。如果下载任务是可以恢复的，NSError对象的userInfo字典包含一个NSURLSessionDownloadTaskResumeData的键。你的应用程序应该传递这个值给downloadTaskWithResumeData:或者downloadTaskWithResumeData:completionHandler:来创建一个新的下载任务来继续已经存在的下载。如果任务是不可恢复的，你的应用程序应该创建一个新的下载任务然后重新开始任务。在任一情况下，如果传输失败超过一个服务器错误以外的任何原因，转到步骤3(创建和恢复任务对象)。
+&lt;strong&gt;注意&lt;/strong&gt;：NSURLSession不会通过error参数来报告任何服务器的错误。通过error参数你代理接收到的错误只是客户端这一边的错误，比如无法解析主机或者无法连接到主机。错误代码在&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Constants/index.html#//apple_ref/doc/constant_group/URL_Loading_System_Error_Codes&#34;&gt; URL Loading System Error Codes &lt;/a&gt;中描述。服务端的错误通过NSHTTPURLResponse对象的HTTP状态码来报告。关于更多信息，参阅&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSHTTPURLResponse_Class/index.html#//apple_ref/occ/cl/NSHTTPURLResponse&#34;&gt; NSHTTPURLResponse &lt;/a&gt;和&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLResponse_Class/index.html#//apple_ref/occ/cl/NSURLResponse&#34;&gt; NSURLResponse &lt;/a&gt;类的文档。&lt;/li&gt;
+&lt;li&gt;如果响应是多部分编码的，会话可能会再次调用代理的didReceiveResponse方法，伴随着零次或者多次didReceiveData调用。如果发生这些，返回步骤7(处理didReceiveResponse调用)。&lt;/li&gt;
+&lt;li&gt;当你不在需要会话时，通过调用invalidateAndCancel(取消未完成的任务)或者finishTasksAndInvalidate(允许未完成的任务完成之后再使会话对象无效)方法来使会话对象无效。在会话对象无效后，当所有的未完成的任务完成或者取消时，会话会给代理发送URLSession:didBecomeInvalidWithError:消息。当代理方法返回时，会话会处置对代理的强引用。
+&lt;strong&gt;重要&lt;/strong&gt;：会话对象会保持对代理的强引用直到你的应用程序显式的使会话无效。如果你不将会话失效，你的应用程序会内存泄漏。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果你的应用程序取消了一个正在进行的下载，NSURLSession对象会由因为发生错误而调用代理的URLSession:task:didCompleteWithError:方法。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>URL Session Programming Guide - Cookies and Custom Protocols</title>
+      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---cookies-and-custom-protocols/</link>
+      <pubDate>Fri, 29 Jan 2016 14:12:55 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---cookies-and-custom-protocols/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/CookiesandCustomProtocols/CookiesandCustomProtocols.html#//apple_ref/doc/uid/10000165i-CH10-SW3&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;cookies-and-custom-protocols&#34;&gt;Cookies and Custom Protocols&lt;/h1&gt;
+
+&lt;p&gt;(Cookies和自定义协议)&lt;/p&gt;
+
+&lt;p&gt;如果你的应用程序需要编程管理Cookies，比如添加、删除Cookies或者决定哪一个Cookies应该接收，阅读 Cookie Storage。&lt;/p&gt;
+
+&lt;p&gt;如果你的应用程序需要支持基于URL的协议，但是NSURL没有原生支持，你可以注册你自己的自定义协议类提供需要的支持。更多信息，阅读 Protocol Support。&lt;/p&gt;
+
+&lt;h2 id=&#34;cookie-storage&#34;&gt;Cookie Storage&lt;/h2&gt;
+
+&lt;p&gt;(Cookie的存储)&lt;/p&gt;
+
+&lt;p&gt;由于HTTP协议无状态，客户端经常使用Cookie在URL请求之间提供持久存储数据。URL加载系统提供了创建和管理Cookie的接口，为了把Cookie当作HTTP请求的一部分发送，以及在解释Web服务器的响应时接收Cookie。&lt;/p&gt;
+
+&lt;p&gt;NSHTTPCookie类封装了Cookie，提供了访问Cookie很多常用属性的访问器。这个类还提供了方法将HTTP cookie headers转换为NSHTTPCookie实例，以及将NSHTTPCookie实例转换为NSURLRequest对象适合使用的headers。URL加载系统会自动发送存储的合适的Cookie给NSURLRequest对象，除非请求指定不要发送Cookie。同样的，一个NSURLResponse对象返回的Cookie按照当前的Cookie策略接受。&lt;/p&gt;
+
+&lt;p&gt;NSHTTPCookieStorage类提供了管理所有应用程序共享的NSHTTPCookie对象的集合的接口。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;iOS注意&lt;/strong&gt;：iOS中应用程序并不共享Cookies。&lt;/p&gt;
+
+&lt;p&gt;NSHTTPCookieStorage允许应用程序指定Cookies的接受策略。Cookies的接受策略控制Cookies是否应该始终被接受，从不接受，或者只接受相同域的URL。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：改变一个应用程序的Cookies接受策略会影响所有运行的应用程序的接受策略。&lt;/p&gt;
+
+&lt;p&gt;当另一个应用程序改变了Cookies存储或者Cookies接受策略，NSHTTPCookieStorage会发送NSHTTPCookieManagerCookiesChangedNotification和NSHTTPCookieStorageAcceptPolicyChangedNotification通知来提醒应用程序。&lt;/p&gt;
+
+&lt;p&gt;更多信息，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSHTTPCookieStorage_Class/index.html#//apple_ref/doc/uid/TP40003665&#34;&gt; NSHTTPCookieStorage Class Reference &lt;/a&gt;和&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSHTTPCookie_Class/index.html#//apple_ref/doc/uid/TP40003664&#34;&gt; NSHTTPCookie Class Reference &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;protocol-support&#34;&gt;Protocol Support&lt;/h2&gt;
+
+&lt;p&gt;(协议支持)&lt;/p&gt;
+
+&lt;p&gt;URL加载系统被设计成允许客户端应用程序拓展传输数据的协议。URL加载系统原生支持HTTP，HTTPS，FILE，FTP，和 DATA 协议。&lt;/p&gt;
+
+&lt;p&gt;你可以通过子类化NSURLProtocol来实现自定义协议然后使用URL加载系统的NSURLProtocol类的registerClass:方法注册新的协议子类。当NSURLSession，NSURLConnection，或者NSURLDownload 对象为一个NSURLRequest对象初始化了一个连接，URL加载系统按照注册的相反顺序参考每一个类。第一个为canInitWithRequest:消息返回YES的类会用来处理请求。&lt;/p&gt;
+
+&lt;p&gt;如果你自定义的协议需要请求或者响应额外的属性，你可以为NSURLRequest，NSMutableURLRequest，和 NSURLResponse创建类别来提供这些属性的访问器。NSURLProtocol类在这些访问器中提供了设置和获取这些属性值的方法。&lt;/p&gt;
+
+&lt;p&gt;URL加载系统在连接开始和完成时负责创建和释放NSURLProtocol实例。你的应用程序始终不应该直接创建NSURLProtocol实例。&lt;/p&gt;
+
+&lt;p&gt;当NSURLProtocol子类被URL加载系统初始化时，它会提供了一个适配了NSURLProtocolClient协议的客户端对象。NSURLProtocol子类会从NSURLProtocolClient协议发送消息到客户端对象来通知URL加载系统它的操作，比如创建响应，接收数据，重定向新的URL，请求认证，以及完成加载。如果自定义的协议支持认证，它必需适配NSURLAuthenticationChallengeSender协议。&lt;/p&gt;
+
+&lt;p&gt;更多信息，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/index.html#//apple_ref/doc/uid/TP40003761&#34;&gt; NSURLProtocol Class Reference &lt;/a&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>URL Session Programming Guide - Understanding Cache Access</title>
+      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---understanding-cache-access/</link>
+      <pubDate>Fri, 29 Jan 2016 14:12:39 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---understanding-cache-access/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Concepts/CachePolicies.html#//apple_ref/doc/uid/20001843-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;understanding-cache-access&#34;&gt;Understanding Cache Access&lt;/h1&gt;
+
+&lt;p&gt;(理解缓存访问)&lt;/p&gt;
+
+&lt;p&gt;URL加载系统为请求提供了综合磁盘和内存的缓存。这些缓存能够减少应用程序对网络的依赖并提高其性能。&lt;/p&gt;
+
+&lt;h2 id=&#34;using-the-cache-for-a-request&#34;&gt;Using the Cache for a Request&lt;/h2&gt;
+
+&lt;p&gt;(为请求使用缓存)&lt;/p&gt;
+
+&lt;p&gt;通过设置缓存策略为NSURLRequestCachePolicy的值：NSURLRequestUseProtocolCachePolicy，NSURLRequestReloadIgnoringCacheData，NSURLRequestReturnCacheDataElseLoad，或者NSURLRequestReturnCacheDataDontLoad来指定NSURLRequest实例如何使用本地缓存。&lt;/p&gt;
+
+&lt;p&gt;NSURLRequest实例的默认缓存策略是NSURLRequestUseProtocolCachePolicy。NSURLRequestUseProtocolCachePolicy的行为是协议指定的，以及定义为该协议最适合的策略。&lt;/p&gt;
+
+&lt;p&gt;设置缓存策略为NSURLRequestReloadIgnoringCacheData会导致URL加载系统从原始资源加载数据，完全无视缓存。&lt;/p&gt;
+
+&lt;p&gt;NSURLRequestReturnCacheDataElseLoad缓存策略会导致URL加载系统加载缓存数据，无视缓存存在的时间以及是否过期，如果没有缓存本本时会从原始资源加载数据。&lt;/p&gt;
+
+&lt;p&gt;NSURLRequestReturnCacheDataDontLoad策略允许一个应用程序指定只有缓存中的数据应该返回。当尝试使用这种策略创建NSURLConnection或者NSURLDownload实例时如果本地缓存中没有响应会立即返回nil。这根离线模式的功能很像，并且绝对不会带来网络连接。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：目前，只有HTTP和HTTPS请求的响应会缓存。FTP和文件协议尝试访问原始资源是允许使用缓存策略。自定义NSURLProtocol类可以选择提供缓存。&lt;/p&gt;
+
+&lt;h2 id=&#34;cache-use-semantics-for-the-http-protocol&#34;&gt;Cache Use Semantics for the HTTP Protocol&lt;/h2&gt;
+
+&lt;p&gt;(对于HTTP协议缓存的使用语义)&lt;/p&gt;
+
+&lt;p&gt;最复杂的缓存使用场景就是当一个请求使用HTTP协议，然后设置缓存策略为NSURLRequestUseProtocolCachePolicy。&lt;/p&gt;
+
+&lt;p&gt;如果对于一个请求NSCachedURLResponse不存在，然后URL加载系统就会从原始资源获取数据。&lt;/p&gt;
+
+&lt;p&gt;如果请求有缓存的响应，URL加载系统会检查响应，确定指定的内容是否必需重新验证。&lt;/p&gt;
+
+&lt;p&gt;如果内容必需重新验证，URL加载系统会向原始资源发起一个HEAD请求查看资源是否改变了。如果没有改变，URL加载系统返回缓存的响应。如果改变了，URL加载系统从原始资源获取数据。&lt;/p&gt;
+
+&lt;p&gt;如果缓存的响应没有指定内容必需要重新验证，URL加载系统会检查缓存中的响应指定的最长存在时间和过期时间。如果缓存的响应是最近的，然后URL加载系统返回缓存的响应。如果响应是陈旧过时的，URL加载系统会向原始资源发起一个HEAD请求来确定资源是否改变了。如果改变，URL加载系统就从原始资源获取数据。否则，返回缓存的响应。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13&#34;&gt; RFC 2616, Section 13 &lt;/a&gt;指定了语义涉及到的细节。&lt;/p&gt;
+
+&lt;h2 id=&#34;controlling-caching-programmatically&#34;&gt;Controlling Caching Programmatically&lt;/h2&gt;
+
+&lt;p&gt;(缓存控制编程)&lt;/p&gt;
+
+&lt;p&gt;默认情况下，一个连接的缓存的数据根据请求的缓存策略来缓存， 由NSURLProtocol子类来处理请求的执行。&lt;/p&gt;
+
+&lt;p&gt;如果你的应用程序需要更精确的控制缓存(如果该协议支持缓存)，你可以实现代理方法允许你的应用程序来确定每个请求的响应是否应该被缓存。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于NSURLSession的data 和 upload tasks，实现URLSession:dataTask:willCacheResponse:completionHandler:方法。这个代理方法只会为data 和 upload tasks调用。下载任务的缓存策略由专门指定的缓存策略决定。&lt;/li&gt;
+&lt;li&gt;对于NSURLConnection，实现connection:willCacheResponse:方法。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对于NSURLSession，你的代理方法会调用一个完成处理的Block告诉会话什么要缓存。对于NSURLConnection，你的代理方法会返回连接应该缓存的对象。&lt;/p&gt;
+
+&lt;p&gt;其这两种情况，代理通常提供如下之一的值：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;提供允许缓存的响应对象。&lt;/li&gt;
+&lt;li&gt;一个新创建的响应对象来缓存改变的响应，比如一个storage policy的响应允许缓存到内存但不是磁盘。&lt;/li&gt;
+&lt;li&gt;NULL防止缓存。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;你的代理方法也能够向NSCachedURLResponse对象相关的userInfo字典插入对象，将这些对象作为缓存响应的一部分。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;重要&lt;/strong&gt;：如果你使用NSURLSession并且实现了代理方法，你的代理方法必需始终调用提供的完成处理句柄。否则，你的应用程序会内存泄漏。&lt;/p&gt;
+
+&lt;p&gt;Listing 7-1的例子防止缓存HTTPS的响应到磁盘。它同样也向用户的userInfo字典插入了当前日期，来标示缓存响应的时间。&lt;/p&gt;
+
+&lt;p&gt;Listing 7-1  Example connection:withCacheResponse: implementation&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-(NSCachedURLResponse *)connection:(NSURLConnection *)connection
+willCacheResponse:(NSCachedURLResponse *)cachedResponse
+{
+    NSCachedURLResponse *newCachedResponse = cachedResponse;
+
+    NSDictionary *newUserInfo;
+    newUserInfo = [NSDictionary dictionaryWithObject:[NSDate date]
+                                              forKey:@&amp;quot;Cached Date&amp;quot;];
+    if ([[[[cachedResponse response] URL] scheme] isEqual:@&amp;quot;https&amp;quot;]) {
+#if ALLOW_IN_MEMORY_CACHING
+        newCachedResponse = [[NSCachedURLResponse alloc]
+                             initWithResponse:[cachedResponse response]
+                             data:[cachedResponse data]
+                             userInfo:newUserInfo
+                             storagePolicy:NSURLCacheStorageAllowedInMemoryOnly];
+#else // !ALLOW_IN_MEMORY_CACHING
+        newCachedResponse = nil
+#endif // ALLOW_IN_MEMORY_CACHING
+        } else {
+            newCachedResponse = [[NSCachedURLResponse alloc]
+                                 initWithResponse:[cachedResponse response]
+                                 data:[cachedResponse data]
+                                 userInfo:newUserInfo
+                                 storagePolicy:[cachedResponse storagePolicy]];
+        }
+        return newCachedResponse;
+    }
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>URL Session Programming Guide - Authentication Challenges and TLS Chain Validation</title>
+      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---authentication-challenges-and-tls-chain-validation/</link>
+      <pubDate>Fri, 29 Jan 2016 14:12:16 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---authentication-challenges-and-tls-chain-validation/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW1&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;authentication-challenges-and-tls-chain-validation&#34;&gt;Authentication Challenges and TLS Chain Validation&lt;/h1&gt;
+
+&lt;p&gt;(认证挑战和TLS链验证)&lt;/p&gt;
+
+&lt;p&gt;一个NSURLRequest对象经常会遇到认证挑战，或者在连接服务器的时候要求凭证。NSURLSession，NSURLConnection，和NSURLDownload类在遇到认证挑战的时候会通知他们的代理，以便采取相应的行动。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;重要&lt;/strong&gt;：URL加载系统的类不会调用他们的代理去处理请求挑战除非服务器响应包含了&lt;strong&gt;WWW-Authenticate&lt;/strong&gt;首部字段。其它的认证类型，比如proxy authentication和TLS信任验证不需要这个首部。&lt;/p&gt;
+
+&lt;h2 id=&#34;deciding-how-to-respond-to-an-authentication-challenge&#34;&gt;Deciding How to Respond to an Authentication Challenge&lt;/h2&gt;
+
+&lt;p&gt;(决定如何应对认证挑战)&lt;/p&gt;
+
+&lt;p&gt;如果一个NSURLRequest对象要求认证，那么这个认证挑战呈现给你应用程序的方式取决于你是使用NSURLSession对象还是NSURLConnection对象还是NSURLDownload对象执行请求的。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如果请求和NSURLSession对象相关，所有的认证都会传递给代理，不管是什么认证类型。&lt;/li&gt;
+&lt;li&gt;如果请求和NSURLConnection或者NSURLDownload对象相关，对象的代理会接收到connection:canAuthenticateAgainstProtectionSpace:(或者download:canAuthenticateAgainstProtectionSpace:)消息。这允许代理在尝试反对认证之前分析服务器的属性，包括协议和认证的方法。如果你的代理不准备对服务器的保护空间进行认证，你可以返回NO，系统将尝试从用户的钥匙串中的信息进行认证。&lt;/li&gt;
+&lt;li&gt;NSURLConnection或者NSURLDownload对象的代理没有实现connection:canAuthenticateAgainstProtectionSpace:(或者download:canAuthenticateAgainstProtectionSpace:)方法以及用户客户端证书认证的保护空间或者服务器信任认证，系统的行为就像你返回了NO。对于其它的认证类型，系统的行为就像返回了YES。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;接下来，如果你的代理同意处理认证，以及没有有效的可用凭证，请求的URL或者共享的NSURLCredentialStorage都没有，代理会接收如下之一的消息：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;URLSession:didReceiveChallenge:completionHandler:&lt;/li&gt;
+&lt;li&gt;URLSession:task:didReceiveChallenge:completionHandler:&lt;/li&gt;
+&lt;li&gt;connection:didReceiveAuthenticationChallenge:&lt;/li&gt;
+&lt;li&gt;download:didReceiveAuthenticationChallenge:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;为了让连接能够继续，代理有如下三个选择：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;提供认证凭证。&lt;/li&gt;
+&lt;li&gt;不要凭证尝试继续。&lt;/li&gt;
+&lt;li&gt;取消认证挑战。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;为了帮助确定正确的操作，传递给方法的NSURLAuthenticationChallenge实例包含了有关触发认证挑战的信息，对挑战做了多少次尝试，以及之前尝试的任何凭证，NSURLProtectionSpace要求凭证和挑战的发送者。&lt;/p&gt;
+
+&lt;p&gt;如果之前尝试认证并且失败(比如，如果用户改变了它在服务器上的密码)，你可以通过在认证挑战上调用proposedCredential来获得尝试的凭证。代理可以使用这些凭证来填充它给用户呈现的对话框。&lt;/p&gt;
+
+&lt;p&gt;在认证挑战上调用previousFailureCount会返回之前认证尝试的总次数，包括不同的认证协议。代理可以提供这些信息给用户，以确定它是否先前提供的凭证是失败的，或限制认证尝试的最大次数。&lt;/p&gt;
+
+&lt;h2 id=&#34;responding-to-an-authentication-challenge&#34;&gt;Responding to an Authentication Challenge&lt;/h2&gt;
+
+&lt;p&gt;(响应认证挑战)&lt;/p&gt;
+
+&lt;p&gt;你可以使用如下三种方式来响应connection:didReceiveAuthenticationChallenge:代理方法。&lt;/p&gt;
+
+&lt;h3 id=&#34;providing-credentials&#34;&gt;Providing Credentials&lt;/h3&gt;
+
+&lt;p&gt;(提供凭证)&lt;/p&gt;
+
+&lt;p&gt;为了尝试认证，应用程序应创建服务器期望形式的认证信息的NSURLCredential对象。你可以通过在认证挑战的保护空间上调用authenticationMethod来确定服务器认证的方法。被NSURLCredential支持的认证方法有：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;HTTP basic authentication (NSURLAuthenticationMethodHTTPBasic)要求一个用户名和密码。提示用户必需的信息，使用credentialWithUser:password:persistence:方法创建NSURLCredential对象。&lt;/li&gt;
+&lt;li&gt;HTTP digest authentication (NSURLAuthenticationMethodHTTPDigest)，类似于basic authentication，要求一个用户名和密码。(digest自动生成。)提示用户必需的信息，使用credentialWithUser:password:persistence:方法创建NSURLCredential对象。&lt;/li&gt;
+&lt;li&gt;Client certificate authentication (NSURLAuthenticationMethodClientCertificate)要求系统的身份以及服务器认证需要的所有证书。使用credentialWithIdentity:certificates:persistence:创建一个NSURLCredential对象。&lt;/li&gt;
+&lt;li&gt;Server trust authentication (NSURLAuthenticationMethodServerTrust) 要求认证挑战的保护空间提供一个信任证书。使用credentialForTrust:方法创建一个NSURLCredential对象。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;创建NSURLCredential对象之后：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于NSURLSession，使用提供的完成处理句柄将对象发送给认证挑战的发送者。&lt;/li&gt;
+&lt;li&gt;对于NSURLConnection和NSURLDownload，使用useCredential:forAuthenticationChallenge:方法将对象传递给认证挑战的发送者。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;continuing-without-credentials&#34;&gt;Continuing Without Credentials&lt;/h3&gt;
+
+&lt;p&gt;(继续但不要凭证)&lt;/p&gt;
+
+&lt;p&gt;如果代理选择不为认证挑战提供凭证，它仍然可以继续。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于NSURLSession，传递如下之一的值给完成处理的block：
+
+&lt;ol&gt;
+&lt;li&gt;NSURLSessionAuthChallengePerformDefaultHandling处理请求就像代理没有提供处理挑战的方法。&lt;/li&gt;
+&lt;li&gt;NSURLSessionAuthChallengeRejectProtectionSpace拒绝挑战。取决于服务器响应允许的认证类型，URL加载系统可能为额外的保护空间多次调用代理的方法。&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;对于NSURLConnection和NSURLDownload，在[challenge sender]上调用continueWithoutCredentialsForAuthenticationChallenge:。取决于协议的实现，不要凭证继续可能会引起连接失败，导致接收到connectionDidFailWithError:消息，或者返回替代的没有要求认证的URL内容。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;canceling-the-connection&#34;&gt;Canceling the Connection&lt;/h3&gt;
+
+&lt;p&gt;(取消连接)&lt;/p&gt;
+
+&lt;p&gt;代理可能也会选择取消认证挑战。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于NSURLSession，传递NSURLSessionAuthChallengeCancelAuthenticationChallenge给完成处理的Block。&lt;/li&gt;
+&lt;li&gt;对于NSURLConnection或者NSURLDownload，在[challenge sender]上调用cancelAuthenticationChallenge:。代理会接收到connection:didCancelAuthenticationChallenge:消息，提供给用户反馈的机会。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;an-authentication-example&#34;&gt;An Authentication Example&lt;/h3&gt;
+
+&lt;p&gt;(一个认证例子)&lt;/p&gt;
+
+&lt;p&gt;Listing 6-1展示的例子实现了通过使用应用程序偏好设置提供的用户名和密码创建NSURLCredential实例来响应挑战。如果之前的认证失败了，它会取消认证挑战然后通知用户。&lt;/p&gt;
+
+&lt;p&gt;Listing 6-1  An example of using the connection:didReceiveAuthenticationChallenge: delegate method&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-(void)connection:(NSURLConnection *)connection
+didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+    if ([challenge previousFailureCount] == 0) {
+        NSURLCredential *newCredential;
+        newCredential = [NSURLCredential credentialWithUser:[self preferencesName]
+                                                   password:[self preferencesPassword]
+                                                persistence:NSURLCredentialPersistenceNone];
+        [[challenge sender] useCredential:newCredential
+               forAuthenticationChallenge:challenge];
+    } else {
+        [[challenge sender] cancelAuthenticationChallenge:challenge];
+        // inform the user that the user name and password
+        // in the preferences are incorrect
+        [self showPreferencesCredentialsAreIncorrectPanel:self];
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果代理没有实现connection:didReceiveAuthenticationChallenge:方法并且请求要求认证，有效的凭证必需在URL credential storage中或者作为URL请求的一部分提供。如果凭证不可用或者它们认证失败，continueWithoutCredentialForAuthenticationChallenge:消息会被底层实现发送。&lt;/p&gt;
+
+&lt;h2 id=&#34;performing-custom-tls-chain-validation&#34;&gt;Performing Custom TLS Chain Validation&lt;/h2&gt;
+
+&lt;p&gt;(执行自定义的TLS链验证)&lt;/p&gt;
+
+&lt;p&gt;在NSURL家族API中，TLS链验证由你应用程序的认证代理的方法处理，但不是提供凭证给用户(你应用程序)给服务器，你的应用程序检查凭证在服务器提供TLS握手期间，然后告诉URL加载系统是否应该接受或者拒绝这些凭证。&lt;/p&gt;
+
+&lt;p&gt;如果你需要以非标准的方式来执行链验证(比如接受指定的证书来测试)，你的应用程序必需做如下事情：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于NSURLSession，实现URLSession:didReceiveChallenge:completionHandler:或者URLSession:task:didReceiveChallenge:completionHandler:代理方法。如果你都实现了，那么在会话层级的方法会响应处理认证。&lt;/li&gt;
+&lt;li&gt;对于NSURLConnection和NSURLDownload，实现connection:canAuthenticateAgainstProtectionSpace:或者download:canAuthenticateAgainstProtectionSpace:方法，如果认证的保护空间是NSURLAuthenticationMethodServerTrust类型然后返回YES。然后实现connection:didReceiveAuthenticationChallenge:或者download:didReceiveAuthenticationChallenge:方法来处理认证。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在你处理认证的代理方法中，你应该检查认证的保护空间的类型是否是NSURLAuthenticationMethodServerTrust，如果是，从保护空间获取serverTrust信息。&lt;/p&gt;
+
+&lt;p&gt;对于额外的详细信息和代码片段(基于NSURLConnection)，阅读 Overriding TLS Chain Validation Correctly。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>URL Session Programming Guide - Handling Redirects and Other Request Changes</title>
+      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---handling-redirects-and-other-request-changes/</link>
+      <pubDate>Fri, 29 Jan 2016 14:11:59 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---handling-redirects-and-other-request-changes/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/RequestChanges.html#//apple_ref/doc/uid/TP40009506-SW1&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;handling-redirects-and-other-request-changes&#34;&gt;Handling Redirects and Other Request Changes&lt;/h1&gt;
+
+&lt;p&gt;(处理重定向和其它的请求变更)&lt;/p&gt;
+
+&lt;p&gt;当服务器响应请求时指示客户端应该重新发起请求不同URL的请求时就会产生重定向。当发生重定向时NSURLSession， NSURLConnection，和NSURLDownload类会通知它们的代理。&lt;/p&gt;
+
+&lt;p&gt;为了处理重定向，你URL加载系统的代理必须实现如下中的一个代理方法：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于NSURLSession，实现URLSession:task:willPerformHTTPRedirection:newRequest:completionHandler:代理方法。&lt;/li&gt;
+&lt;li&gt;对于NSURLConnection，实现connection:willSendRequest:redirectResponse:代理方法。&lt;/li&gt;
+&lt;li&gt;对于NSURLDownload，实现download:willSendRequest:redirectResponse:代理方法。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在这些方法中，代理可以检查新的请求和引起重定向的响应，能够通过完成处理句柄返回一个新的请求对象给NSURLSession或者通过返回值给NSURLConnection和NSURLDownload。&lt;/p&gt;
+
+&lt;p&gt;代理能够做如下任何事情：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;允许通过简单返回提供的请求进行重定向。&lt;/li&gt;
+&lt;li&gt;创建一个新的请求，指向不同的URL，然后返回这个请求。&lt;/li&gt;
+&lt;li&gt;通过返回nil来拒绝重定向和接收从连接返回的任何已经存在的数据。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;另外，代理可以取消重定向和连接。对于NSURLSession，代理通过给任务对象发送cancel消息来实现。对于NSURLConnection和NSURLDownload的API，代理通过给NSURLConnection和NSURLDownload对象发送cancel消息实现。&lt;/p&gt;
+
+&lt;p&gt;如果NSURLProtocol的子类为了标准格式化NSURLRequest处理了请求，代理也会收到connection:willSendRequest:redirectResponse:消息。比如，为了修改&lt;strong&gt;&lt;a href=&#34;http://www.apple.com&#34;&gt;http://www.apple.com&lt;/a&gt;&lt;/strong&gt;为&lt;strong&gt;&lt;a href=&#34;http://www.apple.com/&#34;&gt;http://www.apple.com/&lt;/a&gt;&lt;/strong&gt;改变了请求。这是因为标准或规范，用于缓存管理的请求版本。在这种特殊情况下，传递给委托的响应是nil，你应该简单的返回提供的请求。&lt;/p&gt;
+
+&lt;p&gt;Listing 5-1的例子实现了允许规范的变化，拒绝所有服务器重定向。&lt;/p&gt;
+
+&lt;p&gt;Listing 5-1  Example of an implementation of connection:willSendRequest:redirectResponse:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#if FOR_NSURLSESSION
+- (void)URLSession:(NSURLSession *)session
+task:(NSURLSessionTask *)task
+willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
+newRequest:(NSURLRequest *)request
+completionHandler:(void (^)(NSURLRequest *))completionHandler
+#elif FOR_NSURLCONNECTION
+-(NSURLRequest *)connection:(NSURLConnection *)connection
+willSendRequest:(NSURLRequest *)request
+redirectResponse:(NSURLResponse *)redirectResponse
+#else // FOR_NSURLDOWNLOAD
+-(NSURLRequest *)download:(NSURLConnection *)connection
+willSendRequest:(NSURLRequest *)request
+redirectResponse:(NSURLResponse *)redirectResponse
+#endif
+{
+    NSURLRequest *newRequest = request;
+    if (redirectResponse) {
+        newRequest = nil;
+    }
+
+#if FOR_NSURLSESSION
+    completionHandler(newRequest);
+#else
+    return newRequest;
+#endif
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果代理没有提供处理重定向的方法，所有的规范改变和服务器重定向都允许。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>URL Session Programming Guide - Encoding URL Data</title>
+      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---encoding-url-data/</link>
+      <pubDate>Fri, 29 Jan 2016 14:11:44 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---encoding-url-data/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/WorkingwithURLEncoding/WorkingwithURLEncoding.html#//apple_ref/doc/uid/10000165i-CH12-SW1&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;编码url数据&#34;&gt;编码URL数据&lt;/h1&gt;
+
+&lt;p&gt;为了编码URL字符串，使用Core Foundation的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/CoreFoundation/Reference/CFURLRef/index.html#//apple_ref/c/func/CFURLCreateStringByAddingPercentEscapes&#34;&gt; CFURLCreateStringByAddingPercentEscapes &lt;/a&gt;和&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/CoreFoundation/Reference/CFURLRef/index.html#//apple_ref/c/func/CFURLCreateStringByReplacingPercentEscapesUsingEncoding&#34;&gt; CFURLCreateStringByReplacingPercentEscapesUsingEncoding &lt;/a&gt;函数。这些函数允许你指定一组编码的字符，除了high-ASCII (0x80–0xff)和非打印字符。&lt;/p&gt;
+
+&lt;p&gt;根据&lt;a href=&#34;http://tools.ietf.org/html/rfc3986&#34;&gt; RFC 3986 &lt;/a&gt;，URL中保留如下字符：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;reserved    = gen-delims / sub-delims
+gen-delims  = &amp;quot;:&amp;quot; / &amp;quot;/&amp;quot; / &amp;quot;?&amp;quot; / &amp;quot;#&amp;quot; / &amp;quot;[&amp;quot; / &amp;quot;]&amp;quot; / &amp;quot;@&amp;quot;
+sub-delims  = &amp;quot;!&amp;quot; / &amp;quot;$&amp;quot; / &amp;quot;&amp;amp;&amp;quot; / &amp;quot;&#39;&amp;quot; / &amp;quot;(&amp;quot; / &amp;quot;)&amp;quot;
+              / &amp;quot;*&amp;quot; / &amp;quot;+&amp;quot; / &amp;quot;,&amp;quot; / &amp;quot;;&amp;quot; / &amp;quot;=&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因此，正确编码UTF-8字符串包含在URL中，按照如下执行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CFStringRef originalString = ...
+
+CFStringRef encodedString = CFURLCreateStringByAddingPercentEscapes(
+                                                                    kCFAllocatorDefault,
+                                                                    originalString,
+                                                                    NULL,
+                                                                    CFSTR(&amp;quot;:/?#[]@!$&amp;amp;&#39;()*+,;=&amp;quot;),
+                                                                    kCFStringEncodingUTF8);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果要解码一个URL片段，你必须首先把URL字符串分割成其组成部分(域和路径部分)。如果你不对其进行解码，那你无法分辨&amp;amp;符号是原始内容部分还是指示域结束的符号。&lt;/p&gt;
+
+&lt;p&gt;在你将URL分成几部分后，你可以按照如下解码每一部分：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CFStringRef decodedString = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(
+                                                                                    kCFAllocatorDefault,
+                                                                                    encodedString,
+                                                                                    CFSTR(&amp;quot;&amp;quot;),
+                                                                                    kCFStringEncodingUTF8);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;重要&lt;/strong&gt;： 尽管NSString类提供了内建增加百分号转义的方法，通常你不应该使用它们。这些方法会假定你传递给它们的字符串包含一系列的&amp;amp;分割值，其结果是，你不能正确的URL编码任何包含&amp;amp;符号的字符串。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>URL Session Programming Guide - Using NSURLDownload</title>
+      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurldownload/</link>
+      <pubDate>Fri, 29 Jan 2016 14:11:29 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurldownload/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLDownload.html#//apple_ref/doc/uid/20001839-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;using-nsurldownload&#34;&gt;Using NSURLDownload&lt;/h1&gt;
+
+&lt;p&gt;(使用NSURLDownload)&lt;/p&gt;
+
+&lt;p&gt;在OS X中，NSURLDownload让应用程序具有直接将URL的内容下载到磁盘的能力。它提供了类似于NSURLConnection的接口，增加了一个额外的方法用于指定文件的目的地。NSURLDownload还可以解码常用的编码方案，比如MacBinary，BinHex和gzip。不同于NSURLConnection，使用NSURLDownload下载的数据不会存储到缓存系统。&lt;/p&gt;
+
+&lt;p&gt;如果你的应用程序并不局限于使用Foundation框架的类，WebKit框架包含了WebDownload，是NSURLDownload的子类，提供了用于认证的用户界面。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;iOS Note&lt;/strong&gt;：NSURLDownload类在iOS中不可用，因为并不鼓励直接下载内容到文件系统。使用NSURLSession或者NSURLConnection类代替。参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW1&#34;&gt; Using NSURLSession &lt;/a&gt;和&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLConnection.html#//apple_ref/doc/uid/20001836-BAJEAIEE&#34;&gt; Using NSURLConnection &lt;/a&gt;获取更多信息。&lt;/p&gt;
+
+&lt;h2 id=&#34;downloading-to-a-predetermined-destination&#34;&gt;Downloading to a Predetermined Destination&lt;/h2&gt;
+
+&lt;p&gt;(下载到预定的目的地)&lt;/p&gt;
+
+&lt;p&gt;NSURLDownload的一种使用模式就是使用预定的文件名下载到磁盘。如果应用程序直到下载的目标地址，它可以显式的使用setDestination:allowOverwrite:方法。多次给NSURLDownload的实例发送setDestination:allowOverwrite:消息会被忽略。&lt;/p&gt;
+
+&lt;p&gt;当接收到initWithRequest:delegate:消息时下载会立即开始。在代理接收到downloadDidFinish:或download:didFailWithError:方法之前的任何时间发送cancel消息就能取消下载。&lt;/p&gt;
+
+&lt;p&gt;Listing 3-1的例子设置了目标地址，因此代理只需要实现download:didFailWithError:和downloadDidFinish:方法。&lt;/p&gt;
+
+&lt;p&gt;Listing 3-1  Using NSURLDownload with a predetermined destination file location&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)startDownloadingURL:sender
+{
+    // Create the request.
+    NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@&amp;quot;http://www.apple.com&amp;quot;]
+                                                cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                            timeoutInterval:60.0];
+
+    // Create the connection with the request and start loading the data.
+    NSURLDownload  *theDownload = [[NSURLDownload alloc] initWithRequest:theRequest
+                                                                delegate:self];
+    if (theDownload) {
+        // Set the destination file.
+        [theDownload setDestination:@&amp;quot;/tmp&amp;quot; allowOverwrite:YES];
+    } else {
+        // inform the user that the download failed.
+    }
+}
+
+
+- (void)download:(NSURLDownload *)download didFailWithError:(NSError *)error
+{
+    // Dispose of any references to the download object
+    // that your app might keep.
+    ...
+
+    // Inform the user.
+    NSLog(@&amp;quot;Download failed! Error - %@ %@&amp;quot;,
+          [error localizedDescription],
+          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+}
+
+- (void)downloadDidFinish:(NSURLDownload *)download
+{
+    // Dispose of any references to the download object
+    // that your app might keep.
+    ...
+
+    // Do something with the data.
+    NSLog(@&amp;quot;%@&amp;quot;,@&amp;quot;downloadDidFinish&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代理可以实现其它额外的方法来自定义处理认证，服务器重定向，以及文件解码。&lt;/p&gt;
+
+&lt;h2 id=&#34;downloading-a-file-using-the-suggested-filename&#34;&gt;Downloading a File Using the Suggested Filename&lt;/h2&gt;
+
+&lt;p&gt;(使用建议的文件名下载文件)&lt;/p&gt;
+
+&lt;p&gt;有时候应用程序需要从下载的数据本身推断出目标文件名。这要求你实现download:decideDestinationWithSuggestedFilename:代理方法然后使用建议的文件名调用setDestination:allowOverwrite:方法。Listing 3-2的例子使用建议的文件名将下载的文件保存在了桌面。&lt;/p&gt;
+
+&lt;p&gt;Listing 3-2  Using NSURLDownload with a filename derived from the download&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)startDownloadingURL:sender
+{
+    // Create the request.
+    NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@&amp;quot;http://www.apple.com/index.html&amp;quot;]
+                                                cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                            timeoutInterval:60.0];
+
+    // Create the download with the request and start loading the data.
+    NSURLDownload  *theDownload = [[NSURLDownload alloc] initWithRequest:theRequest delegate:self];
+    if (!theDownload) {
+        // Inform the user that the download failed.
+    }
+}
+
+- (void)download:(NSURLDownload *)download decideDestinationWithSuggestedFilename:(NSString *)filename
+{
+    NSString *destinationFilename;
+    NSString *homeDirectory = NSHomeDirectory();
+
+    destinationFilename = [[homeDirectory stringByAppendingPathComponent:@&amp;quot;Desktop&amp;quot;]
+                           stringByAppendingPathComponent:filename];
+    [download setDestination:destinationFilename allowOverwrite:NO];
+}
+
+
+- (void)download:(NSURLDownload *)download didFailWithError:(NSError *)error
+{
+    // Dispose of any references to the download object
+    // that your app might keep.
+    ...
+
+    // Inform the user.
+    NSLog(@&amp;quot;Download failed! Error - %@ %@&amp;quot;,
+          [error localizedDescription],
+          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+}
+
+- (void)downloadDidFinish:(NSURLDownload *)download
+{
+    // Dispose of any references to the download object
+    // that your app might keep.
+    ...
+
+    // Do something with the data.
+    NSLog(@&amp;quot;%@&amp;quot;,@&amp;quot;downloadDidFinish&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用index.html文件名将下载的文件保存在桌面，文件名根据下载内容推断出。给setDestination:allowOverwrite:方法传入NO参数阻止一个已经存在文件被下载的文件重写。相反，通过在文件名后面插入有序的数据来创建一个唯一的文件名，比如index-1.html。&lt;/p&gt;
+
+&lt;p&gt;如果代理实现了download:didCreateDestination:方法，当一个文件在磁盘上创建时会通知代理。这个方法同样也给了应用程序机会来决定保存下载内容使用的最终的文件名。&lt;/p&gt;
+
+&lt;p&gt;Listing 3-3的例子打印了最终使用的文件名。&lt;/p&gt;
+
+&lt;p&gt;Listing 3-3  Logging the finalized filename using download:didCreateDestination:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-(void)download:(NSURLDownload *)download didCreateDestination:(NSString *)path
+{
+    // path now contains the destination path
+    // of the download, taking into account any
+    // unique naming caused by -setDestination:allowOverwrite:
+    NSLog(@&amp;quot;Final file destination: %@&amp;quot;,path);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在代理有机会能够响应download:shouldDecodeSourceDataOfMIMEType:和download:decideDestinationWithSuggestedFilename:消息后这个消息就会发送给代理。&lt;/p&gt;
+
+&lt;h2 id=&#34;displaying-download-progress&#34;&gt;Displaying Download Progress&lt;/h2&gt;
+
+&lt;p&gt;(显示下载进度)&lt;/p&gt;
+
+&lt;p&gt;通过实现代理的download:didReceiveResponse:和download:didReceiveDataOfLength:方法你可以确定下载的进度。&lt;/p&gt;
+
+&lt;p&gt;download:didReceiveResponse:方法给代理提供了期望从NSURLResponse获取确定内容长度的机会。代理在每次接收到这个消息的时候应该重新设置进度。&lt;/p&gt;
+
+&lt;p&gt;Listing 3-4的例子实现了使用该方法向用户反馈进度。&lt;/p&gt;
+
+&lt;p&gt;Listing 3-4  Displaying the download progress&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)setDownloadResponse:(NSURLResponse *)aDownloadResponse
+{
+    // downloadResponse is an instance variable defined elsewhere.
+    downloadResponse = aDownloadResponse;
+}
+
+- (void)download:(NSURLDownload *)download didReceiveResponse:(NSURLResponse *)response
+{
+    // Reset the progress, this might be called multiple times.
+    // bytesReceived is an instance variable defined elsewhere.
+    bytesReceived = 0;
+
+    // Store the response to use later.
+    [self setDownloadResponse:response];
+}
+
+- (void)download:(NSURLDownload *)download didReceiveDataOfLength:(unsigned)length
+{
+    long long expectedLength = [[self downloadResponse] expectedContentLength];
+
+    bytesReceived = bytesReceived + length;
+
+    if (expectedLength != NSURLResponseUnknownLength) {
+        // If the expected content length is
+        // available, display percent complete.
+        float percentComplete = (bytesReceived/(float)expectedLength)*100.0;
+        NSLog(@&amp;quot;Percent complete - %f&amp;quot;,percentComplete);
+    } else {
+        // If the expected content length is
+        // unknown, just log the progress.
+        NSLog(@&amp;quot;Bytes received - %d&amp;quot;,bytesReceived);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在代理开始接收download:didReceiveDataOfLength:消息之前会接收download:didReceiveResponse:消息。&lt;/p&gt;
+
+&lt;h2 id=&#34;resuming-downloads&#34;&gt;Resuming Downloads&lt;/h2&gt;
+
+&lt;p&gt;(恢复下载)&lt;/p&gt;
+
+&lt;p&gt;在某些情形下，你可以恢复取消或者失败的下载。首先你必须确保你下载的原始数据没有被删除，通过给下载的setDeletesFileUponFailure:方法传递NO来实现。如果原始的下载失败，你可以使用resumeData方法来获取下载的数据。然后你可以使用initWithResumeData:delegate:path:方法来初始化一个新的下载。当下载恢复时，下载的代理会接收到download:willResumeWithResponse:fromByte:消息。&lt;/p&gt;
+
+&lt;p&gt;你可以只恢复连接协议和文件MIME类型支持恢复的下载。你可以使用canResumeDownloadDecodedWithEncodingMIMEType:方法来确定文件的MIME类型是否支持。&lt;/p&gt;
+
+&lt;h2 id=&#34;decoding-encoded-files&#34;&gt;Decoding Encoded Files&lt;/h2&gt;
+
+&lt;p&gt;(解码编码的文件)&lt;/p&gt;
+
+&lt;p&gt;NSURLDownload提供了支持MacBinary，BinHex和gzip文件格式的解码。如果NSURLDownload确定了文件解码支持的格式，它会尝试给代理发送download:shouldDecodeSourceDataOfMIMEType:消息。如果代理实现了这个方法，它应该检查传递的MIME类型，如果文件应该解码就返回YES。&lt;/p&gt;
+
+&lt;p&gt;Listing 3-5的例子检查了文件的MIME类型，然后允许使用MacBinary和BinHex解码文件内容。&lt;/p&gt;
+
+&lt;p&gt;Listing 3-5  Example implementation of download:shouldDecodeSourceDataOfMIMEType: method&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (BOOL)download:(NSURLDownload *)download
+shouldDecodeSourceDataOfMIMEType:(NSString *)encodingType
+{
+    BOOL shouldDecode = NO;
+
+    if ([encodingType isEqual:@&amp;quot;application/macbinary&amp;quot;]) {
+        shouldDecode = YES;
+    } else if ([encodingType isEqual:@&amp;quot;application/binhex&amp;quot;]) {
+        shouldDecode = YES;
+    } else if ([encodingType isEqual:@&amp;quot;application/x-gzip&amp;quot;]) {
+        shouldDecode = NO;
+    }
+    return shouldDecode;
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>URL Session Programming Guide - Using NSURLConnection</title>
+      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurlconnection/</link>
+      <pubDate>Fri, 29 Jan 2016 14:11:09 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurlconnection/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLConnection.html#//apple_ref/doc/uid/20001836-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;using-nsurlconnection&#34;&gt;Using NSURLConnection&lt;/h1&gt;
+
+&lt;p&gt;(使用NSURLConnection)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html#//apple_ref/occ/cl/NSURLConnection&#34;&gt; NSURLConnection &lt;/a&gt;提供了最灵活的方法来获取URL的内容。这个类提供了简单的接口来创建和取消一个连接，也提供了一组代理方法来反馈和控制连接的各个方面。这些类分为五个类别：URL加载，缓存管理，认证和凭证，Cookie存储以及协议支持。&lt;/p&gt;
+
+&lt;h2 id=&#34;creating-a-connection&#34;&gt;Creating a Connection&lt;/h2&gt;
+
+&lt;p&gt;(创建连接)&lt;/p&gt;
+
+&lt;p&gt;NSURLConnection类支持三种方法获取URL内容：同步获取，使用完成处理器Block异步获取，使用自定义的代理对象异步获取。&lt;/p&gt;
+
+&lt;p&gt;同步获取URL内容：对于运行在后台线程的代码，你可以调用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html#//apple_ref/occ/clm/NSURLConnection/sendSynchronousRequest:returningResponse:error:&#34;&gt; sendSynchronousRequest:returningResponse:error: &lt;/a&gt;方法来执行HTTP请求。这个方法会在请求完成或者发生错误的时候返回。更多信息，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLConnection.html#//apple_ref/doc/uid/20001836-SW3&#34;&gt; Retrieving Data Synchronously &lt;/a&gt;。
+使用完成处理器获取内容：如果你不需要监视请求的状态，仅仅需要在数据完全接收后执行一些操作，你可以调用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html#//apple_ref/occ/clm/NSURLConnection/sendAsynchronousRequest:queue:completionHandler:&#34;&gt; sendAsynchronousRequest:queue:completionHandler: &lt;/a&gt;方法，传递Block处理结果。更多细节，参阅&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLConnection.html#//apple_ref/doc/uid/20001836-SW1&#34;&gt; Retrieving Data Using a Completion Handler Block &lt;/a&gt;。
+使用代理对象获取内容：创建一个代理类，至少实现这些方法：connection:didReceiveResponse:，connection:didReceiveData:，connection:didFailWithError:，and connectionDidFinishLoading:。支持的代理方法定义在 &lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLConnectionDelegate_Protocol/index.html#//apple_ref/occ/intf/NSURLConnectionDelegate&#34;&gt; NSURLConnectionDelegate &lt;/a&gt;, &lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLConnectionDownloadDelegate_Protocol/index.html#//apple_ref/occ/intf/NSURLConnectionDownloadDelegate&#34;&gt; NSURLConnectionDownloadDelegate &lt;/a&gt;, and &lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLConnectionDataDelegate_protocol/index.html#//apple_ref/occ/intf/NSURLConnectionDataDelegate&#34;&gt; NSURLConnectionDataDelegate &lt;/a&gt;协议中。&lt;/p&gt;
+
+&lt;p&gt;Listing 2-1的例子使用URL初始化了一个连接。这段代码开始使用URL创建了一个NSURLRequest实例，指定了访问的缓存策略和超时。然后创建了一个NSURLConnection实例，指定请求和代理。如果NSURLConnection不能为请求创建连接，initWithRequest:delegate:方法会返回nil。然后创建了NSMutableData实例来存储数据，这些数据由代理提供。&lt;/p&gt;
+
+&lt;p&gt;Listing 2-1  Creating a connection using NSURLConnection&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// Create the request.
+NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:@&amp;quot;http://www.apple.com/&amp;quot;]
+                                          cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                      timeoutInterval:60.0];
+
+// Create the NSMutableData to hold the received data.
+// receivedData is an instance variable declared elsewhere.
+receivedData = [NSMutableData dataWithCapacity: 0];
+
+// create the connection with the request
+// and start loading the data
+NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+if (!theConnection) {
+    // Release the receivedData object.
+    receivedData = nil;
+
+    // Inform the user that the connection failed.
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在收到initWithRequest:delegate:消息后传输会马上开始。通过给连接发送cancel消息可以在代理接收connectionDidFinishLoading: 或者 connection:didFailWithError:消息之前任何时间取消。&lt;/p&gt;
+
+&lt;p&gt;当服务器已经提供了足够了数据来创建一个NSURLResponse对象，代理会接收一个connection:didReceiveResponse:消息。代理方法可以检测提供的NSURLResponse对象，侦测期望的数据的内容长度，MIME类型，建议的文件名，以及服务器提供的其他源数据。&lt;/p&gt;
+
+&lt;p&gt;你应该让你的代理准备好单个连接会接收多次connection:didReceiveResponse:消息；当响应是多部分的MIME编码的时候就会发生这种情况。每一次代理接收connection:didReceiveResponse:消息，它应该重设进度指示以及放弃之前接收的数据(除了多响应这种情况)。Listing 2-2展示了每一次调用都将接收的数据的长度设为0.&lt;/p&gt;
+
+&lt;p&gt;Listing 2-2  Example connection:didReceiveResponse: implementation&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    // This method is called when the server has determined that it
+    // has enough information to create the NSURLResponse object.
+
+    // It can be called multiple times, for example in the case of a
+    // redirect, so each time we reset the data.
+
+    // receivedData is an instance variable declared elsewhere.
+    [receivedData setLength:0];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当接收到数据时，代理会定期的发送connection:didReceiveData:消息。代理实现负责存储新接收到的数据。Listing 2-3的实现例子中，新的数据拼接到了Listing 2-1中创建的NSMutableData对象上了。&lt;/p&gt;
+
+&lt;p&gt;Listing 2-3  Example connection:didReceiveData: implementation&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    // Append the new data to receivedData.
+    // receivedData is an instance variable declared elsewhere.
+    [receivedData appendData:data];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你也可以使用connection:didReceiveData:方法来向用户提供指示连接的进度。为了实现这些，你必须首先获取期望的内容长度，通过在connection:didReceiveResponse:代理方法中调用响应对象的expectedContentLength方法。如果服务器没有提供长度信息，expectedContentLength返回&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLResponse_Class/index.html#//apple_ref/c/macro/NSURLResponseUnknownLength&#34;&gt; NSURLResponseUnknownLength. &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;如果在传输过程中发生了错误，代理会接收到connection:didFailWithError:消息。NSError对象会当作参数传递过去，对象中指定了错误的详细信息。在user info字典中也提供了请求失败的URL，使用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSError_Class/index.html#//apple_ref/c/data/NSURLErrorFailingURLStringErrorKey&#34;&gt; NSURLErrorFailingURLStringErrorKey &lt;/a&gt;键获取。&lt;/p&gt;
+
+&lt;p&gt;在代理接收了connection:didFailWithError:消息，就不会再接收指定连接的任何消息了。&lt;/p&gt;
+
+&lt;p&gt;Listing 2-4的例子释放了连接，以及接收的数据，然后打印出错误。&lt;/p&gt;
+
+&lt;p&gt;Listing 2-4  Example connection:didFailWithError: implementation&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)connection:(NSURLConnection *)connection
+  didFailWithError:(NSError *)error
+{
+    // Release the connection and the data object
+    // by setting the properties (declared elsewhere)
+    // to nil.  Note that a real-world app usually
+    // requires the delegate to manage more than one
+    // connection at a time, so these lines would
+    // typically be replaced by code to iterate through
+    // whatever data structures you are using.
+    theConnection = nil;
+    receivedData = nil;
+
+    // inform the user
+    NSLog(@&amp;quot;Connection failed! Error - %@ %@&amp;quot;,
+          [error localizedDescription],
+          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后，如果连接成功的检索了请求，代理会接收connectionDidFinishLoading:消息。之后便不会再接收连接的任何消息，应用程序可以释放NSURLConnection对象。&lt;/p&gt;
+
+&lt;p&gt;Listing 2-5的列子，实现了打印接收的数据长度，然后释放了连接对象和接收到的数据。&lt;/p&gt;
+
+&lt;p&gt;Listing 2-5  Example connectionDidFinishLoading: implementation&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    // do something with the data
+    // receivedData is declared as a property elsewhere
+    NSLog(@&amp;quot;Succeeded! Received %d bytes of data&amp;quot;,[receivedData length]);
+
+    // Release the connection and the data object
+    // by setting the properties (declared elsewhere)
+    // to nil.  Note that a real-world app usually
+    // requires the delegate to manage more than one
+    // connection at a time, so these lines would
+    // typically be replaced by code to iterate through
+    // whatever data structures you are using.
+    theConnection = nil;
+    receivedData = nil;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个例子展示了使用NSURLConnection的一个简单实现。另外的代理方法提供了自定义处理重定向，请求认证，以及响应缓存的能力。&lt;/p&gt;
+
+&lt;h2 id=&#34;making-a-post-request&#34;&gt;Making a POST Request&lt;/h2&gt;
+
+&lt;p&gt;(创建一个POST请求)&lt;/p&gt;
+
+&lt;p&gt;你可以像发起其他请求(在&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW2&#34;&gt; An Authentication Example &lt;/a&gt;中描述)一样的方式发起一个HTTP或者HTTPS的POST请求。主要的区别就是你必须首先配置提供给initWithRequest:delegate:方法的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSMutableURLRequest_Class/index.html#//apple_ref/occ/cl/NSMutableURLRequest&#34;&gt; NSMutableURLRequest &lt;/a&gt;对象。&lt;/p&gt;
+
+&lt;p&gt;你也需要构建正文数据(body data)。你可以使用如下三种方式之一构建：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于上传小的，内存中的数据，你应该URL编码存在的数据，正如&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW7&#34;&gt; Continuing Without Credentials &lt;/a&gt;中描述。&lt;/li&gt;
+&lt;li&gt;对于上传磁盘文件数据，调用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSMutableURLRequest_Class/index.html#//apple_ref/occ/instm/NSMutableURLRequest/setHTTPBodyStream:&#34;&gt; setHTTPBodyStream: &lt;/a&gt;方法告诉NSMutableURLRequest对象从NSInputStream中读取，然后将读取的结果数据当作正文内容(body content)。&lt;/li&gt;
+&lt;li&gt;对于构建大数据块，调用CFStreamCreateBoundPair创建一对流，然后调用setHTTPBodyStream:方法告诉NSMutableURLRequest使用这些流中的一个当作正文内容的资源。通过写入其他数据流，你可以一次发送一小段数据。取决于你服务端是怎么处理这些数据的，你可以希望想要编码你发送的数据。(详情，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW7&#34;&gt; Continuing Without Credentials &lt;/a&gt;。)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果你上传数据到兼容的服务端，URL加载系统也支持100(Continue)HTTP状态码，允许在认证失败或者其它错误的情况下继续上传。如果要支持上传continuation，在请求对象中设置Expect:首部字段为100-continue。&lt;/p&gt;
+
+&lt;p&gt;Listing 6-1展示怎么配置一个POST的NSMutableURLRequest。&lt;/p&gt;
+
+&lt;p&gt;Listing 2-6  Configuring an NSMutableRequest object for a POST request&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// In body data for the &#39;application/x-www-form-urlencoded&#39; content type,
+// form fields are separated by an ampersand. Note the absence of a
+// leading ampersand.
+NSString *bodyData = @&amp;quot;name=Jane+Doe&amp;amp;address=123+Main+St&amp;quot;;
+
+NSMutableURLRequest *postRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@&amp;quot;https://www.apple.com&amp;quot;]];
+
+// Set the request&#39;s content type to application/x-www-form-urlencoded
+[postRequest setValue:@&amp;quot;application/x-www-form-urlencoded&amp;quot; forHTTPHeaderField:@&amp;quot;Content-Type&amp;quot;];
+
+// Designate the request a POST request and specify its body data
+[postRequest setHTTPMethod:@&amp;quot;POST&amp;quot;];
+[postRequest setHTTPBody:[NSData dataWithBytes:[bodyData UTF8String] length:strlen([bodyData UTF8String])]];
+
+// Initialize the NSURLConnection and proceed as described in
+// Retrieving the Contents of a URL
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用setValue:forHTTPHeaderField:方法可以为请求指定不同的内容类型。如果这样做，请确保你的正文内容类型和这个匹配。&lt;/p&gt;
+
+&lt;p&gt;为了获取POST请求的进度，在连接的代理中实现connection:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:方法。注意这不是上传进度的准确的测量，因为连接可能失败或者连接可能遇到认证挑战。&lt;/p&gt;
+
+&lt;h2 id=&#34;retrieving-data-using-a-completion-handler-block&#34;&gt;Retrieving Data Using a Completion Handler Block&lt;/h2&gt;
+
+&lt;p&gt;(使用完成处理器Block获取数据)&lt;/p&gt;
+
+&lt;p&gt;NSURLConnection类提供支持异步管理，并且在结果返回或者发生错误或者超时时回调Block。要做到这一点，调用类方法sendAsynchronousRequest:queue:completionHandler:方法，提供请求对象，一个回调Block，一个操作队列(用来运行Block)，当请求完成或者错误发生时，URL加载系统会调用这个Block返回结果数据或者错误信息。&lt;/p&gt;
+
+&lt;p&gt;如果请求成功，请求的内容传递给回调Block，会返回NSData对象和NSURLResponse对象。如果NSURLConnection不能检索URL，一个NSError对象会当作第三个参数传递过来。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：这个方法有两个显著的局限性：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;最小程度的支持需要认证的请求。如果请求需要认证然后连接，有效的凭证必须已经在NSURLCredentialStorage对象中可用了，或者当作URL请求对象的一部分提供了。如果凭证不可用或者认证失败，URL加载系统负责发送连接的continueWithoutCredentialForAuthenticationChallenge:消息到NSURLProtocol的子类处理。&lt;/li&gt;
+&lt;li&gt;没有办法修改默认的响应缓存的行为或者接收服务器重定向。当连接遇到服务器重定向时，重定向始终是被允许的。同样的，根据提供的协议的默认实现，响应的数据存储在缓存中。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;NSURLSession提供了相似的功能当没有这些限制。更多信息，阅读&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW1&#34;&gt; Using NSURLSession &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;retrieving-data-synchronously&#34;&gt;Retrieving Data Synchronously&lt;/h2&gt;
+
+&lt;p&gt;(同步获取数据)&lt;/p&gt;
+
+&lt;p&gt;NSURLConnection类提供支持同步管理，调用类方法&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html#//apple_ref/occ/clm/NSURLConnection/sendSynchronousRequest:returningResponse:error:&#34;&gt; sendSynchronousRequest:returningResponse:error: &lt;/a&gt;来实现同步获取数据。并不推荐使用这种方法，因为它有几点限制：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;除非你在开发command-line工具，否则你必须添加额外的代码保证请求没有运行在你应用程序的主线程上。&lt;/li&gt;
+&lt;li&gt;最小程度的支持请求的认证。&lt;/li&gt;
+&lt;li&gt;没有办法修改默认的响应缓存的行为或者接收服务器重定向。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;重要&lt;/strong&gt;：如果你同步获取数据，你必须确保请求的代码不会运行在你应用程序的主线程上。网络操作需要人任意长的时间才能完成。如果你尝试在主线程上同步执行网络操作，这些操作会阻塞应用程序的执行直到数据完全获取到，或者发生错误，或者请求超时。这回造成糟糕的用户体验，也会引起iOS终止你的应用程序。&lt;/p&gt;
+
+&lt;p&gt;如果请求成功，会通过NSData对象和NSURLResponse对象的引用返回请求的内容。如果NSURLConnection无法检索URL，这方法会返回nil，以及一个NSError实例的引用。&lt;/p&gt;
+
+&lt;p&gt;如果请求需要认证之后连接，有效的凭证必须已经在NSURLCredentialStorage对象且可用，或者必须作为URL请求的一部分提供。如果凭证不可用或者认证失败，URL加载系统负责发送连接的continueWithoutCredentialForAuthenticationChallenge:消息到NSURLProtocol的子类处理。&lt;/p&gt;
+
+&lt;p&gt;如果同步连接遇到服务器重定向，重定向始终是被允许的。同样的，根据提供的协议的默认实现，响应的数据存储在缓存中。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>URL Session Programming Guide - Using NSURLSession</title>
+      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurlsession/</link>
+      <pubDate>Fri, 29 Jan 2016 14:10:55 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurlsession/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW26&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;using-nsurlsession&#34;&gt;Using NSURLSession&lt;/h1&gt;
+
+&lt;p&gt;(使用NSURLSession)&lt;/p&gt;
+
+&lt;p&gt;NSURLSession及其相关的类提供了通过HTTP协议下载内容的API。这些API提供了丰富的代理方法支持认证，并且让你的应用程序在没有运行(在iOS中即是挂起时)时具有后台执行下载任务的能力。&lt;/p&gt;
+
+&lt;p&gt;为了使用NSURLSession的API，你的应用程序创建了一系列的会话，每一个会话都协调了一组数据传输相关的任务。比如，如果你在开发一个web浏览器，你的应用程序可能会每个标签或者窗口创建一个会话。对于每个会话，你的应用程序可能会添加一系列的任务到会话中，每个任务表示了一个特定URL的请求(以及任何返回的HTTP重定向)。&lt;/p&gt;
+
+&lt;p&gt;类似于大多数网络请求API，NSURLSession的API是高度异步的。如果你使用默认的NSURLSession，系统会提供代理，你必须提供一个处理完成的Block，用来在传输成功完成或者发生了错误时给你的应用程序返回数据。另外，如果你提供了你自己自定义的代理对象，任务对象在接收来自服务器的数据后调用这些代理的方法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：完成回调主要用来当作一种可替代的自定义代理。如果你使用接收完成回调的方法创建了一个任务，那么用来传输响应和数据的代理方法就不会被调用。&lt;/p&gt;
+
+&lt;p&gt;NSURLSession的API提供了状态和进度属性，除了将这些信息传递给代理。它也支持取消，重新开始(恢复)，挂起任务，也提供了恢复挂起，取消，或者下载失败的任务的能力。&lt;/p&gt;
+
+&lt;h2 id=&#34;understanding-url-session-concepts&#34;&gt;Understanding URL Session Concepts&lt;/h2&gt;
+
+&lt;p&gt;(理解URL Session的概念)&lt;/p&gt;
+
+&lt;p&gt;在一个会话中，任务的行为依赖于三件事情：会话的类型(取决于创建会话时使用的配置对象)，任务的类型，以及任务创建时应用程序是否在前台。&lt;/p&gt;
+
+&lt;h3 id=&#34;types-of-sessions&#34;&gt;Types of Sessions&lt;/h3&gt;
+
+&lt;p&gt;(会话类型)&lt;/p&gt;
+
+&lt;p&gt;NSURLSession的API支持三种类型的会话，由创建会话时配置对象的类型决定：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Default类型的会话的行为类似于其它用来下载URL内容的Foundation方法。使用持久化的基于磁盘的缓存和存储在用户钥匙串理的凭证。&lt;/li&gt;
+&lt;li&gt;Ephemeral类型的会话不会存储任何数据到磁盘；所有的缓存，凭证等等都保存在内存中，与会话绑定。因此，当你的应用程序无效的时候，他们也被自动抹去了。&lt;/li&gt;
+&lt;li&gt;Background类型的会话类似于Default类型，除了一个分开的进程处理所有的数据传输。Background会话有些额外的限制，在&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW44&#34;&gt; Background Transfer Considerations &lt;/a&gt;中描述了。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;types-of-tasks&#34;&gt;Types of Tasks&lt;/h3&gt;
+
+&lt;p&gt;(任务类型)&lt;/p&gt;
+
+&lt;p&gt;对于会话，NSURLSession类支持三种类型的任务：data tasks，download tasks，and upload tasks。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Data tasks使用NSData对象发送和接收数据。Data tasks主要针对你应用程序中那些与服务器短的、经常交互的请求。Data tasks能够一次返回一小段数据，或者通过完成处理句炳一次返回。&lt;/li&gt;
+&lt;li&gt;Download tasks在文件形式中检索数据，支持在应用程序没有运行时进行后台下载任务。&lt;/li&gt;
+&lt;li&gt;Upload tasks以文件形式发送数据，支持在应用程序没有运行时进行后台上传任务。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;background-transfer-considerations&#34;&gt;Background Transfer Considerations&lt;/h3&gt;
+
+&lt;p&gt;(后台传输的注意事项)&lt;/p&gt;
+
+&lt;p&gt;NSURLSession类支持应用程序被挂起时后台传输。只有使用后台会话的配置对象创建的NSURLSession对象才支持后台传输(使用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionConfiguration_class/index.html#//apple_ref/occ/clm/NSURLSessionConfiguration/backgroundSessionConfiguration:&#34;&gt; backgroundSessionConfiguration: &lt;/a&gt;创建后台会话的配置对象)。&lt;/p&gt;
+
+&lt;p&gt;因为实际传输在分开的进程中处理，以及重启你应用程序的进程是相对昂贵的，所以一些功能无法实现，导致了如下所示的限制：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;会话必须给每一个传输提供一个代理。(对于上传和下载，代理的行为类似于处理传输。)&lt;/li&gt;
+&lt;li&gt;只有HTTP和HTTPS协议支持(自定义协议不支持)。&lt;/li&gt;
+&lt;li&gt;始终遵循重定向。&lt;/li&gt;
+&lt;li&gt;只支持基于文件的上传任务(基于数据对象和流的上传任务在程序退出时就会失败)。&lt;/li&gt;
+&lt;li&gt;如果后台传输是应用程序在后台时初始化的，那么配置对象的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionConfiguration_class/index.html#//apple_ref/occ/instp/NSURLSessionConfiguration/discretionary&#34;&gt; discretionary &lt;/a&gt;属性应该设置为&lt;strong&gt;true&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：在iOS8和OS X 10.10之前，Data tasks不支持后台会话。&lt;/p&gt;
+
+&lt;p&gt;iOS和OS X重新启动应用程序的行为有一些不一样。&lt;/p&gt;
+
+&lt;p&gt;在iOS中，当一个后台传输完成或者需要凭证，如果你的应用程序没有在运行，iOS在后台自动重启你的应用程序然后在应用程序的UIApplicationDelegate对象上调用&lt;strong&gt;application:handleEventsForBackgroundURLSession:completionHandler:&lt;/strong&gt;方法。这个方法提供了导致你应用程序重启的会话的identifier。你的应用程序应该存储完成处理句柄，使用这个相同的identifier创建一个后台配置对象，然后使用这个后台配置对象创建一个会话。新的会话会自动与后台活动的关联。之后，当会话完成了最后一个后台下载任务，它会给会话的代理发送一个&lt;strong&gt;URLSessionDidFinishEventsForBackgroundURLSession:&lt;/strong&gt;消息。你的会话代理应该调用存储的完成句柄。&lt;/p&gt;
+
+&lt;p&gt;在iOS和OS X中，当用户重启了你的应用程序，你的应用程序应该立即使用相同的identifier为应用程序最后运行的任务创建后台配置的对象，然后为每一个配置对象创建一个会话。这些新的会话会自动与后台活动的关联。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：每个identifier只能创建一个会话(创建配置对象的时候指定)。多个会话共享同一个identifier的行为是不确定。&lt;/p&gt;
+
+&lt;p&gt;当应用程序挂起的时候，有任务完成，代理的&lt;strong&gt;URLSession:downloadTask:didFinishDownloadingToURL:&lt;/strong&gt;方法会被调用，以及与新的下载文件相关的任务和URL。&lt;/p&gt;
+
+&lt;p&gt;类似的，如果任务需要凭证，NSURLSession对象调用代理的&lt;strong&gt;URLSession:task:didReceiveChallenge:completionHandler:&lt;/strong&gt;方法或者&lt;strong&gt;URLSession:didReceiveChallenge:completionHandler:&lt;/strong&gt;方法。&lt;/p&gt;
+
+&lt;p&gt;后台会话中的上传和下载的任务在网络错误后，URL加载系统会自动重试。所以没有必要使用reachability的API来侦测网络确定何时重试失败的任务。&lt;/p&gt;
+
+&lt;p&gt;NSURLSession后台传输的例子，参见&lt;strong&gt;Simple Background Transfer&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;life-cycle-and-delegate-interaction&#34;&gt;Life Cycle and Delegate Interaction&lt;/h3&gt;
+
+&lt;p&gt;(声明周期和代理交互)&lt;/p&gt;
+
+&lt;p&gt;取决于你使用NSURLSession类做什么，了解会话完整的生命周期可能很有帮助，包括和代理的交互，以及代理调用的顺序，当服务器返回重定向的时候会发生什么，以及当你的应用程序恢复一个下载失败的任务时发生了什么，等等。&lt;/p&gt;
+
+&lt;p&gt;关于会话生命周期的完整描述，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/NSURLSessionConcepts/NSURLSessionConcepts.html#//apple_ref/doc/uid/10000165i-CH2-SW1&#34;&gt; Life Cycle of a URL Session &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;nscopying-behavior&#34;&gt;NSCopying Behavior&lt;/h3&gt;
+
+&lt;p&gt;(NSCopying行为)&lt;/p&gt;
+
+&lt;p&gt;会话和任务对象按照如下适配&lt;strong&gt;NSCopying&lt;/strong&gt;协议：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当你的应用程序复制会话或者任务对象时，你会得到同一个对象。&lt;/li&gt;
+&lt;li&gt;当你的应用程序复制一个配置对象，你会得到一个新的拷贝的对象，便于你可以独立的修改。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;sample-delegate-class-interface&#34;&gt;Sample Delegate Class Interface&lt;/h2&gt;
+
+&lt;p&gt;(简单的代理类接口)&lt;/p&gt;
+
+&lt;p&gt;接下来的代码片段基于Listing 1-1所示的类接口。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-1  Sample delegate class interface&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#import &amp;lt;Foundation/Foundation.h&amp;gt;
+
+
+typedef void (^CompletionHandlerType)();
+
+@interface MySessionDelegate : NSObject &amp;lt;NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate, NSURLSessionDownloadDelegate&amp;gt;
+
+@property NSURLSession *backgroundSession;
+@property NSURLSession *defaultSession;
+@property NSURLSession *ephemeralSession;
+
+#if TARGET_OS_IPHONE
+@property NSMutableDictionary *completionHandlerDictionary;
+#endif
+
+- (void) addCompletionHandler: (CompletionHandlerType) handler forSession: (NSString *)identifier;
+- (void) callCompletionHandlerForSession: (NSString *)identifier;
+
+
+@end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;creating-and-configuring-a-session&#34;&gt;Creating and Configuring a Session&lt;/h2&gt;
+
+&lt;p&gt;(创建配置会话)&lt;/p&gt;
+
+&lt;p&gt;NSURLSession的API提供了广泛的配置选项：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;支持给单个的会话指定私有的缓存，Cookie，凭证，和协议。&lt;/li&gt;
+&lt;li&gt;依赖于特定请求(task)或者一组请求(session)的认证。&lt;/li&gt;
+&lt;li&gt;通过URL上传和下载文件，鼓励数据(文件内容)和源数据分离。&lt;/li&gt;
+&lt;li&gt;配置每个主机的最大连接数。&lt;/li&gt;
+&lt;li&gt;如果一整个资源在一定的时间下不能下载就会触发每个资源超时。&lt;/li&gt;
+&lt;li&gt;最低和最高的TLS版本支持。&lt;/li&gt;
+&lt;li&gt;自定义的代理字典。&lt;/li&gt;
+&lt;li&gt;控制Cookie策略。&lt;/li&gt;
+&lt;li&gt;控制HTTP管道行为。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;因为大部分设置都包含在一个分开的配置对象里，你可以重用相同的设置。当你初始化一个会话对象时，按照如下：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个配置对象，管理会话和任务的行为。&lt;/li&gt;
+&lt;li&gt;一个可选的代理对象，用来处理接收的数据以及处理指定给会话和任务的其它事件，比如服务器认证，确定资源请求是否应该被转换成下载等。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果你没有提供代理对象，NSURLSession对象会使用系统提供的代理。通过这种方式，你可以很容易的使用NSURLSession来替换已经存在的使用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html#//apple_ref/occ/clm/NSURLConnection/sendAsynchronousRequest:queue:completionHandler:&#34;&gt; sendAsynchronousRequest:queue:completionHandler: &lt;/a&gt;方法的代码。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：如果的应用程序需要执行后台传输，你必须提供一个自定义的代理。&lt;/p&gt;
+
+&lt;p&gt;在你初始化一个会话对象后，你不能改变配置或者代理，除了重新创建一个新的会话。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-2展示了如何创建一个normal， ephemeral， 和 background的会话的例子。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-2  Creating and configuring sessions&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#if TARGET_OS_IPHONE
+self.completionHandlerDictionary = [NSMutableDictionary dictionaryWithCapacity:0];
+#endif
+
+/* Create some configuration objects. */
+
+NSURLSessionConfiguration *backgroundConfigObject = [NSURLSessionConfiguration backgroundSessionConfiguration: @&amp;quot;myBackgroundSessionIdentifier&amp;quot;];
+NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+NSURLSessionConfiguration *ephemeralConfigObject = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+
+
+/* Configure caching behavior for the default session.
+ Note that iOS requires the cache path to be a path relative
+ to the ~/Library/Caches directory, but OS X expects an
+ absolute path.
+ */
+#if TARGET_OS_IPHONE
+NSString *cachePath = @&amp;quot;/MyCacheDirectory&amp;quot;;
+
+NSArray *myPathList = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+NSString *myPath    = [myPathList  objectAtIndex:0];
+
+NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+
+NSString *fullCachePath = [[myPath stringByAppendingPathComponent:bundleIdentifier] stringByAppendingPathComponent:cachePath];
+NSLog(@&amp;quot;Cache path: %@\n&amp;quot;, fullCachePath);
+#else
+NSString *cachePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@&amp;quot;/nsurlsessiondemo.cache&amp;quot;];
+
+NSLog(@&amp;quot;Cache path: %@\n&amp;quot;, cachePath);
+#endif
+
+
+
+
+
+NSURLCache *myCache = [[NSURLCache alloc] initWithMemoryCapacity: 16384 diskCapacity: 268435456 diskPath: cachePath];
+defaultConfigObject.URLCache = myCache;
+defaultConfigObject.requestCachePolicy = NSURLRequestUseProtocolCachePolicy;
+
+/* Create a session for each configurations. */
+self.defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
+self.backgroundSession = [NSURLSession sessionWithConfiguration: backgroundConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
+self.ephemeralSession = [NSURLSession sessionWithConfiguration: ephemeralConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;除了后台配置，你可以重用其他的配置对象创建额外的会话。(你不能重用后台会话配置，因为两个后台会话对象共享相同的identifier的行为不确定的。)&lt;/p&gt;
+
+&lt;p&gt;任何时候修改配置对象都是安全的。当你创建会话的时候，会话会对配置对象执行深拷贝，所以修改只会影响新创建的会话，不会影响已经存在的。比如，你可能创建了第二个会话，只在Wi-Fi连接下才获取内容，如Listing 1-3所示。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-3  Creating a second session with the same configuration object&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ephemeralConfigObject.allowsCellularAccess = NO;
+
+// ...
+
+NSURLSession *ephemeralSessionWiFiOnly = [NSURLSession sessionWithConfiguration: ephemeralConfigObject delegate: self delegateQueue: [NSOperationQueue mainQueue]];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;fetching-resources-using-system-provided-delegates&#34;&gt;Fetching Resources Using System-Provided Delegates&lt;/h2&gt;
+
+&lt;p&gt;(使用系统提供的代理获取资源)&lt;/p&gt;
+
+&lt;p&gt;使用NSURLSession的最直接的方法就是使用NSURLSession上的方法替换&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/index.html#//apple_ref/occ/clm/NSURLConnection/sendAsynchronousRequest:queue:completionHandler:&#34;&gt; sendAsynchronousRequest:queue:completionHandler: &lt;/a&gt;方法。使用这种方法，你只需要完成两部分代码：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;创建一个配置对象，然后使用配置对象创建一个会话。&lt;/li&gt;
+&lt;li&gt;当数据完全接受后的处理句柄。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;使用系统提供的代理，你可以只使用一行代码就能发起获取特定URL的请求。Listing 1-4演示了这个简单的例子。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：系统提供的代理只在自定义网络行为的时候有限制。如果你的应用程序需要除了基本请求之外的特别行为，比如自定义的认证或者后台下载，这种技术就不太适合。对于你必须实现完整代理的情形，参见&lt;strong&gt;Life Cycle of a URL Session&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-4  Requesting a resource using system-provided delegates&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+
+[[delegateFreeSession dataTaskWithURL: [NSURL URLWithString: @&amp;quot;http://www.example.com/&amp;quot;]
+                    completionHandler:^(NSData *data, NSURLResponse *response,
+                                        NSError *error) {
+                        NSLog(@&amp;quot;Got response %@ with error %@.\n&amp;quot;, response, error);
+                        NSLog(@&amp;quot;DATA:\n%@\nEND DATA\n&amp;quot;,
+                              [[NSString alloc] initWithData: data
+                                                    encoding: NSUTF8StringEncoding]);
+                    }] resume];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;fetching-data-using-a-custom-delegate&#34;&gt;Fetching Data Using a Custom Delegate&lt;/h2&gt;
+
+&lt;p&gt;(使用自定义代理获取数据)&lt;/p&gt;
+
+&lt;p&gt;如果你使用自定义代理获取数据，你的代理至少要实现如下方法：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDataDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDataDelegate/URLSession:dataTask:didReceiveData:&#34;&gt; URLSession:dataTask:didReceiveData: &lt;/a&gt;方法提供了从请求中获取的数据，每次一小段。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didCompleteWithError:&#34;&gt; URLSession:task:didCompleteWithError: &lt;/a&gt;方法向你的任务指示数据是否完全接收了。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果你的应用程序需要使用URLSession:dataTask:didReceiveData:方法返回的数据，那么你的代码负责存储这些数据。&lt;/p&gt;
+
+&lt;p&gt;比如，一个Web浏览器可能在接收到数据的时候就要呈现数据。要做到这一点，你可能会使用一个字典映射一个任务对象和存储结果的NSMutableData，然后使用NSMutableData对象的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSMutableData_Class/index.html#//apple_ref/occ/instm/NSMutableData/appendData:&#34;&gt; appendData: &lt;/a&gt;方法拼接新的接收的数据。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-5展示了创建和开始一个data task。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-5  Data task example&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSURL *url = [NSURL URLWithString: @&amp;quot;http://www.example.com/&amp;quot;];
+
+NSURLSessionDataTask *dataTask = [self.defaultSession dataTaskWithURL: url];
+[dataTask resume];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;downloading-files&#34;&gt;Downloading Files&lt;/h2&gt;
+
+&lt;p&gt;(下载文件)&lt;/p&gt;
+
+&lt;p&gt;在更高层级上来说，下载文件类似于接收数据。你的应用程序应该实现如下代理方法：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDownloadDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDownloadDelegate/URLSession:downloadTask:didFinishDownloadingToURL:&#34;&gt; URLSession:downloadTask:didFinishDownloadingToURL: &lt;/a&gt;方法给你的应用程序提供了一个URL，这个URL是临时存储的下载文件的URL。
+&lt;strong&gt;重要&lt;/strong&gt;：在这方法返回之前，你必须打开文件然后读取文件或者将文件移动到一个永久的地址。当这个方法返回之后，如果这个临时文件还在原来的位置就会被删除。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDownloadDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDownloadDelegate/URLSession:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:&#34;&gt; URLSession:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite: &lt;/a&gt;方法给你的应用程序提供下载进度的状态信息。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDownloadDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDownloadDelegate/URLSession:downloadTask:didResumeAtOffset:expectedTotalBytes:&#34;&gt; URLSession:downloadTask:didResumeAtOffset:expectedTotalBytes: &lt;/a&gt;方法告诉你的应用程序尝试恢复之前下载失败的任务是否成功。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didCompleteWithError:&#34;&gt; URLSession:task:didCompleteWithError: &lt;/a&gt;告诉你的应用程序是否下载失败。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果你在后台会话上执行下载，当你应用程序没有下载的时候仍然会继续执行。如果你在默认或者短暂(ephemeral)的会话上运行，下载必须在你应用程序启动后重新开始。&lt;/p&gt;
+
+&lt;p&gt;在与服务器传输数据期间，如果用户告诉应用程序暂停下载，你的应用程序可以调用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDownloadTask_class/index.html#//apple_ref/occ/instm/NSURLSessionDownloadTask/cancelByProducingResumeData:&#34;&gt; cancelByProducingResumeData: &lt;/a&gt;方法来取消任务。之后，你的应用程序可以传递已经下载好的数据给&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/downloadTaskWithResumeData:&#34;&gt; downloadTaskWithResumeData: &lt;/a&gt;或者&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/downloadTaskWithResumeData:completionHandler:&#34;&gt; downloadTaskWithResumeData:completionHandler: &lt;/a&gt;方法来创建一个继续之前下载的新的下载任务。&lt;/p&gt;
+
+&lt;p&gt;如果传输失败，你的代理的调用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didCompleteWithError:&#34;&gt; URLSession:task:didCompleteWithError: &lt;/a&gt;方法，并传递一个NSError对象。如果任务是可恢复的，对象的userInfo字典的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/c/data/NSURLSessionDownloadTaskResumeData&#34;&gt; NSURLSessionDownloadTaskResumeData &lt;/a&gt;键会包含一个已经下载了数据的值。你的应用程序可以传递这个已经下载好的数据给&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/downloadTaskWithResumeData:&#34;&gt; downloadTaskWithResumeData: &lt;/a&gt;或者&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/downloadTaskWithResumeData:completionHandler:&#34;&gt; downloadTaskWithResumeData:completionHandler: &lt;/a&gt;方法创建一个新的下载任务，重新开始下载。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-6提供了一个下载中等文件大小的例子。Listing 1-7提供了下载任务代理方法的例子。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-6  Download task example&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NSURL *url = [NSURL URLWithString: @&amp;quot;https://developer.apple.com/library/ios/documentation/Cocoa/Reference/&amp;quot;
+              &amp;quot;Foundation/ObjC_classic/FoundationObjC.pdf&amp;quot;];
+
+NSURLSessionDownloadTask *downloadTask = [self.backgroundSession downloadTaskWithURL: url];
+[downloadTask resume];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Listing 1-7  Delegate methods for download tasks&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
+{
+    NSLog(@&amp;quot;Session %@ download task %@ finished downloading to URL %@\n&amp;quot;,
+          session, downloadTask, location);
+
+#if 0
+    /* Workaround */
+    [self callCompletionHandlerForSession:session.configuration.identifier];
+#endif
+
+#define READ_THE_FILE 0
+#if READ_THE_FILE
+    /* Open the newly downloaded file for reading. */
+    NSError *err = nil;
+    NSFileHandle *fh = [NSFileHandle fileHandleForReadingFromURL:location
+                                                           error: &amp;amp;err];
+
+    /* Store this file handle somewhere, and read data from it. */
+    // ...
+
+#else
+    NSError *err = nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *cacheDir = [[NSHomeDirectory()
+                           stringByAppendingPathComponent:@&amp;quot;Library&amp;quot;]
+                          stringByAppendingPathComponent:@&amp;quot;Caches&amp;quot;];
+    NSURL *cacheDirURL = [NSURL fileURLWithPath:cacheDir];
+    if ([fileManager moveItemAtURL:location
+                             toURL:cacheDirURL
+                             error: &amp;amp;err]) {
+
+        /* Store some reference to the new URL */
+    } else {
+        /* Handle the error. */
+    }
+#endif
+
+}
+
+-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+    NSLog(@&amp;quot;Session %@ download task %@ wrote an additional %lld bytes (total %lld bytes) out of an expected %lld bytes.\n&amp;quot;,
+          session, downloadTask, bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+}
+
+-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
+{
+    NSLog(@&amp;quot;Session %@ download task %@ resumed at offset %lld bytes out of an expected %lld bytes.\n&amp;quot;,
+          session, downloadTask, fileOffset, expectedTotalBytes);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;uploading-body-content&#34;&gt;Uploading Body Content&lt;/h2&gt;
+
+&lt;p&gt;(上传正文内容)&lt;/p&gt;
+
+&lt;p&gt;你的应用程序可以有三种方式给HTTP POST请求提供请求的正文内容(Body Content)：作为一个NSData对象，文件或者流。通常来说，你的应用程序应该：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用NSData对象，如果你的内存中已经有了数据并且没有理由去处理它。&lt;/li&gt;
+&lt;li&gt;如果你上传的内容已经在磁盘文件中，如果你使用后台传输，或者将数据写入磁盘减少内存对你的应用程序有好处，那么你就使用文件。&lt;/li&gt;
+&lt;li&gt;如果你通过网络接收数据，使用流。或者转换提供给NSURLConnection请求正文的流的代码。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;不管你选择哪种方式，如果你的应用程序提供了自定义的会话代理，代理需要实现&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:&#34;&gt; URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend: &lt;/a&gt;代理方法来获得上传进度的信息。&lt;/p&gt;
+
+&lt;p&gt;另外，如果你的应用程序使用流提供请求正文，必须提供一个自定义会话代理，实现&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:needNewBodyStream:&#34;&gt; URLSession:task:needNewBodyStream: &lt;/a&gt;方法，更多详细内容，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW23&#34;&gt; Uploading Body Content Using a Stream &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;uploading-body-content-using-an-nsdata-object&#34;&gt;Uploading Body Content Using an NSData Object&lt;/h3&gt;
+
+&lt;p&gt;(使用NSData对象上传正文内容)&lt;/p&gt;
+
+&lt;p&gt;使用NSData对象上传正文内容，你的应用程序调用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/uploadTaskWithRequest:fromData:&#34;&gt; uploadTaskWithRequest:fromData: &lt;/a&gt;或者&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/uploadTaskWithRequest:fromData:completionHandler:&#34;&gt; uploadTaskWithRequest:fromData:completionHandler: &lt;/a&gt;方法创建一个上传任务，然后通过fromData参数提供请求的正文数据。&lt;/p&gt;
+
+&lt;p&gt;会话对象会基于数据对象的大小来计算Content-Length首部字段。&lt;/p&gt;
+
+&lt;p&gt;你的应用程序必须提供服务器要求的额外的首部字段信息，比如内容类型(content type)，作为URL请求对象的一部分。&lt;/p&gt;
+
+&lt;h3 id=&#34;uploading-body-content-using-a-file&#34;&gt;Uploading Body Content Using a File&lt;/h3&gt;
+
+&lt;p&gt;(使用文件上传正文内容)&lt;/p&gt;
+
+&lt;p&gt;使用文件上传正文内容，你的应用程序可以调用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/uploadTaskWithRequest:fromFile:&#34;&gt; uploadTaskWithRequest:fromFile: &lt;/a&gt;和&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/uploadTaskWithRequest:fromFile:completionHandler:&#34;&gt; uploadTaskWithRequest:fromFile:completionHandler: &lt;/a&gt;方法创建上传任务，然后提供一个文件的URL，上传任务会从这个URL读取正文内容。&lt;/p&gt;
+
+&lt;p&gt;会话对象根据数据对象计算首部字段Content-Length的值。如果你的应用程序没有为首部字段提供Content-Type的值，会话对象也会提供一个。&lt;/p&gt;
+
+&lt;p&gt;你的应用程序应该提供服务器要求的首部字段信息，作为URL请求对象的一部分。&lt;/p&gt;
+
+&lt;h3 id=&#34;uploading-body-content-using-a-stream&#34;&gt;Uploading Body Content Using a Stream&lt;/h3&gt;
+
+&lt;p&gt;(使用流上传正文内容)&lt;/p&gt;
+
+&lt;p&gt;使用流上传正文内容，调用&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSession_class/index.html#//apple_ref/occ/instm/NSURLSession/uploadTaskWithStreamedRequest:&#34;&gt; uploadTaskWithStreamedRequest: &lt;/a&gt;方法创建一个上传任务。你应用程序提供一个请求对象，这个对象与流相关联，上传任务会从流里面读取正文内容。&lt;/p&gt;
+
+&lt;p&gt;你的应用程序必须提供服务器要求的首部字段的信息，内容类型和内容长度，作为URL请求对象的一部分。&lt;/p&gt;
+
+&lt;h3 id=&#34;uploading-a-file-using-a-download-task&#34;&gt;Uploading a File Using a Download Task&lt;/h3&gt;
+
+&lt;p&gt;(使用下载任务(Download Task)上传文件)&lt;/p&gt;
+
+&lt;p&gt;为下载任务(download task)上传正文内容，你的应用程序必须提供NSData对象或者流作为URL请求对象的一部分，然后用这个请求创建下载请求。&lt;/p&gt;
+
+&lt;p&gt;如果你使用流提供数据，你的应用程序必须提供一个&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:needNewBodyStream:&#34;&gt; URLSession:task:needNewBodyStream: &lt;/a&gt;代理方法在认证失败的事件中来提供新的内容流。这个方法的详细信息，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW23&#34;&gt; Uploading Body Content Using a Stream &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;下载任务(download task)的行为类似于数据任务(data task)，除了返回数据的方式不一样。&lt;/p&gt;
+
+&lt;h2 id=&#34;handling-authentication-and-custom-tls-chain-validation&#34;&gt;Handling Authentication and Custom TLS Chain Validation&lt;/h2&gt;
+
+&lt;p&gt;(处理认证以及自定义TLS链验证)&lt;/p&gt;
+
+&lt;p&gt;如果远程服务器返回了一个状态码指示需要认证，如果认证要求一个连接级别的挑战(比如SSL客户端证书)，NSURLSession调用认证的代理方法。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于会话级别的挑战－&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtectionSpace_Class/index.html#//apple_ref/c/data/NSURLAuthenticationMethodNTLM&#34;&gt; NSURLAuthenticationMethodNTLM &lt;/a&gt;，&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtectionSpace_Class/index.html#//apple_ref/c/data/NSURLAuthenticationMethodNegotiate&#34;&gt; NSURLAuthenticationMethodNegotiate &lt;/a&gt;，&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtectionSpace_Class/index.html#//apple_ref/c/data/NSURLAuthenticationMethodClientCertificate&#34;&gt; NSURLAuthenticationMethodClientCertificate &lt;/a&gt;， 或者 &lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Reference/Foundation/Classes/NSURLProtectionSpace_Class/index.html#//apple_ref/c/data/NSURLAuthenticationMethodServerTrust&#34;&gt; NSURLAuthenticationMethodServerTrust &lt;/a&gt;－NSURLSession对象调用会话的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDelegate/URLSession:didReceiveChallenge:completionHandler:&#34;&gt; URLSession:didReceiveChallenge:completionHandler: &lt;/a&gt;代理方法。如果你的应用程序不提供会话代理方法，NSURLSession对象会调用任务的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didReceiveChallenge:completionHandler:&#34;&gt; URLSession:task:didReceiveChallenge:completionHandler: &lt;/a&gt;代理方法来处理挑战。&lt;/li&gt;
+&lt;li&gt;对于非会话级别的挑战(其他所有情况)，NSURLSession对象会调用会话代理的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:didReceiveChallenge:completionHandler:&#34;&gt; URLSession:task:didReceiveChallenge:completionHandler: &lt;/a&gt;方法处理挑战。如果你的应用提供会话代理以及你需要处理认证，那么你必须在任务级别处理认证或者提供一个任务级别的处理器处理每个会话处理的显示调用。会话的代理方法&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDelegate/URLSession:didReceiveChallenge:completionHandler:&#34;&gt; URLSession:didReceiveChallenge:completionHandler: &lt;/a&gt;在非会话级别是不会调用的。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：Kerberos认证的处理是透明的。&lt;/p&gt;
+
+&lt;p&gt;当一个基于流的上传任务的认证失败时，任务不能回退且安全的重用流。相反，NSURLSession对象会调用代理的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionTaskDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionTaskDelegate/URLSession:task:needNewBodyStream:&#34;&gt; URLSession:task:needNewBodyStream: &lt;/a&gt;方法去获得一个新的NSInputStream对象，给新的请求提供数据。(如果上传任务是基于文件或者NSData对象，会话对象就不会调用这个方法。)&lt;/p&gt;
+
+&lt;p&gt;关于NSURLSession代理中的认证的方法的更多信息，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW1&#34;&gt; Authentication Challenges and TLS Chain Validation &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;handling-ios-background-activity&#34;&gt;Handling iOS Background Activity&lt;/h2&gt;
+
+&lt;p&gt;(处理iOS后台活动)&lt;/p&gt;
+
+&lt;p&gt;如果你在iOS中使用NSURLSession，当下载完成时应用程序会自动重启。你应用程序的app delegate的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/UIKit/Reference/UIApplicationDelegate_Protocol/index.html#//apple_ref/occ/intfm/UIApplicationDelegate/application:handleEventsForBackgroundURLSession:completionHandler:&#34;&gt; application:handleEventsForBackgroundURLSession:completionHandler: &lt;/a&gt;方法会负责重新创建合适的会话，存储完成处理器，当会话调用会话代理的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Foundation/Reference/NSURLSessionDelegate_protocol/index.html#//apple_ref/occ/intfm/NSURLSessionDelegate/URLSessionDidFinishEventsForBackgroundURLSession:&#34;&gt; URLSessionDidFinishEventsForBackgroundURLSession: &lt;/a&gt;方法时会调用那个处理器。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-8 和 Listing 1-9分开展示会话及app delegate的方法。&lt;/p&gt;
+
+&lt;p&gt;Listing 1-8  Session delegate methods for iOS background downloads&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#if TARGET_OS_IPHONE
+-(void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
+{
+    NSLog(@&amp;quot;Background URL session %@ finished events.\n&amp;quot;, session);
+
+    if (session.configuration.identifier)
+        [self callCompletionHandlerForSession: session.configuration.identifier];
+}
+
+- (void) addCompletionHandler: (CompletionHandlerType) handler forSession: (NSString *)identifier
+{
+    if ([ self.completionHandlerDictionary objectForKey: identifier]) {
+        NSLog(@&amp;quot;Error: Got multiple handlers for a single session identifier.  This should not happen.\n&amp;quot;);
+    }
+
+    [ self.completionHandlerDictionary setObject:handler forKey: identifier];
+}
+
+- (void) callCompletionHandlerForSession: (NSString *)identifier
+{
+    CompletionHandlerType handler = [self.completionHandlerDictionary objectForKey: identifier];
+
+    if (handler) {
+        [self.completionHandlerDictionary removeObjectForKey: identifier];
+        NSLog(@&amp;quot;Calling completion handler.\n&amp;quot;);
+
+        handler();
+    }
+}
+#endif
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Listing 1-9  App delegate methods for iOS background downloads&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
+{
+    NSURLSessionConfiguration *backgroundConfigObject = [NSURLSessionConfiguration backgroundSessionConfiguration: identifier];
+
+    NSURLSession *backgroundSession = [NSURLSession sessionWithConfiguration: backgroundConfigObject delegate: self.mySessionDelegate delegateQueue: [NSOperationQueue mainQueue]];
+
+    NSLog(@&amp;quot;Rejoining session %@\n&amp;quot;, identifier);
+
+    [ self.mySessionDelegate addCompletionHandler: completionHandler forSession: identifier];
+}
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>URL Session Programming Guide - Introduction</title>
+      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---introduction/</link>
+      <pubDate>Fri, 29 Jan 2016 14:10:37 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---introduction/</guid>
+      <description>&lt;p&gt;前一份编程指南是关于并发的，算是完成了，凑合着看吧。其实整理这些编程指南蛮花时间的，我空闲的时间基本都是在弄这个。有的时候觉得没什么意义，其实蛮有用的。特别是开发这么久了，看了苹果的说明，这些编程指南，感觉以前蒙在自己眼前的雾都散开了。前两天正好要做一个图片轮循的功能，正好我就是用的定时器类型的&lt;strong&gt;dispatch_source&lt;/strong&gt;实现定时轮循。也是因为正好看到&lt;strong&gt;dispatch_source&lt;/strong&gt;这里，如果没整理并发编程指南我可能就用&lt;strong&gt;NSTimer&lt;/strong&gt;了。所以你现在的努力、做的事情、学习的知识和技能你觉得没什么用，你也许现在不知道，但是总有一天会用上回报你的。感觉都有点像鸡汤了，就不扯了。
+&lt;/p&gt;
+
+&lt;p&gt;之前说了在弄一个代码库，想自己写个HTTP请求的框架。觉得之前的写的很渣，正好最近在看&lt;strong&gt;Alamofire&lt;/strong&gt;的源码，自愧不如。反正我也准备是用&lt;strong&gt;NSURLSession&lt;/strong&gt;来实现，所以就想先把这份指南整理了再开始开发。&lt;/p&gt;
+
+&lt;p&gt;那就开始吧，下面是&lt;strong&gt;NSURLSession&lt;/strong&gt;编程指南的正文了。&lt;/p&gt;
+
+&lt;p&gt;==============================&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165-BCICJDHA&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;about-the-url-loading-system&#34;&gt;About the URL Loading System&lt;/h1&gt;
+
+&lt;p&gt;(关于URL加载系统)&lt;/p&gt;
+
+&lt;p&gt;重要提示：这是一份正在开发中的API或者技术的初步文档。虽然这个文档已经被技术准确性审核，但是这并不是最终的。&lt;/p&gt;
+
+&lt;p&gt;本指南介绍了可用于交互的URL以及使用标准互联网协议与服务器进行通信的Foundation框架类。这些类一起被称为URL加载系统。&lt;/p&gt;
+
+&lt;p&gt;URL加载系统是一组类和协议的集合，允许你的应用程序访问URL引用的内容。这项技术的核心就是&lt;strong&gt;NSURL&lt;/strong&gt;类，它可以让你的应用程序操作URL以及URL引用的资源。&lt;/p&gt;
+
+&lt;p&gt;为了支持这个类，Foundation框架提供了一组丰富的类让你能够加载URL内容，上传数据到服务器，管理Cookie，控制响应缓存，处理Credential，以及应用程序指定的认证方式，自定义的协议拓展。&lt;/p&gt;
+
+&lt;p&gt;URL加载系统支持使用以下协议访问资源：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;文件传输协议(&lt;strong&gt;ftp://&lt;/strong&gt;)&lt;/li&gt;
+&lt;li&gt;超文本传输协议(&lt;strong&gt;http://&lt;/strong&gt;)&lt;/li&gt;
+&lt;li&gt;加密的超文本传输协议(&lt;strong&gt;https://&lt;/strong&gt;)&lt;/li&gt;
+&lt;li&gt;本地文件URL(&lt;strong&gt;file:///&lt;/strong&gt;)&lt;/li&gt;
+&lt;li&gt;数据URL(&lt;strong&gt;data://&lt;/strong&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;使用用户系统的偏好设置也能支持代理服务器和SOCKS。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;重要&lt;/strong&gt;：除了URL加载系统，在OS X和iOS中也提供了在其它应用程序中开放的URL的API，比如Safari。这些API没有在本文档中描述。更多关于在OS X中登陆服务器的信息，参阅&lt;strong&gt;Launch Services Programming Guide&lt;/strong&gt;。更多关于OS X的&lt;strong&gt;NSWorkSpace&lt;/strong&gt;类的&lt;strong&gt;openURL:&lt;/strong&gt;方法，参阅&lt;strong&gt;NSWorkspace Class Reference&lt;/strong&gt;。更多关于iOS的&lt;strong&gt;UIApplication&lt;/strong&gt;类的&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/UIKit/Reference/UIApplication_Class/index.html#//apple_ref/occ/instm/UIApplication/openURL:&#34;&gt; openURL: &lt;/a&gt;方法，参阅&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/UIKit/Reference/UIApplication_Class/index.html#//apple_ref/doc/uid/TP40006728&#34;&gt; UIApplication Class Reference &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;at-a-glance&#34;&gt;At a Glance&lt;/h2&gt;
+
+&lt;p&gt;(概览)&lt;/p&gt;
+
+&lt;p&gt;URL加载系统包含了大量重要的辅助类来帮助URL加载类修改它们的行为。主要的辅助类分为5个类别：协议支持，认证，Credentials，Cookie，配置管理，缓存管理。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/URLSessionProgrammingGuideIntroduction/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;url-loading&#34;&gt;URL Loading&lt;/h3&gt;
+
+&lt;p&gt;(URL加载)&lt;/p&gt;
+
+&lt;p&gt;URL加载系统中最常用的类允许你的应用程序从URL指定的资源检索内容。你可以使用很多方式来检索内容，取决于你应用程序的要求。API的选择取决于你应用程序中OS X或者iOS的目标版本，以及你是希望将数据放在文件或者内存块中。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在iOS7或者OS X v10.9及之后，NSURLSession是执行URL请求的最完美的API之选。&lt;/li&gt;
+&lt;li&gt;对于要支持老版本OS X的软件，你可以使用NSURLDownload来下载URL资源的内容到磁盘文件上。&lt;/li&gt;
+&lt;li&gt;对于要支持老版本iOS或者OS X，你可以使用NSURLConnection下载URL资源的内容到内存中。如果需要之后可以再写到磁盘上。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;你使用的方法大部分取决于你是希望将数据写入内存或者下载到磁盘。&lt;/p&gt;
+
+&lt;h4 id=&#34;fetching-content-as-data-in-memory&#34;&gt;Fetching Content as Data (In Memory)&lt;/h4&gt;
+
+&lt;p&gt;(获取内容数据(内存中))&lt;/p&gt;
+
+&lt;p&gt;在较高层面上来说，有两种基本的方法来获取URL数据：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于简单的请求，使用NSURLSession的API直接从NSURL对象那里检索资源内容，NSData对象或者磁盘上的文件。&lt;/li&gt;
+&lt;li&gt;对于更复杂的请求－请求上传数据，比如－提供一个NSURLRequest对象(或者它可变的子类，NSMutableURLRequest)给NSURLSession 或 NSURLConnection。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;不管你使用哪种方法，你的应用程序可以使用两种方法获取响应数据：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;提供一个处理完成的Block。当URL加载的类完成从服务器获取数据后会调用这个Block。&lt;/li&gt;
+&lt;li&gt;提供一个自定义的代理，URL加载的类从原始资源那里查询到数据会定期的调用你代理的方法。你的应用程序负责积累这些数据，如果需要的话。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;除了数据本身之外，URL加载的类给你的代理或者处理完成的Block提供了一个响应对象，封装了与请求相关的源数据，比如MIME类型和内容长度。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;相关章节&lt;/strong&gt;：&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW1&#34;&gt; Using NSURLSession &lt;/a&gt;，&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLConnection.html#//apple_ref/doc/uid/20001836-BAJEAIEE&#34;&gt; Using NSURLConnection &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h4 id=&#34;downloading-content-as-a-file&#34;&gt;Downloading Content as a File&lt;/h4&gt;
+
+&lt;p&gt;(获取内容文件)&lt;/p&gt;
+
+&lt;p&gt;在较高层面上来说，有两种基本的方法来获取URL文件：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于简单的请求，使用NSURLSession的API直接从NSURL对象那里检索资源内容，NSData对象或者磁盘上的文件。&lt;/li&gt;
+&lt;li&gt;对于更复杂的请－请求上传数据，比如－提供一个NSURLRequest对象(或者它可变的子类，NSMutableURLRequest)给NSURLSession 或 NSURLConnection。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;NSURLSession类通过NSURLDownload类提供了两个显著的优势：在iOS中可用，即使你的应用程序挂起、终止、崩溃了，下载任务仍然可以在后台运行。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：由NSURLDownload或者NSURLSession实例启动下载，不会缓存。如果你需要缓存结果，你的应用程序必须使用NSURLConnection或者NSURLSession将数据写入磁盘本身。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;相关章节&lt;/strong&gt;：&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW1&#34;&gt; Using NSURLSession &lt;/a&gt;，&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLDownload.html#//apple_ref/doc/uid/20001839-BAJEAIEE&#34;&gt; Using NSURLDownload &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;helper-classes&#34;&gt;Helper Classes&lt;/h3&gt;
+
+&lt;p&gt;(辅助类)&lt;/p&gt;
+
+&lt;p&gt;URL加载类使用两种辅助类来提供额外的源数据－一个是用来请求的NSURLRequest和用作服务器响应的NSURLResponse。&lt;/p&gt;
+
+&lt;h4 id=&#34;url-requests&#34;&gt;URL Requests&lt;/h4&gt;
+
+&lt;p&gt;(URL请求)&lt;/p&gt;
+
+&lt;p&gt;一个NSURLRequest对象封装了URL和任何特定协议的特性，使用独立于协议的方式封装。同时它也指定了关于使用本地缓存数据的策略，当使用NSURLConnection或者NSURLDownload，提供了一个设置连接超时的接口。(对于NSURLSession，超时是在每个会话的基础上进行配置。)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：当一个客户端应用程序使用NSMutableURLRequest的实例初始化一个connection或者download时，会要求一个深拷贝。当下载初始化后改变初始的请求是没有效果的。&lt;/p&gt;
+
+&lt;p&gt;某些协议支持特定协议的属性。比如，对于HTTP协议，NSURLRequest增加了返回HTTP请求body，header，以及transfer method的方法。同时NSMutableURLRequest也增加了设置这些值的方法。&lt;/p&gt;
+
+&lt;p&gt;使用URL请求对象的细节在本书中描述。&lt;/p&gt;
+
+&lt;h4 id=&#34;response-metadata&#34;&gt;Response Metadata&lt;/h4&gt;
+
+&lt;p&gt;(响应源数据)&lt;/p&gt;
+
+&lt;p&gt;服务器对于一个请求的响应可以看作两部分：描述内容的源数据和内容数据本身。大多数协议的源数据都是相同的，使用NSURLResponse类进行封装，包括MIME类型，期望的内容长度，字符编码，以及URL。协议特定的NSURLResponse子类可以提供额外的源数据。比如，NSHTTPURLResponse存储了服务器返回的headers(首部字段)和状态码。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;重要&lt;/strong&gt;：只有响应的源数据存储在NSURLResponse对象中。其它的URL加载类通过你应用程序的处理完成的Block或者对象的代理来提供响应数据。一个NSCachedURLResponse实例封装了NSURLResponse对象，URL内容数据，以及你应用程序提供的额外的信息。参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/20001834-155585&#34;&gt; Cache Management &lt;/a&gt;了解详细信息。&lt;/p&gt;
+
+&lt;p&gt;使用URL响应对象的细节在本书中描述。&lt;/p&gt;
+
+&lt;h4 id=&#34;redirection-and-other-request-changes&#34;&gt;Redirection and Other Request Changes&lt;/h4&gt;
+
+&lt;p&gt;(重定向和其它请求更改)&lt;/p&gt;
+
+&lt;p&gt;一些协议，比如HTTP，为服务器提供了一种告知你应用程序请求的URL内容已经移动到其它URL的方式。当这种情况发生的时候，URL加载类会通知它们的代理。如果你应用程序提供了合适的代理方法，你的应用程序就直到如何重定向，返回重定向后的响应数据或者错误。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;相关章节&lt;/strong&gt;：&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/RequestChanges.html#//apple_ref/doc/uid/TP40009506-SW1&#34;&gt; Handling Redirects and Other Request Changes &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h4 id=&#34;authentication-and-credentials&#34;&gt;Authentication and Credentials&lt;/h4&gt;
+
+&lt;p&gt;(认证和Credentials)&lt;/p&gt;
+
+&lt;p&gt;一些服务器限制访问某些内容，要求用户通过提供某种凭证－客户端证书，用户名和密码等等，以获得访问权限。在web服务器的情况下，限制内容被分组成为需要凭证的领域。证书也被用来确定信任另一个方向来评估您的应用程序是否应该信任服务器。&lt;/p&gt;
+
+&lt;p&gt;URL加载系统提供了安全凭证持久化模型和保护区。你的应用程序可以为一个单一的请求指定持久凭证，在应用程序启动时，或者永久的在用户钥匙串中。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：Credentials持久化的存储在用户的钥匙串中，所有的应用程序是共享的。&lt;/p&gt;
+
+&lt;p&gt;NSURLCredential类封装了一个凭证，包括认证的信息(用户名和密码)和持久化的行为。NSURLProtectionSpace类表示需要特定凭证的区域。一个保护空间可以限定在一个单一的URL，包含web服务器的领域，或者代理。&lt;/p&gt;
+
+&lt;p&gt;NSURLCredentialStorage类共享的一个实例(单例)管理凭证，以及提供了NSURLCredential对象与对应的NSURLProtectionSpace对象的映射，提供了认证信息。&lt;/p&gt;
+
+&lt;p&gt;NSURLAuthenticationChallenge类封装了由NSURLProtocol协议实现认证请求所需的信息：一个提议凭证，涉及的保护空间，用来检测认证所需的错误或者响应，以及尝试认证的次数。NSURLAuthenticationChallenge实例也指定了发起认证的对象。启动对象称为发送者，必须适配了NSURLAuthenticationChallengeSender协议。&lt;/p&gt;
+
+&lt;p&gt;NSURLAuthenticationChallenge实例被NSURLProtocol子类用来通知URL加载系统需要的认证。同时也提供了便于定制认证处理的NSURLConnection和NSURLDownload的委托方法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;相关章节&lt;/strong&gt;：&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW1&#34;&gt; Authentication Challenges and TLS Chain Validation &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h4 id=&#34;cache-management&#34;&gt;Cache Management&lt;/h4&gt;
+
+&lt;p&gt;(缓存管理)&lt;/p&gt;
+
+&lt;p&gt;URL加载系统提供了磁盘和内存缓存，允许应用程序减少对网络连接的依赖，提供一个快速的响应缓存。缓存基于每个应用程序存储。NSURLConnection的缓存，通过初始的NSURLRequest对象实例的缓存策略指定。&lt;/p&gt;
+
+&lt;p&gt;NSURLCache类提供了配置缓存大小和存储在磁盘位置上的方法。同时也提供了管理包含响应缓存的NSCachedURLResponse对象的集合的方法。&lt;/p&gt;
+
+&lt;p&gt;NSCachedURLResponse对象封装了NSURLResponse对象和URL内容数据。NSCachedURLResponse同时也提供了用户信息字典，你的应用程序可以用来存储任何自定义的数据。&lt;/p&gt;
+
+&lt;p&gt;不是所有的协议实现都支持响应缓存。目前只有http和https请求支持缓存。&lt;/p&gt;
+
+&lt;p&gt;NSURLConnection对象可以通过实现&lt;strong&gt;connection:willCacheResponse:&lt;/strong&gt;代理方法来控制一个响应是否缓存以及是否只缓存在内存中。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;相关章节&lt;/strong&gt;：&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Concepts/CachePolicies.html#//apple_ref/doc/uid/20001843-BAJEAIEE&#34;&gt; Understanding Cache Access &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h4 id=&#34;cookie-storage&#34;&gt;Cookie Storage&lt;/h4&gt;
+
+&lt;p&gt;(Cookie存储)&lt;/p&gt;
+
+&lt;p&gt;由于HTTP协议的无状态特性，客户端经常使用Cookie来提供跨URL请求数据的持久化存储。URL加载系统提供了接口创建和管理Cookie，将Cookie当作HTTP请求的一部分发送，然后在解释web服务器响应时接收Cookie。&lt;/p&gt;
+
+&lt;p&gt;OS X和iOS提供了NSHTTPCookieStorage类，又提供了一种管理NSHTTPCookie对象的结合的接口。在OS X中，所有的应用程序共享Cookie，在iOS中，Cookie是基于每个应用程序存储的。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;相关章节&lt;/strong&gt;：&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/CookiesandCustomProtocols/CookiesandCustomProtocols.html#//apple_ref/doc/uid/10000165i-CH10-SW1&#34;&gt; Cookie Storage &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h4 id=&#34;protocol-support&#34;&gt;Protocol Support&lt;/h4&gt;
+
+&lt;p&gt;(协议支持)&lt;/p&gt;
+
+&lt;p&gt;URL加载系统本身支持http，https，file，ftp 和 data协议。但是，URL加载系统也允许你的应用程序注册你自己的类来支持额外的应用程序层级的网络协议。你也可以添加特定协议的特性到URL请求和响应对象中。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;相关章节&lt;/strong&gt;：&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/CookiesandCustomProtocols/CookiesandCustomProtocols.html#//apple_ref/doc/uid/10000165i-CH10-SW3&#34;&gt; Cookies and Custom Protocols &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;how-to-use-this-document&#34;&gt;How to Use This Document&lt;/h2&gt;
+
+&lt;p&gt;(如何使用本文档)&lt;/p&gt;
+
+&lt;p&gt;本文档根据章节描述的不同的URL加载类来分的。为了决定使用哪种API，参阅&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165-SW1&#34;&gt; URL Loading &lt;/a&gt;。在你决定使用哪种API之后，请阅读API指定的章节或者如下章节：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;对于使用NSURLSession类来异步获取URL内容到内存或者下载文件到磁盘，阅读&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW1&#34;&gt; Using NSURLSession &lt;/a&gt;。然后阅读&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/NSURLSessionConcepts/NSURLSessionConcepts.html#//apple_ref/doc/uid/10000165i-CH2-SW1&#34;&gt; Life Cycle of a URL Session &lt;/a&gt;学习NSURLSession与代理之间交互的细节。&lt;/li&gt;
+&lt;li&gt;对于使用NSURLConnection异步获取URL内容到内存，阅读&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLConnection.html#//apple_ref/doc/uid/20001836-BAJEAIEE&#34;&gt; Using NSURLConnection &lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;对于使用NSURLDownload异步下载文件到磁盘，阅读&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLDownload.html#//apple_ref/doc/uid/20001839-BAJEAIEE&#34;&gt; Using NSURLDownload &lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在阅读了一个或者多个API指定的章节后，你应该阅读以下章节，也是相关的API：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/WorkingwithURLEncoding/WorkingwithURLEncoding.html#//apple_ref/doc/uid/10000165i-CH12-SW1&#34;&gt; Encoding URL Data &lt;/a&gt;解释了如何编码具体的字符串，让它们在URL中能够安全的使用。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/RequestChanges.html#//apple_ref/doc/uid/TP40009506-SW1&#34;&gt; Handling Redirects and Other Request Changes &lt;/a&gt;描述了当你请求的URL的内容移动到了其它的URL时你能做的操作。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW1&#34;&gt; Authentication Challenges and TLS Chain Validation &lt;/a&gt;描述了当你的连接被安全服务器拒绝时认证的处理过程。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Concepts/CachePolicies.html#//apple_ref/doc/uid/20001843-BAJEAIEE&#34;&gt; Understanding Cache Access &lt;/a&gt;描述了连接在请求期间如何使用缓存。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/CookiesandCustomProtocols/CookiesandCustomProtocols.html#//apple_ref/doc/uid/10000165i-CH10-SW3&#34;&gt; Cookies and Custom Protocols &lt;/a&gt;描述了用来管理Cookie的可用的类以及支持自定义的应用层级的协议。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;see-also&#34;&gt;See Also&lt;/h2&gt;
+
+&lt;p&gt;(请参阅)&lt;/p&gt;
+
+&lt;p&gt;可用的案例代码：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;LinkedImageFetcher (OS X) 和 AdvancedURLConnections (iOS)，使用NSURLConnection和自定义认证。&lt;/li&gt;
+&lt;li&gt;SpecialPictureProtocol (OS X) 和 CustomHTTPProtocol (iOS)展示了如何实现自定义的NSURLProtocol子类。&lt;/li&gt;
+&lt;li&gt;QuickLookDownloader (in the Mac Developer Library)使用NSURLDownload管理从互联网下载的文件。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>Concurrency Programming Guide - Migrating Away from Threads</title>
+      <link>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---migrating-away-from-threads/</link>
+      <pubDate>Thu, 14 Jan 2016 13:52:12 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---migrating-away-from-threads/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW1&#34;&gt;官方文档&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;migrating-away-from-threads&#34;&gt;Migrating Away from Threads&lt;/h1&gt;
+
+&lt;p&gt;(从线程迁移)&lt;/p&gt;
+
+&lt;p&gt;将现有线程代码迁移到GCD和操作对象有很多种方法。尽管不是所有的线程代码都能够迁移，但是迁移可能提升性能，并简化你的代码。使用调度队列和操作队列来代替线程拥有许多有点：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;不再需要存储线程堆栈到应用程序的内存空间。&lt;/li&gt;
+&lt;li&gt;消除了创建和配置线程的代码。&lt;/li&gt;
+&lt;li&gt;消除了管理和调度线程工作的代码。&lt;/li&gt;
+&lt;li&gt;简化了你要编写的代码。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;本章提供了一些技巧和指引，如何使用调度队列和操作队列替换基于线程的代码，并且实现相同的行为。&lt;/p&gt;
+
+&lt;h2 id=&#34;replacing-threads-with-dispatch-queues&#34;&gt;Replacing Threads with Dispatch Queues&lt;/h2&gt;
+
+&lt;p&gt;(使用调度队列替换线程)&lt;/p&gt;
+
+&lt;p&gt;首先考虑应用可能使用线程的几种方式：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;单一任务线程：创建一个线程执行一个单一的任务，当任务完成时释放线程。&lt;/li&gt;
+&lt;li&gt;工作线程：创建一个或者多个工作线程执行特定的任务，定期分配任务给每个线程。&lt;/li&gt;
+&lt;li&gt;创建一个通用线程池，为每一个线程设置&lt;strong&gt;run loops&lt;/strong&gt;。当你有任务要执行的时候，从线程池中抓取一个线程，并分配任务给它。如果没有空闲线程可用，将任务入队列，等待可用的线程。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;尽管这些看起来像是不同的技术，但实际上只是相同原理的变种。这些线程都是应用程序用来执行任务的。唯一的区别就是管理线程和任务排队的代码。使用调度队列和操作队列，你可以消除线程和线程间通信的代码，让你专注于要执行的任务。&lt;/p&gt;
+
+&lt;p&gt;如果你使用了上面其中一种线程模型，你应该非常了解你应用程序要执行的任务类型。不再是将任务提交到一个你自定义的线程，而是封装在一个操作对象里面或者Block对象里面，然后调度到合适的队列。对于那些没有争议，不需要使用锁的任务，你可以直接使用一下方法进行迁移：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;单一任务线程，将任务封装在Block或者操作对象里面，然后提交给并发队列。&lt;/li&gt;
+&lt;li&gt;对于工作线程，你需要决定是使用串行的队列还是并发的队列。如果你需要工作线程将特定任务集同步的执行，使用串行队列。如果你使用工作线程执行具体的没有相互依赖的任务，使用并发队列。&lt;/li&gt;
+&lt;li&gt;对于线程池，将任务封装到Block或者操作对象，调度给并发队列执行。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当然，这种简单的替换并不适合所有的情形。如果你要执行的任务会争夺共享资源，理想的解决方案就是消除或者最小化资源的争夺。如果你可以重构代码或者重新架构代码来消除共享资源的依赖，这是最完美的。如果不能这样做，或者没有效果，你仍然可以使用队列。队列的一大优势就是提供了可供预测的代码执行。这里的可预测意味着你在不使用锁或者其它重量级的锁机制的情形下仍然可以同步的执行代码。你可以使用队列来替代锁执行一下任务：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如果你的任务必须按照指定顺序执行，提交到串行调度队列。如果你更喜欢使用操作队列，请使用操作对象的依赖确保按照指定的顺序执行。&lt;/li&gt;
+&lt;li&gt;如果你使用锁保护共享资源，使用串行队列来执行任何会修改资源的任务。串行队列替代的同步的锁的机制。关于更多摆脱锁的信息，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW3&#34;&gt; Eliminating Lock-Based Code &lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;如果你使用&lt;strong&gt;thread joins&lt;/strong&gt;来等待后台任务的完成，你可以考虑使用&lt;strong&gt;dispatch groups&lt;/strong&gt;替代。你也可以使用一个&lt;strong&gt;NSBlockOperation&lt;/strong&gt;对象或者操作对象依赖来实现这些行为。更多关于如何跟踪组的任务执行，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW6&#34;&gt; Replacing Thread Joins &lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;如果你使用生产者－消费者算法来管理有限资源池，请考虑改变实现，参考&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW7&#34;&gt; Changing Producer-Consumer Implementations &lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;如果你使用线程从描述符读写数据，或者监控文件操作，使用&lt;strong&gt;dispatch sources&lt;/strong&gt;，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1&#34;&gt; Dispatch Sources &lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;记住队列不是替代线程的万能药这点很重要。异步编程模型提供的队列适合延迟无关紧要的场合。虽然队列提供配置任务执行的优先级的方法，但更高的优先级也不能确保任务一定能在特定时间得到执行。因此，线程仍然是实现最小延迟的适当选择，例如音频和视频的播放。&lt;/p&gt;
+
+&lt;h2 id=&#34;eliminating-lock-based-code&#34;&gt;Eliminating Lock-Based Code&lt;/h2&gt;
+
+&lt;p&gt;(消除基于锁的代码)&lt;/p&gt;
+
+&lt;p&gt;对于线程代码，锁不同线程间同步访问共享资源的一种方式。然而，锁会带来开销。即使不考虑开销的情形下，使用锁也会由性能损失。在竞争的情形下，一个或者多个线程会为了等待锁的释放而阻塞。&lt;/p&gt;
+
+&lt;p&gt;使用队列替代锁，消除了锁带来的开销，并且简化了现有代码。你可以创建队列来串行的访问资源，而不是使用锁来保护共享资源。队列的开销和锁不一样。比如，将任务入队列并不会到内核中去获取互斥锁。&lt;/p&gt;
+
+&lt;p&gt;当把任务入队列时，你做的主要决定就是同步还是异步。异步提交任务使当前线程在任务执行时继续执行。同步提交任务会阻塞当前线程直到任务完成。两种机制各有用途，不过异步优于同步，尽可能的异步提交。&lt;/p&gt;
+
+&lt;p&gt;接下来展示了如何使用基于队列的代码来等价的替换已经存在的基于锁的代码。&lt;/p&gt;
+
+&lt;h3 id=&#34;implementing-an-asynchronous-lock&#34;&gt;Implementing an Asynchronous Lock&lt;/h3&gt;
+
+&lt;p&gt;(实现异步锁)&lt;/p&gt;
+
+&lt;p&gt;异步锁保护共享资源，也不会阻塞任何修改资源的代码。当你代码的部分工作需要修改一个数据结构的时候你可能会使用异步锁。使用传统的线程，你的实现：获得共享资源的锁，做必要的修改，释放锁，然后继续任务的其它部分的工作。但是，使用调度队列，调用代码可以异步修改，而不需要等待这些修改完成。&lt;/p&gt;
+
+&lt;p&gt;Listing 5-1展示了一个异步锁的实现。在这个例子中，受保护的资源定义了自己的串行队列。调用代码提交了一个Block对象到队列，Block包含了对资源必要的修改。因为这个队列是串行执行的，这个资源的修改可以确保按顺序进行；而且任务是异步执行的，调用线程不会阻塞。&lt;/p&gt;
+
+&lt;p&gt;Listing 5-1  Modifying protected resources asynchronously&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;dispatch_async(obj-&amp;gt;serial_queue, ^{
+    // Critical section
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;executing-critical-sections-synchronously&#34;&gt;Executing Critical Sections Synchronously&lt;/h3&gt;
+
+&lt;p&gt;(同步执行临界区)&lt;/p&gt;
+
+&lt;p&gt;如果当前的代码无法继续直到给定的任务完成，你可以使用&lt;strong&gt;dispatch_sync&lt;/strong&gt;函数同步提交任务。这个函数将任务添加到调度队列，然后阻塞当前线程，直到任务执行完成。根据你的需要这个队列可以是串行的或者并发的。因为这个函数会阻塞当前线程，所以只在需要的时候使用这个函数。Listing 5-2展示了使用&lt;strong&gt;dispatch_sync&lt;/strong&gt;实现临界区的例子。&lt;/p&gt;
+
+&lt;p&gt;Listing 5-2  Running critical sections synchronously&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;dispatch_sync(my_queue, ^{
+    // Critical section
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你已经使用串行队列来保护共享资源，同步提交并不会比异步提交更好的保护资源。同步提交的唯一理由就是阻止当前代码运行直到临界区执行完成。如果你想要马上使用共享资源的一些值，你可能会同步提交。如果当前代码不需要等待临界区执行完成，或者接下来可以简单的提交额外的任务到这个相同的串行队列，通常异步提交更好。&lt;/p&gt;
+
+&lt;h2 id=&#34;improving-on-loop-code&#34;&gt;Improving on Loop Code&lt;/h2&gt;
+
+&lt;p&gt;(改进循环代码)&lt;/p&gt;
+
+&lt;p&gt;如果你的代码中有循环，每次循环迭代执行的任务是相互独立的，你可以考虑使用&lt;strong&gt;dispatch_apply&lt;/strong&gt; 或者 &lt;strong&gt;dispatch_apply_f&lt;/strong&gt;函数来替换循环代码。这些函数将循环的迭代分开，然后提交给调度队列处理。当使用并发队列时，可以并发的执行循环中的多个迭代。&lt;/p&gt;
+
+&lt;p&gt;调用&lt;strong&gt;dispatch_apply&lt;/strong&gt; 和 &lt;strong&gt;dispatch_apply_f&lt;/strong&gt;函数是同步的，会阻塞当前线程直到循环所有的迭代都完成。当提交给并发队列时，循坏迭代的顺序是不确定的。运行每个迭代的线程可能会阻塞导致一个迭代在其它迭代之前或者之后完成。因此，你用于每个循环迭代的Block对象或者函数必须是可重入的。&lt;/p&gt;
+
+&lt;p&gt;Listing 5-3展示了如何使用GCD等价的替换&lt;strong&gt;for&lt;/strong&gt;循环。你传递给&lt;strong&gt;dispatch_apply&lt;/strong&gt; 或 &lt;strong&gt;dispatch_apply_f&lt;/strong&gt;函数的Block或者函数必须接收一个整型值的参数，用来指示当前的循环迭代。在这个例子中，简单的将循环的次数打印到控制台。&lt;/p&gt;
+
+&lt;p&gt;Listing 5-3  Replacing a for loop without striding&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+dispatch_apply(count, queue, ^(size_t i) {
+    printf(&amp;quot;%u\n&amp;quot;, i);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;尽管之前的例子很简单，演示了使用调度队列替换&lt;strong&gt;for&lt;/strong&gt;循环的基本技术。虽然这是优化基于循环代码的好方法，但是你仍然需要明智的使用这项技术。虽然调度队列的开销非常小，但是在线程上调度每个循环迭代仍然是有开销的。因此，你的循环迭代必须由一定的工作量才能忽略这些开销。你应该使用性能工具找出到底需要执行多大的工作量。&lt;/p&gt;
+
+&lt;p&gt;提升每次循环迭代的工作量的方法就是使用跨步。使用跨步时，重写原来的Block代码，执行多个循环迭代。从而减少了你指定给&lt;strong&gt;dispatch_apply&lt;/strong&gt;函数的count值。Listing 5-4展示了使用跨步实现Listing 5-3的代码。Block仍然会打印出当前迭代循环的索引，当前跨步是137。(真实的跨步值应该由你基于工作量自己配置。)因为有余值，任何剩余的迭代内联执行。&lt;/p&gt;
+
+&lt;p&gt;Listing 5-4  Adding a stride to a dispatched for loop&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int stride = 137;
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+
+dispatch_apply(count / stride, queue, ^(size_t idx){
+    size_t j = idx * stride;
+    size_t j_stop = j + stride;
+    do {
+        printf(&amp;quot;%u\n&amp;quot;, (unsigned int)j++);
+    }while (j &amp;lt; j_stop);
+});
+
+size_t i;
+for (i = count - (count % stride); i &amp;lt; count; i++)
+printf(&amp;quot;%u\n&amp;quot;, (unsigned int)i);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用跨步有明确的性能优势，特别是当循环迭代的次数很大的时候。调度少量的Block并发，意味着执行代码花的时间比调度它们的时间更多。正如任何性能指标，你应该多试几次跨步值，找到你代码最高效的那个跨步值。&lt;/p&gt;
+
+&lt;h2 id=&#34;replacing-thread-joins&#34;&gt;Replacing Thread Joins&lt;/h2&gt;
+
+&lt;p&gt;(替换Thread Joins)&lt;/p&gt;
+
+&lt;p&gt;Thread Joins允许你生成一个或者多个线程，然后让当前线程等待这些线程完成。为了实现一个Thread Joins，父线程创建子线程时作为joinable的线程。如果父线程没有子线程的结果无法继续处理，就可以join子线程。会阻塞父线程直到子线程的任务完成后退出，这时候父线程可以获得子线程的结果然后继续它的工作。父线程可以一次join多个子线程。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Dispatch groups&lt;/strong&gt;提供了类似于Thread Joins的语义，但是拥有一些额外的优势。和Thread Joins类似，&lt;strong&gt;Dispatch groups&lt;/strong&gt;也能够阻塞一个线程直到一个或者多个子任务执行完成。但是不同于Thread Joins，&lt;strong&gt;Dispatch groups&lt;/strong&gt;同时等待所有子任务。因为&lt;strong&gt;Dispatch groups&lt;/strong&gt;使用调度队列执行任务，非常高效。&lt;/p&gt;
+
+&lt;p&gt;使用&lt;strong&gt;Dispatch groups&lt;/strong&gt;替换Thread Joins，步骤如下：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;使用&lt;strong&gt;dispatch_group_create&lt;/strong&gt;函数创建一个新的&lt;strong&gt;dispatch group&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;使用&lt;strong&gt;dispatch_group_async&lt;/strong&gt; 和 &lt;strong&gt;dispatch_group_async_f&lt;/strong&gt;函数给组添加任务。每个提交到组的任务表示你使用joinable线程执行的普通任务。&lt;/li&gt;
+&lt;li&gt;如果当前线程不能继续任何工作，调用&lt;strong&gt;dispatch_group_wait&lt;/strong&gt;函数等待组。这个函数会阻塞当前线程直到组里所有的任务执行完成。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果你使用操作对象实现你的任务，你也可以使用依赖实现Thread Joins。不过这时候不是让父线程等待一个或者多个任务完成，而是将父线程的代码移到操作对象中。然后你就可以设置父的操作对象和任意数量的子操作对象之间的依赖，执行joinable线程执行的普通任务。因为父的操作对象在其它操作对象上有依赖，阻止了父操作对象在其它操作完成之前执行。&lt;/p&gt;
+
+&lt;p&gt;关于如何使用&lt;strong&gt;dispatch groups&lt;/strong&gt;，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW25&#34;&gt; Waiting on Groups of Queued Tasks &lt;/a&gt;。关于操作对象之间设置依赖，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW17&#34;&gt; Configuring Interoperation Dependencies &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;changing-producer-consumer-implementations&#34;&gt;Changing Producer-Consumer Implementations&lt;/h2&gt;
+
+&lt;p&gt;(修改生产者－消费者实现)&lt;/p&gt;
+
+&lt;p&gt;生产者－消费者模型可以让你管理有限的动态产生的资源。当生产者创建了一个新的资源，一个或者多个消费者等待并消耗这些资源。通常实现生产者－消费者的典型机制是条件或者信号量。&lt;/p&gt;
+
+&lt;p&gt;使用条件时，生产者线程通常如下：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;使用&lt;strong&gt;pthread_mutex_lock&lt;/strong&gt;锁住与条件相关联的mutex。&lt;/li&gt;
+&lt;li&gt;产生要消费的资源或者工作。&lt;/li&gt;
+&lt;li&gt;使用信号提醒条件变量有资源可以消费了(使用&lt;strong&gt;pthread_cond_signal&lt;/strong&gt;)。&lt;/li&gt;
+&lt;li&gt;使用&lt;strong&gt;pthread_mutex_unlock&lt;/strong&gt;解锁mutex。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;对应的消费者线程如下：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;使用&lt;strong&gt;pthread_mutex_lock&lt;/strong&gt;锁住条件相关的mutex。&lt;/li&gt;
+&lt;li&gt;设置一个&lt;strong&gt;while&lt;/strong&gt;循环做如下工作：
+
+&lt;ul&gt;
+&lt;li&gt;检查是否有真的有工作在做。&lt;/li&gt;
+&lt;li&gt;如果没有工作做(或者没有资源可用)，调用&lt;strong&gt;pthread_cond_wait&lt;/strong&gt;阻塞当前线程直到相应的信号触发。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;获得生产者提供的工作或资源。&lt;/li&gt;
+&lt;li&gt;使用&lt;strong&gt;pthread_mutex_unlock&lt;/strong&gt;解锁mutex。&lt;/li&gt;
+&lt;li&gt;处理工作。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;使用调度队列，你只需要一个调用就可以实现生产者和消费者模型：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;dispatch_async(queue, ^{
+    // Process a work item.
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当你的生产者有工作要做时，只需要将工作添加到队列，并让队列去处理该工作。唯一需要确定的就是队列的类型。如果生产者生成的任务需要特定的执行顺序。你可以使用串行队列。如果生产者生成的任务并发执行，使用并发队列，然后让系统同时尽可能多的执行。&lt;/p&gt;
+
+&lt;h2 id=&#34;replacing-semaphore-code&#34;&gt;Replacing Semaphore Code&lt;/h2&gt;
+
+&lt;p&gt;(替换信号量代码)&lt;/p&gt;
+
+&lt;p&gt;如果你正在使用信号量来限制共享资源的访问，你应该考虑使用调度信号量来替换。传统的信号量总是需要调用内核来测试信号量。与此相反，调度信号量在用户空间快速测试信号状态，只有测试失败的时候才会调用内核，调用线程需要阻塞。在没有竞争的情形下，调度信号量的行为比传统信号量要快的多。在其它方面，两者的行为是类似的。&lt;/p&gt;
+
+&lt;p&gt;关于如何使用调度信号量，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW24&#34;&gt; Using Dispatch Semaphores to Regulate the Use of Finite Resources &lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;replacing-run-loop-code&#34;&gt;Replacing Run-Loop Code&lt;/h2&gt;
+
+&lt;p&gt;(替换Run-Loop代码)&lt;/p&gt;
+
+&lt;p&gt;如果你使用Run-Loop来管理一个或多个线程执行的工作，你会发现使用队列来实现和维护任务要简单许多。设置一个自定义的Run-Loop需要同时设置底层线程和Run-Loop本身。Run-Loop代码需要包含设置一个或者多个run-loop sources然后编写回调处理到达这些sources上的事件。你可以简单的创建一个串行队列然后调度任务给它。你可以使用一行代码来替换你所有的小城和Run-Loop创建的代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;dispatch_queue_t myNewRunLoop = dispatch_queue_create(&amp;quot;com.apple.MyQueue&amp;quot;, NULL);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为队列自动执行添加进来的任务，不需要额外的代码来管理队列。你不需要创建或者配置一个线程，也不需要创建或者附加任何的run-loop sources。此外，你还可以通过简单的添加任务到这个队列上来执行其它类型的任务。使用Run-Loop来实现这一点，你需要修改现有的run loop source或者创建一个新的处理新的数据。&lt;/p&gt;
+
+&lt;p&gt;Run-Loop的一个常用配置就是处理网络套接字异步到达的数据。为了替代这种行为类型的Run-Loop，你可以附加一个调度源到期望的队列上。调度源同样也提供了比传统run loop sources更多的选择来处理数据。除了处理定时器和网络端口的事件，你也可以使用调度源读写文件。监控文件系统对象，监控进程，以及信号。你甚至可以自定义调度源然后由你部分的异步代码来触发。关于设置调度源的更多信息，参见[ Dispatch Sources ]()。&lt;/p&gt;
+
+&lt;h2 id=&#34;compatibility-with-posix-threads&#34;&gt;Compatibility with POSIX Threads&lt;/h2&gt;
+
+&lt;p&gt;(与POSIX线程的兼容性)&lt;/p&gt;
+
+&lt;p&gt;因为Grand Central Dispatch管理你提供的任务之间的关系以及运行任务的线程，通常你应该避免在任务代码中调用POSIX线程事务。如果由于一些原因你必须调用，你应该非常小心你调用的事务。接下来的部分给你提供了那些事务在你任务代码中调用是安全的，哪些是不安全的。这个列表是未完成的，但是应该提示你哪些调用是安全的，哪些不是。&lt;/p&gt;
+
+&lt;p&gt;通常来说，你的应用程序不能删除或者改变不是自己创建的对象和数据结构。因此，调度队列执行的Block对象不能调用如下函数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pthread_detach
+pthread_cancel
+pthread_join
+pthread_kill
+pthread_exit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;虽然在任务运行的时候修改线程的状态是可以的，你必须在任务返回之前还原线程原来的状态。只要你还原了线程原来的状态，调用如下的函数就是安全的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pthread_setcancelstate
+pthread_setcanceltype
+pthread_setschedparam
+pthread_sigmask
+pthread_setspecific
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用来执行给定Block的底层线程在多次调用间会发生改变。因此，你的应用程序不应该依赖于如下函数与调用Block之间的返回值信息：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pthread_self
+pthread_getschedparam
+pthread_get_stacksize_np
+pthread_get_stackaddr_np
+pthread_mach_thread_np
+pthread_from_mach_thread_np
+pthread_getspecific
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;重要&lt;/strong&gt;：Block必须捕获和禁止任何在其中抛出的语言级别的异常。Block执行期间的其它错误也应该由Block处理或者通知应用程序。&lt;/p&gt;
+
+&lt;p&gt;更多关于POSIX线程的信息以及这里提到的函数，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man3/pthread.3.html#//apple_ref/doc/man/3/pthread&#34;&gt; pthread &lt;/a&gt;主页。&lt;/p&gt;
+
+&lt;p&gt;================= 结束 =================&lt;/p&gt;
+
+&lt;p&gt;到这里就结束了，官方文档最后一章是名词解释，这里就不翻译了。&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Glossary/Glossary.html#//apple_ref/doc/uid/TP40008091-CH104-SW2&#34;&gt; Glossary &lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

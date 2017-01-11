@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cert on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/cert/index.xml</link>
+    <description>Recent content in Cert on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/cert/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Fastlane - Cert</title>
+      <link>http://lynchwong.com/blog/2016/06/fastlane---cert/</link>
+      <pubDate>Tue, 28 Jun 2016 08:46:19 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/fastlane---cert/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;说明：翻译的 &lt;code&gt;Cert&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; 原文地址 &lt;/a&gt;。
+&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneCert/cert.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;cert&#34;&gt;cert&lt;/h1&gt;
+
+&lt;p&gt;自动创建维护 iOS 的 Code Signing Certificates 。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;cert&lt;/code&gt; 只专注于 Code Signing 。你可以为不同的环境(development 和 distribution)创建新的 Code Signing identities 然后使用任何已经存在的有效的 Certificates 替换本地的。&lt;/p&gt;
+
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt;根据 &lt;a href=&#34;https://codesigning.guide&#34;&gt;codesigning.guide&lt;/a&gt; 推荐使用 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt;match&lt;/a&gt; 来生成维护你的 Certificates 。&lt;/p&gt;
+
+&lt;p&gt;如果你想完整的控制要发生的事情以及知道 Codesigning 的更多知识，可以直接使用 &lt;code&gt;cert&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo gem install cert
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;确保你已经安装了 Xcode 最新版本的命令行工具：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xcode-select --install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;为什么使用&#34;&gt;为什么使用？&lt;/h1&gt;
+
+&lt;p&gt;请查看 &lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/cert/ManualSteps.md&#34;&gt;this guide&lt;/a&gt; ，向你演示了如何使用 Apple Developer Portal 手动创建 iOS Code Signing Profile 和 Provisioning Profile 。&lt;/p&gt;
+
+&lt;p&gt;查看完成&lt;strong&gt;之后&lt;/strong&gt;，再看 &lt;code&gt;cert&lt;/code&gt; 和 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt;&lt;code&gt;sigh&lt;/code&gt;&lt;/a&gt; 如何为你做这些工作。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneCert/cert.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如上所示，我使用了 &lt;code&gt;cert &amp;amp;&amp;amp; sigh&lt;/code&gt; ，首先会创建 iOS Code Signing Certificate ，如果 &lt;code&gt;cert&lt;/code&gt; 成功，然后会为你的 App 创建 Provisioning Profile 。&lt;/p&gt;
+
+&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;cert
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个会检测你本地机器是否已经安装了可用的 Signing Certificates 。&lt;/p&gt;
+
+&lt;p&gt;如果需要创建新的 Certificate ，&lt;code&gt;cert&lt;/code&gt; 会做如下事情：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;创建新的 Private Key&lt;/li&gt;
+&lt;li&gt;创建新的 Signing Request&lt;/li&gt;
+&lt;li&gt;生成、下载、安装 Certificate&lt;/li&gt;
+&lt;li&gt;导入所有生成的文件到你的 Keychain&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;cert&lt;/code&gt; 永远不会废除(revoke)你已经存在的 Certificates 。如果不能再创建任何新的 Certificates，&lt;code&gt;cert&lt;/code&gt; 会产生一个异常，意味着你必需废除(revoke)一个已经存在的 Certificates 给新的腾出空间。&lt;/p&gt;
+
+&lt;p&gt;你可以传递你的 Apple ID：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cert -u cert@krausefx.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可用的命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cert --help
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;记住，&lt;code&gt;cert&lt;/code&gt; 没有办法从 Apple Develop Portal 下载已经存在的 Certificates 和 Private Keys ，因为 Private Key 永远不会离开?(leaves)你的电脑。&lt;/p&gt;
+
+&lt;h2 id=&#34;环境变量&#34;&gt;环境变量&lt;/h2&gt;
+
+&lt;p&gt;运行 &lt;code&gt;cert --help&lt;/code&gt; 列出所有可用的环境变量的列表。&lt;/p&gt;
+
+&lt;h2 id=&#34;和-sigh-https-github-com-fastlane-fastlane-tree-master-sigh-一起使用&#34;&gt;和 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt;&lt;code&gt;sigh&lt;/code&gt;&lt;/a&gt; 一起使用&lt;/h2&gt;
+
+&lt;p&gt;当 &lt;code&gt;cert&lt;/code&gt; 和 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/fastlane&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt;&lt;/a&gt; 中的 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt;&lt;code&gt;sigh&lt;/code&gt;&lt;/a&gt; 组合使用时就变的很有趣了。&lt;/p&gt;
+
+&lt;p&gt;更新你的 &lt;code&gt;Fastfile&lt;/code&gt; 包含如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lane :beta do
+    cert
+    sigh(force: true)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;force: true&lt;/code&gt; 会确保在每次运行的时候都会重新生成 Provisioning Profile 。这会导致 &lt;code&gt;sigh&lt;/code&gt; 始终使用的是对的 Signing Certificate，会安装在本地机器上。&lt;/p&gt;
+
+&lt;h2 id=&#34;如何存储我的密码&#34;&gt;如何存储我的密码？&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;cert&lt;/code&gt; 使用来自 &lt;code&gt;fastlane&lt;/code&gt; 的 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt;password manager&lt;/a&gt;。查看 &lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/credentials_manager/README.md&#34;&gt;CredentialsManager README&lt;/a&gt;获取更多信息。&lt;/p&gt;
+
+&lt;h1 id=&#34;提示&#34;&gt;提示&lt;/h1&gt;
+
+&lt;h2 id=&#34;fastlane-工具链&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt;工具链&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; &lt;code&gt;deliver&lt;/code&gt; &lt;/a&gt;：将你的应用、截图、元数据上传到App Store&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; &lt;code&gt;snapshot&lt;/code&gt; &lt;/a&gt;：将你iOS应用在每一种设备上进行本地化自动截图&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; &lt;code&gt;frameit&lt;/code&gt; &lt;/a&gt;：快速将你的截图放入到适合的设备框中&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; &lt;code&gt;pem&lt;/code&gt; &lt;/a&gt;自动生成和更新你的推送通知证书&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; &lt;code&gt;sigh&lt;/code&gt; &lt;/a&gt;：管理你的 provisioning profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; &lt;code&gt;produce&lt;/code&gt; &lt;/a&gt;：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; &lt;code&gt;spaceship&lt;/code&gt; &lt;/a&gt;：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; &lt;code&gt;pilot&lt;/code&gt; &lt;/a&gt;：管理你TestFlight测试人员的最好方式，使用终端构建&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; &lt;code&gt;boarding&lt;/code&gt; &lt;/a&gt;：邀请你 TestFlight 的beta测试人员的最简单方式&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; &lt;code&gt;gym&lt;/code&gt; &lt;/a&gt;：构建你iOS应用程序&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; &lt;code&gt;scan&lt;/code&gt; &lt;/a&gt;：为你iOS和Mac应用运行测试的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; &lt;code&gt;match&lt;/code&gt; &lt;/a&gt;：使用Git在你的团队中同步你的 certificates 和 profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/supply&#34;&gt; &lt;code&gt;supply&lt;/code&gt; &lt;/a&gt;：将你的Android应用和数据上传到 Google Play&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/screengrab&#34;&gt; &lt;code&gt;screengrab&lt;/code&gt; &lt;/a&gt;：Android版&lt;code&gt;snapshot&lt;/code&gt;，一样的功能&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;使用-provisioning-quicklook-plugin&#34;&gt;使用&amp;rsquo;Provisioning Quicklook plugin&amp;rsquo;&lt;/h2&gt;
+
+&lt;p&gt;下载安装 &lt;a href=&#34;https://github.com/chockenberry/Provisioning&#34;&gt;Provisioning Plugin&lt;/a&gt; ，方便查看 Provisioning Profile files 和 Certificates 。&lt;/p&gt;
+
+&lt;h1 id=&#34;帮助&#34;&gt;帮助&lt;/h1&gt;
+
+&lt;p&gt;请提交 issue 到 GitHub，并提供你关于设置的信息。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

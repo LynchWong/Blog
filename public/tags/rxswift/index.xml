@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rxswift on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/rxswift/index.xml</link>
+    <description>Recent content in Rxswift on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/rxswift/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>小记 - RxSwift</title>
+      <link>http://lynchwong.com/blog/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</link>
+      <pubDate>Sat, 23 Apr 2016 09:30:49 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</guid>
+      <description>&lt;p&gt;又有一个月没有写过博客了，真是罪过，深深的内疚的感觉。之前写完了&lt;a href=&#34;http://lynchwong.com/2016/03/19/Alamofire-源码学习-Request/&#34;&gt; Alamofire 源码学习 &lt;/a&gt;然后让另一个做iOS的同学看，他说看不懂，写的乱。
+&lt;/p&gt;
+
+&lt;p&gt;其实我看了下貌似是挺乱的，但是 Alamofire 的模式很简单，明白了就没什么东西了。大神的代码写的很简洁、简单，思路很清晰，结构很明朗。我觉得这样的代码就是最好的，特别是在公司里面，大家合作的时候，代码越简单、简洁，思路越清晰越好，这样才能降低维护的成本。&lt;/p&gt;
+
+&lt;p&gt;这段时间除了忙公司项目外，还在搞RxSwift。学习了下RxSwift，做了些小Demo，感觉用起来很爽。跟之前使用RAC相比，我感觉RxSwift更容易上手。RAC和RxSwift的源码都看了下，看懂了一小部分，后面会接着看。这两个框架的对比，网上有很多，之前我也用过RAC，项目里面也用过。但是RxSwift给我的感觉就是更顺，所以现在我更倾向于RxSwift。&lt;/p&gt;
+
+&lt;p&gt;这里贴一些RxSwift的学习资料，方便查阅：&lt;/p&gt;
+
+&lt;p&gt;ReactiveX社区，不仅仅是RxSwift，几乎包含了所有的编程语言：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://reactivex.io&#34;&gt; ReactiveX &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://mcxiaoke.gitbooks.io/rxdocs/content/&#34;&gt; ReactiveX文档中文翻译 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://rxmarbles.com&#34;&gt; RxMarbles 图解运算符 &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;讲解RxSwift的文章，以及一些Demo：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://realm.io/cn/news/slug-max-alexander-functional-reactive-rxswift/?hmsr=toutiao.io&#34;&gt; RxSwift 函数响应式编程 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.callmewhy.com/2015/11/01/moya-rxswift-argo-lets-go/&#34;&gt; 通过 Moya+RxSwift+Argo 完成网络请求 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.callmewhy.com/2015/09/21/rxswift-getting-started-0/&#34;&gt; RxSwift 入坑手册 Part0 - 基础概念 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.callmewhy.com/2015/09/23/rxswift-getting-started-1/&#34;&gt; RxSwift 入坑手册 Part1 - 示例实战 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://geek.csdn.net/news/detail/59759&#34;&gt; RxSwift的第一印象 &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://t.swift.gg/d/2-rxswift&#34;&gt; RxSwift 学习指导索引 &lt;/a&gt;(列出的参考资源很好，很丰富)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;RAC和RxSwift的对比：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.cnblogs.com/andy-zhou/p/5321798.html&#34;&gt; iOS响应式编程：ReactiveCocoa vs RxSwift 选谁好 &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;RAC也好、RxSwift也好，都跟FRP有关，理解FRP的思想：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.infoq.com/cn/articles/functional-reactive-programming&#34;&gt; 函数式反应型编程(FRP) —— 实时互动应用开发的新思路 &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;隆重推荐最后这篇，超级棒。很多人学习了RxSwift，但是可能不知道在项目里怎么用，那么读了这篇你就明白了。讲解了如何以响应式编程的方式来思考：一切皆是流。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/hehonghui/android-tech-frontier/tree/master/androidweekly/那些年我们错过的响应式编程&#34;&gt; 那些年我们错过的响应式编程 &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当然看源码也是很好的，项目中的 Rx.playground 也是学习理解的好地方。&lt;/p&gt;
+
+&lt;p&gt;以上。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

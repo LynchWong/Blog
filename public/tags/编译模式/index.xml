@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>编译模式 on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/index.xml</link>
+    <description>Recent content in 编译模式 on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Debug/Release等编译模式</title>
+      <link>http://lynchwong.com/blog/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Sun, 25 Oct 2015 00:07:53 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</guid>
+      <description>&lt;p&gt;通常我们的App有多种不同的编译模式，比如&lt;strong&gt;Debug&lt;/strong&gt;、&lt;strong&gt;Release&lt;/strong&gt;。我们在开发的时候大都是&lt;strong&gt;Debug&lt;/strong&gt;模式，发布的时候会选择&lt;strong&gt;Release&lt;/strong&gt;模式。通常我们的服务请求地址也会根据编译模式来进行不同的选择。当然系统已经给我们定义好了这两种编译模式，但有时候我们不止需要两种，我可以自己添加额外的编译模式。
+&lt;/p&gt;
+
+&lt;p&gt;假设我们有3种环境，开发、测试、发布。开发是开发人员使用的环境；测试是测试人员使用的环境；发布是App正式上线之后使用的环境。那么我们就需要3种编译模式，测试对应&lt;strong&gt;Debug&lt;/strong&gt;、发布对应&lt;strong&gt;Release&lt;/strong&gt;，那么还需要添加另外一种编译模式。这里我们假设就需要添加一种叫做&lt;strong&gt;Develop&lt;/strong&gt;的编译模式。&lt;/p&gt;
+
+&lt;p&gt;我们新建一个项目，语言选择OC。然后我们替换&lt;strong&gt;ViewController.m&lt;/strong&gt;文件内容如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#import &amp;quot;ViewController.h&amp;quot;
+
+@interface ViewController ()
+
+@end
+
+@implementation ViewController
+
+#ifdef DEBUG
+    #define kWidth 100.0f
+#elif RELEASE
+    #define kWidth 200.0f
+#else
+    #define kWidth 300.0f
+#endif
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+    NSLog(@&amp;quot;kWidht : %f&amp;quot;, kWidth);
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+@end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里我们在3种不同的环境下定义了&lt;strong&gt;kWidth&lt;/strong&gt;常量，然后我们打印这个常量，运行之后输出如下结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-10-25 13:48:01.217 DebugRelease[1193:76047] kWidht : 100.000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;项目新建之后我们没有对Scheme做任何更改，默认Scheme截图如下，模拟器运行是在&lt;strong&gt;DEBUG&lt;/strong&gt;模式下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;修改Scheme，将&lt;strong&gt;Build Configuration&lt;/strong&gt;修改为Release，截图如下；&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;运行之后控制台输出：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-10-25 14:01:37.186 DebugRelease[1360:87151] kWidht : 300.000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;跟我们预想的有些不一样，按照逻辑来说应该输出：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-10-25 14:05:10.454 DebugRelease[1430:90460] kWidht : 200.000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来我们做下修改就好了，截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图中所示，我们在&lt;strong&gt;Build Settings&lt;/strong&gt;中搜索macro，然后发现&lt;strong&gt;Release&lt;/strong&gt;这一项是没值的，所以到了另外一个分支里面，输出了其他结果。&lt;strong&gt;Debug&lt;/strong&gt;已经默认设置好了，所以我们这里设置一下值就好了，设置为&lt;strong&gt;RELEASE=1 $(inherited)&lt;/strong&gt;，运行之后输出结果就对了。&lt;/p&gt;
+
+&lt;p&gt;这里我们还需要添加一种编译模式，如最开始的时候说的&lt;strong&gt;Develop&lt;/strong&gt;模式。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们点击&lt;strong&gt;+&lt;/strong&gt;号来添加一个编译模式，叫&lt;strong&gt;Develop&lt;/strong&gt;。截图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后我们修改Scheme为&lt;strong&gt;Develop&lt;/strong&gt;，运行后输出：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-10-25 14:19:55.663 DebugRelease[1555:100946] kWidht : 200.000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是因为我是按照&lt;strong&gt;Release&lt;/strong&gt;模式来设置&lt;strong&gt;Develop&lt;/strong&gt;的，如果我们去&lt;strong&gt;Build Settings&lt;/strong&gt;里面去看就会发现&lt;strong&gt;Develop&lt;/strong&gt;模式的值和&lt;strong&gt;Release&lt;/strong&gt;的值是一样的，所以输出的结果也是一样的。如果你是按照按照&lt;strong&gt;Debug&lt;/strong&gt;模式来设置&lt;strong&gt;Develop&lt;/strong&gt;，那么输出的结果就是和&lt;strong&gt;Debug&lt;/strong&gt;的值一样。所以我们这里修改下&lt;strong&gt;Develop&lt;/strong&gt;的值，修改为&lt;strong&gt;DEVELOP=1 $(inherited)&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;运行后的结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-10-25 14:25:07.919 DebugRelease[1584:104028] kWidht : 300.000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;判断编译模式的代码也可以修改为如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#ifdef DEBUG
+    #define kWidth 100.0f
+#elif RELEASE
+    #define kWidth 200.0f
+#elif DEVELOP
+    #define kWidth 300.0f
+#endif
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这种方式可能会导致没有&lt;strong&gt;kWidth&lt;/strong&gt;这个常量，当其他的同事定义使用了其他的编译模式时就会出现这个问题。原来的代码始终会有一个&lt;strong&gt;kWidth&lt;/strong&gt;常量，只是值可能不是你期望的。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

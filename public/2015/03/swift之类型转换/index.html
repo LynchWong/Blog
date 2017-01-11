@@ -1,0 +1,958 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Swift之类型转换</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="类型转换可以判断实例的类型,也可以将实例看做是其父类或者子类的实例。
+">
+    <meta property="og:description" content="类型转换可以判断实例的类型,也可以将实例看做是其父类或者子类的实例。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Swift之类型转换">
+    <meta property="og:url" content="/2015/03/swift%E4%B9%8B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="类型转换可以判断实例的类型,也可以将实例看做是其父类或者子类的实例。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Swift之类型转换
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-03-06T10:46:22Z">
+    
+  
+  
+  
+  
+    2015-03-06 10:46:22
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>类型转换可以判断实例的类型,也可以将实例看做是其父类或者子类的实例。
+</p>
+
+<p>类型转换在 Swift 中使用 is 和 as 操作符实现。这两个操作符提供了一种简单达意的方式去检查值的类型或者转换它的类型。</p>
+
+<p>你也可以用它来检查一个类是否实现了某个协议,就像在 检验协议的一致性部分讲述的一样。</p>
+
+<h2 id="定义一个类层次作为例子">定义一个类层次作为例子</h2>
+
+<p>你可以将类型转换用在类和子类的层次结构上,检查特定类实例的类型并且转换这个类实例的类型成为这个层次结构中的其他类型。下面的三个代码段定义了一个类层次和一个包含了几个这些类实例的数组,作为类型转换的例子。</p>
+
+<p>第一个代码片段定义了一个新的基础类 MediaItem 。这个类为任何出现在数字媒体库的媒体项提供基础功 能。特别的,它声明了一个 String 类型的 name 属性,和一个 init name 初始化器。(假定所有的媒体项都 有个名称。)</p>
+
+<pre><code>class MediaItem {
+    var name: String
+    init(name: String) {
+        self.name = name
+    }
+}
+</code></pre>
+
+<p>下一个代码段定义了 MediaItem 的两个子类。第一个子类 Movie 封装了与电影相关的额外信息,在父类(或 者说基类)的基础上增加了一个 director (导演)属性,和相应的初始化器。第二个子类 Song ,在父类的基 础上增加了一个 artist (艺术家)属性,和相应的初始化器:</p>
+
+<pre><code>class Movie: MediaItem {
+    var director: String
+    init(name: String, director: String) {
+        self.director = director
+        super.init(name: name)
+    }
+}
+
+class Song: MediaItem {
+    var artist: String
+    init(name: String, artist: String) {
+        self.artist = artist
+        super.init(name: name)
+    }
+}
+</code></pre>
+
+<p>最后一个代码段创建了一个数组常量 library ,包含两个 Movie 实例和三个 Song 实例。 library 的类型是在它被初始化时根据它数组中所包含的内容推断来的。Swift的类型检测器能够推理出 Movie 和 Song 有共同的 父类 MediaItem ,所以它推断出 [MediaItem] 类作为 library 的类型。</p>
+
+<pre><code>let library = [
+    Movie(name: &quot;Casablanca&quot;, director: &quot;Michael Curtiz&quot;),
+    Song(name: &quot;Blue Suede Shoes&quot;, artist: &quot;Elvis Presley&quot;),
+    Movie(name: &quot;Citizen Kane&quot;, director: &quot;Orson Welles&quot;),
+    Song(name: &quot;The One And Only&quot;, artist: &quot;Chesney Hawkes&quot;),
+    Song(name: &quot;Never Gonna Give You Up&quot;, artist: &quot;Rick Astley&quot;)
+]
+// the type of &quot;library&quot; is inferred to be [MediaItem]
+</code></pre>
+
+<p>在幕后 library 里存储的媒体项依然是 Movie 和 Song 类型的。但是,若你迭代它,依次取出的实例会是 ediaItem 类型的,而不是 Movie 和 Song 类型。为了让它们作为原本的类型工作,你需要检查它们的类型或 者向下转换它们到其它类型,就像下面描述的一样。</p>
+
+<h2 id="检查类型">检查类型</h2>
+
+<p>用类型检查操作符( is )来检查一个实例是否属于特定子类型。若实例属于那个子类型,类型检查操作符返回 true ,否则返回 false 。</p>
+
+<p>下面的例子定义了两个变量, movieCount 和 songCount ,用来计算数组 library 中 Movie 和 Song 类 型的实例数量。</p>
+
+<pre><code>var movieCount = 0
+var songCount = 0
+
+for item in library {
+    if item is Movie {
+        ++movieCount
+    } else if item is Song {
+        ++songCount
+    }
+}
+
+println(&quot;Media library contains \(movieCount) movies and \(songCount) songs&quot;)
+// prints &quot;Media library contains 2 movies and 3 songs&quot;
+</code></pre>
+
+<p>示例迭代了数组 library 中的所有项。每一次, for - in 循环设置 item 为数组中的下一个 MediaItem 。</p>
+
+<p>若当前 MediaItem 是一个 Movie 类型的实例, item is Movie 返回 true ,相反返回 false 。同样的, ite m is Song 检查item是否为 Song 类型的实例。在循环结束后, movieCount 和 songCount 的值就是被找 到属于各自的类型的实例数量。</p>
+
+<h2 id="向下转型-downcasting">向下转型(Downcasting)</h2>
+
+<p>某类型的一个常量或变量可能在幕后实际上属于一个子类。当确定是这种情况时,你可以尝试向下转到它的子类型,用类型转换操作符( as? 或 as! )。</p>
+
+<p>因为向下转型可能会失败,类型转型操作符带有两种不同形式。条件形式(conditional form) as? 返回一个 你试图向下转成的类型的可选值(optional value)。强制形式 as! 把试图向下转型和强制解包(force-unwr aps)结果作为一个混合动作。</p>
+
+<p>当你不确定向下转型可以成功时,用类型转换的条件形式( as? )。条件形式的类型转换总是返回一个可选值(op tional value),并且若下转是不可能的,可选值将是 nil 。这使你能够检查向下转型是否成功。</p>
+
+<p>只有你可以确定向下转型一定会成功时,才使用强制形式( as! )。当你试图向下转型为一个不正确的类型时,强 制形式的类型转换会触发一个运行时错误。</p>
+
+<p>下面的例子,迭代了 library 里的每一个 MediaItem ,并打印出适当的描述。要这样做, item 需要真正作为 Movie 或 Song 的类型来使用,不仅仅是作为 MediaItem 。为了能够在描述中使用 Movie 或 Song 的 director 或 artist 属性,这是必要的。</p>
+
+<p>在这个示例中,数组中的每一个 item 可能是 Movie 或 Song 。事前你不知道每个 item 的真实类型,所以 这里使用条件形式的类型转换( as? )去检查循环里的每次下转。</p>
+
+<pre><code>for item in library {
+    if let movie = item as? Movie {
+        println(&quot;Movie: '\(movie.name)', dir. \(movie.director)&quot;)
+    } else if let song = item as? Song {
+        println(&quot;Song: '\(song.name)', by \(song.artist)&quot;)
+    }
+}
+
+// Movie: 'Casablanca', dir. Michael Curtiz
+// Song: 'Blue Suede Shoes', by Elvis Presley
+// Movie: 'Citizen Kane', dir. Orson Welles
+// Song: 'The One And Only', by Chesney Hawkes
+// Song: 'Never Gonna Give You Up', by Rick Astley
+</code></pre>
+
+<p>示例首先试图将 item 下转为 Movie。因为 item 是一个 MediaItem 类型的实例,它可能是一个 Movie;同样,它可能是一个 Song,或者仅仅是基类 MediaItem。因为不确定,as?形式在试图下转时将返还一个可选值。 item as? Movie 的返回值是 Movie?类型或 可选 Movie”。</p>
+
+<p>当向下转型为 Movie 应用在两个 Song 实例时将会失败。为了处理这种情况,上面的实例使用了可选绑定(optional binding)来检查可选 Movie 真的包含一个值(这个是为了判断下 是否成功。)可选绑定是这样写的“if let movie = item as? Movie”,可以这样解读:</p>
+
+<p>“尝试将 item 转为 Movie 类型。若成功,设置一个新的临时常量 movie 来存储返回的可选 Movie”</p>
+
+<p>若下转成功,然后 movie 的属性将用于打印一个 Movie 实例的描述,包括它的导演的名字 director。相近的原理被用来检测 Song 实例，当 Song 被找到时则打印它的描述(包含 artist 的名字)。</p>
+
+<p>注意:转换没有真的改变实例或它的值。潜在的根本的实例保持不变;只是简单地把它作为它被转换成的类来使用。</p>
+
+<h2 id="any-和-anyobject-的转换">Any 和 AnyObject 的转换</h2>
+
+<p>Swift 为不确定类型提供了两种特殊类型别名:</p>
+
+<ol>
+<li>AnyObject 可以代表任何 class 类型的实例。</li>
+<li>Any 可以表示任何类型,除了方法类型(function types)。</li>
+</ol>
+
+<p>注意:只有当你明确的需要它的行为和功能时才使用 Any 和 AnyObject。在你的代码里使用你期望的明确的类型总是更好的。</p>
+
+<h3 id="anyobject-类型">AnyObject 类型</h3>
+
+<p>当在工作中使用 Cocoa APIs,我们一般会接收一个 [AnyObject] 类型的数组,或者说“一个任何对象类型的数组”。这是因为 Objective-C 没有明确的类型化数组。但是,你常常可以从 API 提供的信息中清晰地确定数组中对象的类型。</p>
+
+<p>在这些情况下,你可以使用强制形式的类型转换( as )来下转在数组中的每一项到比 AnyObject 更明确的类型,不需要可选解析(optional unwrapping)。</p>
+
+<p>下面的示例定义了一个 [AnyObject] 类型的数组并填入三个 Movie 类型的实例:</p>
+
+<pre><code>let someObjects: [AnyObject] = [
+    Movie(name: &quot;2001: A Space Odyssey&quot;, director: &quot;Stanley Kubrick&quot;),
+    Movie(name: &quot;Moon&quot;, director: &quot;Duncan Jones&quot;),
+    Movie(name: &quot;Alien&quot;, director: &quot;Ridley Scott&quot;)
+]
+</code></pre>
+
+<p>因为知道这个数组只包含 Movie 实例,你可以直接用( as! )下转并解包到不可选的 Movie 类型:</p>
+
+<pre><code>for object in someObjects {
+    let movie = object as! Movie
+    println(&quot;Movie: '\(movie.name)', dir. \(movie.director)&quot;)
+}
+// Movie: '2001: A Space Odyssey', dir. Stanley Kubrick
+// Movie: 'Moon', dir. Duncan Jones
+// Movie: 'Alien', dir. Ridley Scott
+</code></pre>
+
+<p>为了变为一个更短的形式,下转 someObjects 数组为 [Movie] 类型来代替下转数组中每一项的方式。</p>
+
+<pre><code>for movie in someObjects as! [Movie] {
+    println(&quot;Movie: '\(movie.name)', dir. \(movie.director)&quot;)
+}
+// Movie: '2001: A Space Odyssey', dir. Stanley Kubrick
+// Movie: 'Moon', dir. Duncan Jones
+// Movie: 'Alien', dir. Ridley Scott
+</code></pre>
+
+<h3 id="any类型">Any类型</h3>
+
+<p>这里有个示例,使用 Any 类型来和混合的不同类型一起工作,包括方法类型和非 class 类型。它创建了一个 可以存储 Any 类型的数组 things 。</p>
+
+<pre><code>var things = [Any]()
+things.append(0)
+things.append(0.0)
+things.append(42)
+things.append(3.14159)
+things.append(&quot;hello&quot;)
+things.append((3.0, 5.0))
+things.append(Movie(name: &quot;Ghostbusters&quot;, director: &quot;Ivan Reitman&quot;))
+things.append({ (name: String) -&gt; String in &quot;Hello, \(name)&quot; })
+</code></pre>
+
+<p>things 数组包含两个 Int 值,2个 Double 值,1个 String 值,一个元组 (Double, Double) ,电影“Gho stbusters”,和一个获取 String 值并返回另一个 String 值的闭包表达式。</p>
+
+<p>你可以在 switch 表达式的cases中使用 is 和 as 操作符来发觉只知道是 Any 或 AnyObject 的常量或变 量的类型。下面的示例迭代 things 数组中的每一项的并用 switch 语句查找每一项的类型。这几种 switch 语 句的情形绑定它们匹配的值到一个规定类型的常量,让它们的值可以被打印:</p>
+
+<pre><code>for thing in things {
+    switch thing {
+    case 0 as Int:
+        println(&quot;zero as an Int&quot;)
+    case 0 as Double:
+        println(&quot;zero as a Double&quot;)
+    case let someInt as Int:
+        println(&quot;an integer value of \(someInt)&quot;)
+    case let someDouble as Double where someDouble &gt; 0:
+        println(&quot;a positive double value of \(someDouble)&quot;)
+    case is Double:
+        println(&quot;some other double value that I don't want to print&quot;)
+    case let someString as String:
+        println(&quot;a string value of \&quot;\(someString)\&quot;&quot;)
+    case let (x, y) as (Double, Double):
+        println(&quot;an (x, y) point at \(x), \(y)&quot;)
+    case let movie as Movie:
+        println(&quot;a movie called '\(movie.name)', dir. \(movie.director)&quot;)
+    case let stringConverter as String -&gt; String:
+        println(stringConverter(&quot;Michael&quot;))
+    default:
+        println(&quot;something else&quot;)
+    }
+}
+
+// zero as an Int
+// zero as a Double
+// an integer value of 42
+// a positive double value of 3.14159
+// a string value of &quot;hello&quot;
+// an (x, y) point at 3.0, 5.0
+// a movie called 'Ghostbusters', dir. Ivan Reitman
+// Hello, Michael
+</code></pre>
+
+<p>注意:在一个switch语句的case中使用强制形式的类型转换操作符(as, 而不是 as?)来检查和转换到一个明确的类 型。在 switch case 语句的内容中这种检查总是安全的。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E5%B5%8C%E5%A5%97%E7%B1%BB%E5%9E%8B/" data-tooltip="Swift之嵌套类型">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" data-tooltip="Swift之错误处理">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25B1%25BB%25E5%259E%258B%25E8%25BD%25AC%25E6%258D%25A2%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25B1%25BB%25E5%259E%258B%25E8%25BD%25AC%25E6%258D%25A2%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25B1%25BB%25E5%259E%258B%25E8%25BD%25AC%25E6%258D%25A2%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E5%B5%8C%E5%A5%97%E7%B1%BB%E5%9E%8B/" data-tooltip="Swift之嵌套类型">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" data-tooltip="Swift之错误处理">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25B1%25BB%25E5%259E%258B%25E8%25BD%25AC%25E6%258D%25A2%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25B1%25BB%25E5%259E%258B%25E8%25BD%25AC%25E6%258D%25A2%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25B1%25BB%25E5%259E%258B%25E8%25BD%25AC%25E6%258D%25A2%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25B1%25BB%25E5%259E%258B%25E8%25BD%25AC%25E6%258D%25A2%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25B1%25BB%25E5%259E%258B%25E8%25BD%25AC%25E6%258D%25A2%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25B1%25BB%25E5%259E%258B%25E8%25BD%25AC%25E6%258D%25A2%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/03\/swift%E4%B9%8B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2\/';
+          
+            this.page.identifier = '\/2015\/03\/swift%E4%B9%8B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

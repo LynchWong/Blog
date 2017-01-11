@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ios Game on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/ios-game/index.xml</link>
+    <description>Recent content in Ios Game on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/ios-game/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>SpriteKit：Scenes</title>
+      <link>http://lynchwong.com/blog/2015/04/spritekitscenes/</link>
+      <pubDate>Thu, 23 Apr 2015 23:20:32 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/04/spritekitscenes/</guid>
+      <description>&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;最近这周时间比较忙，空闲的时候看了看苹果官方的编程指南。发现有很多东西都是之前忽略掉的，或者就是根本不知道的。看完之后感觉收获良多，在某些方面有恍然大悟之感。其实刚开始学iOS的时候去看一些官方文档可能并没有多少作用，到了一定程度回头再去看得时候就觉得很清晰、很有逻辑。这些编程指南就像一些经典书籍一样，不同的时间回去看就会有不同的收获，这些书籍能随着时间跟随我们一起成长，我们需要做得就是细细的品，不时的回头看看，思考。看书还是多看经典的好，这也是为什么有的人觉得看了那么多书，却感觉没什么用，就是因为经典看的少。&lt;/p&gt;
+
+&lt;p&gt;装了下逼，心情就更舒畅了。SpriteKit这个系列还有很多内容，估计写起来还要花很多时间。所以后面我会穿插一些其他的内容，比如一些阅读编程指南后的感悟，或者就是翻译下编程指南。网上有很多博主已经翻译了很多编程指南，有些可能版本已经对不上了，内容跟现在的有些差异。我会参考这些翻译的指南，重新整理。&lt;/p&gt;
+
+&lt;p&gt;再多说一点，写SpriteKit这个系列，并没有教大家怎样完整的做一个游戏。主要的还是理论、概念方面的讲解，所以当作资料或者工具来使用比较好。同时还是推荐大家&lt;a href=&#34;http://www.raywenderlich.com/store/ios-games-by-tutorials&#34;&gt;iOS Games by Tutorials Second Edition&lt;/a&gt;这本书，它有5个完整的游戏Demo，对大家的学习更有帮助。这本书跟大家推荐过很多次了，后面不会再提了。&lt;/p&gt;
+
+&lt;p&gt;回到主题，这章就讲讲场景和视差滚动这两个内容。&lt;/p&gt;
+
+&lt;h2 id=&#34;场景&#34;&gt;场景&lt;/h2&gt;
+
+&lt;p&gt;通常继承&lt;code&gt;SKScene&lt;/code&gt;，然后实现&lt;code&gt;init(size:)&lt;/code&gt;, &lt;code&gt;update()&lt;/code&gt;, &lt;code&gt;touchesBegan(withEvent:)&lt;/code&gt;或者其他一些你需要的方法。&lt;/p&gt;
+
+&lt;p&gt;还是打开之前的项目，选择*File\New\File&amp;hellip;*，*iOS\Source\Swift File*，点击*Next*，输入*GameOverScene*点击*Save As*。然后打开*GameOverScene.swift*文件替换成如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import Foundation
+import SpriteKit
+
+class GameOverScene: SKScene {
+
+    override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.grayColor()
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里将场景的背景色设置为灰色，所以当切换到这个场景时就是灰色的背景。&lt;/p&gt;
+
+&lt;h2 id=&#34;切换场景&#34;&gt;切换场景&lt;/h2&gt;
+
+&lt;p&gt;首先我们将&lt;code&gt;GameScene.swift&lt;/code&gt;的替换成如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import SpriteKit
+
+class GameScene: SKScene {
+
+    let ship = SKSpriteNode(imageNamed: &amp;quot;Spaceship&amp;quot;)
+
+    override func didMoveToView(view: SKView) {
+        ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        addChild(ship)
+    }
+
+    override func touchesBegan(touches: Set&amp;lt;NSObject&amp;gt;, withEvent event: UIEvent) {
+        let touch = touches.first as! UITouch
+        let location = touch.locationInNode(self)
+        if CGRectContainsPoint(ship.frame, location) {
+            let scene = GameOverScene(size: CGSize(width: 750.0, height: 1334.0))
+            scene.scaleMode = scaleMode
+            let transition = SKTransition.flipHorizontalWithDuration(0.5)
+            view?.presentScene(scene, transition: transition)
+        }
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这段代码很简单，相信大家都能看懂。首先我们设置场景的&lt;code&gt;scaleMode&lt;/code&gt;为同一个模式，确保有相同的行为。多说一句，有四个值可以选，大家可以⌘点击进去看下具体的描述，这里就不一一解释了。当我们点击飞船精灵的内部时，我们就会从当前这个场景过渡到我们新创建的&lt;code&gt;GameOverScene&lt;/code&gt;场景。&lt;/p&gt;
+
+&lt;p&gt;从一个场景过渡到另一个场景只需要三个步骤：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;*创建新场景。*首先，创建新场景的实例。通常我们用默认的初始化方法&lt;code&gt;init(size:)&lt;/code&gt;，我们也可以使用自己定义的初始化方法，同时也可以传递额外的参数。&lt;/li&gt;
+&lt;li&gt;*创建过渡对象。*然后，你创建过渡对象来指定用来显示新场景时的动画类型。比如，淡入淡出、翻转等等。&lt;/li&gt;
+&lt;li&gt;*调用SKView的 presentScene(transition:) 方法。*在iOS中，&lt;code&gt;SKView&lt;/code&gt;就是&lt;code&gt;UIView&lt;/code&gt;，在屏幕上显示SpriteKit的内容。你可以用场景的属性&lt;code&gt;view&lt;/code&gt;来访问它。然后将第一步和第二部创建的参数传递给这个方法。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;有很多过渡用的动画，大家自行测试。&lt;/p&gt;
+
+&lt;h2 id=&#34;创建自定义的场景构造器&#34;&gt;创建自定义的场景构造器&lt;/h2&gt;
+
+&lt;p&gt;替换``为如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import Foundation
+import SpriteKit
+
+class GameOverScene: SKScene {
+
+    override init(size: CGSize) {
+        super.init(size: size)
+        backgroundColor = SKColor.yellowColor()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(&amp;quot;init(coder:) has not been implemented&amp;quot;)
+    }
+
+    //    override func didMoveToView(view: SKView) {
+    //        backgroundColor = SKColor.grayColor()
+    //    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;init(size: CGSize)&lt;/code&gt;这个构造器是从写的父类的，而且这个构造器是指定构造器。如果之前Swift的相关文章看过，这里就涉及到构造器链、以及两段式构造这些概念。指定构造器总是向上代理的，便利构造器总是横向代理的。指定构造器需要在本类所有属性初始化完成后调用父类的指定构造器，避免赋值的属性被父类从新赋值了；便利构造器需要先调用本类的指定构造器然后再对属性赋值，避免赋值的属性被本类的指定构造器从新赋值了，所以要先调用。由于我们没有属性需要初始化，所以直接调用了父类的指定构造器，然后在设置背景颜色为黄色。如果你先设置了背景颜色为黄色，然后再调用父类的指定构造器，编译器就会报错：Use of &amp;lsquo;self&amp;rsquo; in property access &amp;lsquo;backgroundColor&amp;rsquo; before super.init initializes self。这里就是两段式构造的概念了，在Swift里面，我们不需要显示的使用&lt;code&gt;Self&lt;/code&gt;这个关键字。其实这个&lt;code&gt;backgroundColor = SKColor.yellowColor()&lt;/code&gt;就相当于是&lt;code&gt;self.backgroundColor = SKColor.yellowColor()&lt;/code&gt;。编译器这里也解释了，在调用父类的指定构造器之前是不能使用&amp;rsquo;self&amp;rsquo;的。另一方面，指定构造器必须先向上代理调用父类构造器，然后再为继承的属性设置新值。如果没有这么做，指定构造器赋予的新值将被父类中的构造器所覆盖。所以在写自定义构造器时，最好先弄明白构造器链、以及两段式构造这些概念。&lt;/p&gt;
+
+&lt;h2 id=&#34;背景层滚动&#34;&gt;背景层滚动&lt;/h2&gt;
+
+&lt;p&gt;大家肯定都见过视差滚动了，很多游戏都用了这个技术。比如大家常玩的一些打飞机类的游戏，就有视差滚动。背景层以一个稳定的速度向着一个方向移动，从上向下或者从左往右，当多个背景层以不同的速度移动的时候就实现了远近的感觉。&lt;/p&gt;
+
+&lt;p&gt;这里我们讲讲怎么简单的实现一个背景层循环滚动，多个背景层滚动就是类似的，不做讲解。其实实现背景层循环滚动有很多种方法，因人而异，但是原理都是差不多的，随便讲解一种。&lt;/p&gt;
+
+&lt;p&gt;还是使用之前的那个项目，最后会上传这个简单的Demo。&lt;/p&gt;
+
+&lt;p&gt;首先我们添加一张背景图片，尺寸就是我们设置的场景的大小。然后替换&lt;code&gt;GameScene.swift&lt;/code&gt;内容为如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import SpriteKit
+
+class GameScene: SKScene {
+
+    let background = SKSpriteNode(imageNamed: &amp;quot;bg&amp;quot;)
+    let background1 = SKSpriteNode(imageNamed: &amp;quot;bg&amp;quot;)
+
+    override func didMoveToView(view: SKView) {
+        background.anchorPoint = CGPointZero
+        addChild(background)
+
+        background1.anchorPoint = CGPointZero
+        background1.position = CGPoint(x: 0.0, y: background.size.height)
+        addChild(background1)
+    }
+
+    override func update(currentTime: NSTimeInterval) {
+        if background.position.y &amp;lt;= -background.size.height {
+            background.position.y = background.size.height
+        }
+        if background1.position.y &amp;lt;= -background1.size.height {
+            background1.position.y = background1.size.height
+        }
+        background.position.y -= 1
+        background1.position.y -= 1
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;点击运行就能看到效果了，代码很简单。主要原理就是判断背景的y坐标是否超过了那个临界值，然后再设置背景的y坐标，这样就实现了循环滚动。&lt;a href=&#34;https://github.com/LynchWong/Test&#34;&gt;Demo&lt;/a&gt;，示例很简单。很多视差滚动的原理都是类似的，大家可以自行封装下达到重用的目的。&lt;/p&gt;
+
+&lt;p&gt;由于&lt;code&gt;SKNode&lt;/code&gt;本身是不会绘制内容的，所以在SpriteKit里面我们常常使用&lt;code&gt;SKNode&lt;/code&gt;来管理、组织我们场景里面的一些内容，就像cocos2d里面的&lt;code&gt;CCLayer&lt;/code&gt;。比如一个游戏，我们把背景组织放在一层，当作背景层，放在场景的最下面（设置zPositionsh属性）；然后玩家角色和其他的敌人等放在另外一层，放在场景背景层上面；最后我们将一些UI元素，比如按钮、标签等组织在UI层，放在场景的最上面。这些更方便我们来管理场景，同时操作也更方便。但是这些里面有一些地方时需要注意的，就是坐标问题。比如我们玩家角色需要和背景层里面的一些精灵交互，但是现在两个精灵在不同的层里面，那边位置坐标肯定是不一样的，所以我们应该将两个精灵的坐标转换到同一个坐标系统，不管是玩家角色转换到背景层还是背景层的转换到角色层。比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;backgroundLayer.convertPoint(CGPoint(x: size.width, y: CGRectGetMaxY(playableRect)), fromNode: self)
+
+//将场景坐标系统中得一个点转换到backgroundLayer的坐标系统。
+backgroundLayer.convertPoint( background.position, toNode: self)
+
+//将backgroundLayer的点转换到场景坐标系统。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据需求选择不同的方法。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SpriteKit：Actions</title>
+      <link>http://lynchwong.com/blog/2015/04/spritekitactions/</link>
+      <pubDate>Wed, 15 Apr 2015 10:31:17 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/04/spritekitactions/</guid>
+      <description>&lt;p&gt;上篇介绍了一些SpriteKit的基本概念，也介绍了怎么添加精灵到场景里面。但精灵在场景里都是静态的，我们还没有让它们动起来。所以这篇就讲讲怎么让精灵动起来，让游戏更生动。
+&lt;/p&gt;
+
+&lt;p&gt;有两种方法可以让精灵动起来：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;我们可以让精灵运行动作，在SpriteKit里面动作用&lt;code&gt;SKAction&lt;/code&gt;这个类来表示。比如一些简单的动作，移动，缩放，旋转，跟随等。你可以将简单的动作组合起来，成为一个序列；你也可以指定动作执行的次数或者循环执行；你也可以自定义动作等等。&lt;/li&gt;
+&lt;li&gt;我们可以根据时间来手动设置精灵的位置。之前有提到过&lt;code&gt;GameScene.swift&lt;/code&gt;里面有个&lt;code&gt;update(currentTime: NSTimeInterval)&lt;/code&gt;方法，SpriteKit每帧都会自动调用这个方法。所以，在这个方法里根据时间设置精灵的位置是个不错的选择。但是这个方法的效果有时候不会很理想，特别是当帧率不稳定的时候，我们后边再讲。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;所以接下来我们就具体的看看这两种方法，我们先用第二种方法。&lt;/p&gt;
+
+&lt;h2 id=&#34;使用update方法来移动精灵&#34;&gt;使用update方法来移动精灵&lt;/h2&gt;
+
+&lt;p&gt;我们还是接着上次使用的项目来继续，如果没有了，新建一个也很快，只需添加一个精灵到场景中即可。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;GameViewController.swift&lt;/code&gt;代码如下，只是删除了一些现在用不到的东西：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import UIKit
+import SpriteKit
+
+class GameViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let scene = GameScene(size: CGSize(width: 750.0, height: 1334.0))
+        let skView = self.view as! SKView
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        skView.ignoresSiblingOrder = true
+        scene.scaleMode = .AspectFill
+        skView.presentScene(scene)
+    }
+    override func prefersStatusBarHidden() -&amp;gt; Bool {
+        return true
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;GameScene.swift&lt;/code&gt;的代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import SpriteKit
+
+class GameScene: SKScene {
+
+    let ship = SKSpriteNode(imageNamed: &amp;quot;Spaceship&amp;quot;)
+
+    override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.whiteColor()
+        ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        addChild(ship)
+    }
+
+    override func update(currentTime: NSTimeInterval) {
+        ship.position.y += 1.0
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我将精灵声明为了GameScene的属性，其次我在update方法中更新精灵位置的y坐标，每帧增加1。⌘R运行后的效果就是飞船精灵由屏幕的正中间向上飞行，当然，看起来像是在飞行。这里我就不贴图了。&lt;/p&gt;
+
+&lt;p&gt;也许大家都注意到了屏幕右下角的一些信息，1 node 60.0fps，这里分别表示当前屏幕内有多少个节点，每秒绘制多少次。Frames per second (FPS)，表示每秒绘制的次数，值越高越好。通常来说游戏都会尽量保持30 ~ 60的FPS以保证动画的流畅，当低于30的时候就会感觉到呆滞。&lt;/p&gt;
+
+&lt;p&gt;这里我们需要研究SpriteKit每帧都做了些什么事情，官方文档&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html&#34;&gt;About Sprite Kit&lt;/a&gt;开篇就讲了这个问题，看下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;SpriteKit提供了图形渲染和动画基础，你可以用来使任意的纹理图像或者精灵动起来。SpriteKit使用传统的渲染循环，每一帧的内容会在这一帧渲染之前处理。你的游戏决定了场景的内容，以及场景内容在每一帧中怎么改变。SpriteKit使用图形硬件高效的绘制动画的每一帧。翻译的不好，大概意思就是这样。&lt;/p&gt;
+
+&lt;p&gt;从图中可以看出调用update方法只是每一帧执行内容的一部分，除此之外还有很多其他的事情，最后才是渲染整个场景。这里就先不说其他的，后面需要的时候会再说。SpriteKit会尽量快得绘制每一帧，让FPS尽量的接近60。然而，如果你得update方法花了太多的时间，或者SpriteKit一次绘制了草果硬件能够处理的节点数量，FPS就会下降。而这下降就意味着两次调用update方法之间的时间间隔是不一样的，这就导致了我们精灵的位置始终是在我们期望的位置附近波动的。即使我们保持60FPS时，两次update方法之间的时间间隔仍然是波动的。只是这时波动较小，肉眼难以从动画中看出差别。&lt;/p&gt;
+
+&lt;p&gt;接下来，我们添加代码来打印出两次方法调用之间的时间间隔：&lt;/p&gt;
+
+&lt;p&gt;在&lt;code&gt;GameScene.swift&lt;/code&gt;方法中添加如下两个属性：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var lastUpdateTime: NSTimeInterval = 0
+var dt: NSTimeInterval = 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在update方法中添加如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if lastUpdateTime &amp;gt; 0 {
+    dt = currentTime - lastUpdateTime
+} else {
+    dt = 0
+}
+lastUpdateTime = currentTime
+println(&amp;quot;\(dt*1000) milliseconds since last update&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;控制台输出如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;16.6635850000603 milliseconds since last update
+16.6687409982842 milliseconds since last update
+15.7276280006045 milliseconds since last update
+17.6131959997292 milliseconds since last update
+15.7501659996342 milliseconds since last update
+17.1622560010292 milliseconds since last update
+17.1266059987829 milliseconds since last update
+15.6556320034724 milliseconds since last update
+16.7910149975796 milliseconds since last update
+16.4657300010731 milliseconds since last update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看出是波动的，虽然是毫秒单位，人眼难以识别，但是毫秒对计算机来说已经是相当的一段时间了。所以这种波动的时间导致动画效果就如下图所示：图片来自&lt;a href=&#34;http://www.raywenderlich.com/store/ios-games-by-tutorials&#34;&gt;iOS Games by Tutorials Second Edition&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;总会在我们期望的准确位置附近波动。我们接下来就来修复这个问题：&lt;/p&gt;
+
+&lt;p&gt;首先我们保持update方法足够的快，应当避免在update方法里面执行复杂的算法；其次让场景中节点的数量越少越好，比如移除屏幕外的和不再需要的节点。&lt;/p&gt;
+
+&lt;p&gt;下面我们添加一个movePointsPerSec属性到&lt;code&gt;GameScene.swift&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let movePointsPerSec: CGFloat = 480.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后修改update方法代码如下所示；&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func update(currentTime: NSTimeInterval) {
+    if lastUpdateTime &amp;gt; 0 {
+        dt = currentTime - lastUpdateTime
+    } else {
+        dt = 0
+    }
+    lastUpdateTime = currentTime
+    println(&amp;quot;\(dt*1000) milliseconds since last update&amp;quot;)
+    ship.position.y += movePointsPerSec * CGFloat(dt)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们根据两次调用的时间差乘以期望每秒移动的距离，然后再加上原来位置的y坐标值，而不是像原来直接增加一个固定的值。&lt;/p&gt;
+
+&lt;p&gt;示例很简单，是单坐标抽的移动，实际情况更复杂。但是思想是一样的，也能推导出来。比如，我想让飞船移动到我手指点击的那个点。首先我们在&lt;code&gt;touchesBegan&lt;/code&gt;方法里面获取点击的坐标位置，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func touchesBegan(touches: Set&amp;lt;NSObject&amp;gt;, withEvent event: UIEvent) {
+    let touch = touches.first as! UITouch
+    let touchLocation = touch.locationInNode(self)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里有必要说一下，由于更新Swift1.2和Xcode6.3的原因，这个方法跟之前不一样了。原来是这样的&lt;code&gt;touchesBegan(touches: NSSet, withEvent event: UIEvent)&lt;/code&gt;，用&lt;code&gt;let touch = touches.anyObject() as UITouch&lt;/code&gt;获取&lt;code&gt;UITouch&lt;/code&gt;对象。简单的查了下集合类&lt;code&gt;Set&lt;/code&gt;的API改成上面那样获取&lt;code&gt;UITouch&lt;/code&gt;对象。包括as!，应该是Swift1.2版本更新的内容。这里先不说了，Xcode6.3也提供了方法将之前的Swift版本代码转变到最新版本的代码，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;试了下效果貌似不理想，可能是我使用方法不对，没做深究，大家自己试试。&lt;/p&gt;
+
+&lt;p&gt;添加一个&lt;code&gt;velocity&lt;/code&gt;属性：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var velocity = CGPointZero
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后添加吐下代码到&lt;code&gt;touchesBegan&lt;/code&gt;方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let offset = CGPoint(x: touchLocation.x - ship.position.x, y: touchLocation.y - ship.position.y)
+let length = sqrt(Double(offset.x * offset.x + offset.y * offset.y))
+let unit = CGPoint(x: offset.x / CGFloat(length), y: offset.y / CGFloat(length))
+velocity = CGPoint(x: unit.x * movePointsPerSec, y: unit.y * movePointsPerSec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们首先计算点击的点到当前精灵位置的差值，然后利用勾股定理计算出两点之间的距离，这些我想大家都懂了，要是忘了去搜下，或者自己用手画画坐标系，模拟计算下两点之间的距离。然后我们计算出单位向量，这个单位向量是以原来精灵的位置为坐标原点的，希望大家能理解。最后我们用单位向量乘以每秒期望移动的距离，最后得出一个速度。每当点击屏幕的时候，我们都会计算出一个速度。&lt;/p&gt;
+
+&lt;p&gt;最后修改&lt;code&gt;update&lt;/code&gt;方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func update(currentTime: NSTimeInterval) {
+    if lastUpdateTime &amp;gt; 0 {
+        dt = currentTime - lastUpdateTime
+    } else {
+        dt = 0
+    }
+    lastUpdateTime = currentTime
+    println(&amp;quot;\(dt*1000) milliseconds since last update&amp;quot;)
+    let amountToMove = CGPoint(x: velocity.x * CGFloat(dt), y: velocity.y * CGFloat(dt))
+    ship.position = CGPoint(x: ship.position.x + amountToMove.x, y: ship.position.y + amountToMove.y)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们用速度乘以时间差得出需要移动的距离，然后再加上精灵当前的位置。运行后就会发现精灵会向我们点击的点得方法移动，且会一直移动下去。怎么让精灵只移动到我们点击的点，大家自己试试。以及旋转飞机指向飞机前进的方向。&lt;/p&gt;
+
+&lt;h2 id=&#34;skaction&#34;&gt;SKAction&lt;/h2&gt;
+
+&lt;p&gt;注释掉&lt;code&gt;update&lt;/code&gt;和&lt;code&gt;touchesBegan&lt;/code&gt;方法，我们现在通过&lt;code&gt;SKAction&lt;/code&gt;来移动精灵。&lt;/p&gt;
+
+&lt;h3 id=&#34;move-action&#34;&gt;Move action&lt;/h3&gt;
+
+&lt;p&gt;修改&lt;code&gt;didMoveToView&lt;/code&gt;方法中的代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func didMoveToView(view: SKView) {
+    backgroundColor = SKColor.whiteColor()
+    ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+    ship.setScale(0.5)
+    addChild(ship)
+
+    let actionMove = SKAction.moveTo(CGPoint(x: ship.position.x, y: size.height), duration: 2.0)
+    ship.runAction(actionMove)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过调用&lt;code&gt;SKAction&lt;/code&gt;的类方法来创建一个动作，如上创建的动作会使节点在指定的时间内移动到指定的点。精灵通过调用&lt;code&gt;runAction()&lt;/code&gt;方法来执行动作，任何SKNode节点都可以调用&lt;code&gt;runAction()&lt;/code&gt;。运行后就会看到飞船精灵从屏幕中心点移动到屏幕上方的中点。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;moveTo(duration:)&lt;/code&gt;方法会移动在指定时间移动节点到指定的位置，除此方法之外还有其他的移动精灵的方法。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;moveToX(duration:)&lt;/code&gt;和&lt;code&gt;moveToY(duration:)&lt;/code&gt;这两个移动方法会根据指定的x轴和y轴的值来移动，而其他的保持不变。比如上面的实例我们也可以用&lt;code&gt;moveToY(duration:)&lt;/code&gt;这个方法实现。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;moveByX(y:duration:)&lt;/code&gt;。“move to”的方法会移动精灵到指定的位置，但是有时候根据偏移量来移动精灵也是很方便的。比如上面的示例我们也可以用这个方法实现，传递“0”给x轴，传递“size.height / 2”给y轴。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;区别如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;“[action] to”和“[action] by”这两种模式在其他种类的动作中也存在。比如“scale to”、“scale by”、“rotate by”、“rotate to”等等，大家运用的时候多看看方法说明。&lt;/p&gt;
+
+&lt;p&gt;有时候我们可以通过&lt;code&gt;extension&lt;/code&gt;来拓展一个类添加新的功能。但是&lt;code&gt;SKAction&lt;/code&gt;类无法拓展，创建action的唯一方法就是调用&lt;code&gt;SKAction&lt;/code&gt;的相应的类方法。&lt;/p&gt;
+
+&lt;h3 id=&#34;sequence-action&#34;&gt;Sequence action&lt;/h3&gt;
+
+&lt;p&gt;单个动作有时满足不了我们的需求，需要完成一个动作之后接着执行另一个动作。我们需要把一连串的动作排成一个序列，然后让节点执行这个动作。&lt;code&gt;SKAction&lt;/code&gt;提供了相应的方法来满足这个需求。&lt;/p&gt;
+
+&lt;p&gt;修改&lt;code&gt;didMoveToView()&lt;/code&gt;方法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func didMoveToView(view: SKView) {
+    backgroundColor = SKColor.whiteColor()
+    ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+    ship.setScale(0.5)
+    addChild(ship)
+
+    let moveUp = SKAction.moveByX(0, y: 100, duration: 1.0)
+    let zoom = SKAction.scaleTo(2.0, duration: 0.25)
+    let wait = SKAction.waitForDuration(0.5)
+    let fadeAway = SKAction.fadeOutWithDuration(0.25)
+    let removeNode = SKAction.removeFromParent()
+
+    let sequence = SKAction.sequence([moveUp, zoom, wait, fadeAway, removeNode])
+    ship.runAction(sequence)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;稍微讲下涉及到的一两个动作，将动作序列起来也很简单，大家应该一看就能领悟，动作的效果大家运行便知：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;wait 通常用到序列里面。这个动作只是简单的等待一段时间，然后就结束。&lt;/li&gt;
+&lt;li&gt;removeNode 动作是瞬时的，没有执行时间。虽然这个动作是序列的一部分，你会看到这个动作并没有出现在下面序列的时间线里面。作为瞬时动作，在 fadeAway 动作结束了就开始，然后马上就结束了。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;group-action&#34;&gt;Group action&lt;/h3&gt;
+
+&lt;p&gt;“group action”是一组动作的集合，当节点开始执行“group action”时，所有的动作都开始执行。修改&lt;code&gt;didMoveToView()&lt;/code&gt;代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func didMoveToView(view: SKView) {
+    backgroundColor = SKColor.whiteColor()
+    ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+    ship.setScale(0)
+    addChild(ship)
+
+
+    let animate = SKAction.animateWithTextures([SKTexture(imageNamed: &amp;quot;Spaceship&amp;quot;)], timePerFrame: 2.0)
+    let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+    let scale = SKAction.scaleTo(1.0, duration: 1.0)
+    let fadeIn = SKAction.fadeInWithDuration(1.0)
+
+    let group = SKAction.group([animate, moveDown, scale, fadeIn])
+    ship.runAction(group)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上图展示了“group action”的时间线，可以看出和“sequence action”的区别。“group action”里面的动作在同一时间开始执行，单个动作的结束时间取决于自己的执行时间，“group action”的执行时间取决于执行时间最长的动作。&lt;/p&gt;
+
+&lt;h3 id=&#34;repeating-sequence-action&#34;&gt;Repeating Sequence action&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;override func didMoveToView(view: SKView) {
+    backgroundColor = SKColor.whiteColor()
+    ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+    ship.setScale(0.5)
+    addChild(ship)
+
+
+    let fadeOut = SKAction.fadeOutWithDuration(1)
+    let fadeIn = SKAction.fadeInWithDuration(1)
+    let pulse = SKAction.sequence([fadeOut,fadeIn])
+
+    let pulseThreeTimes = SKAction.repeatAction(pulse, count: 3)
+    ship.runAction(pulseThreeTimes)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码很简单，下图展示了 pulseThreeTimes 动作的时间线。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;repeating-group-action&#34;&gt;Repeating Group action&lt;/h3&gt;
+
+&lt;p&gt;修改&lt;code&gt;didMoveToView()&lt;/code&gt;方法如下，循环执行一个“group action”：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func didMoveToView(view: SKView) {
+    backgroundColor = SKColor.whiteColor()
+    ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+    ship.setScale(0.5)
+    addChild(ship)
+
+
+    let animate = SKAction.animateWithTextures([SKTexture(imageNamed: &amp;quot;Spaceship&amp;quot;)], timePerFrame: 2.0)
+    let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+
+    let group = SKAction.sequence([animate, moveDown])
+    let repeat = SKAction.repeatActionForever(group)
+    ship.runAction(repeat)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下图展示了 repeat 动作的时间线。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;group-repeat-action&#34;&gt;Group repeat action&lt;/h3&gt;
+
+&lt;p&gt;标题的名字是不是有点让人糊涂了，但是仔细理解，认真看代码就能明白是什么意思了。这个标题的意思就是把重复动作用group组合起来。修改&lt;code&gt;didMoveToView()&lt;/code&gt;方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func didMoveToView(view: SKView) {
+    backgroundColor = SKColor.whiteColor()
+    ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+    ship.setScale(0.5)
+    addChild(ship)
+
+
+    let animate = SKAction.animateWithTextures([SKTexture(imageNamed: &amp;quot;Spaceship&amp;quot;)], timePerFrame: 1.0)
+    let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+
+    let repeatAnimation = SKAction.repeatActionForever(animate)
+    let repeatMove = SKAction.repeatActionForever(moveDown)
+
+    let group = SKAction.group([repeatAnimation, repeatMove])
+    ship.runAction(group)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下图展示了 group 动作的时间线。其实group很好理解，完全可以理解为组合中得动作是互不相干的，这样思考起来可能就简单些了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;run-block-action&#34;&gt;Run block action&lt;/h3&gt;
+
+&lt;p&gt;有时我们希望运行一段block代码，比如我想在序列运行结束的时候打印一段log。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+    let logMessage = SKAction.runBlock() {
+        println(&amp;quot;down 200.0!&amp;quot;)
+    }
+    ship.runAction(SKAction.sequence([moveDown, logMessage]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;控制台输出&lt;code&gt;down 200.0!&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;reversed-actions&#34;&gt;Reversed actions&lt;/h3&gt;
+
+&lt;p&gt;上一个示例让精灵节点下移，现在我又想让精灵节点返回去。最直接的方法就是再创建一个上移的动作就可实现，但是我们有更好的选择。通过在指定的动作上调用&lt;code&gt;reversedAction()&lt;/code&gt;方法可以逆转这个动作，返回一个和原来动作对立的新动作。&lt;/p&gt;
+
+&lt;p&gt;如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;不是所有的动作都是可逆的，比如&lt;code&gt;moveTo(duration:)&lt;/code&gt;就不是的。要知道一个动作是否是可逆的，请查看苹果的官方文档的说明。如果在不可逆的动作上调用了&lt;code&gt;reversedAction()&lt;/code&gt;方法，会返回原来的动作。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+    let reversed = moveDown.reversedAction()        
+    ship.runAction(SKAction.sequence([moveDown, reversed]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;同样的“sequence action”也是可逆的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    let moveDown = SKAction.moveByX(0, y: -200, duration: 2.0)
+    let reversed = moveDown.reversedAction()
+    let sequence = SKAction.sequence([moveDown, reversed])
+    ship.runAction(SKAction.sequence([sequence, sequence.reversedAction()]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的代码，演示性不强，大家自行修改下动作让掩饰性更强些。“sequence action”的&lt;code&gt;reversedAction()&lt;/code&gt;方法，逆转了序列的顺序，也逆转了序列的每一个动作。上面代码的 sequence 动作的逆转，第一个动作就是 reversed 动作的逆转，第二个动作就是 moveDown 动作的逆转。可以得出 sequence 动作的逆转和 sequence 本身是一样的，所示最后运行的效果就像是执行了两遍 sequence 动作一样。&lt;/p&gt;
+
+&lt;h3 id=&#34;animation-action&#34;&gt;Animation action&lt;/h3&gt;
+
+&lt;p&gt;这个动作在前面我们已经用过了，就是这个样子的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let animate = SKAction.animateWithTextures([SKTexture(imageNamed: &amp;quot;Spaceship&amp;quot;)], timePerFrame: 2.0)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;要运行这个动作，我们首先需要一组纹理。SpriteKit是通过纹理来展示图片的，用&lt;code&gt;SKTexture&lt;/code&gt;类表示。我们之前通过图片来创建精灵，其实SpriteKit还是先用图片创建了纹理，然后再将纹理赋值给精灵的&lt;code&gt;texture&lt;/code&gt;属性。我们可以在程序运行的时候随意改变精灵的&lt;code&gt;texture&lt;/code&gt;属性。实际上，“animation action”就是根据我们提供的那组纹理，以及timePerFrame参数来自动的为我们改变精灵的&lt;code&gt;texture&lt;/code&gt;属性。创建方法如上面代码所示，由于找不到美术资源，随意创建的。然后就像其他的动作一样在节点上运行。&lt;/p&gt;
+
+&lt;p&gt;这个方法是我们以后会经常用到的，比如在游戏里面看见一些角色常常有一些基本的动作动画，这些就可以用这个动作实现。&lt;/p&gt;
+
+&lt;h3 id=&#34;stopping-action&#34;&gt;Stopping action&lt;/h3&gt;
+
+&lt;p&gt;在运行动作的时候，我们可以给动作一个key。之前调用&lt;code&gt;runAction()&lt;/code&gt;方法，现在&lt;code&gt;runAction(withKey:)&lt;/code&gt;方法替代，我们就可以调用&lt;code&gt;removeActionForKey()&lt;/code&gt;方法来停止一个动作。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ship.runAction(moveDown, withKey: &amp;quot;MoveDown&amp;quot;)
+ship.removeActionForKey(&amp;quot;MoveDown&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;scale-action&#34;&gt;Scale action&lt;/h3&gt;
+
+&lt;p&gt;这个动作和前面我们用的“move to”的模式是很像的，这里就不上代码了，有几点需要注意下：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;scaleXTo(duration:), scaleYTo(duration:) 和 scaleXTo(y:duration:): 这些可以允许你独立的缩放x或者y轴，可以用来实现拉伸、挤压一个节点的效果。&lt;/li&gt;
+&lt;li&gt;scaleBy(duration:): 这个方法缩放的倍数是由当前节点的缩放倍数乘以传递过去的参数，通常我们没有设置缩放倍数时默认都是1.0。比如现在我传递过去的参数是2.0，那么现在就会变为原来的2倍，如果我再调用这个方法，就会变为4倍。所以如果我们一开始精灵的缩放倍数就是0，你调用这个方法始终都是0。&lt;/li&gt;
+&lt;li&gt;scaleXBy(y:duration:): 允许你延x和y轴独立的缩放。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;sound-action&#34;&gt;Sound action&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;runAction(SKAction.playSoundFileNamed(&amp;quot;xxxx&amp;quot;, waitForCompletion: false))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个动作是用来播放音效的，通常运行在当前的场景节点上。&lt;/p&gt;
+
+&lt;h3 id=&#34;sharing-actions&#34;&gt;Sharing actions&lt;/h3&gt;
+
+&lt;p&gt;SpriteKit的动作是可以共享的，是SpriteKit很强大的。如果你像上面那样直接在需要的时候初始化一个音效，然后再来播放。很多时候第一次可能会卡顿，这是由于加载音频文件的原因。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;SKAction&lt;/code&gt;对象本身并没有维持什么状态，所以我们可以同时在任意多个节点上重用动作。比如我们创建了一个子弹发射出去的动作，我们可能创建很多个子弹精灵，但是这个动作只需一个就够了，我们可以将这个动作运行到不同的子弹精灵上。&lt;/p&gt;
+
+&lt;p&gt;其实解决音频卡顿的问题也很简单，可以将播放音效的动作赋值为当前场景的一个属性，在场景初始化的时候就初始化了这个动作，然后在需要的时候运行就可以了。&lt;/p&gt;
+
+&lt;h2 id=&#34;结束&#34;&gt;结束&lt;/h2&gt;
+
+&lt;p&gt;最后要讲得就是我们最开始的时候给了一张游戏渲染循环的一张图，如下，我还是贴出来：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;之前我们讲了&lt;code&gt;update&lt;/code&gt;方法，要讲得就是接下来的。这里我们先做个假设，比如我们场景中有两个精灵，一个是我们的玩家角色，另外一个是怪物。怪物精灵执行动作从屏幕右边出现往屏幕左边移动。现在我们要检测这两个精灵的碰撞，我们在&lt;code&gt;update&lt;/code&gt;方法里面获取两个精灵的“frame”属性，然后调用&lt;code&gt;CGRectIntersectsRect(rect1: CGRect, rect2: CGRect)&lt;/code&gt;方法来检测两个精灵是否有交叉的地方，如果有就说明有碰撞。后面我们会利用SpriteKit的物理引擎来检测碰撞，这里就先这样做了。&lt;/p&gt;
+
+&lt;p&gt;有了这个假设我们再仔细的看看上面的那个图，主要看&lt;code&gt;update&lt;/code&gt;后面的那两段。虽然不知道到底是干嘛，但是大致能想到跟action有关系。&lt;code&gt;-didEvaluateActions&lt;/code&gt;应该也是个方法。Evaluate查了下有个求值的意思，那么这个方法的大概意思就是已经对action求值了。那么在我们上面描述的逻辑中就有一个Bug存在，首先我们是在&lt;code&gt;update&lt;/code&gt;方法里面检测碰撞的，其次怪物精灵是通过执行动作来移动。而那时还没有对action求值，也就是说怪物精灵的位置还没有计算成最新的，获取的怪物CGRect值也不是最新的，任然是上一帧的，所以我们的检测总是慢了一帧。所以我们应该在&lt;code&gt;-didEvaluateActions&lt;/code&gt;方法里面获取两个精灵的“frame”属性，然后调用&lt;code&gt;CGRectIntersectsRect(rect1: CGRect, rect2: CGRect)&lt;/code&gt;方法来检测两个精灵是否有交叉的地方。&lt;/p&gt;
+
+&lt;p&gt;这种情况可能对于一些游戏来说没有什么影响，人眼也难以区别这两者之间的不同。但是有的游戏可能就很容易区别出来，最好还是知道这一点。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SpriteKit：简介</title>
+      <link>http://lynchwong.com/blog/2015/04/spritekit%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Sun, 12 Apr 2015 16:40:05 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/04/spritekit%E7%AE%80%E4%BB%8B/</guid>
+      <description>&lt;p&gt;前一段时间一直都在看这本书&lt;a href=&#34;http://www.raywenderlich.com/store/ios-games-by-tutorials&#34;&gt;iOS Games by Tutorials Second Edition&lt;/a&gt;，本想SpriteKit这个系列把书中的章节全部翻译过来就好了。但是书是需要购买的，有版权，包括书中配套的源码和艺术资源都是不能共享给别人的。所以这个系列还是得自己写，质量应该不会很高，仅供入门用用，高手不要喷。当然还是推荐大家去看这种原版书籍，支持正版。
+&lt;/p&gt;
+
+&lt;p&gt;我们就直接从新建一个项目开始吧，当前操作系统版本是10.10.3，Xcode是6.3，Swift的版本应该是1.2。&lt;/p&gt;
+
+&lt;h2 id=&#34;创建spritekit项目&#34;&gt;创建SpriteKit项目&lt;/h2&gt;
+
+&lt;p&gt;打开Xcode，我们选择&lt;strong&gt;Create a new Xcode project&lt;/strong&gt;，然后选择&lt;strong&gt;iOS&lt;/strong&gt;中&lt;strong&gt;Application&lt;/strong&gt;的&lt;strong&gt;Game&lt;/strong&gt;选项,点击&lt;strong&gt;Next&lt;/strong&gt;，在选项框中填好对应的选项，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们语言选择Swift，这里多说一句。我自己的项目现在都是用Swift写，公司项目还是用OC，毕竟OC更稳定。不过觉得Swift是趋势，会成为主流，所以早点学习更好。&lt;strong&gt;Game Technology&lt;/strong&gt;选择SpriteKit，下拉选项里面还有SceneKit、Metal和OpenGL ES。SceneKit带来了3D引擎和一些增强功能。Metal可以说是跟OpenGL ES类似的东西，只不过只适用于苹果的平台，对苹果的硬件有特别的优化，并且很多游戏引擎如Unity3D都支持了Metal。OpenGL ES是一个编程接口规范，在不同的平台有不同的实现，直接和GPU打交道，属于比较底层的API。在以前没有引擎的时候，那些游戏开发的大神都是基于OpenGL ES开发游戏。&lt;strong&gt;Devices&lt;/strong&gt;这项选择Universal，即iPhone和iPad都适用。&lt;/p&gt;
+
+&lt;p&gt;我们点击&lt;strong&gt;Next&lt;/strong&gt;，然后&lt;strong&gt;Create&lt;/strong&gt;，创建后的项目结构截图如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;点击上面那个三角形的按钮Build and Run，或者快捷键⌘R，模拟器选择iPhone 6。效果图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;每次点击屏幕都会增加一个旋转的飞机到场景里面。&lt;/p&gt;
+
+&lt;p&gt;所以我们打开GameScene.swift文件去看看源代码。&lt;code&gt;didMoveToView()&lt;/code&gt;方法会在SpriteKit将你的场景展示到View之前调用；所以这个方法是你初始化场景内容的一个好地方。&lt;code&gt;update()&lt;/code&gt;方法是SpriteKit每一帧都会自动调用的，这个方法里面会处理一些游戏逻辑。&lt;code&gt;touchesBegan()&lt;/code&gt;方法处理用户对屏幕的操作。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html&#34;&gt;SpriteKit Programming Guide&lt;/a&gt;这里讲解了SpriteKit的很多基本原理及编程指南，中文版的应该也能搜到，建议大家看下。&lt;/p&gt;
+
+&lt;p&gt;将GameScene.swift文件内容替换成如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import SpriteKit
+
+class GameScene: SKScene {
+    override func didMoveToView(view: SKView) {
+        backgroundColor = SKColor.whiteColor()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在创建SpriteKit项目的时候，模板会自动创建GameScene.sks文件。你可以用Xcode新的内建的编辑器编辑这个文件，用来可视化展示你的游戏场景。这个场景编辑器对于SpriteKit来说就像Interface Builder对于UIKit一样。后面学习粒子系统时候也会用到这个场景编辑器。现在我们删除这个文件，使用代码创建场景。邮件选择文件删除，&lt;strong&gt;Move to Trash&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;打开GameViewController.swift文件，删除如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;extension SKNode {
+    class func unarchiveFromFile(file : String) -&amp;gt; SKNode? {
+        if let path = NSBundle.mainBundle().pathForResource(file, ofType: &amp;quot;sks&amp;quot;) {
+            var sceneData = NSData(contentsOfFile: path, options: .DataReadingMappedIfSafe, error: nil)!
+            var archiver = NSKeyedUnarchiver(forReadingWithData: sceneData)
+
+            archiver.setClass(self.classForKeyedUnarchiver(), forClassName: &amp;quot;SKScene&amp;quot;)
+            let scene = archiver.decodeObjectForKey(NSKeyedArchiveRootObjectKey) as! GameScene
+            archiver.finishDecoding()
+            return scene
+        } else {
+            return nil
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;仔细看看这段代码就会发现是用来加载上面提到的.sks文件的，所以这里就不需要了，后面用到.sks文件加载场景的时候就需要用到这段代码了。替换GameViewController.swift的内容为如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import UIKit
+import SpriteKit
+
+class GameViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let scene = GameScene(size: CGSize(width: 750.0, height: 1334.0))
+        let skView = self.view as! SKView
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        skView.ignoresSiblingOrder = true
+        scene.scaleMode = .AspectFill
+        skView.presentScene(scene)
+    }
+    override func prefersStatusBarHidden() -&amp;gt; Bool {
+        return true
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;添加精灵到场景中&#34;&gt;添加精灵到场景中&lt;/h2&gt;
+
+&lt;p&gt;当制作2D游戏时，我们通常会把图片放到场景中来代表我们游戏中各种各样的元素：英雄，敌人，子弹，怪物等等。所有这些我们都称作为“精灵”。现在我们来添加第一个精灵，打开GameScene.swift文件修改&lt;code&gt;didMoveToView()&lt;/code&gt;方法如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;override func didMoveToView(view: SKView) {
+    backgroundColor = SKColor.whiteColor()
+    let ship = SKSpriteNode(imageNamed: &amp;quot;Spaceship&amp;quot;)
+    addChild(ship)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改背景颜色为白色，然后用飞船的图片初始化了一个精灵，然后添加到场景中。⌘R启动模拟器，效果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;设置精灵位置&#34;&gt;设置精灵位置&lt;/h2&gt;
+
+&lt;p&gt;飞船的位置跟大家期望的肯定不一样，这里有几点需要说明一下：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;SpriteKit的坐标系统和UIKit的是不一样的，UIKit的坐标原点在左上角，SpriteKit的坐标原点在左下角。&lt;/li&gt;
+&lt;li&gt;对于没有设置位置（属性为position）的精灵，SpriteKit默认设置为(0, 0)。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;所以飞船的位置就出现在了左下角的坐标原点处。现在我们将飞船位置设置到正中间，在添加到场景前添加如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ship.position = CGPoint(x: size.width / 2, y: size.height / 2)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;⌘R运行，飞船就显示到正中间了，这里就不贴图了。&lt;/p&gt;
+
+&lt;h2 id=&#34;精灵的anchorpoint属性&#34;&gt;精灵的anchorPoint属性&lt;/h2&gt;
+
+&lt;p&gt;也许大家注意到了，在设置飞船精灵的位置时，相当于是把精灵的中点设置到了那个位置。跟UIKit里面也是不一样的，这种效果是由精灵的anchorPoint属性决定。当没有设置精灵的anchorPoint属性时，SpriteKit默认设置为(0.5, 0.5)。anchorPoint是一个点，取值范围从0 ~ 1。默认(0.5, 0.5)即表示中点；(0.0, 0.0)的时候表示左下角；(1.0, 1.0)的时候表示右上角；大家可以依次类推。&lt;/p&gt;
+
+&lt;p&gt;下图展示了不同anchorPoint的值时，精灵的位置：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们注释掉之前设置精灵位置的代码，然后设置精灵的anchorPoint为(0.0, 0.0)。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ship.anchorPoint = CGPoint(x: 0.0, y: 0.0)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;模拟器效果如图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;因为我们注释掉了设置位置的代码，所以SpriteKit默认设置了position属性为(0.0, 0.0)。然后设置了anchorPoint为(0.0, 0.0)，效果就如上图中间一样，只是position变为了原点，而不是中点。所以大家就看到了飞船完整的出现在了原点的位置。如果将anchorPoint为(1.0, 1.0)，大家就看不到飞船了，大家可以试下。现在大家也可以解释为什么最开始的时候只有飞船的右上部分出现在屏幕上。大家可以设置不同的position和anchorPoint然后看看不同的飞船位置，以确保自己理解了anchorPoint。&lt;/p&gt;
+
+&lt;p&gt;通常情况下，大家都可以不用管anchorPoint，SpriteKit会默认设置为(0.5, 0.5)，除非你需要精灵按照你指定的点进行旋转，后面我们会提到。&lt;/p&gt;
+
+&lt;p&gt;简单点说就是：当你设置精灵的位置时，默认的你就是设置了精灵的中点到那个位置。&lt;/p&gt;
+
+&lt;h2 id=&#34;旋转精灵&#34;&gt;旋转精灵&lt;/h2&gt;
+
+&lt;p&gt;添加如下代码在添加精灵到场景之前：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ship.zRotation = CGFloat(M_PI) / 8
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;zRotation属性接受弧度值，类型为&lt;code&gt;CGFloat&lt;/code&gt;，这里&lt;code&gt;M_PI&lt;/code&gt;是&lt;code&gt;Double&lt;/code&gt;类型，所以使用&lt;code&gt;CGFloat&lt;/code&gt;把&lt;code&gt;M_PI&lt;/code&gt;转换成&lt;code&gt;Double&lt;/code&gt;。弧度值换乘以180然后除以π就是角度值；角度值乘以π然后除以180就是弧度值。所以这个角度值就是22.5度。&lt;/p&gt;
+
+&lt;p&gt;这里是围绕anchorPoint旋转的，所以这里anchorPoint的作用就显示出来了。大家设想一下，比如我有一个人物较色，我需要旋转角色的手臂，那么我就需要设置人物手臂的anchorPoint到关节处。&lt;/p&gt;
+
+&lt;h2 id=&#34;精灵的尺寸&#34;&gt;精灵的尺寸&lt;/h2&gt;
+
+&lt;p&gt;有时我们需要知道精灵的尺寸，精灵默认的尺寸就是图片的大小。在SpriteKit中，我们用纹理代表图片。添加如下代码到&lt;code&gt;didMoveToView()&lt;/code&gt;方法的最后来获取飞船精灵的大小。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let shipSize = ship.size
+println(&amp;quot;Size: \(shipSize)&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行之后控制台会输出：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Size: (394.0, 347.0)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;精灵和节点&#34;&gt;精灵和节点&lt;/h2&gt;
+
+&lt;p&gt;如果我们要精灵显示在屏幕上，我们就需要将精灵添加为场景的子节点，或者子节点的子节点。&lt;/p&gt;
+
+&lt;p&gt;所有出现在屏幕上得元素都是&lt;code&gt;SKNode&lt;/code&gt;的子类，值得注意的是&lt;code&gt;SKNode&lt;/code&gt;并不绘制实际的内容。场景类(&lt;code&gt;SKScene&lt;/code&gt;)也继承自&lt;code&gt;SKNode&lt;/code&gt;，精灵类（&lt;code&gt;SKSpriteNode&lt;/code&gt;）同样也继承自&lt;code&gt;SKNode&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;这里推荐给大家&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/SpriteKit/Reference/SKNode_Ref/index.html#//apple_ref/doc/uid/TP40013023&#34;&gt;SKNode Class Reference&lt;/a&gt;，这里面有&lt;code&gt;SKNode&lt;/code&gt;得很多属性和方法的讲解，同时也讲解了一些&lt;code&gt;SKNode&lt;/code&gt;的使用技巧，比如用来管理场景内容等。这里就不赘述了。&lt;/p&gt;
+
+&lt;p&gt;每个节点都有一个叫作zPosition的属性，默认值为0。每个节点绘制子节点都是按照zPosition值得顺序绘制的，即从小到大。在GameViewController.swift中我们设置了ignoresSiblingOrder属性为true。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;skView.ignoresSiblingOrder = true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果ignoresSiblingOrder属性为true，当一个节点中的两个子节点有相同的zPosition值时，SpriteKit无法保证绘制的顺序。如果ignoresSiblingOrder属性为false，SpriteKit会按照添加到父节点的顺序绘制。通常设置为true更好一些，因为SpriteKit会做一些优化使游戏运行的更快。&lt;/p&gt;
+
+&lt;p&gt;如果ignoresSiblingOrder属性为true，我们最好不要设置相同的zPosition值。比如我们有一个表示背景的精灵，那我们应该设置其zPosition值为-1来避免背景覆盖了玩家精灵。&lt;/p&gt;
+
+&lt;p&gt;这章主要就讲了一些很基础的东西，还有一些大家可能需要注意的东西。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SpriteKit：引言</title>
+      <link>http://lynchwong.com/blog/2015/04/spritekit%E5%BC%95%E8%A8%80/</link>
+      <pubDate>Sun, 12 Apr 2015 15:04:36 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/04/spritekit%E5%BC%95%E8%A8%80/</guid>
+      <description>&lt;p&gt;对于一个想学习游戏开发的新手来说，我觉得第一件事首先就是选择一款游戏引擎。如果你想从构建游戏引擎开始着手来开发一款游戏，对个人开发者以及一些小团队来说真的是有点小题大做了，毕竟免费得游戏引擎很多，而且大多都很优秀，背后有强有力的团队在更新和维护。所以我觉得结合自己的条件，以及游戏的特点选择合适的游戏引擎是很好的选择。
+&lt;/p&gt;
+
+&lt;p&gt;所以我们先来分析自身的条件：首先鄙人是做iOS App的开发，对iOS的开发虽谈不上精通，但很熟悉，所以我希望开发移动端的手游（规模不大，一个人能完成最好，偏向于2D游戏）；其次鄙人一直都想在空余闲暇的时候做游戏开发，纯粹点说就是个人爱好而已，觉得自己和朋友能玩上鄙人开发的小游戏是一件很有成就感的事情；最后就是游戏运行在多平台上这个需求不是很在意，所以引擎的跨平台性对我来说不是很重要。&lt;/p&gt;
+
+&lt;p&gt;分析完自身条件，我们再来列举一些现在主流的一些移动端的游戏开发引擎，然后选出对自己最优的那个。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Cocos2D系列&lt;/li&gt;
+&lt;li&gt;Unity3D&lt;/li&gt;
+&lt;li&gt;SpriteKit&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;光Cocos2D系列就有很多个版本的引擎，最先的游戏引擎就是Cocos2D-iPhone这样的，那时针对不同的平台有不同的Cocos2D引擎对应，开发者需要根据不同的平台选择不同的引擎版本。近年来由于跨平台的需求，所以Cocos2D-x的份额越来越大。在Cocos2D-x下还有很多不同语言的版本，比如Cocos2D-lua、JS等，这些脚本语言开发起来更简单、更快速。而lua语言的的简单性和热更新使得Cocos2D-lua大受欢迎，而IDE环境的支持，功能的不断更新大大降低了开发的难度以及开发者的工作量。Cocos2D-x的跨平台性，完整的生态圈，强大的技术支持使得它成为国内手游厂商的最佳选择。而Cocos2D-iPhone随着单一的平台支持、以及苹果在iOS7.0时推出自家引擎后慢慢的淡出了大家的视线。貌似现在Cocos2D-iPhone和SpriteBuilder整合在一起了。&lt;/p&gt;
+
+&lt;p&gt;Unity3D是近年来得一匹大黑马，抢占了移动端3D游戏引擎的大部分份额，一些很有名的移动端手游都是基于Unity3D开发。这匹黑马搞得很多传统大牌的桌面端引擎厂商都慌了，纷纷推出自家移动端的游戏引擎。Unity3D的优势不仅跨平台，还提供了可视化的IDE环境。同时还提供了很多超级棒的子系统，比如物理引擎、粒子系统、动画系统等等，同时还提供了很多有用的资源。Pro版是需要购买授权的，貌似4.0开始有免费版的可以选择使用。如果你得游戏能火，授权费跟游戏赚得钱根本不值一提，专业版还是值得考虑的。&lt;/p&gt;
+
+&lt;p&gt;SpriteKit是苹果在iOS7.0的时候推出的，缺点当然就是不跨平台了。优点对于iOS开发者来说，我到觉得是一大推，根本就不需要说了。其实很早之前就有系统学习过Cocos2D-iPhone，后来学习SpriteKit的时候上手就很快，感觉很多东西都是类似的，概念都是相同的。SpriteKit是2D的，在iOS8.0的时候苹果又推出了SceneKit和Metal。&lt;/p&gt;
+
+&lt;p&gt;说了这么多，我最后的选择就是SpriteKit，因为我不需要跨平台，其次偏向于2D小游戏。我觉得学会一种游戏引擎，然后再转向另一种应该也不会太难。就像精通了一门语言，再学另一门语言一样。&lt;/p&gt;
+
+&lt;p&gt;接下来就开始学习SpriteKit，开始之前还是推荐一本书给大家&lt;a href=&#34;http://www.raywenderlich.com/store/ios-games-by-tutorials&#34;&gt;iOS Games by Tutorials Second Edition&lt;/a&gt;。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

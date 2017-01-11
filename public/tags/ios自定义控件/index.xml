@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ios自定义控件 on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/ios%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6/index.xml</link>
+    <description>Recent content in Ios自定义控件 on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/ios%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>自定义UITabBar</title>
+      <link>http://lynchwong.com/blog/2015/11/%E8%87%AA%E5%AE%9A%E4%B9%89uitabbar/</link>
+      <pubDate>Mon, 09 Nov 2015 15:48:59 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/11/%E8%87%AA%E5%AE%9A%E4%B9%89uitabbar/</guid>
+      <description>&lt;p&gt;先给出两个参考资料：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/gf771115/article/details/37890663&#34;&gt; iOS 自定义TabBarController &lt;/a&gt;
+&lt;a href=&#34;http://www.cnblogs.com/martin1009/archive/2012/05/30/2526401.html&#34;&gt; 学习笔记：UITabBarController使用详解 &lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;先说说思路，和第一个参考资料的思路基本类似。我们自己做一个类似&lt;strong&gt;UITabBar&lt;/strong&gt;的视图，然后我们新建一个继承自&lt;strong&gt;UITabBarController&lt;/strong&gt;的控制器，然后将我们自己的视图添加到系统的&lt;strong&gt;UITabBar&lt;/strong&gt;。这样做的好处前面的参考资料里面也提到了，省去了隐藏TabBar时的许多麻烦。&lt;/p&gt;
+
+&lt;p&gt;这里就不手把手的一步一步的讲解怎么做了，我描述一下大概的步骤，提示一些细节。最后我会上传一个完整的Demo工程，大家参考工程源码就能明白了。&lt;/p&gt;
+
+&lt;h1 id=&#34;自定义视图&#34;&gt;自定义视图&lt;/h1&gt;
+
+&lt;p&gt;自定义视图很简单，不管你是用代码还是用Xib或者StoryBoard都可以。我工程中使用的是Xib，而且我做的这个视图并不具有通用性，完全参照UI设计的来做的。工程里面的代码没有什么难点的地方，约束也都很简单。这里我们需要一个委托来选择点击的按钮是对应的控制器。&lt;/p&gt;
+
+&lt;h1 id=&#34;添加视图&#34;&gt;添加视图&lt;/h1&gt;
+
+&lt;p&gt;我们新建一个继承自&lt;strong&gt;UITabBarController&lt;/strong&gt;的控制器，然后在&lt;strong&gt;viewWillAppear:&lt;/strong&gt;方法里面添加如下代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//去掉那条线
+self.tabBar.shadowImage = [UIImage imageNamed:@&amp;quot;TransparentPixel&amp;quot;];
+[self.tabBar setBackgroundImage:[UIImage imageNamed:@&amp;quot;Pixel&amp;quot;]];
+
+//去掉Tabbar原来的子视图
+CGRect rect = self.tabBar.bounds;
+for (UIView *view in self.tabBar.subviews) {
+    [view removeFromSuperview];
+    NSLog(@&amp;quot;removeFromSuperview : %@&amp;quot;, [[view class] description]);
+}
+
+//添加我们自己的Tabbar
+YKTabBar *tabbar = [[[NSBundle mainBundle] loadNibNamed:@&amp;quot;YKTabBar&amp;quot; owner:nil options:nil] firstObject];
+tabbar.frame = rect;
+tabbar.delegate = self;
+[self.tabBar addSubview:tabbar];
+
+_preSelectedButton = tabbar.firstButton;
+_preSelectedButton.enabled = NO;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码中我们循环了系统的UITabBar，然后我们移除了所有的子视图。最开始的时候我是在&lt;strong&gt;viewDidLoad&lt;/strong&gt;方法里面做这些操作的，在循环中打印Log，什么都没有输出。&lt;/p&gt;
+
+&lt;p&gt;最开始的两行代码很有用，用来去掉UITabBar上面那条线的。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SelfDefineUITabBar/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;左边的和右边的数字对应。图中1的UIVIew是我自己添加到视图中的，而2就是我们要去掉的那条线。我循环去掉UITabBar的子视图也没能把这个UIImageView去掉。这个方法是参考苹果官方Demo来实现的，&lt;a href=&#34;https://developer.apple.com/library/ios/samplecode/NavBar/Introduction/Intro.html&#34;&gt; Customizing UINavigationBar &lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;然后我们将我们自己的视图添加到系统的UITabBar，最后设置第一个按钮的状态。&lt;/p&gt;
+
+&lt;h1 id=&#34;实现委托&#34;&gt;实现委托&lt;/h1&gt;
+
+&lt;p&gt;最后一步就是实现委托的方法，在委托方法中设置&lt;strong&gt;selectedIndex&lt;/strong&gt;的值为对应按钮的Tag值就好了。&lt;/p&gt;
+
+&lt;p&gt;效果图如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SelfDefineUITabBar/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上传的源码最后的效果图和我这个不一样，图片资源就不提供了。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/UITabbarDemo&#34;&gt; 工程源码 &lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>自定义进度视图</title>
+      <link>http://lynchwong.com/blog/2015/09/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%9B%E5%BA%A6%E8%A7%86%E5%9B%BE/</link>
+      <pubDate>Tue, 29 Sep 2015 16:37:57 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2015/09/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%9B%E5%BA%A6%E8%A7%86%E5%9B%BE/</guid>
+      <description>&lt;p&gt;最近项目需要做一个表示进度的视图，其实第三方的应该蛮多的。自己估摸着做一个应该很简单，直接着手就开始做了。
+&lt;/p&gt;
+
+&lt;h1 id=&#34;准备工作&#34;&gt;准备工作&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://objccn.io/issue-12-2/&#34;&gt;Layer中自定义属性的动画&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mrackwitz/MRProgress&#34;&gt;MRProgress&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我做的控件参考文献主要就是上面给出的这两个链接，一个是objc.io的文章。另一个是类似的开源控件的GitHub地址。&lt;/p&gt;
+
+&lt;h1 id=&#34;源码和demo&#34;&gt;源码和Demo&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/CircleView&#34;&gt;CircleView&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;控件功能&#34;&gt;控件功能&lt;/h1&gt;
+
+&lt;p&gt;控件的功能主要就是表示进度。项目主要有两种需求，用圆圈表示当前进度以及步骤显示。&lt;/p&gt;
+
+&lt;h3 id=&#34;功能1-圆圈进度&#34;&gt;功能1.圆圈进度&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSProgressCircleView/1.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/blog/img/iOSProgressCircleView/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如上图所示，这个是圆圈进度的截图。图中是一个播放声音的按钮，表示进度的圈圈会根据声音播放的进度来进行动画。当声音播放完成时整个圆圈也就动画完成了。下篇博客就写播放声音的接口，能播放本地的声音，也能播放网络声音。&lt;/p&gt;
+
+&lt;p&gt;使用代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;_progressCircleView = [[YKCircleView alloc] initWithType:CircleViewTypeProgress];
+_progressCircleView.downArcColor = [UIColor clearColor];
+_progressCircleView.upArcColor = [UIColor colorWithRed:80.0f/255.0f green:227.0f/255.0f blue:202.0f/255.0f alpha:1.0f];
+_progressCircleView.arcWidth = 5.0f * ratio;
+_progressCircleView.durationTime = 0.1;
+_progressCircleView.bounds = CGRectMake(0, 0, radiu, radiu);
+_progressCircleView.center = CGPointMake(kScreenWidth / 2, _topConstraint.constant + buttoWidth / 2);
+_progressCircleView.userInteractionEnabled = YES;
+[_progressCircleView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playSound:)]];
+[_view addSubview:_progressCircleView];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是初始化的代码，&lt;strong&gt;CircleViewTypeProgress&lt;/strong&gt;表示的是进度圈。其他的属性设置都很简单，更多详细的解释都在实现文件中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+ *  设置进度圈的Delegate，当progress为0.0和1.0的时候不会产生动画，避免当值为1.0的时候先动画一圈，然后再递减到0.
+ *
+ *
+ *  @param progress 0.0f － 1.0f
+ */
+- (void)setProgress:(CGFloat)progress
+{
+    if(progress &amp;gt;= 0 &amp;amp;&amp;amp; progress &amp;lt;= 1)
+    {
+        [_progressCircleView setProgress:progress duration:0.1];
+    }
+
+    if(progress &amp;gt;= 1.0f)//避免圆圈不能完全闭合
+    {
+        [_progressCircleView setProgress:progress duration:0.1];
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后我们需要不断的调用上面的方法来设置视图的属性来产生动画。上面的方法会被我的声音接口在播放声音的时候不断的进行回调来设置当前播放的进度，从而产生动画。&lt;/p&gt;
+
+&lt;h3 id=&#34;功能2-当前步骤&#34;&gt;功能2.当前步骤&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSProgressCircleView/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如上图所示，表示的是当前进行到了第几个步骤，圈中间会有显示当前进行到的步骤以及总的步骤。&lt;/p&gt;
+
+&lt;p&gt;使用代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;_stepCircleView = [[YKCircleView alloc] initWithType:CircleViewTypeStep];
+_stepCircleView.totalIndex = _lessonDetail.tips.count + 1;
+_stepCircleView.downArcColor = [UIColor colorWithRed:217.0f/255.0f green:217.0f/255.0f blue:217.0f/255.0f alpha:1.0f];
+_stepCircleView.upArcColor = [UIColor colorWithRed:67.0f/255.0f green:196.0f/255.0f blue:212.0f/255.0f alpha:1.0f];
+_stepCircleView.arcWidth = 5.0f;
+_stepCircleView.durationTime = 0.15;
+_stepCircleView.bounds = CGRectMake(0, 0, 70, 70);
+_stepCircleView.center = CGPointMake(self.view.bounds.size.width / 2, (kScreenHeight - 64.0f - _cognitionView.bounds.size.height) / 2 + _cognitionView.bounds.size.height);
+[self.view addSubview:_stepCircleView];
+
+_stepCircleView.currentIndex = 1;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;初始化代码和上面类似的，这里就不讲解了。同理也需要对进度视图的属性进行设置，从而产生动画。如下方法所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)currentOffsetX:(CGFloat)offsetX
+{
+    CGFloat index = offsetX / (_cardWidth + 24) + 1;
+    _stepCircleView.currentIndex = index;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这篇博客写的很简单，基本没有讲解什么。因为我觉得这个控件很简单，没有什么好讲的，大家一看代码就明白了。而且文章开头给出的两篇文章包含了所有的知识点，大家可以先看那两篇文章。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>自定义iOS控件</title>
+      <link>http://lynchwong.com/blog/2014/12/%E8%87%AA%E5%AE%9A%E4%B9%89ios%E6%8E%A7%E4%BB%B6/</link>
+      <pubDate>Wed, 17 Dec 2014 11:40:47 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2014/12/%E8%87%AA%E5%AE%9A%E4%B9%89ios%E6%8E%A7%E4%BB%B6/</guid>
+      <description>&lt;p&gt;刚开始学习iOS开发的时候接触了很多Cocoa Touch的标准控件，那时就觉得这些控件好用是好用，但是可定制性不高。往往我们的需求又比较变态，特别是控件外观方面基本达不到需求，所以很多时候我们需要自己做控件。
+&lt;/p&gt;
+
+&lt;p&gt;不过很多需求我们可以通过组合已经存在的原生控件来达到，但是还是有一些需求不能实现。比如我们要实现一个类似汽车驾驶室的界面，这个界面的功能不要太复杂：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;能控制汽车的方向，我们可以做一个方向盘的控件；&lt;/li&gt;
+&lt;li&gt;能控制汽车前进、后退、停止，我们还需要一个油门的控件；这个我们可以把油门和变速器用一个控件实现。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个界面的实现思路：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;首先可以给这个界面一个汽车驾驶室的图片，当作背景，图片内容主要就是驾驶室方向盘那部分，可以让美工设计下；&lt;/li&gt;
+&lt;li&gt;其次我们把方向盘放在界面右边，如果背景图片有仪表盘，最好方向盘和仪表盘有对应。界面右边我们放油门这个空间；&lt;/li&gt;
+&lt;li&gt;操作方式可以这样来设定，油门上有个按钮，往前拖就是前进，越拖到上面速度越快；然后有个N档，拖到这里就是停止；有个R档，拖到这里就后退。方向盘就是根据手指在控件上的滑动来计算出角度，然后根角度进行旋转，我们还可以给方向盘加上重力感应来控制方向盘。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;思路大概就是上面这样，具体的实现和细节还要再讨论。这里我只做“油门”这个控件的自定义，接下来我们就一步一步的来实现。方向盘这个控件大家可以自行实现一下，后面可能会贴出源码（可能贴出来）。&lt;/p&gt;
+
+&lt;p&gt;这里有一篇很好的&lt;a href=&#34;http://beyondvincent.com/blog/2014/01/20/how-to-build-a-custom-control-in-ios/&#34;&gt;博文&lt;/a&gt;，就是讲解怎么在iOS中自定义控件的，所以我们根据这篇博文来实现我们的“油门”控件。&lt;/p&gt;
+
+&lt;p&gt;现在我们就一步一步的开始实现“油门”控件，OS X是10.10.1，Xcode是6.6.1。我们新建一个项目，名字叫做“AcceleratorView”，我们使用OC开发。建好后的项目截图如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;新建一个文件&lt;code&gt;Accelerator&lt;/code&gt;，继承自&lt;code&gt;UIControl&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;然后我们打开&lt;code&gt;Main.storyboard&lt;/code&gt;文件，拖拽一个&lt;code&gt;View&lt;/code&gt;控件到&lt;code&gt;View Controller&lt;/code&gt;里面。如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后我们将&lt;code&gt;Class&lt;/code&gt;属性改成我们刚创建的，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接下来就是为&lt;code&gt;View&lt;/code&gt;控件添加约束，我们大小设置为200 x 580，x 和 y分别是5 和 20。首先设置长宽的约束，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;设置完成之后Xcode会有红色的警示线，表示添加的约束无法确定&lt;code&gt;View&lt;/code&gt;的位置，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;所以我们还要继续添加约束，添加x和y的约束，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;添加完成后红色的虚线消失，如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;大家可以试下不为&lt;code&gt;View&lt;/code&gt;添加约束，然后运行会发现视图错乱，那是因为iOS8、Xcode6新建的项目使用了&lt;code&gt;Size Classes&lt;/code&gt;，是为多种设备做适配用的。iOS的设备越来越多，所以适配是必须要做的，所以&lt;code&gt;AutoLayout&lt;/code&gt;和&lt;code&gt;Size Classes&lt;/code&gt;是必备技能了。这里就不说了，以后有时间也要搞一篇。这时候运行模拟器还没有什么东西，让我们继续。&lt;/p&gt;
+
+&lt;p&gt;在&lt;code&gt;ViewController.m&lt;/code&gt;文件里面添加如下三个方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    - (BOOL)shouldAutorotate
+    {
+        return YES;
+    }
+
+    - (NSUInteger)supportedInterfaceOrientations
+    {
+        return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
+    }
+
+    - (BOOL)prefersStatusBarHidden
+    {
+        return YES; //返回NO表示要显示，返回YES将hiden
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;前两个方法会让当前显示的Controller支持横屏显示。若我要跳转到下一个Controller，而下一个Controller要求竖屏显示，那么我们同样实现上述两个方法，只不过&lt;code&gt;- (NSUInteger)supportedInterfaceOrientations&lt;/code&gt;方法返回&lt;code&gt;UIInterfaceOrientationMaskPortrait&lt;/code&gt;。或者完全不实现这两个方法，默认就会竖屏显示。第三个方法会隐藏状态栏。&lt;/p&gt;
+
+&lt;p&gt;接下来我们的主要工作就是实现&lt;code&gt;Accelerator&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@property (strong, nonatomic) UIImage *accButtonImage;
+@property (assign, nonatomic) CGPoint accButtonPosition;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;新建两个属性，第一个属性表示按钮图片，第二个属性就是按钮的位置。至于为什么要有这两个属性，一开始我做的时候也不是就想好了要有这两个属性，一开始做的时候只有个大概的思路，很多东西和细节都是在做的过程中想到或者遇到的，经过不断修改而来的。所以有时候最重要的就是要动手开始做，去做了才知道。&lt;/p&gt;
+
+&lt;p&gt;这个“油门”控件要做成什么样的，大家都没看过，所以说有思路是不可能的，所以我们先看下效果图，然后来分析分析，应该怎么做，有个大体的思路。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上图就是完成后的效果图，当然不是很美观，跟我项目里完整的还是有很大的差别，这里我们只实现这一部分。首先控件的按钮是一张图片，其他的部分全都是在&lt;code&gt;- (void)drawRect:(CGRect)rect&lt;/code&gt;方法中绘图绘上去的。N、和R分别标示不同的档位，即空档和倒档，效果分别是制动和后退。上面的档位表示前进，档位越高表示速度越快。拖动按钮来变换档位，而且标示档位的线的颜色也会改变。需求就是这些了，看到效果图，实现也应该是比较简单的。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;所以在控件里面应该有监测手指在控件上触摸和滑动的方法。&lt;/li&gt;
+&lt;li&gt;当手指在控件上滑动时，按钮要不停的改变位置，而且我们还要计算按钮的位置来判断是否要给标示档位的档位线上色。而且按钮这张图片，不是&lt;code&gt;addSubview:&lt;/code&gt;到控件里面的，而是在&lt;code&gt;- (void)drawRect:(CGRect)rect&lt;/code&gt;方法里面使用&lt;code&gt;UIKit&lt;/code&gt; &lt;code&gt;UIImage&lt;/code&gt;自带的方法&lt;code&gt;[self.accButtonImage drawAtPoint:self.accButtonPosition];&lt;/code&gt;绘制到屏幕上的。同理，档位线的R、N字幕也是用&lt;code&gt;NSString&lt;/code&gt;的&lt;code&gt;drawAtPoint:withFont:&lt;/code&gt;绘制的。&lt;/li&gt;
+&lt;li&gt;当方法检测到控件上有手指滑动时，每次都需要重绘，大家都知道不能直接调用&lt;code&gt;- (void)drawRect:(CGRect)rect&lt;/code&gt;方法，所以要调用&lt;code&gt;setNeedsDisplay&lt;/code&gt;方法来重绘。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面我们就直接上代码了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if ((self = [super initWithCoder:aDecoder])) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (void)initialize
+{
+    self.backgroundColor = [UIColor clearColor];
+    self.accButtonImage = [UIImage imageNamed:@&amp;quot;accelerator_but&amp;quot;];
+    self.accButtonPosition = CGPointMake((self.bounds.size.width - 54.0f) / 2, 224.0f);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是控件初始化的代码，很简单，就不讲解了。控件大小是固定的，所以我很多位置的代码都是写固定位置的，简单一点。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    [super beginTrackingWithTouch:touch withEvent:event];
+
+    CGPoint touchLocation = [touch locationInView:self];
+
+    if (CGRectContainsPoint(CGRectMake(self.accButtonPosition.x - 73.0f, self.accButtonPosition.y, 200.0f, 32.0f), touchLocation)) {
+        NSLog(@&amp;quot;YES&amp;quot;);
+        return YES;
+    } else {
+        NSLog(@&amp;quot;NO&amp;quot;);
+        [self calculatorButtonPosition:touchLocation];
+        return YES;
+    }
+}
+
+- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    [super continueTrackingWithTouch:touch withEvent:event];
+    CGPoint touchLocation = [touch locationInView:self];
+    [self calculatorButtonPosition:touchLocation];
+    return YES;
+}
+
+- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面三个方法就是用来检测触摸和滑动的，只有前面的方法返回&lt;code&gt;YES&lt;/code&gt;的时候才会调用下一个方法。方法首先调用父类的方法，然后获取手指当前在控件上的位置。第一个方法中&lt;code&gt;if&lt;/code&gt;和&lt;code&gt;else&lt;/code&gt;分支，一开始只有&lt;code&gt;if&lt;/code&gt;分支，即手指在按钮内滑动的时候才会返回&lt;code&gt;YES&lt;/code&gt;，然后调用&lt;code&gt;continueTrackingWithTouch&lt;/code&gt;方法，既而计算按钮的位置，在&lt;code&gt;calculatorButtonPosition:touchLocation&lt;/code&gt;中，我们计算出位置后，然后再调用&lt;code&gt;setNeedsDisplay&lt;/code&gt;方法来重绘。&lt;code&gt;else&lt;/code&gt;分支是为了满足项目需求加上的，即当手指接触到控件，即使没有在按钮内，也会马上计算出按钮位置，然后重绘。下面我们就来看看&lt;code&gt;calculatorButtonPosition:touchLocation&lt;/code&gt;方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)calculatorButtonPosition:(CGPoint)touchLocation
+{
+    CGFloat y = touchLocation.y;
+
+    if (y &amp;lt;= 30.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 4.0f);
+    } else if (y &amp;gt; 30.0f &amp;amp;&amp;amp; y &amp;lt;= 50.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 24.0f);
+    } else if (y &amp;gt; 50.0f &amp;amp;&amp;amp; y &amp;lt;= 70.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 44.0f);
+    } else if (y &amp;gt; 70.0f &amp;amp;&amp;amp; y &amp;lt;= 90.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 64.0f);
+    } else if (y &amp;gt; 90.0f &amp;amp;&amp;amp; y &amp;lt;= 110.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 84.0f);
+    } else if (y &amp;gt; 110.0f &amp;amp;&amp;amp; y &amp;lt;= 130.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 104.0f);
+    } else if (y &amp;gt; 130.0f &amp;amp;&amp;amp; y &amp;lt;= 150.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 124.0f);
+    } else if (y &amp;gt; 150.0f &amp;amp;&amp;amp; y &amp;lt;= 170.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 144.0f);
+    } else if (y &amp;gt; 170.0f &amp;amp;&amp;amp; y &amp;lt;= 190.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 164.0f);
+    } else if (y &amp;gt; 190.0f &amp;amp;&amp;amp; y &amp;lt;= 210.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 184.0f);
+    } else if (y &amp;gt; 210.0f &amp;amp;&amp;amp; y &amp;lt;= 270.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 224.0f);
+    } else if (y &amp;gt; 270.0f) {
+        self.accButtonPosition = CGPointMake(self.accButtonPosition.x, 264.0f);
+    }
+
+    [self setNeedsDisplay];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个方法也很简单，主要就是根据手指触摸的位置的y值和档位线的y值比较来计算按钮的位置。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (int)calculatorLineIndex:(CGPoint)buttonPosition
+{
+    CGFloat y = buttonPosition.y + 16.0f;
+    int index = 0;
+
+    if (y &amp;lt;= 30.0f) {
+        index = 0;
+    } else if (y &amp;gt; 30.0f &amp;amp;&amp;amp; y &amp;lt;= 50.0f) {
+        index = 1;
+    } else if (y &amp;gt; 50.0f &amp;amp;&amp;amp; y &amp;lt;= 70.0f) {
+        index = 2;
+    } else if (y &amp;gt; 70.0f &amp;amp;&amp;amp; y &amp;lt;= 90.0f) {
+        index = 3;
+    } else if (y &amp;gt; 90.0f &amp;amp;&amp;amp; y &amp;lt;= 110.0f) {
+        index = 4;
+    } else if (y &amp;gt; 110.0f &amp;amp;&amp;amp; y &amp;lt;= 130.0f) {
+        index = 5;
+    } else if (y &amp;gt; 130.0f &amp;amp;&amp;amp; y &amp;lt;= 150.0f) {
+        index = 6;
+    } else if (y &amp;gt; 150.0f &amp;amp;&amp;amp; y &amp;lt;= 170.0f) {
+        index = 7;
+    } else if (y &amp;gt; 170.0f &amp;amp;&amp;amp; y &amp;lt;= 190.0f) {
+        index = 8;
+    } else if (y &amp;gt; 190.0f &amp;amp;&amp;amp; y &amp;lt;= 210.0f) {
+        index = 9;
+    } else if (y &amp;gt; 210.0f &amp;amp;&amp;amp; y &amp;lt;= 270.0f) {
+        index = 10;
+    } else if (y &amp;gt; 270.0f) {
+        index = 11;
+    }
+
+    return index;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;类似的，上面的方法是用来计算当前按钮在哪个档位线，然后在重绘方法里面决定那些档位线需要上色。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)drawRect:(CGRect)rect
+{
+    [super drawRect:rect];
+    NSLog(@&amp;quot;drawRect&amp;quot;);
+    int buttonIndex = [self calculatorLineIndex:self.accButtonPosition];
+    //NSLog(@&amp;quot;buttonIndex : %d&amp;quot;, buttonIndex);
+
+    [[UIColor whiteColor] set];
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(currentContext, 1.0f);
+
+    for (int i = 0; i &amp;lt; 12; i++) {
+
+        if (i &amp;lt; 10) {
+
+            if (i &amp;gt;= buttonIndex) {
+                if (i == 0) {
+                    [[UIColor colorWithHexString:@&amp;quot;#ff0000&amp;quot;] set];
+                } else if (i == 1) {
+                    [[UIColor colorWithHexString:@&amp;quot;#ed5002&amp;quot;] set];
+                } else if (i == 2) {
+                    [[UIColor colorWithHexString:@&amp;quot;#f25102&amp;quot;] set];
+                } else if (i == 3) {
+                    [[UIColor colorWithHexString:@&amp;quot;#ed5d03&amp;quot;] set];
+                } else if (i == 4) {
+                    [[UIColor colorWithHexString:@&amp;quot;#f27202&amp;quot;] set];
+                } else if (i == 5) {
+                    [[UIColor colorWithHexString:@&amp;quot;#f18a02&amp;quot;] set];
+                } else if (i == 6) {
+                    [[UIColor colorWithHexString:@&amp;quot;#f2a102&amp;quot;] set];
+                } else if (i == 7) {
+                    [[UIColor colorWithHexString:@&amp;quot;#f2b702&amp;quot;] set];
+                } else if (i == 8) {
+                    [[UIColor colorWithHexString:@&amp;quot;#ecc202&amp;quot;] set];
+                } else if (i == 9) {
+                    [[UIColor colorWithHexString:@&amp;quot;#f2c602&amp;quot;] set];
+                }
+            } else {
+                [[UIColor whiteColor] set];
+            }
+
+            CGFloat leftStartX = 0.0f;
+            CGFloat rightEndX = 0.0f;
+
+            if (i != 9) {
+                leftStartX = 42.5f;
+                rightEndX = 157.5f;
+            } else {
+                leftStartX = 2.5f;
+                rightEndX = 197.5f;
+            }
+
+            CGContextMoveToPoint(currentContext, leftStartX, 20.0f * (i + 1));
+            CGContextAddLineToPoint(currentContext, 87.5f, 20.0f * (i + 1));
+            CGContextStrokePath(currentContext);
+
+            CGContextMoveToPoint(currentContext, 112.5f, 20.0f * (i + 1));
+            CGContextAddLineToPoint(currentContext, rightEndX, 20.0f * (i + 1));
+            CGContextStrokePath(currentContext);
+        } else {
+            if (i == 10) {
+
+                if (i == buttonIndex) {
+                    [[UIColor colorWithHexString:@&amp;quot;#ff0000&amp;quot;] set];
+                } else {
+                    [[UIColor whiteColor] set];
+                }
+                NSString *string = @&amp;quot;N&amp;quot;;
+                [string drawAtPoint:CGPointMake(20.0f, 10.0f + 20.0f * (i  + 1)) withFont:[UIFont systemFontOfSize:20.0f]];
+                [string drawAtPoint:CGPointMake(165.5f, 10.0f + 20.0f * (i  + 1)) withFont:[UIFont systemFontOfSize:20.0f]];
+
+                CGContextMoveToPoint(currentContext, 42.5f, 20.0f * (i  + 2));
+                CGContextAddLineToPoint(currentContext, 87.5f, 20.0f * (i  + 2));
+                CGContextStrokePath(currentContext);
+
+                CGContextMoveToPoint(currentContext, 112.5f, 20.0f * (i  + 2));
+                CGContextAddLineToPoint(currentContext, 157.5f, 20.0f * (i  + 2));
+                CGContextStrokePath(currentContext);
+            }
+            if (i == 11) {
+
+                if (i == buttonIndex) {
+                    [[UIColor colorWithHexString:@&amp;quot;#00ff00&amp;quot;] set];
+                } else {
+                    [[UIColor whiteColor] set];
+                }
+
+                NSString *string = @&amp;quot;R&amp;quot;;
+                [string drawAtPoint:CGPointMake(20.0f, 10.0f + 20.0f * (i  + 2)) withFont:[UIFont systemFontOfSize:20.0f]];
+                [string drawAtPoint:CGPointMake(165.5f, 10.0f + 20.0f * (i  + 2)) withFont:[UIFont systemFontOfSize:20.0f]];
+
+                CGContextMoveToPoint(currentContext, 42.5f, 20.0f * (i  + 3));
+                CGContextAddLineToPoint(currentContext, 87.5f, 20.0f * (i  + 3));
+                CGContextStrokePath(currentContext);
+
+                CGContextMoveToPoint(currentContext, 112.5f, 20.0f * (i  + 3));
+                CGContextAddLineToPoint(currentContext, 157.5f, 20.0f * (i  + 3));
+                CGContextStrokePath(currentContext);
+            }
+        }
+    }
+    [self.accButtonImage drawAtPoint:self.accButtonPosition];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;- (void)drawRect:(CGRect)rect&lt;/code&gt;方法也很简单，主要复杂的就是业务逻辑，也没多大好讲解的。这里有个比较坑的地方就是&lt;code&gt;- (void)drawRect:(CGRect)rect&lt;/code&gt;方法何时调用的问题。之前有个需求，需要重绘控件，调用&lt;code&gt;setNeedsDisplay&lt;/code&gt;方法后并没有立即重绘。而且我在一个10次循环里面调用了10次&lt;code&gt;setNeedsDisplay&lt;/code&gt;方法，但是最终只调用了一次&lt;code&gt;- (void)drawRect:(CGRect)rect&lt;/code&gt;方法。最后在Stack Overflow上找到了方法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[self setNeedsDisplay];
+[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的方法会立即重绘。&lt;/p&gt;
+
+&lt;p&gt;项目代码：&lt;a href=&#34;https://github.com/LynchWong/AcceleratorView&#34;&gt;AcceleratorView&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

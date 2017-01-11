@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spaceship on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/spaceship/index.xml</link>
+    <description>Recent content in Spaceship on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/spaceship/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Fastlane - Spaceship</title>
+      <link>http://lynchwong.com/blog/2016/06/fastlane---spaceship/</link>
+      <pubDate>Tue, 28 Jun 2016 09:03:31 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/fastlane---spaceship/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;说明：翻译的 &lt;code&gt;Spaceship&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; 原文地址 &lt;/a&gt;。
+&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSpaceship/spaceship.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;spaceship&#34;&gt;spaceship&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;spaceship&lt;/code&gt; 暴露了 Apple Developer Center 和 iTunes Connect API。这些快速和强大的API已经是 fastlane 的一部分，能够实现更多 fastlane 的高级功能。脚本化 Developer Center 的工作流从未如此简单。&lt;/p&gt;
+
+&lt;h1 id=&#34;spaceship-是什么东西&#34;&gt;spaceship 是什么东西？&lt;/h1&gt;
+
+&lt;p&gt;到现在为止， &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane tools&lt;/a&gt; 都是使用的网页抓取的方式与 Apple&amp;rsquo;s Web Services 进行交互。使用 spaceship 只需要一个简单的 HTTP Client 就能直接访问底层的 API。&lt;/p&gt;
+
+&lt;p&gt;使用 spaceship， &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt;sigh&lt;/a&gt; 的执行时间从1分钟减少到5秒内。&lt;/p&gt;
+
+&lt;p&gt;spaceship 使用3中不同的API端点的组合，被 Apple Developer Portal 和 Xcode 使用。由于没有为我们提供所有需要的API，所以 spaceship 为你组合了所有的API。 &lt;a href=&#34;More details about the APIs&#34;&gt;关于API的更多细节&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;更多关于为什么 spaceship 有用的说明，查看 &lt;a href=&#34;https://spaceship.airforce&#34;&gt;spaceship.airforce&lt;/a&gt;。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;不管你有多少 App 或者 Certificates，spaceship 都能处理。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;够了，这里是代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Spaceship.login
+
+# Create a new app
+app = Spaceship.app.create!(bundle_id: &amp;quot;com.krausefx.app&amp;quot;, name: &amp;quot;Spaceship App&amp;quot;)
+
+# Use an existing certificate
+cert = Spaceship.certificate.production.all.first
+
+# Create a new provisioning profile
+profile = Spaceship.provisioning_profile.app_store.create!(bundle_id: app.bundle_id,
+                                                     certificate: cert)
+
+# Print the name and download the new profile
+puts &amp;quot;Created Profile &amp;quot; + profile.name
+profile.download
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;速度&#34;&gt;速度&lt;/h2&gt;
+
+&lt;p&gt;跟网页抓取比起来，使用 &lt;code&gt;spaceship&lt;/code&gt; 工具有多快？&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSpaceship/SpaceshipRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo gem install spaceship
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+
+&lt;h2 id=&#34;playground&#34;&gt;Playground&lt;/h2&gt;
+
+&lt;p&gt;尝试 &lt;code&gt;spaceship&lt;/code&gt; ，只需要运行 &lt;code&gt;spaceship&lt;/code&gt; 。然后就会自动启动 &lt;code&gt;spaceship playground&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSpaceship/Playground.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这要求你使用 &lt;code&gt;sudo gem install pry&lt;/code&gt; 安装 &lt;code&gt;pry&lt;/code&gt; 。&lt;code&gt;pry&lt;/code&gt; 不会默认安装，因为大部分的 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; 用户不需要 &lt;code&gt;spaceship playground&lt;/code&gt; 。你可以在 &lt;code&gt;Gemfile&lt;/code&gt; 文件里添加 &lt;code&gt;pry&lt;/code&gt; 依赖。&lt;/p&gt;
+
+&lt;h2 id=&#34;apple-developer-portal-api&#34;&gt;Apple Developer Portal API&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/spaceship/docs/DeveloperPortal.md&#34;&gt;DeveloperPortal.md&lt;/a&gt; 中有示例代码&lt;/p&gt;
+
+&lt;h2 id=&#34;itunes-connect-api&#34;&gt;iTunes Connect API&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/spaceship/docs/iTunesConnect.md&#34;&gt;iTunesConnect.md&lt;/a&gt; 中有示例代码&lt;/p&gt;
+
+&lt;h2 id=&#34;2-step-verification&#34;&gt;2 Step Verification&lt;/h2&gt;
+
+&lt;p&gt;如果你的苹果账户开启了两步验证，将会自动询问你使用手机进行验证。结果会话将会存储在 &lt;code&gt;~/.spaceship/[email]/cookie&lt;/code&gt; 。这个会话在一个月内是有效的，当然没有办法真的等到一个月后来测试。&lt;/p&gt;
+
+&lt;p&gt;由于你的 CI 系统可能不允许你输入值(比如验证码)，你可以使用 &lt;code&gt;spaceauth&lt;/code&gt; ：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;spaceauth -u apple@krausefx.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个将会给你授权，并提供一个字符串，可以传给你的 CI 系统：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;export FASTLANE_SESSION=&#39;---\n- !ruby/object:HTTP::Cookie\n  name: DES5c148586dfd451e55afbaaa5f62418f91\n  value: HSARMTKNSRVTWFla1+yO4gVPowH17VaaaxPFnUdMUegQZxqy1Ie1c2v6bM1vSOzIbuOmrl/FNenlScsd/NbF7/Lw4cpnL15jsyg0TOJwP32tC/NguPiyOaaaU+jrj4tf4uKdIywVaaaFSRVT\n  domain: idmsa.apple.com\n  for_domain: true\n  path: &amp;quot;/&amp;quot;\n  secure: true\n  httponly: true\n  expires: 2016-04-27 23:55:56.000000000 Z\n  max_age: \n  created_at: 2016-03-28 16:55:57.032086000 -07:00\n  accessed_at: 2016-03-28 19:11:17.828141000 -07:00\n&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;从 &lt;code&gt;---\n&lt;/code&gt; 开始复制所有的东西到你的 CI 服务器，然后当做环境变量提供，变量名是 &lt;code&gt;FASTLANE_SESSION&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;h2 id=&#34;spaceship-in-use&#34;&gt;Spaceship in use&lt;/h2&gt;
+
+&lt;p&gt;很多 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane tools&lt;/a&gt; 已经使用了 &lt;code&gt;spaceship&lt;/code&gt;，比如 &lt;code&gt;sigh&lt;/code&gt;， &lt;code&gt;cert&lt;/code&gt;， &lt;code&gt;produce&lt;/code&gt;， &lt;code&gt;pilot&lt;/code&gt; 和 &lt;code&gt;boarding&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;h1 id=&#34;技术细节&#34;&gt;技术细节&lt;/h1&gt;
+
+&lt;h2 id=&#34;http-client&#34;&gt;HTTP Client&lt;/h2&gt;
+
+&lt;p&gt;到现在为止，所有的 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane tools&lt;/a&gt; 都是使用的网页抓取的方式与 Apple&amp;rsquo;s Web Services 进行交互。spaceship 使用一个简单的 HTTP Client ，更少的开销，更快的速度。&lt;/p&gt;
+
+&lt;p&gt;跟网页抓取比起来，&lt;code&gt;spaceship&lt;/code&gt; 的优势：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;快90%&lt;/li&gt;
+&lt;li&gt;不需要再加载图像、HTML、JS 以及 CSS文件&lt;/li&gt;
+&lt;li&gt;通过稳定的服务器响应，更广的测试覆盖率&lt;/li&gt;
+&lt;li&gt;能够应对 Apple Developer Portal 的设计变更&lt;/li&gt;
+&lt;li&gt;当请求超时，会自动重试&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;api-endpoints&#34;&gt;API Endpoints&lt;/h2&gt;
+
+&lt;p&gt;这里不会深入讲解各种API，只是给一些参考：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;https://idmsa.apple.com&lt;/code&gt;：用来授权，获取有效的会话&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;https://developerservices2.apple.com&lt;/code&gt;：
+
+&lt;ul&gt;
+&lt;li&gt;获取可用的 Provisioning Profiles 的详细列表&lt;/li&gt;
+&lt;li&gt;这个API会返回每个 Profiles 的设备，Certificates 和 App&lt;/li&gt;
+&lt;li&gt;注册新的设备&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;https://developer.apple.com&lt;/code&gt;：
+
+&lt;ul&gt;
+&lt;li&gt;列出所有设备，Certificates，Apps 和 App Groups&lt;/li&gt;
+&lt;li&gt;创建新的Certificates，Provisioning Profiles 和 Apps&lt;/li&gt;
+&lt;li&gt;禁用/开启 应用的服务，然后赋值给 App Groups&lt;/li&gt;
+&lt;li&gt;删除Certificates 和 Apps&lt;/li&gt;
+&lt;li&gt;修复 Provisioning Profiles&lt;/li&gt;
+&lt;li&gt;下载 Provisioning Profiles&lt;/li&gt;
+&lt;li&gt;团队选择&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;https://itunesconnect.apple.com&lt;/code&gt;：
+
+&lt;ul&gt;
+&lt;li&gt;管理应用&lt;/li&gt;
+&lt;li&gt;管理测试用户&lt;/li&gt;
+&lt;li&gt;提交更新进行审核&lt;/li&gt;
+&lt;li&gt;管理应用的元数据&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;https://du-itc.itunesconnect.apple.com&lt;/code&gt;：
+
+&lt;ul&gt;
+&lt;li&gt;上传 图标、截图、trailers&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;spaceship&lt;/code&gt; 使用所有这些API提供了所有功能的无缝体验。&lt;/p&gt;
+
+&lt;h2 id=&#34;magic-involved&#34;&gt;Magic involved&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;spaceship&lt;/code&gt; 做了许多魔法的事情来让所有的工作都很整洁：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;合理的默认值：&lt;/strong&gt;你只需要提供那些强制性的信息(比如新的 Provisioning Profiles，默认包含所有设备)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;本地验证：&lt;/strong&gt;将所有的改变推送到 Apple Dev Portal 的时候，&lt;code&gt;spaceship&lt;/code&gt; 会确保只有有效的数据发送给 Apple (比如自动修复了的 Provisioning Profiles)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;各种请求响应类型：&lt;/strong&gt;当处理不同的API的时候，&lt;code&gt;spaceship&lt;/code&gt; 必需处理 &lt;code&gt;JSON&lt;/code&gt;，&lt;code&gt;XML&lt;/code&gt;，&lt;code&gt;txt&lt;/code&gt;，&lt;code&gt;plist&lt;/code&gt;，有时甚至包括 HTML 的请求和响应&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;自动分页：&lt;/strong&gt;即使你有上千个App、Profiles 或者 Certificates，&lt;code&gt;spaceship&lt;/code&gt; 都会为你处理。是经过测试的。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Session, Cookie and CSRF token：&lt;/strong&gt;&lt;code&gt;spaceship&lt;/code&gt; 处理了安全的各个方面。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Profile Magic：&lt;/strong&gt;创建上传 Code Signing Requests，所有的都由&lt;code&gt;spaceship&lt;/code&gt; 处理&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Multiple Spaceship：&lt;/strong&gt;你可以使用不同的苹果账户来登录多个 &lt;code&gt;spaceship&lt;/code&gt;，用来同步注册的设备&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

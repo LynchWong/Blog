@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mobilevlckit on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/mobilevlckit/index.xml</link>
+    <description>Recent content in Mobilevlckit on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/mobilevlckit/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>最近的代码</title>
+      <link>http://lynchwong.com/blog/2016/06/%E6%9C%80%E8%BF%91%E7%9A%84%E4%BB%A3%E7%A0%81/</link>
+      <pubDate>Thu, 02 Jun 2016 11:35:40 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/%E6%9C%80%E8%BF%91%E7%9A%84%E4%BB%A3%E7%A0%81/</guid>
+      <description>&lt;p&gt;这三个小项目其实已经完成蛮久了，差不多一个多月的时间了。有发在Cocoachina的代码里面，我的&lt;a href=&#34;https://github.com/LynchWong&#34;&gt; GitHub &lt;/a&gt;上面也有源码。这里也只是作下记录，不做详细的讲解。
+&lt;/p&gt;
+
+&lt;h1 id=&#34;仿-爱范儿-客户端&#34;&gt;仿 爱范儿 客户端&lt;/h1&gt;
+
+&lt;p&gt;仿 爱范儿 客户端，使用UIViewController容器、UIScrollView实现，使用 SnapKit 布局。&lt;/p&gt;
+
+&lt;p&gt;实现左右滚动，顶部标题滚动，缩小视图，下拉刷新(上拉加载未实现)。&lt;/p&gt;
+
+&lt;p&gt;说明：由于水平和思路的差异导致视觉效果上有些差异，除此之外还有些功能未实现(如 更多栏目)，请使用CocoaPods添加依赖库。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/mifanr&#34;&gt; 源码 &lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;圆圈按钮&#34;&gt;圆圈按钮&lt;/h1&gt;
+
+&lt;p&gt;自动布局，随意配制按钮个数和外观。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/CircleMenu&#34;&gt; 源码 &lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;效果图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/RecentCoding/demo.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;播放器&#34;&gt;播放器&lt;/h1&gt;
+
+&lt;p&gt;这个播放器是基于VLC的MobileVLCKit开发的，使用Swift。是我自己做的一个App，去年就上架到App Store了，最近空闲就小更新了下。&lt;/p&gt;
+
+&lt;p&gt;MobileVLCKit功能强大，这个App只用到皮毛。实现了一些基本的功能：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用&lt;a href=&#34;https://github.com/swisspol/GCDWebServer&#34;&gt; GCDWebServer &lt;/a&gt;来进行本地视频上传到播放器。&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;实现简单的播放、暂停、快进、后退、左侧上下滑动屏幕调节亮度、右侧上下滑动屏幕调节音量、左右扫动进度调节。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;没有支持播放远程视频，不支持外挂字幕，不支持截屏等其他功能。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;后续可能会添加这些功能的支持。&lt;/p&gt;
+
+&lt;p&gt;项目App Store地址：
+&lt;a href=&#34;https://itunes.apple.com/us/app/jian-yi-bo-fang-qi-ji-jian/id1059131009?ls=1&amp;amp;mt=8&#34;&gt;简易播放器 - 极简播放器&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/ePlayer&#34;&gt; 源码 &lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;效果图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/RecentCoding/intro.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

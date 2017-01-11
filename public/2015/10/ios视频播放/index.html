@@ -1,0 +1,1544 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>iOS视频播放</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="离上一篇博客发布又是两周时间过去了，心里总是感觉空空的。两周没有发布一篇博客，感觉就像是虚度了。另外一个原因就是实在是不知道写点什么，有些内容兴趣不大就搁置了。其次就是之前的天坑真是没有动力去填了，比如CoreData，就放在那吧。上篇博客也提到了这篇做视频播放器，所以这篇就是讲讲视频播放器的。
+">
+    <meta property="og:description" content="离上一篇博客发布又是两周时间过去了，心里总是感觉空空的。两周没有发布一篇博客，感觉就像是虚度了。另外一个原因就是实在是不知道写点什么，有些内容兴趣不大就搁置了。其次就是之前的天坑真是没有动力去填了，比如CoreData，就放在那吧。上篇博客也提到了这篇做视频播放器，所以这篇就是讲讲视频播放器的。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="iOS视频播放">
+    <meta property="og:url" content="/2015/10/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="离上一篇博客发布又是两周时间过去了，心里总是感觉空空的。两周没有发布一篇博客，感觉就像是虚度了。另外一个原因就是实在是不知道写点什么，有些内容兴趣不大就搁置了。其次就是之前的天坑真是没有动力去填了，比如CoreData，就放在那吧。上篇博客也提到了这篇做视频播放器，所以这篇就是讲讲视频播放器的。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      iOS视频播放
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-10-14T18:18:18Z">
+    
+  
+  
+  
+  
+    2015-10-14 18:18:18
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>离上一篇博客发布又是两周时间过去了，心里总是感觉空空的。两周没有发布一篇博客，感觉就像是虚度了。另外一个原因就是实在是不知道写点什么，有些内容兴趣不大就搁置了。其次就是之前的天坑真是没有动力去填了，比如CoreData，就放在那吧。上篇博客也提到了这篇做视频播放器，所以这篇就是讲讲视频播放器的。
+</p>
+
+<p>上篇博客也提到了一些资源：</p>
+
+<p><a href="http://www.cnblogs.com/kenshincui/p/4186022.html">iOS开发系列&ndash;音频播放、录音、视频播放、拍照、视频录制</a>
+<a href="http://msching.github.io/blog/2014/07/07/audio-in-ios/">iOS音频播放 (一)：概述</a>
+<a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">AVFoundation Programming Guide</a></p>
+
+<p>第一个资源基本所有的东西都讲到了，音频、视频等。简单易懂，入门级学习都够了，也能满足基本的需求。
+第二个资源主要讲解音频的，很专业。
+第三个资源是苹果官方的编程指南，具有很好的指导意义，建议大家阅读。</p>
+
+<p>其实基本知识点前面的这些资源都讲到了，我这里再讲也就没什么意思了。</p>
+
+<p>所以我们这里就做一个完整功能的播放器，播放，暂停，快进，全屏等功能。</p>
+
+<p>接下来我们就开始吧，先说下我的开发环境。</p>
+
+<ul>
+<li>OS X EI Capitan(Version 10.11)</li>
+<li>Xcode(Version 7.0.1)</li>
+<li>使用Swift作为开发语言</li>
+</ul>
+
+<h1 id="建立项目">建立项目</h1>
+
+<p>如下图所示，我们选择*Single View Application*，项目名称叫做*LWPlayer*，语言选择*Swift*。
+<img src="http://lynchwong.com/blog/img/iOSLWPlayer/1.png" alt="alt text" /></p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/2.png" alt="alt text" /></p>
+
+<p>然后我们将项目的*Deployment Target*修改为8.0。然后我们删除*Main.storyboard*文件，同时*Main Interface*里面的Main也去掉。因为我们删除了storyboard文件，如果不删除Main的话程序无法启动直接崩溃。</p>
+
+<p>现在项目的界面应该如下所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/3.png" alt="alt text" /></p>
+
+<p>这里我们删除了storyboard文件，我的打算是用代码手写界面，不使用storyboard和xib文件。大家可能都知道用代码写布局很繁琐，所以这里使用第三方的框架*SnapKit*。这个第三方框架其实就是OC版本的*Masonry*，这里就不细讲布局的事情了，参考资料<a href="https://github.com/SnapKit/Masonry"> SnapKit </a>和<a href="https://github.com/SnapKit/Masonry"> Masonry </a>。</p>
+
+<p>现在项目编译运行之后就是一片漆黑，之后我们要自己做一些初始化的工作。首先我们先添加第三方库，及*SnapKit*。我们使用依赖管理器来添加第三方库。可以使用*CocoaPods*，当然你也可以使用*Carthage*，如果是Swift以及iOS8.0以上推荐使用*Carthage*来管理。这里我们使用*Carthage*，<a href="https://github.com/Carthage/Carthage#adding-frameworks-to-an-application"> Carthage </a>，安装很简单，请自行了解。</p>
+
+<p>*Carthage*的参考资料：</p>
+
+<p><a href="https://github.com/Carthage/Carthage#adding-frameworks-to-an-application">Carthage</a>
+<a href="http://www.cocoachina.com/ios/20141204/10528.html">Carthage：去中心化的Cocoa依赖管理器</a>
+<a href="http://www.isaced.com/post-265.html">Cocoa 新的依赖管理工具：Carthage</a></p>
+
+<p>第一篇是官方的，第二篇相当于是官方的翻译，大家自行参考学习。</p>
+
+<p>我们进入到项目目录执行如下命令，截图如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/4.png" alt="alt text" /></p>
+
+<p>进入到项目目录后我们创建了*Cartfile*文件，然后在里面添加需要的第三方库。如下所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/5.png" alt="alt text" /></p>
+
+<p>然后*:wq*保存退出，然后执行*carthage update*命令进行安装编译。</p>
+
+<p>这里就算是安装编译完成了，我们可以进到工程目录里面看下编程生成的二进制framework文件。如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/6.png" alt="alt text" /></p>
+
+<p>不仅有iOS的，还有Mac的。现在我们还差最后一步，就是将framework添加到我们的工程。设置*Framework Search Paths<em>是最简单的方法，告诉工程到那里去找这些framework。设置为</em>$(SRCROOT)/Carthage/Build/iOS*，如果是OS X就把iOS改成Mac。如下所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/7.png" alt="alt text" /></p>
+
+<p>这一步和官方说明的不一样，按照官方的方法，每次添加了新的framework都要自己到Xcode里面进行手动添加。</p>
+
+<p>第三方库算是添加完成了，现在我们要修改*AppDelegate*文件。修改*func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool*方法如下：</p>
+
+<pre><code>func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool {
+    // Override point for customization after application launch.
+
+    //appearance
+    UINavigationBar.appearance().barTintColor = UIColor(red: 56.0/255.0, green: 62.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+
+    //rootViewController
+    let rootVC = ViewController()
+
+    window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    window!.rootViewController = rootVC
+    window?.makeKeyAndVisible()
+
+    return true
+}
+</code></pre>
+
+<p>这里代码很简单，就不讲解了。运行启动后屏幕仍然是黑的，我们继续做些修改。将*ViewController*的代码修改为如下所示：</p>
+
+<pre><code>import UIKit
+import SnapKit
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        view.backgroundColor = UIColor.whiteColor()
+
+        let aView = UIView()
+        aView.backgroundColor = UIColor.orangeColor()
+        view.addSubview(aView)
+
+        aView.snp_makeConstraints { (make) -&gt; Void in
+            make.edges.equalTo(view).offset(UIEdgeInsets(top: 10, left: 10, bottom: -10, right: -10))
+        }
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+
+}
+</code></pre>
+
+<p>我们首先导入*SnapKit*模块，然后修改视图的背景色为白色，然后添加了一个距离父视图编剧为10的橙色子视图。布局的代码，*SnapKit*的使用方法就不讲解了。</p>
+
+<p>编译运行后会发现如下错误，</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/8.png" alt="alt text" /></p>
+
+<p>这里是因为之前修改*Framework Search Paths*导致的，其实前面的这一步貌似并没有效果。所以我们还是得按照官方的来，如下所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/9.png" alt="alt text" /></p>
+
+<p>我们在*Embedded Binaries*这里将*Carthage/Build/iOS/SnapKit.framework*添加进来，然后编译运行，截图如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/10.png" alt="alt text" /></p>
+
+<h1 id="项目结构">项目结构</h1>
+
+<p>首先我们删除*ViewController*，新建*LWPlayerViewController*，代码如下：</p>
+
+<pre><code>import UIKit
+import SnapKit
+
+class LWPlayerViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+        let aView = UIView();
+        aView.backgroundColor = UIColor.orangeColor();
+        view.addSubview(aView)
+
+        aView.snp_makeConstraints { (make) -&gt; Void in
+            make.edges.equalTo(view)
+        }
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+}
+</code></pre>
+
+<p>很简单就不讲解了，同时我们还需要修改*AppDelegate*的*func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool*方法，代码如下：</p>
+
+<pre><code>func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool {
+    // Override point for customization after application launch.
+
+    //appearance
+    UINavigationBar.appearance().barTintColor = UIColor(red: 56.0/255.0, green: 62.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+
+    //rootViewController
+    let rootVC = LWPlayerViewController()
+
+    window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    window!.rootViewController = rootVC
+    window?.makeKeyAndVisible()
+
+    return true
+}
+</code></pre>
+
+<p>运行后截图如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/11.png" alt="alt text" /></p>
+
+<p>你可能发现我们设置了导航栏的外观，所以我们接下来就新建*LWNavigationController*继承自*UINavigationController*，代码如下：</p>
+
+<pre><code>import UIKit
+
+class LWNavigationController: UINavigationController {
+
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
+    }
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError(&quot;init(coder:) has not been implemented&quot;)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    // MARK: - StatusBar
+
+    override func preferredStatusBarStyle() -&gt; UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+
+}
+</code></pre>
+
+<p>这里的代码也没什么好讲解的，主要就是一些初始化方法，有些是必需的，没有会报错。之后我们修改*AppDelegate*，首先添加：</p>
+
+<pre><code>var navigationVC: LWNavigationController!
+</code></pre>
+
+<p>的属性，然后修改*func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool*方法：</p>
+
+<pre><code>func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool {
+    // Override point for customization after application launch.
+
+    //appearance
+    UINavigationBar.appearance().barTintColor = UIColor(red: 56.0/255.0, green: 62.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+
+    //rootViewController
+    let rootVC = LWPlayerViewController()
+    navigationVC = LWNavigationController(rootViewController: rootVC)
+
+    window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    window!.rootViewController = navigationVC
+    window?.makeKeyAndVisible()
+
+    return true
+}
+</code></pre>
+
+<p>运行后模拟器截图：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/12.png" alt="alt text" /></p>
+
+<h1 id="视频资源">视频资源</h1>
+
+<p>说来惭愧，没有在网上找到可以用来进行远程播放的视频资源，所以我们要自己弄个。使用<strong>CocoaHTTPServer</strong>第三方库，让App内嵌一个HTTP server。</p>
+
+<p><a href="https://github.com/viki-org/VKVideoPlayer">VKVideoPlayer</a></p>
+
+<p>这里有一个开源的播放器，功能很完善，包括加载字幕、广告等等，大家可以参考学习下。</p>
+
+<p>这里我们先来添加第三方库<strong>CocoaHTTPServer</strong>，前面我们使用的是Carthage来管理依赖的，貌似 这个第三方库不行。但是CocoaPods可以，但是我们这里就不使用CocoaPods，估计这里是可以用的，这两个依赖管理应该不会冲突，这里我们就不测试了，直接使用最原始的方法：拖放文件。</p>
+
+<p><a href="https://github.com/robbiehanson/CocoaHTTPServer">CocoaHTTPServer</a> ，这里是下载地址，下载完成后我们将<strong>Core</strong>，<strong>Extensions</strong>，<strong>Vendor</strong>放到新建的文件夹<strong>CocoaHTTPServer</strong>中，其他的东西我们不需要了。然后将这个文件夹拖放到工程中，如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/13.png" alt="alt text" /></p>
+
+<p>接下来我们添加<strong>libxml2.tbd</strong>，不添加会报找不到文件的错。添加后如下图所示。</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/14.png" alt="alt text" /></p>
+
+<p>因为这个第三方库是OC，如果要混编的话我们需要添加桥接头文件，<strong>LWPlayer-Bridging-Header.h</strong>。修改文件内容的代码如下：</p>
+
+<pre><code>#import &quot;HTTPServer.h&quot;
+</code></pre>
+
+<p>然后我们还要配置下头文件，如下所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/15.png" alt="alt text" /></p>
+
+<p>然后我们参考<a href="https://github.com/viki-org/VKVideoPlayer"> VKVideoPlayer </a>的<strong>HTTPStreamingServer</strong>，代码如下：</p>
+
+<pre><code>import UIKit
+
+let HTTPStreamingServerSingleton = HTTPStreamingServer()
+
+class HTTPStreamingServer: NSObject {
+
+    var httpServer: HTTPServer!
+
+    class var sharedInstance: HTTPStreamingServer {
+        get {
+            return HTTPStreamingServerSingleton
+        }
+    }
+
+    override init() {
+        super.init()
+        initialize()
+    }
+
+    func initialize() {
+        httpServer = HTTPServer()
+        httpServer.setType(&quot;_http._tcp.&quot;)
+        httpServer.setPort(12345)
+        let webPath = NSBundle.mainBundle().resourcePath?.stringByAppendingString(&quot;/web&quot;)
+        httpServer.setDocumentRoot(webPath)
+    }
+
+    func start() {
+        do {
+            try httpServer.start()
+            print(&quot;Started HTTP Server on port \(httpServer.listeningPort())&quot;)
+        } catch {
+            print(&quot;Error starting HTTP Server&quot;)
+        }
+    }
+
+    func stop() {
+        httpServer.stop()
+    }
+
+}
+</code></pre>
+
+<p>定义了一个全局的常量，然后使用类计算型属性实现单列。其他的代码很简单，就不讲解了。</p>
+
+<p>然后我们在<strong>func applicationDidBecomeActive(application: UIApplication)</strong>方法中加入<strong>HTTPStreamingServer.sharedInstance.start()</strong>及<strong>func applicationWillTerminate(application: UIApplication)</strong>方法中添加<strong>HTTPStreamingServer.sharedInstance.stop()</strong>，运行之后在控制台输出<strong>Started HTTP Server on port 12345</strong>。</p>
+
+<p>然后我们将一些视频资源拖到项目中，这里我们就用<strong>VKVideoPlayer</strong>的资源，将<strong>web</strong>这个文件夹拖到我们项目中，注意我截图中的箭头，如下所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/16.png" alt="alt text" /></p>
+
+<h1 id="播放器">播放器</h1>
+
+<p>新建一个类<strong>LWPlayerView</strong>继承自<strong>UIView</strong>，代码如下：</p>
+
+<pre><code>import UIKit
+import AVFoundation
+
+class LWPlayerView: UIView {
+
+    var player: AVPlayer {
+        set {
+            (layer as! AVPlayerLayer).player = newValue
+        }
+        get {
+            return (layer as! AVPlayerLayer).player!
+        }
+    }
+
+    override class func layerClass() -&gt; AnyClass {
+        return AVPlayerLayer.classForCoder()
+    }
+
+}
+</code></pre>
+
+<p>如果你看过苹果的编程指南或者苹果给的Demo，都是这样实现的，可以算是最佳实践吧。</p>
+
+<p>接下来我们就来实现播放器，到<strong>LWPlayerViewController</strong>。首先我们添加如下所示的属性：</p>
+
+<pre><code>let videoPath = &quot;http://localhost:12345/wifi_640_index.m3u8&quot;//视频播放地址
+let radio = CGFloat(375.0 / 238.0)//缩放比例
+let width = UIScreen.mainScreen().bounds.size.width//屏幕宽度
+
+let playContentView = UIView()//播放器容器视图
+let toolContentView = UIView()//播放器工具容器视图
+
+var player: AVPlayer!//播放器
+var playerView = LWPlayerView()//播放视图
+
+var hideTool = false
+</code></pre>
+
+<p>后面都有注释，最后一个属性用来表示是否隐藏状态栏和工具栏。然后我们添加初始化播放器的方法：</p>
+
+<pre><code>func initPlayer() {
+    let url = NSURL(string: videoPath)!
+    let playerItem = AVPlayerItem(URL: url)
+    player = AVPlayer(playerItem: playerItem)
+}
+</code></pre>
+
+<p>然后是初始化视图的方法：</p>
+
+<pre><code>func initView() {
+
+    playContentView.backgroundColor = UIColor.blackColor()
+    view.addSubview(playContentView)
+    playContentView.snp_makeConstraints { (make) -&gt; Void in
+        make.top.left.right.equalTo(view)
+        make.width.equalTo(playContentView.snp_height).multipliedBy(radio)
+    }
+
+    playerView.player = player
+    playerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector(&quot;sigleTapAction&quot;)))
+    playContentView.addSubview(playerView)
+    playerView.snp_makeConstraints { (make) -&gt; Void in
+        make.edges.equalTo(playContentView)
+    }
+
+    toolContentView.backgroundColor = UIColor(red: 56.0/255.0, green: 62.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    playContentView.addSubview(toolContentView)
+    toolContentView.snp_makeConstraints { (make) -&gt; Void in
+        make.left.bottom.right.equalTo(playContentView)
+        make.height.equalTo(30.0)
+    }
+}
+</code></pre>
+
+<p>然后我们实现<strong>sigleTapAction()</strong>方法：</p>
+
+<pre><code>func sigleTapAction() {
+    if hideTool {
+        hideTool = false
+        navigationController?.navigationBar.hidden = false
+        toolContentView.hidden = false
+    } else {
+        hideTool = true
+        navigationController?.navigationBar.hidden = true
+        toolContentView.hidden = true
+    }
+}
+</code></pre>
+
+<p>然后修改<strong>func viewDidLoad()</strong>方法，当点击的时候会隐藏状态栏和工具栏：</p>
+
+<pre><code>override func viewDidLoad() {
+    super.viewDidLoad()
+    view.backgroundColor = UIColor.whiteColor()
+    initPlayer()
+    initView()
+    player.play()
+}
+</code></pre>
+
+<p>运行后截图如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/17.png" alt="alt text" /></p>
+
+<p>大家都知道HTTP请求在iOS9里面有变化，所以有的同学可能没有看到视频播放的画面；同样的<strong>VKVideoPlayer</strong>你可能也看不到视频播放，都是相同的原因，大家搜索都能解决。设置下<strong>.plist</strong>文件就可以了，如下图所示：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/18.png" alt="alt text" /></p>
+
+<p>注意这两个字段的类型，一个是字典类型，一个是布尔类型。</p>
+
+<h2 id="播放器界面">播放器界面</h2>
+
+<p>接下来我们就来完成播放器的界面，让它开起来更像一个播放器。首先我们添加如下所示的属性：</p>
+
+<pre><code>let playButton = UIButton()//播放按钮
+let muteButton = UIButton()//静音按钮
+let progress = UISlider()//播放进度
+let srtsButton = UIButton()//字幕按钮
+let fullButton = UIButton()//全屏按钮
+</code></pre>
+
+<p>接下来我们就来布局这些按钮，修改<strong>initView()</strong>方法，代码如下，直接替换即可：</p>
+
+<pre><code>func initView() {
+
+    playContentView.backgroundColor = UIColor.blackColor()
+    view.addSubview(playContentView)
+    playContentView.snp_makeConstraints { (make) -&gt; Void in
+        make.top.left.right.equalTo(view)
+        make.width.equalTo(playContentView.snp_height).multipliedBy(radio)
+    }
+
+    playerView.player = player
+    playerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector(&quot;sigleTapAction&quot;)))
+    playContentView.addSubview(playerView)
+    playerView.snp_makeConstraints { (make) -&gt; Void in
+        make.edges.equalTo(playContentView)
+    }
+
+    toolContentView.backgroundColor = UIColor(red: 56.0/255.0, green: 62.0/255.0, blue: 72.0/255.0, alpha: 1.0)
+    playContentView.addSubview(toolContentView)
+    toolContentView.snp_makeConstraints { (make) -&gt; Void in
+        make.left.bottom.right.equalTo(playContentView)
+        make.height.equalTo(30.0)
+    }
+
+    playButton.setImage(UIImage(named: &quot;pause_icon_vertical&quot;), forState: UIControlState.Normal)
+    playButton.setImage(UIImage(named: &quot;play_icon_vertical&quot;), forState: UIControlState.Selected)
+    muteButton.setImage(UIImage(named: &quot;sound_on_vertical&quot;), forState: UIControlState.Normal)
+    muteButton.setImage(UIImage(named: &quot;sound_off_vertical&quot;), forState: UIControlState.Selected)
+    srtsButton.setImage(UIImage(named: &quot;chinese_english_shift_vertical&quot;), forState: UIControlState.Normal)
+    srtsButton.setImage(UIImage(named: &quot;english_shift_vertical&quot;), forState: UIControlState.Selected)
+    fullButton.setImage(UIImage(named: &quot;full_screen_icon_vertical&quot;), forState: UIControlState.Normal)
+
+    progress.minimumValue = 0.0
+    progress.maximumValue = 1.0
+    progress.continuous = false
+    progress.setThumbImage(UIImage(named: &quot;VKScrubber_thumb_vertical&quot;), forState: UIControlState.Normal)
+    progress.value = 0.0
+    progress.minimumTrackTintColor = UIColor(red: 10 / 255, green: 137 / 255, blue: 153 / 255, alpha: 1.0)
+    progress.maximumTrackTintColor = UIColor(red: 10 / 255, green: 137 / 255, blue: 153 / 255, alpha: 0.4)
+
+    playButton.addTarget(self, action: Selector(&quot;playAction:&quot;), forControlEvents: UIControlEvents.TouchUpInside)
+    muteButton.addTarget(self, action: Selector(&quot;muteAction:&quot;), forControlEvents: UIControlEvents.TouchUpInside)
+    srtsButton.addTarget(self, action: Selector(&quot;srtsAction:&quot;), forControlEvents: UIControlEvents.TouchUpInside)
+    fullButton.addTarget(self, action: Selector(&quot;fullAction:&quot;), forControlEvents: UIControlEvents.TouchUpInside)
+
+    toolContentView.addSubview(playButton)
+    toolContentView.addSubview(muteButton)
+    toolContentView.addSubview(progress)
+    toolContentView.addSubview(srtsButton)
+    toolContentView.addSubview(fullButton)
+
+    playButton.snp_makeConstraints { (make) -&gt; Void in
+        make.left.equalTo(10.0)
+        make.centerY.equalTo(toolContentView.snp_centerY)
+        make.height.width.equalTo(20.0)
+    }
+
+    muteButton.snp_makeConstraints { (make) -&gt; Void in
+        make.left.equalTo(playButton.snp_right).offset(13.0)
+        make.centerY.equalTo(toolContentView.snp_centerY)
+        make.height.width.equalTo(20.0)
+    }
+
+    progress.snp_makeConstraints { (make) -&gt; Void in
+        make.left.equalTo(muteButton.snp_right).offset(22.0)
+        make.right.equalTo(srtsButton.snp_left).offset(-16.0)
+        make.centerY.equalTo(toolContentView.snp_centerY)
+        make.height.equalTo(2.0)
+    }
+
+    srtsButton.snp_makeConstraints { (make) -&gt; Void in
+        make.right.equalTo(fullButton.snp_left).offset(-14.0)
+        make.centerY.equalTo(toolContentView.snp_centerY)
+        make.height.width.equalTo(20.0)
+    }
+
+    fullButton.snp_makeConstraints { (make) -&gt; Void in
+        make.right.equalTo(-10.0)
+        make.centerY.equalTo(toolContentView.snp_centerY)
+        make.height.width.equalTo(20.0)
+    }
+}
+</code></pre>
+
+<p>代码很长，但是基本没有难点，大都是布局的代码，这里就不讲解了。然后我们添加按钮相应的Action：</p>
+
+<pre><code>func playAction(sender: UIButton) {
+    if player.rate == 0 {
+        player.play()
+        sender.selected = true
+    } else {
+        player.pause()
+        sender.selected = false
+    }
+}
+
+func muteAction(sender: UIButton) {
+    if player.muted {
+        player.muted = false
+        sender.selected = false
+    } else {
+        player.muted = true
+        sender.selected = true
+    }
+}
+
+func srtsAction(sender: UIButton) {
+
+}
+
+func fullAction(sender: UIButton) {
+
+}
+</code></pre>
+
+<p>然后我们将<strong>viewDidLoad()</strong>方法里面的播放的代码<strong>player.play()</strong>去掉，运行之后截图如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/19.png" alt="alt text" /></p>
+
+<h2 id="强制横屏">强制横屏</h2>
+
+<p>首先我们修改横屏按钮要调用的方法，代码如下：</p>
+
+<pre><code>func fullAction(sender: UIButton) {
+    UIDevice.currentDevice().setValue(NSNumber(integer: UIInterfaceOrientation.LandscapeRight.rawValue), forKey: &quot;orientation&quot;)
+    UIViewController.attemptRotationToDeviceOrientation()
+}
+</code></pre>
+
+<p>接下来就是要调整下横屏时的视图，代码如下：</p>
+
+<pre><code>override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+    if UIInterfaceOrientationIsLandscape(toInterfaceOrientation) {
+        playContentView.snp_remakeConstraints { (make) -&gt; Void in
+            make.edges.equalTo(view)
+        }
+
+        toolContentView.snp_remakeConstraints { (make) -&gt; Void in
+            make.left.bottom.right.equalTo(playContentView)
+            make.height.equalTo(52.0)
+        }
+
+        playButton.setImage(UIImage(named: &quot;pause_icon_landscape&quot;), forState: UIControlState.Normal)
+        playButton.setImage(UIImage(named: &quot;play_icon_landscape&quot;), forState: UIControlState.Selected)
+        muteButton.setImage(UIImage(named: &quot;sound_on_landscape&quot;), forState: UIControlState.Normal)
+        muteButton.setImage(UIImage(named: &quot;sound_off_landscape&quot;), forState: UIControlState.Selected)
+        srtsButton.setImage(UIImage(named: &quot;chinese_english_shift_landscape&quot;), forState: UIControlState.Normal)
+        srtsButton.setImage(UIImage(named: &quot;english_shift_landscape&quot;), forState: UIControlState.Selected)
+        fullButton.setImage(UIImage(named: &quot;full_screen_icon_landscape&quot;), forState: UIControlState.Normal)
+        progress.setThumbImage(UIImage(named: &quot;VKScrubber_thumb_landscape&quot;), forState: UIControlState.Normal)
+
+        playButton.snp_remakeConstraints { (make) -&gt; Void in
+            make.left.equalTo(25.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(24.0)
+        }
+
+        muteButton.snp_remakeConstraints { (make) -&gt; Void in
+            make.left.equalTo(playButton.snp_right).offset(32.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(24.0)
+        }
+
+        progress.snp_remakeConstraints { (make) -&gt; Void in
+            make.left.equalTo(muteButton.snp_right).offset(30.0)
+            make.right.equalTo(srtsButton.snp_left).offset(-31.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.equalTo(4.0)
+        }
+
+        srtsButton.snp_remakeConstraints { (make) -&gt; Void in
+            make.right.equalTo(fullButton.snp_left).offset(-26.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(24.0)
+        }
+
+        fullButton.snp_remakeConstraints { (make) -&gt; Void in
+            make.right.equalTo(-27.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(24.0)
+        }
+    } else {
+        playContentView.snp_remakeConstraints { (make) -&gt; Void in
+            make.top.left.right.equalTo(view)
+            make.width.equalTo(playContentView.snp_height).multipliedBy(radio)
+        }
+
+        toolContentView.snp_remakeConstraints { (make) -&gt; Void in
+            make.left.bottom.right.equalTo(playContentView)
+            make.height.equalTo(30.0)
+        }
+        UIApplication.sharedApplication().statusBarHidden = true
+        playButton.setImage(UIImage(named: &quot;pause_icon_vertical&quot;), forState: UIControlState.Normal)
+        playButton.setImage(UIImage(named: &quot;play_icon_vertical&quot;), forState: UIControlState.Selected)
+        muteButton.setImage(UIImage(named: &quot;sound_on_vertical&quot;), forState: UIControlState.Normal)
+        muteButton.setImage(UIImage(named: &quot;sound_off_vertical&quot;), forState: UIControlState.Selected)
+        srtsButton.setImage(UIImage(named: &quot;chinese_english_shift_vertical&quot;), forState: UIControlState.Normal)
+        srtsButton.setImage(UIImage(named: &quot;english_shift_vertical&quot;), forState: UIControlState.Selected)
+        fullButton.setImage(UIImage(named: &quot;full_screen_icon_vertical&quot;), forState: UIControlState.Normal)
+        progress.setThumbImage(UIImage(named: &quot;VKScrubber_thumb_vertical&quot;), forState: UIControlState.Normal)
+
+        playButton.snp_remakeConstraints { (make) -&gt; Void in
+            make.left.equalTo(10.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(20.0)
+        }
+
+        muteButton.snp_remakeConstraints { (make) -&gt; Void in
+            make.left.equalTo(playButton.snp_right).offset(13.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(20.0)
+        }
+
+        progress.snp_remakeConstraints { (make) -&gt; Void in
+            make.left.equalTo(muteButton.snp_right).offset(22.0)
+            make.right.equalTo(srtsButton.snp_left).offset(-16.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.equalTo(2.0)
+        }
+
+        srtsButton.snp_remakeConstraints { (make) -&gt; Void in
+            make.right.equalTo(fullButton.snp_left).offset(-14.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(20.0)
+        }
+
+        fullButton.snp_remakeConstraints { (make) -&gt; Void in
+            make.right.equalTo(-10.0)
+            make.centerY.equalTo(toolContentView.snp_centerY)
+            make.height.width.equalTo(20.0)
+        }
+    }
+}
+</code></pre>
+
+<p>运行之后截图如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/20.png" alt="alt text" /></p>
+
+<p>现在只能横屏，还不能返回到竖屏的状态，接下来修改<strong>fullAction(sender: UIButton)</strong>方法，代码如下：</p>
+
+<pre><code>func fullAction(sender: UIButton) {
+    if UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait {
+        UIDevice.currentDevice().setValue(NSNumber(integer: UIInterfaceOrientation.LandscapeRight.rawValue), forKey: &quot;orientation&quot;)
+        UIViewController.attemptRotationToDeviceOrientation()
+    } else {
+        UIDevice.currentDevice().setValue(NSNumber(integer: UIInterfaceOrientation.Portrait.rawValue), forKey: &quot;orientation&quot;)
+        UIViewController.attemptRotationToDeviceOrientation()
+    }
+}
+</code></pre>
+
+<h2 id="播放进度">播放进度</h2>
+
+<p>其实实现播放器进度很简单，如果看了最开始的那些资源的话。几行代码就可以解决了：</p>
+
+<pre><code>func addProgressObserver() {
+    let playerItem = player.currentItem!
+    player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1), queue: dispatch_get_main_queue()) { (time: CMTime) -&gt; Void in
+        let current = CMTimeGetSeconds(time)
+        let total = CMTimeGetSeconds(playerItem.duration)
+        let progress = current / total
+        self.progress.setValue(Float(progress), animated: true)
+    }
+}
+</code></pre>
+
+<p>获取当前播放器的播放资源，然后得出总的时间和当前的时间，然后做一个百分比，最后设置<strong>UISlider</strong>的值。这个方法在我之前做进度条的时候就用到了，那里唯一不同的地方就是每秒调用10次，这里是每秒一次，设置<strong>CMTimeMake(1, 1)</strong>为<strong>CMTimeMake(1, 10)</strong>就是每秒调用10次。</p>
+
+<p>然后我们在初始化播放器的方法里面添加调用该方法的代码：</p>
+
+<pre><code>func initPlayer() {
+    let url = NSURL(string: videoPath)!
+    let playerItem = AVPlayerItem(URL: url)
+    player = AVPlayer(playerItem: playerItem)
+    addProgressObserver()
+}
+</code></pre>
+
+<p>运行之后如下所示:</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/21.png" alt="alt text" /></p>
+
+<h2 id="拖动进度">拖动进度</h2>
+
+<p>首先我们添加一个属性，如下所示：</p>
+
+<pre><code>var timeObserver: AnyObject!
+</code></pre>
+
+<p>然后修改<strong>addProgressObserver()</strong>方法，如下：</p>
+
+<pre><code>func addProgressObserver() {
+    let playerItem = player.currentItem!
+    timeObserver = player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1), queue: dispatch_get_main_queue()) { (time: CMTime) -&gt; Void in
+        let current = CMTimeGetSeconds(time)
+        let total = CMTimeGetSeconds(playerItem.duration)
+        let progress = current / total
+        self.progress.setValue(Float(progress), animated: true)
+    }
+}
+</code></pre>
+
+<p>然后添加一个新的方法：</p>
+
+<pre><code>func removeProgressObserve() {
+    player.removeTimeObserver(timeObserver)
+}
+</code></pre>
+
+<p>苹果说这两个方法最好成对出现，你Cmd点击这些方法名就能看见苹果给的注释和描述了。</p>
+
+<p>现在我们就来实现主要的逻辑了，但是首先还是要给我们的<strong>UISlider</strong>添加Action，代码如下：</p>
+
+<pre><code>progress.addTarget(self, action: Selector(&quot;updateProgress:&quot;), forControlEvents: UIControlEvents.ValueChanged)
+</code></pre>
+
+<p>然后我们实现<strong>updateProgress(sender: UISlider)</strong>方法，这里就是主要逻辑了，代码如下：</p>
+
+<pre><code>func updateProgress(sender: UISlider) {
+    removeProgressObserve()
+    let progress = Float64(sender.value)
+    let seekTime = CMTimeGetSeconds(player.currentItem!.duration) * progress
+    player.seekToTime(CMTimeMakeWithSeconds(seekTime, 1), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero) { (finished: Bool) -&gt; Void in
+        if finished {
+            self.addProgressObserver()
+        }
+    }
+}
+</code></pre>
+
+<p>首先我们移除掉进度监视的方法，避免在拖动的时候还在设置进度的值。然后我们算出拖动的值对应的要播放的时间，然后我们就调用<strong>AVPlayer</strong>的方法就可以了，然后在结束的时候再添加进度监视就OK了。经测试，不调用这两个方法也是OK的。</p>
+
+<p>运行后截图如下：</p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/22.png" alt="alt text" /></p>
+
+<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/23.png" alt="alt text" /></p>
+
+<p>第一张图启动后没有点击播放，然后我们拖动进度条，拖动后的效果就是第二张图。这个进度条不太好拖动，如果你是模拟器，用鼠标点击圆点的左上角比较好拖动。</p>
+
+<p>播放器到此就基本完成了，当然功能不够完善，比如音量不能调节，只能静音开关。还剩下一个字幕的功能也没有做，这里就不再继续了。字幕的实现主要难点就是解析字幕文件了，留给大家了，不会就参考<a href="https://github.com/viki-org/VKVideoPlayer"> VKVideoPlayer </a>。</p>
+
+<p><a href="https://github.com/LynchWong/LWPlayer"> 完整源码 </a>，这里我把图片资源去掉了，不方便贡献给大家，见谅。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/%E9%9F%B3%E9%A2%91/">音频</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/" data-tooltip="storyboard、xib、AutoLayout实现UILabel自动换行">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/" data-tooltip="iOS播放音频">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/" data-tooltip="storyboard、xib、AutoLayout实现UILabel自动换行">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/" data-tooltip="iOS播放音频">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/10\/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE\/';
+          
+            this.page.identifier = '\/2015\/10\/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

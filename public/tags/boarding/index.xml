@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Boarding on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/boarding/index.xml</link>
+    <description>Recent content in Boarding on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/boarding/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Fastlane - Boarding</title>
+      <link>http://lynchwong.com/blog/2016/06/fastlane---boarding/</link>
+      <pubDate>Tue, 28 Jun 2016 09:04:26 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/fastlane---boarding/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;说明：翻译的 &lt;code&gt;Boarding&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; 原文地址 &lt;/a&gt;。
+&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneBoarding/BoardingHuge.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;boarding-是什么&#34;&gt;boarding 是什么？&lt;/h1&gt;
+
+&lt;p&gt;即时为 TestFlight beta 测试人员创建一个注册页面。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Have you ever been to an airport, where you had to ask the manager of the airport if you can board now? Once the manager agrees, you&amp;rsquo;ll be carried from your check-in to your gate into your plane.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;做为一个开发人员，当你想添加一个新的测试人员时你就是这么做的： &lt;a href=&#34;https://raw.githubusercontent.com/fastlane/boarding/master/assets/OldWay.jpg&#34;&gt;Open Screenshots&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;你为什么不弄一个简单的网页，与你潜在的测试人员分享(比如邮件、Facebook、Twitter)，那些对你的新 App 感兴趣的人，然后让他们自己来 &lt;code&gt;board&lt;/code&gt; ？&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneBoarding/BoardingScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;感谢 &lt;a href=&#34;https://spaceship.airforce&#34;&gt;spaceship.airforce&lt;/a&gt; ，现在可以自动为你的 TestFlight beta 测试人员 boarding process 。&lt;/p&gt;
+
+&lt;h2 id=&#34;例子&#34;&gt;例子&lt;/h2&gt;
+
+&lt;p&gt;查看鲜活的例子页面： &lt;a href=&#34;https://boarding.herokuapp.com&#34;&gt;boarding.herokuapp.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;开始&#34;&gt;开始&lt;/h1&gt;
+
+&lt;p&gt;将设你已经有 &lt;a href=&#34;https://www.heroku.com&#34;&gt;Heroku&lt;/a&gt; 账户，按照如下步骤：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Deploy to Heroku&lt;/li&gt;
+&lt;li&gt;输入你 iTunes Connect 的凭证和你 App 的 Bundle identifier。这些会被当做你自己 Heroku 实例的环境变量&lt;/li&gt;
+&lt;li&gt;一旦设置完成，点击 &lt;code&gt;view&lt;/code&gt; 然后开始分享 URL&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;boarding&lt;/code&gt; 已经为你做了所有神奇的工作，比如获取应用的名字和图标。&lt;/p&gt;
+
+&lt;p&gt;对于标准的机器，Heroku 是免费的。如果你需要一个 Heroku 账户，如果你已经有了公司账户，询问你的支持团队。&lt;/p&gt;
+
+&lt;h2 id=&#34;安全&#34;&gt;安全&lt;/h2&gt;
+
+&lt;p&gt;为了确保你的网页的安全，你只需要为 &lt;code&gt;ITC_TOKEN&lt;/code&gt; 环境变量设置任何密码。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;你可以给你的测试人员发送链接然后告诉他们密码&lt;/li&gt;
+&lt;li&gt;你可以直接给他们发送包含 token 的链接，比如： &lt;a href=&#34;https://url.com/?token=[password&#34;&gt;https://url.com/?token=[password&lt;/a&gt;]&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;可用的环境变量&#34;&gt;可用的环境变量&lt;/h2&gt;
+
+&lt;p&gt;要求：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ITC_USER&lt;/code&gt;  iTunes Connect 用户名&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ITC_PASSWORD&lt;/code&gt; iTunes Connect 密码&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ITC_APP_ID&lt;/code&gt; 你 App 的 Apple ID 或者 Bundle Identifier&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;可选：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ITC_TOKEN&lt;/code&gt; 设置一个密码来防止路人注册&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ITC_CLOSED_TEXT&lt;/code&gt; 这只这个变量来临时禁用新的测试人员注册&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RESTRICTED_DOMAIN&lt;/code&gt; 设置这个域名来限制用户使用来自另一个域名的邮件进行注册。使用这种格式 &lt;code&gt;domain1.com,domain2.com&lt;/code&gt; 支持设置多个域名&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FASTLANE_ITC_TEAM_NAME&lt;/code&gt; 如果你在多个团队中，在这里输入你 iTC 团队的名字。确保匹配&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;自定义域名&#34;&gt;自定义域名&lt;/h2&gt;
+
+&lt;p&gt;使用 Heroku ，你可以使用自己的域名，参见 &lt;a href=&#34;https://devcenter.heroku.com/articles/custom-domains&#34;&gt;this guide&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h1 id=&#34;如何工作的&#34;&gt;如何工作的？&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;boarding&lt;/code&gt; 是 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; 的一部分，帮助你自动化一些需要开发人员手动完成的工作。&lt;/p&gt;
+
+&lt;p&gt;使用 &lt;a href=&#34;https://spaceship.airforce&#34;&gt;spaceship.airforce&lt;/a&gt; 能够管理测试人员、构建、元数据、证书等等。&lt;/p&gt;
+
+&lt;p&gt;这个 Repository 就是一个简单的 Rails 应用程序，大部分代码在如下文件中：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding/blob/master/app/controllers/invite_controller.rb&#34;&gt;invite_controller.rb&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding/blob/master/app/views/invite/index.html.erb&#34;&gt;invite/index.html.erb&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneBoarding/BoardingOverview.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;更多关于自动化过程的信息，参见 &lt;a href=&#34;https://krausefx.com&#34;&gt;my blog&lt;/a&gt; 。&lt;/p&gt;
+
+&lt;h1 id=&#34;自定义&#34;&gt;自定义&lt;/h1&gt;
+
+&lt;p&gt;如果你想要改变设计，布局，添加新的功能：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;安装 &lt;a href=&#34;https://toolbelt.heroku.com&#34;&gt;Heroku toolbelt&lt;/a&gt; 和 &lt;code&gt;heroku login&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Clone 你的应用程序，使用 &lt;code&gt;heroku git:clone --app [heroku_app_name]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cd [heroku_app_name]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;修改上面描述到的文件的内容&lt;/li&gt;
+&lt;li&gt;运行 &lt;code&gt;ITC_USER=&amp;quot;email&amp;quot; ITC_... rails s&lt;/code&gt; 在本地测试，然后打开 &lt;a href=&#34;http://127.0.0.1:3000&#34;&gt;http://127.0.0.1:3000&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;提交改变&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git push&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;除了 Heroku 之外，推荐你将版本信息也存储在你的 Git Repo 中。&lt;/p&gt;
+
+&lt;h2 id=&#34;更新到新的版本&#34;&gt;更新到新的版本&lt;/h2&gt;
+
+&lt;p&gt;随着时间的推移，&lt;code&gt;boarding&lt;/code&gt; 会迎来更新。有两种方法来更新你的 Heroku 应用程序；&lt;/p&gt;
+
+&lt;h3 id=&#34;推荐-使用-terminal&#34;&gt;推荐：使用 Terminal&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;安装 &lt;a href=&#34;https://toolbelt.heroku.com&#34;&gt;Heroku toolbelt&lt;/a&gt; 和 &lt;code&gt;heroku login&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Clone 你的应用程序，使用 &lt;code&gt;heroku git:clone --app [heroku_app_name]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cd [heroku_app_name]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git pull https://github.com/fastlane/boarding&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git push&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;使用-heroku-website&#34;&gt;使用 Heroku Website&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;删除你在 &lt;a href=&#34;https://www.heroku.com&#34;&gt;heroku.com&lt;/a&gt; 上的应用程序&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.heroku.com/deploy?template=https://github.com/fastlane/boarding&#34;&gt;Create a new boarding application&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;再次输入你的用户凭证&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

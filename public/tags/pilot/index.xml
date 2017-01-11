@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pilot on Nobodyknows&#43; 2.5</title>
+    <link>http://lynchwong.com/blog/tags/pilot/index.xml</link>
+    <description>Recent content in Pilot on Nobodyknows&#43; 2.5</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://lynchwong.com/blog/tags/pilot/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Fastlane - Pilot</title>
+      <link>http://lynchwong.com/blog/2016/06/fastlane---pilot/</link>
+      <pubDate>Tue, 28 Jun 2016 09:03:59 +0000</pubDate>
+      
+      <guid>http://lynchwong.com/blog/2016/06/fastlane---pilot/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;说明：翻译的 &lt;code&gt;Pilot&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane-old/pilot&#34;&gt; 原文地址 &lt;/a&gt;。
+&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlanePilot/PilotTextTransparentSmall.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;pilot&#34;&gt;Pilot&lt;/h1&gt;
+
+&lt;p&gt;管理你 TestFlight 用户的最简单的方法。&lt;/p&gt;
+
+&lt;p&gt;Pilot 让你能够非常容易的管理你应用的 Apple&amp;rsquo;s TestFlight。你可以：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;上传 &amp;amp; 分发 你构建的应用&lt;/li&gt;
+&lt;li&gt;添加 &amp;amp; 移除 测试用户&lt;/li&gt;
+&lt;li&gt;获取 测试用户 &amp;amp; 设备 的信息&lt;/li&gt;
+&lt;li&gt;导出/导入 所有可用的测试用户&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;pilot&lt;/code&gt; 使用 &lt;a href=&#34;https://spaceship.airforce&#34;&gt;spaceship.airforce&lt;/a&gt; 和 iTunes Connect 交互。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;pilot&lt;/code&gt; 现在是 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; 的一部分：自动构建、发布你 iOS 和 Android 应用的最简单方法。&lt;/p&gt;
+
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo gem install pilot
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+
+&lt;p&gt;你可以使用 &lt;code&gt;-u felix@krausefx.com&lt;/code&gt; 命令来指定 Apple ID。如果你的项目已经使用了 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; ，用户名和 App identifier 会自动检测。&lt;/p&gt;
+
+&lt;h2 id=&#34;上传构建的应用&#34;&gt;上传构建的应用&lt;/h2&gt;
+
+&lt;p&gt;上传一个新的构建，只需运行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot upload
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;将会在你当前目录查找 &lt;code&gt;ipa&lt;/code&gt; 文件，然后会尝试从 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane setup&lt;/a&gt; 中获取登录凭证。&lt;/p&gt;
+
+&lt;p&gt;然后会向你询问漏掉的信息。另外，你可以传递所有种类的参数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot --help
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你可以使用下面的命令传递修改日志：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot upload --changelog &amp;quot;Something that is new here&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你也可以跳过二进制的提交，这意味着，&lt;code&gt;ipa&lt;/code&gt; 文件只会被上传，不会分发给测试用户：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot upload --skip_submission
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;pilot&lt;/code&gt; 为你做了所有神奇的工作：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;从你的 &lt;code&gt;ipa&lt;/code&gt; 文件中自动检测 Bundle identifier&lt;/li&gt;
+&lt;li&gt;基于 Bundle identifier，自动获取你 App 的 AppID&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;pilot&lt;/code&gt; 使用 &lt;a href=&#34;https://spaceship.airforce&#34;&gt;spaceship&lt;/a&gt; 来提交构建的元数据，然后使用 iTunes Transporter 来上传二进制。&lt;/p&gt;
+
+&lt;h2 id=&#34;列出构建的应用&#34;&gt;列出构建的应用&lt;/h2&gt;
+
+&lt;p&gt;列出指定应用程序的所有构建：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot builds
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;会列出所有激活的构建和处理中的构建：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;+-----------+---------+----------+----------+----------+
+|                   Great App Builds                   |
++-----------+---------+----------+----------+----------+
+| Version # | Build # | Testing  | Installs | Sessions |
++-----------+---------+----------+----------+----------+
+| 0.9.13    | 1       | Expired  | 1        | 0        |
+| 0.9.13    | 2       | Expired  | 0        | 0        |
+| 0.9.20    | 3       | Expired  | 0        | 0        |
+| 0.9.20    | 4       | Internal | 5        | 3        |
++-----------+---------+----------+----------+----------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;管理测试用户&#34;&gt;管理测试用户&lt;/h1&gt;
+
+&lt;h2 id=&#34;列出所有的测试人员&#34;&gt;列出所有的测试人员&lt;/h2&gt;
+
+&lt;p&gt;这个命令会列出所有的测试人员，包括内部人员和外部人员。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot list
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;+--------+--------+--------------------------+-----------+
+|                    Internal Testers                    |
++--------+--------+--------------------------+-----------+
+| First  | Last   | Email                    | # Devices |
++--------+--------+--------------------------+-----------+
+| Felix  | Krause | felix@krausefx.com       | 2         |
++--------+--------+--------------------------+-----------+
+
++-----------+---------+----------------------------+-----------+
+|                       External Testers                       |
++-----------+---------+----------------------------+-----------+
+| First     | Last    | Email                      | # Devices |
++-----------+---------+----------------------------+-----------+
+| Max       | Manfred | email@email.com            | 0         |
+| Detlef    | Müller  | detlef@krausefx.com        | 1         |
++-----------+---------+----------------------------+-----------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;添加新的测试人员&#34;&gt;添加新的测试人员&lt;/h2&gt;
+
+&lt;p&gt;使用 &lt;code&gt;pilot add&lt;/code&gt; 命令来为你的 iTunes Connect 账户和应用添加新的测试人员。这个会创建新的测试人员(如果必要的话)或者添加一个已经存在的测试人员到App进行测试。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot add email@invite.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;除此之外，你可以指定 App 的 identifier(如果必要)：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot add email@email.com -a com.krausefx.app
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;查找一个测试人员&#34;&gt;查找一个测试人员&lt;/h2&gt;
+
+&lt;p&gt;查找一个指定的测试人员：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot find felix@krausefx.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;+---------------------+---------------------+
+|            felix@krausefx.com             |
++---------------------+---------------------+
+| First name          | Felix               |
+| Last name           | Krause              |
+| Email               | felix@krausefx.com  |
+| Latest Version      | 0.9.14 (23          |
+| Latest Install Date | 03/28/15 19:00      |
+| 2 Devices           | • iPhone 6, iOS 8.3 |
+|                     | • iPhone 5, iOS 7.0 |
++---------------------+---------------------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;移除一个测试人员&#34;&gt;移除一个测试人员&lt;/h2&gt;
+
+&lt;p&gt;这个命令只会移除外部的测试人员：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot remove felix@krausefx.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;导出测试人员&#34;&gt;导出测试人员&lt;/h2&gt;
+
+&lt;p&gt;将所有的外部测试人员导出到 CSV 文件。这个非常有用，如果你需要将测试人员的信息导入到另一个系统或者新的账户。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot export
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;导入测试人员&#34;&gt;导入测试人员&lt;/h2&gt;
+
+&lt;p&gt;从一个 CSV 文件中添加外部测试人员。&lt;a href=&#34;https://itunesconnect.apple.com/itc/docs/tester_import.csv&#34;&gt;这里有一个可用的 CSV 文件&lt;/a&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot import
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你也可以使用下面的命令来指定目录：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot export -c ~/Desktop/testers.csv
+pilot import -c ~/Desktop/testers.csv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;提示&#34;&gt;提示&lt;/h1&gt;
+
+&lt;h2 id=&#34;fastlane-https-fastlane-tools-工具链&#34;&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt;&lt;/a&gt; 工具链&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; &lt;code&gt;deliver&lt;/code&gt; &lt;/a&gt;：将你的应用、截图、元数据上传到App Store&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; &lt;code&gt;snapshot&lt;/code&gt; &lt;/a&gt;：将你iOS应用在每一种设备上进行本地化自动截图&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; &lt;code&gt;frameit&lt;/code&gt; &lt;/a&gt;：快速将你的截图放入到适合的设备框中&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; &lt;code&gt;pem&lt;/code&gt; &lt;/a&gt;自动生成和更新你的推送通知证书&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; &lt;code&gt;sigh&lt;/code&gt; &lt;/a&gt;：管理你的 provisioning profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; &lt;code&gt;produce&lt;/code&gt; &lt;/a&gt;：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; &lt;code&gt;cert&lt;/code&gt; &lt;/a&gt;：自动创建和维护iOS的 code signing certificates&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; &lt;code&gt;spaceship&lt;/code&gt; &lt;/a&gt;：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; &lt;code&gt;boarding&lt;/code&gt; &lt;/a&gt;：邀请你 TestFlight 的beta测试人员的最简单方式&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; &lt;code&gt;gym&lt;/code&gt; &lt;/a&gt;：构建你iOS应用程序&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; &lt;code&gt;scan&lt;/code&gt; &lt;/a&gt;：为你iOS和Mac应用运行测试的最简单方法&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; &lt;code&gt;match&lt;/code&gt; &lt;/a&gt;：使用Git在你的团队中同步你的 certificates 和 profiles&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/supply&#34;&gt; &lt;code&gt;supply&lt;/code&gt; &lt;/a&gt;：将你的Android应用和数据上传到 Google Play&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/screengrab&#34;&gt; &lt;code&gt;screengrab&lt;/code&gt; &lt;/a&gt;：Android版&lt;code&gt;snapshot&lt;/code&gt;，一样的功能&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;调试信息&#34;&gt;调试信息&lt;/h2&gt;
+
+&lt;p&gt;如果你遇到了什么问题，你可以使用 &lt;code&gt;verbose&lt;/code&gt; 模式来获取更多细节的输出：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pilot --verbose
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;防火墙问题&#34;&gt;防火墙问题&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;pilot&lt;/code&gt; 使用 iTunes Transporter 上传元数据和二进制。以防万一被防火墙挡住，你可以指定不同的传输协议，使用如下命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS=&amp;quot;-t DAV&amp;quot; pilot ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你使用 &lt;code&gt;pilot&lt;/code&gt; 通过 &lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md#pilot&#34;&gt;fastlane action&lt;/a&gt; ，添加如下代码到你的 &lt;code&gt;Fastfile&lt;/code&gt; ：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ENV[&amp;quot;DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS&amp;quot;] = &amp;quot;-t DAV&amp;quot;
+pilot...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;凭证问题&#34;&gt;凭证问题&lt;/h2&gt;
+
+&lt;p&gt;如果你的密码包含特殊字符，&lt;code&gt;pilot&lt;/code&gt; 可能会抛出一个模糊的错误，“你的 Apple ID 或者 密码输入不正确”。最简单的修复方法就是修改你的密码，不包含特殊字符。&lt;/p&gt;
+
+&lt;h2 id=&#34;如何保存我的密码&#34;&gt;如何保存我的密码？&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;pilot&lt;/code&gt; 使用来自 &lt;code&gt;fastlane&lt;/code&gt; 的 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt;CredentialsManager&lt;/a&gt; 管理密码。&lt;/p&gt;
+
+&lt;h1 id=&#34;帮助&#34;&gt;帮助&lt;/h1&gt;
+
+&lt;p&gt;请提交 issue 到 GitHub，并提供你关于设置的信息。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

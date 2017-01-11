@@ -1,0 +1,938 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Swift之继承</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="一个类可以继承(inherit)另一个类的方法(methods),属性(properties)和其它特性。当一个类继承其它类时,继承类叫子类(subclass),被继承类叫超类(或父类,superclass)。在 Swift 中,继承是区分「类」与其它类型的一个基本特征。
+">
+    <meta property="og:description" content="一个类可以继承(inherit)另一个类的方法(methods),属性(properties)和其它特性。当一个类继承其它类时,继承类叫子类(subclass),被继承类叫超类(或父类,superclass)。在 Swift 中,继承是区分「类」与其它类型的一个基本特征。
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Swift之继承">
+    <meta property="og:url" content="/2015/03/swift%E4%B9%8B%E7%BB%A7%E6%89%BF/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="一个类可以继承(inherit)另一个类的方法(methods),属性(properties)和其它特性。当一个类继承其它类时,继承类叫子类(subclass),被继承类叫超类(或父类,superclass)。在 Swift 中,继承是区分「类」与其它类型的一个基本特征。
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Swift之继承
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-03-05T15:35:43Z">
+    
+  
+  
+  
+  
+    2015-03-05 15:35:43
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>一个类可以继承(inherit)另一个类的方法(methods),属性(properties)和其它特性。当一个类继承其它类时,继承类叫子类(subclass),被继承类叫超类(或父类,superclass)。在 Swift 中,继承是区分「类」与其它类型的一个基本特征。
+</p>
+
+<p>在 Swift 中,类可以调用和访问超类的方法,属性和下标脚本(subscripts),并且可以重写(override)这些方法,属性和下标脚本来优化或修改它们的行为。Swift 会检查你的重写定义在超类中是否有匹配的定义,以此确保你的重写行为是正确的。</p>
+
+<p>可以为类中继承来的属性添加属性观察器(property observers),这样一来,当属性值改变时,类就会被通知到。可以为任何属性添加属性观察器,无论它原本被定义为存储型属性(stored property)还是计算型属性(computed property)。</p>
+
+<h2 id="定义一个基类-base-class">定义一个基类(Base class)</h2>
+
+<p>不继承于其它类的类,称之为基类(base calss)。</p>
+
+<p>注意:Swift 中的类并不是从一个通用的基类继承而来。如果你不为你定义的类指定一个超类的话,这个类就自动成为基类。</p>
+
+<p>下面的例子定义了一个叫 Vehicle 的基类。这个基类声明了一个名为 currentSpeed ,默认值是0.0的存储属性(属性类型推断为 Double )。 currentSpeed 属性的值被一个 String 类型的只读计算型属性 description 使用,用来创建车辆的描述。</p>
+
+<p>Vehicle 基类也定义了一个名为 makeNoise 的方法。这个方法实际上不为 Vehicle 实例做任何事,但之后将会被 Vehicle 的子类定制:</p>
+
+<pre><code>class Vehicle {
+    var currentSpeed = 0.0
+    var description: String {
+        return &quot;traveling at \(currentSpeed) miles per hour&quot;
+    }
+    func makeNoise() {
+        // do nothing - an arbitrary vehicle doesn't necessarily make a noise
+    }
+}
+</code></pre>
+
+<p>您可以用初始化语法创建一个 Vehicle 的新实例,即类名后面跟一个空括号:</p>
+
+<pre><code>let someVehicle = Vehicle()
+</code></pre>
+
+<p>现在已经创建了一个 Vehicle 的新实例,你可以访问它的 description 属性来打印车辆的当前速度。</p>
+
+<pre><code>print(&quot;Vehicle: \(someVehicle.description)&quot;)
+// Vehicle: traveling at 0.0 miles per hour
+</code></pre>
+
+<p>Vehicle 类定义了一个通用特性的车辆类,实际上没什么用处。为了让它变得更加有用,需要改进它能够描述一个更加具体的车辆类。</p>
+
+<h2 id="子类生成-subclassing">子类生成(Subclassing)</h2>
+
+<p>子类生成(Subclassing)指的是在一个已有类的基础上创建一个新的类。子类继承超类的特性,并且可以优化或改变它。你还可以为子类添加新的特性。</p>
+
+<p>为了指明某个类的超类,将超类名写在子类名的后面,用冒号分隔:</p>
+
+<pre><code>class SomeClass: SomeSuperclass {
+    // 类的定义
+}
+</code></pre>
+
+<p>下一个例子,定义一个叫 Bicycle 的子类,继承成父类 Vehicle</p>
+
+<pre><code>class Bicycle: Vehicle {
+    var hasBasket = false
+}
+</code></pre>
+
+<p>新的 Bicycle 类自动获得 Vehicle 类的所有特性，比如 currentSpeed 和 description 属性，还有它的 makeNoise 方法。</p>
+
+<p>除了它所继承的特性, Bicycle 类还定义了一个默认值为 false 的存储型属性 hasBasket (属性推断为 Bool )。</p>
+
+<p>默认情况下，你创建任何新的 Bicycle 实例将不会有一个篮子，创建该实例之后，你可以为特定的 Bicycle 实例设置 hasBasket 属性为 true：</p>
+
+<pre><code>let bicycle = Bicycle()
+bicycle.hasBasket = true
+</code></pre>
+
+<p>你还可以修改 Bicycle 实例所继承的 currentSpeed 属性，和查询实例所继承的 description 属性：</p>
+
+<pre><code>bicycle.currentSpeed = 15.0
+print(&quot;Bicycle: \(bicycle.description)&quot;)
+// Bicycle: traveling at 15.0 miles per hour
+</code></pre>
+
+<p>子类还可以继续被其它类继承，下面的示例为 Bicycle 创建了一个名为 Tandem (双人自行车) 的子类：</p>
+
+<pre><code>class Tandem: Bicycle {
+    var currentNumberOfPassengers = 0
+}
+</code></pre>
+
+<p>Tandem 从 Bicycle 继承了所有的属性与方法，这又使它同时继承了 Vehicle 的所有属性与方法。Tandem 也增加了一个新的叫做 currentNumberOfPassengers 的存储型属性，默认值为0。</p>
+
+<p>如果你创建一个 Tandem 的实例，你可以使用它所有的新属性和继承的属性，还能查询从 Vehicle 继承来的只读属性 description：</p>
+
+<pre><code>let tandem = Tandem()
+tandem.hasBasket = true
+tandem.currentNumberOfPassengers = 2
+tandem.currentSpeed = 22.0
+print(&quot;Tandem: \(tandem.description)&quot;)
+// Tandem: traveling at 22.0 miles per hour
+</code></pre>
+
+<h2 id="重写-overriding">重写(Overriding)</h2>
+
+<p>子类可以为继承来的实例方法(instance method),类方法(class method),实例属性(instance property),或下标脚本(subscript)提供自己定制的实现(implementation)。我们把这种行为叫重写(overriding)。</p>
+
+<p>如果要重写某个特性,你需要在重写定义的前面加上 override 关键字。这么做,你就表明了你是想提供一个重写版本,而非错误地提供了一个相同的定义。意外的重写行为可能会导致不可预知的错误,任何缺少 override 关键字的重写都会在编译时被诊断为错误。</p>
+
+<p>override 关键字会提醒 Swift 编译器去检查该类的超类(或其中一个父类)是否有匹配重写版本的声明。这个检查可以确保你的重写定义是正确的。</p>
+
+<h3 id="访问超类的方法-属性及下标脚本">访问超类的方法,属性及下标脚本</h3>
+
+<p>当你在子类中重写超类的方法,属性或下标脚本时,有时在你的重写版本中使用已经存在的超类实现会大有裨益。比如,你可以优化已有实现的行为,或在一个继承来的变量中存储一个修改过的值。</p>
+
+<p>在合适的地方,你可以通过使用 super 前缀来访问超类版本的方法,属性或下标脚本:</p>
+
+<ul>
+<li>在方法 someMethod 的重写实现中,可以通过 super.someMethod() 来调用超类版本的 someMethod 方法。</li>
+<li>在属性 someProperty 的 getter 或 setter 的重写实现中,可以通过 super.someProperty 来访问超类版本的 someProperty 属性。</li>
+<li>在下标脚本的重写实现中,可以通过 super[someIndex] 来访问超类版本中的相同下标脚本。</li>
+</ul>
+
+<h3 id="重写方法">重写方法</h3>
+
+<p>在子类中,你可以重写继承来的实例方法或类方法,提供一个定制或替代的方法实现。</p>
+
+<p>下面的例子定义了 Vehicle 的一个新的子类,叫 Train ,它重写了从 Vehicle 类继承来的 makeNoise 方法:</p>
+
+<pre><code>class Train: Vehicle {
+    override func makeNoise() {
+        print(&quot;Choo Choo&quot;)
+    }
+}
+</code></pre>
+
+<p>如果你创建一个 Train 的新实例,并调用了它的 makeNoise 方法,你就会发现 Train 版本的方法被调用:</p>
+
+<pre><code>let train = Train()
+train.makeNoise()
+// prints &quot;Choo Choo&quot;
+</code></pre>
+
+<h3 id="重写属性">重写属性</h3>
+
+<p>你可以重写继承来的实例属性或类属性,提供自己定制的getter和setter,或添加属性观察器使重写的属性可以观察属性值什么时候发生改变。</p>
+
+<h4 id="重写属性的getters和setters">重写属性的Getters和Setters</h4>
+
+<p>你可以提供定制的 getter(或 setter)来重写任意继承来的属性,无论继承来的属性是存储型的还是计算型的属性。子类并不知道继承来的属性是存储型的还是计算型的,它只知道继承来的属性会有一个名字和类型。你在重写一个属性时,必需将它的名字和类型都写出来。这样才能使编译器去检查你重写的属性是与超类中同名同类型的属性相匹配的。</p>
+
+<p>你可以将一个继承来的只读属性重写为一个读写属性,只需要你在重写版本的属性里提供 getter 和 setter 即可。但是,你不可以将一个继承来的读写属性重写为一个只读属性。</p>
+
+<p>注意:如果你在重写属性中提供了 setter,那么你也一定要提供 getter。如果你不想在重写版本中的 getter 里修改继承来的属性值,你可以直接通过 super.someProperty 来返回继承来的值,其中 someProperty 是你要重写的属性的名字。</p>
+
+<p>以下的例子定义了一个新类,叫 Car ,它是 Vehicle 的子类。这个类引入了一个新的存储型属性叫做 gear ,默认为整数1。 Car 类重写了继承自 Vehicle 的description属性,提供自定义的,包含当前档位的描述:</p>
+
+<pre><code>class Car: Vehicle {
+    var gear = 1
+    override var description: String {
+        return super.description + &quot; in gear \(gear)&quot;
+    }
+}
+</code></pre>
+
+<p>重写的 description 属性,首先要调用 super.description 返回 Vehicle 类的 description 属性。之后, Car 类版本的 description 在末尾增加了一些额外的文本来提供关于当前档位的信息。</p>
+
+<p>如果你创建了 Car 的实例并且设置了它的 gear 和 currentSpeed 属性,你可以看到它的 description 返回了 Car 中定义的 description :</p>
+
+<pre><code>let car = Car()
+car.currentSpeed = 25.0
+car.gear = 3
+print(&quot;Car: \(car.description)&quot;)
+// Car: traveling at 25.0 miles per hour in gear 3
+</code></pre>
+
+<h4 id="重写属性观察器-property-observer">重写属性观察器(Property Observer)</h4>
+
+<p>你可以在属性重写中为一个继承来的属性添加属性观察器。这样一来,当继承来的属性值发生改变时,你就会被通知到,无论那个属性原本是如何实现的。关于属性观察器的更多内容,请看属性观察器。</p>
+
+<p>注意: 你不可以为继承来的常量存储型属性或继承来的只读计算型属性添加属性观察器。这些属性的值是不可以被设置的,所以,为它们提供 willSet 或 didSet 实现是不恰当。此外还要注意,你不可以同时提供重写的 setter 和重写的属性观察器。如果你想观察属性值的变化,并且你已经为那个属性提供了定制的 setter,那么你在 setter 中就可以观察到任何值变化了。</p>
+
+<p>下面的例子定义了一个新类叫 AutomaticCar ,它是 Car 的子类。 AutomaticCar 表示自动挡汽车,它可以根据当前的速度自动选择合适的挡位:</p>
+
+<pre><code>class AutomaticCar: Car {
+    override var currentSpeed: Double {
+        didSet {
+            gear = Int(currentSpeed / 10.0) + 1
+        }
+    }
+}
+</code></pre>
+
+<p>当你设置 AutomaticCar 的 currentSpeed 属性,属性的 didSet 观察器就会自动地设置 gear 属性,为新的速 度选择一个合适的挡位。具体来说就是,属性观察器将新的速度值除以10,然后向下取得最接近的整数值,最后 加1来得到档位 gear 的值。例如,速度为10.0时,挡位为1;速度为35.0时,挡位为4:</p>
+
+<pre><code>let automatic = AutomaticCar()
+automatic.currentSpeed = 35.0
+print(&quot;AutomaticCar: \(automatic.description)&quot;)
+// AutomaticCar: traveling at 35.0 miles per hour in gear 4
+</code></pre>
+
+<h2 id="防止重写">防止重写</h2>
+
+<p>你可以通过把方法,属性或下标脚本标记为 final 来防止它们被重写,只需要在声明关键字前加上 final 特性即可。(例如: final var , final func , final class func , 以及 final subscript )</p>
+
+<p>如果你重写了 final 方法,属性或下标脚本,在编译时会报错。在类扩展中的方法,属性或下标脚本也可以在扩展的定义里标记为 final。</p>
+
+<p>你可以通过在关键字 class 前添加 final 特性( final class )来将整个类标记为 final 的,这样的类是不可被继承的,任何子类试图继承此类时,在编译时会报错。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/swift/">Swift</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%9E%84%E9%80%A0%E8%BF%87%E7%A8%8B/" data-tooltip="Swift之构造过程">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E4%B8%8B%E6%A0%87%E8%84%9A%E6%9C%AC/" data-tooltip="Swift之下标脚本">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25BB%25A7%25E6%2589%25BF%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25BB%25A7%25E6%2589%25BF%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25BB%25A7%25E6%2589%25BF%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%9E%84%E9%80%A0%E8%BF%87%E7%A8%8B/" data-tooltip="Swift之构造过程">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E4%B8%8B%E6%A0%87%E8%84%9A%E6%9C%AC/" data-tooltip="Swift之下标脚本">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25BB%25A7%25E6%2589%25BF%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25BB%25A7%25E6%2589%25BF%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25BB%25A7%25E6%2589%25BF%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25BB%25A7%25E6%2589%25BF%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25BB%25A7%25E6%2589%25BF%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f03%2fswift%25E4%25B9%258B%25E7%25BB%25A7%25E6%2589%25BF%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/03\/swift%E4%B9%8B%E7%BB%A7%E6%89%BF\/';
+          
+            this.page.identifier = '\/2015\/03\/swift%E4%B9%8B%E7%BB%A7%E6%89%BF\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

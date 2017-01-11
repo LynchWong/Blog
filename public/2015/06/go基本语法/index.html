@@ -1,0 +1,1451 @@
+
+
+  
+    
+  
+
+
+  
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.18.1">
+    <title>Go基本语法</title>
+    <meta name="author" content="Lynch Wong">
+    <meta name="keywords" content="">
+
+    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    
+
+    
+    <meta name="description" content="">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Go基本语法">
+    <meta property="og:url" content="/2015/06/go%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/">
+    <meta property="og:site_name" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nobodyknows&#43; 2.5">
+    <meta name="twitter:description" content="">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=640">
+    
+
+    
+    
+      <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg">
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="http://lynchwong.com/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="http://lynchwong.com/blog/#about">
+          <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Lynch Wong</h4>
+        
+          <h5 class="sidebar-profile-bio">I WILL.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/LynchWong" target="_blank">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('//d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg')"
+       data-behavior="4">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Go基本语法
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  <time itemprop="datePublished" datetime="2015-06-19T12:30:31Z">
+    
+  
+  
+  
+  
+    2015-06-19 12:30:31
+  
+
+  </time>
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="http://lynchwong.com/blog/categories/go">Go</a>
+    
+  
+
+
+</div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="4"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p></p>
+
+<h1 id="变量">变量</h1>
+
+<h2 id="变量声明">变量声明</h2>
+
+<p>Go语言使用关键字<strong>var</strong>来声明变量，变量类型放在变量名之后，如下所示：</p>
+
+<pre><code>var v1 int
+var v2 string 
+var v3 [10]int          // 数组
+var v4 []int            // 数组切片
+var v5 struct {
+    f int 
+}
+var v6 *int             // 指针
+var v7 map[string]int   // map,key为string类型,value为int类型
+var v8 func(a int) int 
+</code></pre>
+
+<!--more-->
+
+<p><strong>var</strong>关键字可以将若干个需要声明的变量放在一起，避免重复书写<strong>var</strong>关键字，如下所示：
+    var （
+        v1 int
+        v2 string
+    ）</p>
+
+<h2 id="初始化变量">初始化变量</h2>
+
+<p>你可以在声明变量的时候初始化变量，但是这时候<strong>var</strong>关键字不是必须的，如下所示：</p>
+
+<pre><code>var v1 int = 10     // 正确的使用方式1
+var v2 = 10         // 正确的使用方式2,编译器可以自动推导出v2的类型
+v3 := 10            // 正确的使用方式3,编译器可以自动推导出v3的类型
+</code></pre>
+
+<p>这三种使用方式效果是完全一样的。第一种是完整的表达方式，第二种省去了类型说明，编译器会根据赋的值自动推导出v2的类型。第三种的<strong>:=</strong>符号用于明确表达同时进行变量声明和初始化的工作。</p>
+
+<p>指定类型已不再是必需的，Go编译器可以从初始化表达式的右值推导出该变量应该声明为哪种类型，这让Go语言看起来有点像动态类型的语言，但其实Go语言实际上是不折不扣的强类型语言(静态类型语言)。PS：Swift在这点上也是类似的。</p>
+
+<p>出现在<strong>:=</strong>符号左侧的变量不应该是已经被声明过的，否侧会导致编译错误，如下：</p>
+
+<pre><code>var i int
+i := 2
+</code></pre>
+
+<p>会导致如下的编译错误：</p>
+
+<p>no new variables on left side of :=</p>
+
+<h2 id="变量赋值">变量赋值</h2>
+
+<p>在Go语法中，变量初始化和变量赋值是两个不同的概念。下面为声明一个变量之后的赋值过程：</p>
+
+<pre><code>var v10 int
+v10 = 123
+</code></pre>
+
+<p>多重赋值功能，比如下面这个交换i和j变量的语句：</p>
+
+<pre><code>i, j = j, i
+</code></pre>
+
+<p>如果大家学过C语言，一定知道需要一个中间变量才能完成如上操作。</p>
+
+<h2 id="匿名变量">匿名变量</h2>
+
+<p>我们在使用传统的强类型语言编程时，经常会出现这种情况，即在调用函数时为了获取一个值，却因为该函数返回多个值而不得不定义一堆没用的变量。在Go中这种情况可以通过结合使用多重返回和匿名变量来避免这种丑陋的写法，让代码看起来更加优雅。</p>
+
+<p>假设GetName()函数定义如下，它返回3个值，分别为firstName、lastName和nickName：</p>
+
+<pre><code>func GetName() (firstName, lastName, nickName string) { 
+    return &quot;May&quot;, &quot;Chan&quot;, &quot;Chibi Maruko&quot;
+}
+</code></pre>
+
+<p>若指向获得nickName，则函数调用语句可以用如下方式编写：
+    _, _, nickName := GetName()</p>
+
+<h1 id="常量">常量</h1>
+
+<p>在Go语言中，常量是指编译期间就已知且不可改变的值。常量可以是数值类型(包括整型、浮点型和复数类型)、布尔类型、字符串类型等。</p>
+
+<h2 id="字面常量">字面常量</h2>
+
+<p>所谓字面常量(literal)，是指程序中硬编码的常量，如:</p>
+
+<pre><code>-12
+3.14159265358979323846  // 浮点类型的常量
+3.2+12i                 // 复数类型的常量
+true                    // 布尔类型的常量
+&quot;foo&quot;                   // 字符串常量
+</code></pre>
+
+<p>在其他语言中，常量通常有特定的类型，比如-12在C语言中会认为是一个int类型的常量。如果要指定一个值为-12的long类型常量，需要写成-12l，这有点违反人们的直观感觉。Go语言的字面常量更接近我们自然语言中的常量概念，它是无类型的。只要这个常量在相应类型的值域范围内，就可以作为该类型的常量，比如上面的常量-12，它可以赋值给int、uint、int32、 int64、float32、float64、complex64、complex128等类型的变量。</p>
+
+<h2 id="常量定义">常量定义</h2>
+
+<p>通过<strong>const</strong>关键字可以给常量指定一个友好的名字：</p>
+
+<pre><code>const Pi float64 = 3.14159265358979323846
+const zero = 0.0                // 无类型浮点常量
+const (
+    size int64 = 1024
+    eof = -1                    // 无类型整型常量
+)
+const u, v float32 = 0, 3       // u = 0.0, v = 3.0, 常量多重赋值
+const a, b, c = 3, 4, &quot;foo&quot;     //a=3,b=4,c=&quot;foo&quot;, 无类型整型和字符串常量
+</code></pre>
+
+<p>Go的常量定义可以限定常量类型，但不是必需的。如果定义常量时没有指定类型，那么它与字面常量一样，是无类型常量。</p>
+
+<p>常量定义的右值也可以是一个在编译期运算的常量表达式，比如
+    const mask = 1 &lt;&lt; 3
+由于常量的赋值是一个编译期行为，所以右值不能出现任何需要运行期才能得出结果的表达式，比如试图以如下方式定义常量就会导致编译错误：
+    const Home = os.GetEnv(&ldquo;HOME&rdquo;)
+原因很简单，os.GetEnv()只有在运行期才能知道返回结果，在编译期并不能确定，所以无法作为常量定义的右值。</p>
+
+<h2 id="预定义常量">预定义常量</h2>
+
+<p>Go语言预定义了这些常量：true、false和iota。
+iota比较特殊，可以被认为是一个可被编译器修改的常量，在每一个const关键字出现时被重置为0，然后在下一个const出现之前，每出现一次iota，其所代表的数字会自动增1。
+从以下的例子可以基本理解iota的用法：
+    const (         // iota被重设为0
+        c0 = iota   // c0 == 0
+        c1 = iota   // c1 == 1
+        c2 = iota   // c2 == 2
+    )</p>
+
+<pre><code>const (
+    a = 1 &lt;&lt; iota   // a == 1 (iota在每个const开头被重设为0)
+    b = 1 &lt;&lt; iota   // b == 2
+    c = 1 &lt;&lt; iota   // c == 4
+)
+
+const (
+    u         = iota * 42   // u == 0
+    v float64 = iota * 42   //v==42.0
+    w         = iota * 42   //w==84
+)
+const x = iota
+const y = iota
+</code></pre>
+
+<p>如果两个const的赋值语句的表达式是一样的，那么可以省略后一个复制表达式。因此，上面的前两个const语句可简写为：</p>
+
+<pre><code>const (         // iota被重设为0
+    c0 = iota   // c0 == 0
+    c1          // c1 == 1
+    c2          // c2 == 2
+)
+
+const (
+    a = 1 &lt;&lt; iota   // a == 1 (iota在每个const开头被重设为0)
+    b               // b == 2
+    c               // c == 4
+)
+</code></pre>
+
+<h2 id="枚举">枚举</h2>
+
+<p>枚举指一系列相关的常量，比如下面关于一个星期中每天的定义。通过上一节的例子，我们看到可以用在const后跟一对圆括号的方式定义一组常量，这种定义法在Go语言中通常用于定义枚举值。Go语言并不支持众多其他语言明确支持的enum关键字。</p>
+
+<p>下面是一个常规的枚举表示法，其中定义了一系列整型常量：
+    const (
+        Sunday = iota
+        Monday
+        Tuesday
+        Wednesday
+        Thursday
+        Friday
+        Saturday
+        numberOfDays    // 这个常量没有导出
+    ）</p>
+
+<p>同Go语言的其他符号(symbol)一样，以大写字母开头的常量在包外可见。以上例子中numberOfDays为包内私有，其他符号则可被其他包访问。</p>
+
+<h1 id="类型">类型</h1>
+
+<p>Go语言内置以下这些基础类型：</p>
+
+<ul>
+<li>布尔类型：bool。</li>
+<li>整型：int8、byte、int16、int、uint、uintptr等。</li>
+<li>浮点类型：float32、float64。</li>
+<li>复数类型：complex64、complex128。</li>
+<li>字符串：string。</li>
+<li>字符类型：rune。</li>
+<li>错误类型：error。
+此外，Go语言也支持以下这些复合类型：</li>
+<li>指针(pointer)</li>
+<li>数组(array)</li>
+<li>切片(slice)</li>
+<li>字典(map)</li>
+<li>通道(chan)</li>
+<li>结构体(struct)</li>
+
+<li><p>接口(interface)</p>
+
+<h2 id="布尔类型">布尔类型</h2>
+
+<p>Go语言中的布尔类型与其他语言基本一致，关键字也为bool，可赋值为预定义的true和false示例代码如下：
+var v1 bool
+v1 = true
+v2 := (1 == 2) // v2也会被推导为bool类型
+布尔类型不能接受其他类型的赋值，不支持自动或强制的类型转换。以下的示例是一些错误的用法，会导致编译错误：
+var b bool
+b=1// 编译错误
+b = bool(1) // 编译错误
+以下的用法才是正确的：
+var b bool
+b = (1!=0) // 编译正确
+fmt.Println(&ldquo;Result:&ldquo;, b) // 打印结果为Result: true</p></li>
+</ul>
+
+<h2 id="整型">整型</h2>
+
+<p>整型是所有编程语言里最基础的数据类型。Go语言支持表2-1所示的这些整型类型。</p>
+
+<p><img src="http://lynchwong.com/blog/img/GoBasicSyn/1.png" alt="alt text" /></p>
+
+<h3 id="类型表示">类型表示</h3>
+
+<p>需要注意的是，int和int32在Go语言里被认为是两种不同的类型，编译器也不会帮你自动做类型转换，比如以下的例子会有编译错误：</p>
+
+<pre><code>var value2 int32
+value1 := 64 // value1将会被自动推导为int类型 
+value2 = value1 // 编译错误
+</code></pre>
+
+<p>编译错误类似于：
+    cannot use value1 (type int) as type int32 in assignment。
+使用强制类型转换可以解决这个编译错误：
+    value2 = int32(value1) // 编译通过
+当然，开发者在做强制类型转换时，需要注意数据长度被截短而发生的数据精度损失(比如 将浮点数强制转为整数)和值溢出(值超过转换的目标类型的值范围时)问题。</p>
+
+<h3 id="数值运算">数值运算</h3>
+
+<p>Go语言支持下面的常规整数运算:+、-、*、/和%。加减乘除就不详细解释了，需要说下的是，% 和在C语言中一样是求余运算，比如：
+    5%3// 结果为:2</p>
+
+<h3 id="比较运算">比较运算</h3>
+
+<p>Go语言支持以下的几种比较运算符：&gt;、&lt;、==、&gt;=、&lt;=和!=。这一点与大多数其他语言相同，与C语言完全一致。</p>
+
+<p>下面为条件判断语句的例子：
+    i, j := 1, 2
+    if i == j {
+        fmt.Println(&ldquo;i and j are equal.&rdquo;)
+    }</p>
+
+<p>两个不同类型的整型数不能直接比较，比如int8类型的数和int类型的数不能直接比较，但各种类型的整型变量都可以直接与字面常量(literal)进行比较，比如：</p>
+
+<pre><code>var i int32
+var j int64
+
+i, j = 1, 2
+
+if i == j { // 编译错误
+    fmt.Println(&quot;i and j are equal.&quot;)
+}
+
+if i == 1 || j == 2 {// 编译通过
+    fmt.Println(&quot;i and j are equal.&quot;)
+}
+</code></pre>
+
+<h3 id="位运算">位运算</h3>
+
+<p>Go语言支持表2-2所示的位运算符。</p>
+
+<p><img src="http://lynchwong.com/blog/img/GoBasicSyn/2.png" alt="alt text" /></p>
+
+<p>Go语言的大多数位运算符与C语言都比较类似，除了取反在C语言中是~x，而在Go语言中是^x。</p>
+
+<h2 id="浮点型">浮点型</h2>
+
+<p>浮点型用于表示包含小数点的数据，比如1.234就是一个浮点型数据。Go语言中的浮点类型采用IEEE-754标准的表达方式。</p>
+
+<h3 id="浮点数表示">浮点数表示</h3>
+
+<p>Go语言定义了两个类型float32和float64，其中float32等价于C语言的float类型，float64等价于C语言的double类型。
+￼在Go语言里，定义一个浮点数变量的代码如下：
+    var fvalue1 float32</p>
+
+<pre><code>fvalue1 = 12
+fvalue2 := 12.0 // 如果不加小数点,fvalue2会被推导为整型而不是浮点型
+</code></pre>
+
+<p>对于以上例子中类型被自动推导的fvalue2，需要注意的是其类型将被自动设为float64(Swift的类型推断也是推断精度更高的类型)，而不管赋给它的数字是否是用32位长度表示的。因此，对于以上的例子，下面的赋值将导致编译错误：
+    fvalue1 = fvalue2
+而必须使用这样的强制类型转换：
+    fvalue1 = float32(fvalue2)</p>
+
+<h3 id="浮点数比较">浮点数比较</h3>
+
+<p>因为浮点数不是一种精确的表达方式，所以像整型那样直接用==来判断两个浮点数是否相等是不可行的，这可能会导致不稳定的结果。</p>
+
+<p>下面是一种推荐的替代方案：
+    import &ldquo;math&rdquo;</p>
+
+<pre><code>// p为用户自定义的比较精度,比如0.00001 
+func IsEqual(f1, f2, p float64) bool {
+    return math.Fdim(f1, f2) &lt; p 
+}
+</code></pre>
+
+<h2 id="复数类型">复数类型</h2>
+
+<p>复数实际上由两个实数(在计算机中用浮点数表示)构成，一个表示实部(real)，一个表示 虚部(imag)。如果了解了数学上的复数是怎么回事，那么Go语言的复数就非常容易理解了。</p>
+
+<h3 id="复数表示">复数表示</h3>
+
+<p>复数表示的示例如下：</p>
+
+<pre><code>var value1 complex64            // 由2个float32构成的复数类型
+
+value1 = 3.2 + 12i
+value2 := 3.2 + 12i             // value2是complex128类型
+value3 := complex(3.2, 12)      // value3结果同 value2
+</code></pre>
+
+<h3 id="实部与虚部">实部与虚部</h3>
+
+<p>对于一个复数z = complex(x, y)，就可以通过Go语言内置函数real(z)获得该复数的实部，也就是x，通过imag(z)获得该复数的虚部，也就是y。</p>
+
+<p>更多关于复数的函数，请查阅math/cmplx标准库的文档。</p>
+
+<h2 id="字符串">字符串</h2>
+
+<p>在Go语言中，字符串也是一种基本类型。相比之下，C/C++语言中并不存在原生的字符串类型，通常使用字符数组来表示，并以字符指针来传递。
+Go语言中字符串的声明和初始化非常简单，如下：
+    var str string // 声明一个字符串变量
+    str = &ldquo;Hello world&rdquo; // 字符串赋值
+    ch := str[0] // 取字符串的第一个字符
+    fmt.Printf(&ldquo;The length of \&ldquo;%s\&rdquo; is %d \n&rdquo;, str, len(str))
+    fmt.Printf(&ldquo;The first character of \&ldquo;%s\&rdquo; is %c.\n&rdquo;, str, ch)
+输出结果为：
+    The length of &ldquo;Hello world&rdquo; is 11
+    The first character of &ldquo;Hello world&rdquo; is H.</p>
+
+<p>字符串的内容可以用类似于数组下标的方式获取，但与数组不同，字符串的内容不能在初始化后被修改，比如以下的例子：</p>
+
+<pre><code>str := &quot;Hello world&quot; // 字符串也支持声明时进行初始化的做法 
+str[0] = 'X' // 编译错误
+</code></pre>
+
+<p>编译器会报类似如下的错误：</p>
+
+<pre><code>cannot assign to str[0]
+</code></pre>
+
+<p>在这个例子中我们使用了一个Go语言内置的函数len()来取字符串的长度。这个函数非常有用，我们在实际开发过程中处理字符串、数组和切片时将会经常用到。</p>
+
+<p>本节中我们还顺便示范了Printf()函数的用法。有C语言基础的读者会发现，Printf()函数的用法与C语言运行库中的printf()函数如出一辙。读者在以后学习更多的Go语言特性时，可以配合使用Println()和Printf()来打印各种自己感兴趣的信息，从而让学习过程更加直观、有趣。</p>
+
+<p>Go编译器支持UTF-8的源代码文件格式。这意味着源代码中的字符串可以包含非ANSI的字符，比如“Hello world. 你好,世界!”可以出现在Go代码中。但需要注意的是，如果你的Go代码需要包含非ANSI字符，保存源文件时请注意编码格式必须选择UTF-8。特别是在Windows下一般编辑器都默认存为本地编码，比如中国地区可能是GBK编码而不是UTF-8，如果没注意这点在编译和运行时就会出现一些意料之外的情况。</p>
+
+<p>字符串的编码转换是处理文本文档(比如TXT、XML、HTML等)非常常见的需求，不过可惜的是Go语言仅支持UTF-8和Unicode编码。对于其他编码，Go语言标准库并没有内置的编码转换支持。不过，所幸的是我们可以很容易基于iconv库用Cgo包装一个。这里有一个开源项目: <a href="https://github.com/xushiwei/go-iconv。">https://github.com/xushiwei/go-iconv。</a></p>
+
+<h3 id="字符串操作">字符串操作</h3>
+
+<p>平时常用的字符串操作如表2-3所示。</p>
+
+<p><img src="http://lynchwong.com/blog/img/GoBasicSyn/3.png" alt="alt text" /></p>
+
+<p>更多的字符串操作，请参考标准库strings包。</p>
+
+<h3 id="字符串遍历">字符串遍历</h3>
+
+<p>Go语言支持两种方式遍历字符串。一种是以字节数组的方式遍历：</p>
+
+<pre><code>str := &quot;Hello,世界&quot;
+n := len(str)
+for i := 0; i &lt; n; i++ {
+    ch := str[i] // 依据下标取字符串中的字符,类型为byte
+    fmt.Println(i, ch)
+}
+</code></pre>
+
+<p>这个例子的输出结果为：
+    0 72
+    1 101
+    2 108
+    3 108
+    4 111
+    5 44
+    6 32
+    7 228
+    8 184
+    9 150
+    10 231
+    11 149
+    12 140
+可以看出，这个字符串长度为13。尽管从直观上来说，这个字符串应该只有9个字符。这是因为每个中文字符在UTF-8中占3个字节，而不是1个字节。</p>
+
+<p>另一种是以Unicode字符遍历：
+    str := &ldquo;Hello,世界&rdquo;
+    for i, ch := range str {
+        fmt.Println(i, ch)//ch的类型为rune
+    }</p>
+
+<p>输出结果为：
+    0 72
+    1 101
+    2 108
+    3 108
+    4 111
+    5 44
+    6 32
+    7 19990
+    10 30028</p>
+
+<p>以Unicode字符方式遍历时，每个字符的类型是rune(早期的Go语言用int类型表示Unicode 字符)，而不是byte。</p>
+
+<h2 id="字符类型">字符类型</h2>
+
+<p>在Go语言中支持两个字符类型，一个是byte(实际上是uint8的别名)，代表UTF-8字符串的单个字节的值；另一个是rune，代表单个Unicode字符。
+关于rune相关的操作，可查阅Go标准库的unicode包。另外unicode/utf8包也提供了UTF8和Unicode之间的转换。
+出于简化语言的考虑，Go语言的多数API都假设字符串为UTF-8编码。尽管Unicode字符在标准库中有支持，但实际上较少使用。</p>
+
+<h2 id="数组">数组</h2>
+
+<p>数组是Go语言编程中最常用的数据结构之一。顾名思义，数组就是指一系列同一类型数据的集合。数组中包含的每个数据被称为数组元素(element)，一个数组包含的元素个数被称为数组的长度。
+以下为一些常规的数组声明方法：
+    [32]byte                        // 长度为32的数组,每个元素为一个字节
+    [2*N] struct { x, y int32 }     // 复杂类型数组
+    [1000]*float64                  // 指针数组
+    [3][5]int                       // 二维数组
+    [2][2][2]float64                // 等同于<a href="[2]([2]float64)">2</a></p>
+
+<p>从以上类型也可以看出，数组可以是多维的，比如[3][5]int就表达了一个3行5列的二维整 型数组，总共可以存放15个整型元素。
+在Go语言中,数组长度在定义后就不可更改，在声明时长度可以为一个常量或者一个常量表达式(常量表达式是指在编译期即可计算结果的表达式)。数组的长度是该数组类型的一个内置常量，可以用Go语言的内置函数len()来获取。下面是一个获取数组arr元素个数的写法：
+    arrLength := len(arr)</p>
+
+<h3 id="元素访问">元素访问</h3>
+
+<p>可以使用数组下标来访问数组中的元素。与C语言相同，数组下标从0开始，len(array)-1则表示最后一个元素的下标。下面的示例遍历整型数组并逐个打印元素内容：
+    for i := 0; i &lt; len(array); i++ {
+        fmt.Println(&ldquo;Element&rdquo;, i, &ldquo;of array is&rdquo;, array[i])
+    }</p>
+
+<p>Go语言还提供了一个关键字range，用于便捷地遍历容器中的元素。当然，数组也是range的支持范围。上面的遍历过程可以简化为如下的写法:</p>
+
+<pre><code>for i, v := range array {
+    fmt.Println(&quot;Array element[&quot;, i, &quot;]=&quot;, v)
+￼}
+</code></pre>
+
+<p>在上面的例子里可以看到，range具有两个返回值，第一个返回值是元素的数组下标，第二个返回值是元素的值。</p>
+
+<h3 id="值类型">值类型</h3>
+
+<p>需要特别注意的是，在Go语言中数组是一个值类型(value type)。所有的值类型变量在赋值和作为参数传递时都将产生一次复制动作。如果将数组作为函数的参数类型，则在函数调用时该参数将发生数据复制。因此，在函数体中无法修改传入的数组的内容，因为函数内操作的只是所传入数组的一个副本。
+下面用例子来说明这一特点:
+    package main</p>
+
+<pre><code>import (
+    &quot;fmt&quot;
+)
+
+func modify(array [5]int) {
+    array[0] = 10   // 试图修改数组的第一个元素
+    fmt.Println(&quot;In modify(), array values:&quot;, array)
+}
+
+func main() {
+    array := [5]int{1,2,3,4,5}  // 定义并初始化一个数组
+    modify(array)   // 传递给一个函数,并试图在函数体内修改这个数组内容
+    fmt.Println(&quot;In main(), array values:&quot;, array)
+}
+</code></pre>
+
+<p>该程序的执行结果为：</p>
+
+<pre><code>In modify(), array values: [10 2 3 4 5]
+In main(), array values: [1 2 3 4 5]
+</code></pre>
+
+<p>从执行结果可以看出，函数modify()内操作的那个数组跟main()中传入的数组是两个不同的实例。那么，如何才能在函数内操作外部的数据结构呢?用数组切 片功能来达成这个目标。</p>
+
+<h2 id="数组切片">数组切片</h2>
+
+<p>在前一节里我们已经提过数组的特点：数组的长度在定义之后无法再次修改；数组是值类型，每次传递都将产生一份副本。显然这种数据结构无法完全满足开发者的真实需求。</p>
+
+<p>不用失望，Go语言提供了数组切片(slice)这个非常酷的功能来弥补数组的不足。</p>
+
+<p>初看起来，数组切片就像一个指向数组的指针，实际上它拥有自己的数据结构，而不仅仅是个指针。数组切片的数据结构可以抽象为以下3个变量：</p>
+
+<ul>
+<li>一个指向原生数组的指针；</li>
+<li>数组切片中的元素个数；</li>
+
+<li><p>数组切片已分配的存储空间。
+从底层实现的角度来看，数组切片实际上仍然使用数组来管理元素，因此它们之间的关系让 C++程序员们很容易联想起STL中std::vector和数组的关系。基于数组，数组切片加了一系列管理功能，可以随时动态扩充存放空间，并且可以被随意传递而不会导致所管理的元素被重复复制。</p>
+
+<h3 id="创建数组切片">创建数组切片</h3>
+
+<p>创建数组切片的方法主要有两种&ndash;基于数组和直接创建,下面我们来简要介绍一下这两种方法。</p>
+
+<h4 id="基于数组">基于数组</h4></li>
+</ul>
+
+<p>数组切片可以基于一个已存在的数组创建。数组切片可以只使用数组的一部分元素或者整个数组来创建，甚至可以创建一个比所基于的数组还要大的数组切片。如下代码演示了如何基于一个数组的前5个元素创建一个数组切片：</p>
+
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+    // 先定义一个数组
+    var myArray [10]int = [10]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10} 
+
+    // 基于数组创建一个数组切片
+    var mySlice []int = myArray[:5]
+    fmt.Println(&quot;Elements of myArray: &quot;) 
+
+    for _, v := range myArray {
+        fmt.Print(v, &quot; &quot;)
+    }
+
+    fmt.Println(&quot;\nElements of mySlice: &quot;)
+
+    for _, v := range mySlice { 
+        fmt.Print(v, &quot; &quot;)
+    }
+    fmt.Println()
+}
+</code></pre>
+
+<p>运行结果为：
+    Elements of myArray:
+    1 2 3 4 5 6 7 8 9 10
+    Elements of mySlice:
+    1 2 3 4 5</p>
+
+<p>读者应该已经注意到，Go语言支持用myArray[first:last]这样的方式来基于数组生成一个数组切片，而且这个用法还很灵活，比如下面几种都是合法的。</p>
+
+<p>基于myArray的所有元素创建数组切片：
+    mySlice = myArray[:]
+￼基于myArray的前5个元素创建数组切片：
+    mySlice = myArray[:5]
+基于从第5个元素开始的所有元素创建数组切片：
+    mySlice = myArray[5:]</p>
+
+<h4 id="直接创建">直接创建</h4>
+
+<p>并非一定要事先准备一个数组才能创建数组切片。Go语言提供的内置函数make()可以用于灵活地创建数组切片。下面的例子示范了直接创建数组切片的各种方法。
+创建一个初始元素个数为5的数组切片，元素初始值为0：
+    mySlice1 := make([]int, 5)
+创建一个初始元素个数为5的数组切片，元素初始值为0，并预留10个元素的存储空间：
+    mySlice2 := make([]int, 5, 10)
+直接创建并初始化包含5个元素的数组切片：
+    mySlice3 := []int{1, 2, 3, 4, 5}
+当然，事实上还会有一个匿名数组被创建出来，只是不需要我们来操心而已。</p>
+
+<h3 id="元素遍历">元素遍历</h3>
+
+<p>操作数组元素的所有方法都适用于数组切片，比如数组切片也可以按下标读写元素，用len()函数获取元素个数，并支持使用range关键字来快速遍历所有元素。
+传统的元素遍历方法如下：
+    for i := 0; i &lt;len(mySlice); i++ {
+        fmt.Println(&ldquo;mySlice[&ldquo;, i, &ldquo;] =&rdquo;, mySlice[i])
+    }
+使用range关键字可以让遍历代码显得更整洁。range表达式有两个返回值，第一个是索引，第二个是元素的值：
+    for i, v := range mySlice {
+        fmt.Println(&ldquo;mySlice[&ldquo;, i, &ldquo;] =&rdquo;, v)
+    }
+对比上面的两个方法，我们可以很容易地看出使用range的代码更简单易懂。</p>
+
+<h3 id="动态增减元素">动态增减元素</h3>
+
+<p>可动态增减元素是数组切片比数组更为强大的功能。与数组相比，数组切片多了一个存储能力(capacity)的概念，即元素个数和分配的空间可以是两个不同的值。合理地设置存储能力的值，可以大幅降低数组切片内部重新分配内存和搬送内存块的频率，从而大大提高程序性能。
+假如你明确知道当前创建的数组切片最多可能需要存储的元素个数为50，那么如果你设置的存储能力小于50，比如20，那么在元素超过20时，底层将会发生至少一次这样的动作&ndash;重新分配一块“够大”的内存，并且需要把内容从原来的内存块复制到新分配的内存块，这会产生比较明显的开销。给“够大”这两个字加上引号的原因是系统并不知道多大才是够大，所以只是一个简单的猜测。比如，将原有的内存空间扩大两倍，但两倍并不一定够，所以之前提到的内存重新分配和内容复制的过程很有可能发生多次，从而明显降低系统的整体性能。但如果你知道最大是50并且一开始就设置存储能力为50,那么之后就不会发生这样非常耗费CPU的动作,从而达到空间换时间的效果。
+数组切片支持Go语言内置的cap()函数和len()函数，如下简单示范了这两个内置函数的用法。可以看出，cap()函数返回的是数组切片分配的空间大小，而len()函数返回的是数组切片中当前所存储的元素个数。
+    package main</p>
+
+<pre><code>import &quot;fmt&quot; 
+
+func main() {
+    mySlice := make([]int, 5, 10)
+    fmt.Println(&quot;len(mySlice):&quot;, len(mySlice))
+    fmt.Println(&quot;cap(mySlice):&quot;, cap(mySlice))
+}
+</code></pre>
+
+<p>该程序的输出结果为：</p>
+
+<pre><code>len(mySlice): 5
+cap(mySlice): 10
+</code></pre>
+
+<p>如果需要往上例中mySlice已包含的5个元素后面继续新增元素，可以使用append()函数。下面的代码可以从尾端给mySlice加上3个元素，从而生成一个新的数组切片：
+    mySlice = append(mySlice, 1, 2, 3)
+函数append()的第二个参数其实是一个不定参数，我们可以按自己需求添加若干个元素，甚至直接将一个数组切片追加到另一个数组切片的末尾：
+    mySlice2 := []int{8, 9, 10}
+    // 给mySlice后面添加另一个数组切片
+    mySlice = append(mySlice, mySlice2&hellip;)
+需要注意的是,我们在第二个参数mySlice2后面加了三个点，即一个省略号，如果没有这个省略号的话，会有编译错误，因为按append()的语义，从第二个参数起的所有参数都是待附加的元素。因为mySlice中的元素类型为int，所以直接传递mySlice2是行不通的。加上省略号相当于把mySlice2包含的所有元素打散后传入。
+上述调用等同于:
+    mySlice = append(mySlice, 8, 9, 10)
+数组切片会自动处理存储空间不足的问题。如果追加的内容长度超过当前已分配的存储空间(即cap()调用返回的信息)，数组切片会自动分配一块足够大的内存。</p>
+
+<h3 id="基于数组切片创建数组切片">基于数组切片创建数组切片</h3>
+
+<p>类似于数组切片可以基于一个数组创建，数组切片也可以基于另一个数组切片创建。下面的例子基于一个已有数组切片创建新数组切片：
+    oldSlice := []int{1, 2, 3, 4, 5}
+    newSlice := oldSlice[:3] // 基于oldSlice的前3个元素构建新数组切片
+有意思的是，选择的oldSlicef元素范围甚至可以超过所包含的元素个数，比如newSlice可以基于oldSlice的前6个元素创建，虽然oldSlice只包含5个元素。只要这个选择的范围不超过oldSlice存储能力(即cap()返回的值)，那么这个创建程序就是合法的。newSlice中超出oldSlice元素的部分都会填上0。</p>
+
+<h3 id="内容赋值">内容赋值</h3>
+
+<p>数组切片支持Go语言的另一个内置函数copy()，用于将内容从一个数组切片复制到另一个数组切片。如果加入的两个数组切片不一样大，就会按其中较小的那个数组切片的元素个数进行复制。下面的示例展示了copy()函数的行为：
+slice1 := []int{1, 2, 3, 4, 5}
+slice2 := []int{5, 4, 3}
+copy(slice2, slice1) // 只会复制slice1的前3个元素到slice2中
+copy(slice1, slice2) // 只会复制slice2的3个元素到slice1的前3个位置</p>
+
+<h2 id="map">map</h2>
+
+<p>在C++/Java中，map一般都以库的方式提供，比如在C++中是STL的std::map&lt;&gt;，在C#中是Dictionary&lt;&gt;，在Java中是Hashmap&lt;&gt;，在这些语言中，如果要使用map，事先要引用相应的库。而在Go中，使用map不需要引入任何库，并且用起来也更加方便。
+map是一堆键值对的未排序集合。比如以身份证号作为唯一键来标识一个人的信息，如下所示：
+    package main
+    import &ldquo;fmt&rdquo;</p>
+
+<pre><code>//PersonInfo是一个包含个人详细信息的类型
+type PersonInfo struct {
+    ID string
+    Name string
+    Address string
+}
+
+func main() {
+    var personDB map[string] PersonInfo
+    personDB = make(map[string] PersonInfo)
+
+    //往这个map里插入几条数据
+    personDB[&quot;12345&quot;] = PersonInfo{&quot;12345&quot;, &quot;Tom&quot;, &quot;Room 203,...&quot;}
+    personDB[&quot;1&quot;] = PersonInfo{&quot;1&quot;, &quot;Jack&quot;, &quot;Room 101,...&quot;}
+
+    //从这个map查找键为&quot;1234&quot;的信息
+    person, ok := personDB[&quot;1234&quot;]
+    //ok是一个返回的bool类型，返回true表示查找到了对应的数据
+    if ok {
+        fmt.Println(&quot;Found person&quot;, person.Name, &quot;with ID 1234.&quot;)
+    } else {
+        fmt.Println(&quot;Did not find person with ID 1234.&quot;)
+    }
+}
+</code></pre>
+
+<p>上面这个简单的例子基本上已经覆盖了map的主要用法，下面对其中的关键点进行细述。</p>
+
+<h3 id="变量声明-1">变量声明</h3>
+
+<p>map的声明基本上没有多余的元素，比如：</p>
+
+<pre><code>var myMap map[string] PersonInfo
+</code></pre>
+
+<p>其中，myMap是声明的map变量名，string是键的类型，PersonInfo则是其中所存放的值类型。</p>
+
+<h3 id="创建">创建</h3>
+
+<p>我们可以使用Go语言内置的函数make()来创建一个新map。下面的这个例子创建了一个键类型为string、值类型为PersonInfo的map：</p>
+
+<pre><code>myMap = make(map[string] PersonInfo)
+</code></pre>
+
+<p>也可以选择是否在创建时指定该map的初始存储能力，下面的例子创建了一个初始存储能力为100的map：</p>
+
+<pre><code>myMap = make(map[string] PersonInfo, 100)
+</code></pre>
+
+<p>创建并初始化map的代码如下：</p>
+
+<pre><code>myMap = map[string] PersonInfo{
+    &quot;1234&quot;: PersonInfo{&quot;1&quot;, &quot;Jack&quot;, &quot;Room 101,...&quot;},
+}
+</code></pre>
+
+<h3 id="元素赋值">元素赋值</h3>
+
+<p>赋值过程非常简单明了，就是将键和值用下面的方式对应起来即可：</p>
+
+<pre><code>myMap[&quot;1234&quot;] = PersonInfo{&quot;1&quot;, &quot;Jack&quot;, &quot;Room 101,...&quot;}
+</code></pre>
+
+<h3 id="元素删除">元素删除</h3>
+
+<p>Go语言提供了一个内置函数delete()，用于删除容器内的元素。下面我们简单介绍一下如何用delete()函数删除map内的元素：</p>
+
+<pre><code>delete(myMap, &quot;1234&quot;)
+</code></pre>
+
+<p>上面的代码将从myMap中删除键为“1234”的键值对。如果“1234”这个键不存在，那么这个调用将什么都不发生，也不会有什么副作用。但是如果传入的map变量的值是nil，该调用将导致程序抛出异常(panic)。</p>
+
+<h3 id="元素查找">元素查找</h3>
+
+<p>在Go语言中，map的查找功能设计得比较精巧。而在其他语言中，我们要判断能否获取到一个值不是件容易的事情。判断能否从map中获取一个值的常规做法是：</p>
+
+<ol>
+<li>声明并初始化一个变量为空；</li>
+<li>试图从map中获取相应键的值到该变量中；</li>
+<li>判断该变量是否依旧为空，如果为空则表示map中没有包含该变量。</li>
+</ol>
+
+<p>这种用法比较啰嗦，而且判断变量是否为空这条语句并不能真正表意(是否成功取到对应的值)，从而影响代码的可读性和可维护性。有些库甚至会设计为因为一个键不存在而抛出异常，让开发者用起来胆战心惊，不得不一层层嵌套try-catch语句，这更是不人性化的设计。在Go语言中，要从map中查找一个特定的键，可以通过下面的代码来实现：</p>
+
+<pre><code>value, ok := myMap[&quot;1234&quot;]
+if ok { // 找到了
+    // 处理找到的value
+}
+</code></pre>
+
+<p>判断是否成功找到特定的键，不需要检查取到的值是否为nil，只需查看第二个返回值ok，这让表意清晰很多。配合:=操作符，让你的代码没有多余成分，看起来非常清晰易懂。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/go%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B/">Go语言编程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/06/go%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" data-tooltip="Go流程控制">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/06/%E5%88%9D%E8%AF%86go%E8%AF%AD%E8%A8%80/" data-tooltip="初识Go语言">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f06%2fgo%25E5%259F%25BA%25E6%259C%25AC%25E8%25AF%25AD%25E6%25B3%2595%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f06%2fgo%25E5%259F%25BA%25E6%259C%25AC%25E8%25AF%25AD%25E6%25B3%2595%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f06%2fgo%25E5%259F%25BA%25E6%259C%25AC%25E8%25AF%25AD%25E6%25B3%2595%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Lynch Wong. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/06/go%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" data-tooltip="Go流程控制">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/06/%E5%88%9D%E8%AF%86go%E8%AF%AD%E8%A8%80/" data-tooltip="初识Go语言">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f06%2fgo%25E5%259F%25BA%25E6%259C%25AC%25E8%25AF%25AD%25E6%25B3%2595%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f06%2fgo%25E5%259F%25BA%25E6%259C%25AC%25E8%25AF%25AD%25E6%25B3%2595%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f06%2fgo%25E5%259F%25BA%25E6%259C%25AC%25E8%25AF%25AD%25E6%25B3%2595%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f06%2fgo%25E5%259F%25BA%25E6%259C%25AC%25E8%25AF%25AD%25E6%25B3%2595%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f06%2fgo%25E5%259F%25BA%25E6%259C%25AC%25E8%25AF%25AD%25E6%25B3%2595%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f06%2fgo%25E5%259F%25BA%25E6%259C%25AC%25E8%25AF%25AD%25E6%25B3%2595%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Lynch Wong</h4>
+    
+      <div id="about-card-bio">I WILL.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        iOS Development
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Hangzhou
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+                <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">Fastlane - 示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p><strong>说明：</strong>之前把关于 <code>Fastlane</code> 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+                <h3 class="media-heading">Fastlane - Match</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Match</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/match"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+                <h3 class="media-heading">Fastlane - Scan</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Scan</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/scan"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+                <h3 class="media-heading">Fastlane - Gym</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Gym</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/gym"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+                <h3 class="media-heading">Fastlane - Boarding</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Boarding</code> 的指南，<a href="https://github.com/fastlane/boarding"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+                <h3 class="media-heading">Fastlane - Pilot</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Pilot</code> 的指南，<a href="https://github.com/fastlane-old/pilot"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+                <h3 class="media-heading">Fastlane - Spaceship</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Spaceship</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/spaceship"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+                <h3 class="media-heading">Fastlane - Cert</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Cert</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/cert"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+                <h3 class="media-heading">Fastlane - Produce</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jun 6, 2016
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>说明：翻译的 <code>Produce</code> 的指南，<a href="https://github.com/fastlane/fastlane/tree/master/produce"> 原文地址 </a>。
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         149 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/06\/go%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95\/';
+          
+            this.page.identifier = '\/2015\/06\/go%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'lynchwong';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+
