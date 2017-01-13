@@ -2,25 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/index.xml</link>
+    <link>http://lynchwong.com/index.xml</link>
     <description>Recent content on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 26 Aug 2016 10:29:18 +0000</lastBuildDate>
-    <atom:link href="http://lynchwong.com/blog/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>UILabel 使用 Autolayout 自动换行的BUG</title>
-      <link>http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/</link>
+      <link>http://lynchwong.com/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/</link>
       <pubDate>Fri, 26 Aug 2016 10:29:18 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/</guid>
+      <guid>http://lynchwong.com/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/</guid>
       <description>&lt;p&gt;之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
 &lt;/p&gt;
 
 &lt;p&gt;最近貌似产生了一个BUG，最近做界面的时候按照这种方式自动换行的时候有些瑕疵，而之前的界面没有产生这个BUG。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/UILabelBUG/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/UILabelBUG/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;BUG已经在图中标注出来了，可以明显看到 UILabel 的那个高度跟我们期望的不一样。后来在排查BUG的时候，我用代码计算的 &lt;strong&gt;&amp;ldquo;VOA常速新闻:特朗普不担心缺少党内支持&amp;rdquo;&lt;/strong&gt; 的高度差不多是25.0左右。但是我用 Xcode 的 View UI Hierarchy 调试的时候高度是差不多50.0左右。所以可以断定的是 UILabel 进行了换行，但是我们是不需要换行的。另外，&lt;strong&gt;&amp;ldquo;永不退缩 Won&amp;rsquo;t Back Down (2012)&amp;rdquo;&lt;/strong&gt;也没有显示完全。&lt;/p&gt;
 
@@ -35,19 +35,19 @@
 
 &lt;p&gt;从图中可以看出我的 UILabel 的宽度是动态变化的，所以其实这个值应该也是变化的。但是我看我的 storyboard 里面设置的是 290.0，且是不变的。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/UILabelBUG/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/UILabelBUG/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;后来验证确实是这个的问题，其实界面是按照 6S 为基准做的，所以宽度是 375.0 减去左右边距和 30.0，应该是 345.0。所以这个 290.0 其实是不对的，以 6S 为标准应该是 345.0。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/UILabelBUG/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/UILabelBUG/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;所以按照这样的设置，在 6S 上没有图片的Cell显示应该是没问题的。截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/UILabelBUG/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/UILabelBUG/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;但是箭头指的那里还是没有显示完全，后来设置成零就没有问题了，就没有深究了。截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/UILabelBUG/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/UILabelBUG/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这样看来就正常了。&lt;/p&gt;
 
@@ -56,10 +56,10 @@
     
     <item>
       <title>Fastlane - 示例</title>
-      <link>http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/</link>
+      <link>http://lynchwong.com/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/</link>
       <pubDate>Thu, 07 Jul 2016 23:08:32 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/</guid>
+      <guid>http://lynchwong.com/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/</guid>
       <description>&lt;p&gt;&lt;strong&gt;说明：&lt;/strong&gt;之前把关于 &lt;code&gt;Fastlane&lt;/code&gt; 的工具集的文档简单翻译了下，翻译的比较糙。由于最近太忙了，没时间回去校对。之后有时间了也不会回去校对，so be it。
 &lt;/p&gt;
 
@@ -263,16 +263,16 @@ end
     
     <item>
       <title>Fastlane - Match</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---match/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---match/</link>
       <pubDate>Tue, 28 Jun 2016 09:05:34 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---match/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---match/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Match&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/match.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;match&#34;&gt;match&lt;/h1&gt;
 
@@ -389,7 +389,7 @@ end
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match_init.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/match_init.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;会要求你输入 Git Repo 的 URL。可以是 &lt;code&gt;https://&lt;/code&gt; 或者 &lt;code&gt;git&lt;/code&gt; URL。&lt;code&gt;match init&lt;/code&gt; 不会读取或者修改你的证书或者配置文件。&lt;/p&gt;
 
@@ -423,7 +423,7 @@ match(git_branch: &amp;quot;team2&amp;quot;, username: &amp;quot;user@team2.com&
 match development
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match_appstore_small.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/match_appstore_small.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这回创建新的证书和配置文件(如果需要)然后存储在你的 Git Repo 中。如果你之前运行 &lt;code&gt;match&lt;/code&gt; ，它会自动安装 Git Repo 里已经存在的 Profiles 。&lt;/p&gt;
 
@@ -502,7 +502,7 @@ end
 
 &lt;p&gt;除此之外，&lt;code&gt;match&lt;/code&gt; 会为你创建一个漂亮的 Repo &lt;code&gt;README.md&lt;/code&gt;，方便新的团队成员登船(入坑，哈哈，开玩笑)：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/github_repo.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/github_repo.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;fastlane&#34;&gt;fastlane&lt;/h3&gt;
 
@@ -542,11 +542,11 @@ match(app_identifier: &amp;quot;tools.fastlane.app.today_widget&amp;quot;, type:
 
 &lt;p&gt;&lt;code&gt;match&lt;/code&gt; 会使用正确的 Provisioning Profiles 的 UUID 来自动填充环境变量，准备在你的 Xcode 项目中使用。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/UDIDPrint.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/UDIDPrint.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;打开你的 target 设置，打开 &lt;code&gt;Provisioning Profile&lt;/code&gt; 选择 &lt;code&gt;Other&lt;/code&gt; ：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/XcodeProjectSettings.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/XcodeProjectSettings.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Profile 环境变量以 &lt;code&gt;$(sigh_&amp;lt;bundle_identifier&amp;gt;_&amp;lt;profile_type&amp;gt;)&lt;/code&gt; 命名&lt;/p&gt;
 
@@ -589,7 +589,7 @@ match(app_identifier: &amp;quot;tools.fastlane.app.today_widget&amp;quot;, type:
 match nuke distribution
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match_nuke.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/match_nuke.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在删除 profiles / certificates 之前你必需确认。&lt;/p&gt;
 
@@ -671,16 +671,16 @@ match nuke distribution
     
     <item>
       <title>Fastlane - Scan</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---scan/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---scan/</link>
       <pubDate>Tue, 28 Jun 2016 09:05:20 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---scan/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---scan/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Scan&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/scan.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/scan.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;scan&#34;&gt;scan&lt;/h1&gt;
 
@@ -690,7 +690,7 @@ match nuke distribution
 
 &lt;h1 id=&#34;scan-是什么&#34;&gt;scan 是什么？&lt;/h1&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f43555263457075576f4141724533642e706e673a6c61726765.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f43555263457075576f4141724533642e706e673a6c61726765.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;scan-之前&#34;&gt;&lt;code&gt;scan&lt;/code&gt; 之前&lt;/h2&gt;
 
@@ -798,13 +798,13 @@ match nuke distribution
 
 &lt;p&gt;&lt;code&gt;scan&lt;/code&gt; 使用的是简单的 &lt;code&gt;xcodebuild&lt;/code&gt; 命令，因此保持了与 &lt;code&gt;xcodebuild&lt;/code&gt; 100%的兼容性。为了生成漂亮的输出，&lt;code&gt;scan&lt;/code&gt; 使用 &lt;a href=&#34;https://github.com/supermarin/xcpretty&#34;&gt;xcpretty&lt;/a&gt;。你总是可以在 &lt;code&gt;~/Library/Logs/scan&lt;/code&gt; 中访问原始的输出。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/scanScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/scanScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/slack.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/slack.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/scanHTML.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/scanHTML.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/scanHTMLFailing.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/scanHTMLFailing.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
 
@@ -901,16 +901,16 @@ end
     
     <item>
       <title>Fastlane - Gym</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---gym/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---gym/</link>
       <pubDate>Tue, 28 Jun 2016 09:05:06 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---gym/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---gym/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Gym&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneGym/gym.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneGym/gym.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;gym&#34;&gt;gym&lt;/h1&gt;
 
@@ -996,9 +996,9 @@ xcodebuild -exportArchive \
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneGym/gymScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneGym/gymScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneGym/gym.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneGym/gym.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
 
@@ -1197,16 +1197,16 @@ archive | xcpretty
     
     <item>
       <title>Fastlane - Boarding</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---boarding/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---boarding/</link>
       <pubDate>Tue, 28 Jun 2016 09:04:26 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---boarding/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---boarding/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Boarding&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneBoarding/BoardingHuge.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneBoarding/BoardingHuge.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;boarding-是什么&#34;&gt;boarding 是什么？&lt;/h1&gt;
 
@@ -1220,7 +1220,7 @@ archive | xcpretty
 
 &lt;p&gt;你为什么不弄一个简单的网页，与你潜在的测试人员分享(比如邮件、Facebook、Twitter)，那些对你的新 App 感兴趣的人，然后让他们自己来 &lt;code&gt;board&lt;/code&gt; ？&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneBoarding/BoardingScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneBoarding/BoardingScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;感谢 &lt;a href=&#34;https://spaceship.airforce&#34;&gt;spaceship.airforce&lt;/a&gt; ，现在可以自动为你的 TestFlight beta 测试人员 boarding process 。&lt;/p&gt;
 
@@ -1287,7 +1287,7 @@ archive | xcpretty
 &lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding/blob/master/app/views/invite/index.html.erb&#34;&gt;invite/index.html.erb&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneBoarding/BoardingOverview.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneBoarding/BoardingOverview.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;更多关于自动化过程的信息，参见 &lt;a href=&#34;https://krausefx.com&#34;&gt;my blog&lt;/a&gt; 。&lt;/p&gt;
 
@@ -1332,16 +1332,16 @@ archive | xcpretty
     
     <item>
       <title>Fastlane - Pilot</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---pilot/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---pilot/</link>
       <pubDate>Tue, 28 Jun 2016 09:03:59 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---pilot/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---pilot/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Pilot&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane-old/pilot&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlanePilot/PilotTextTransparentSmall.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlanePilot/PilotTextTransparentSmall.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;pilot&#34;&gt;Pilot&lt;/h1&gt;
 
@@ -1570,16 +1570,16 @@ pilot...
     
     <item>
       <title>Fastlane - Spaceship</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---spaceship/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---spaceship/</link>
       <pubDate>Tue, 28 Jun 2016 09:03:31 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---spaceship/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---spaceship/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Spaceship&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSpaceship/spaceship.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSpaceship/spaceship.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;spaceship&#34;&gt;spaceship&lt;/h1&gt;
 
@@ -1622,7 +1622,7 @@ profile.download
 
 &lt;p&gt;跟网页抓取比起来，使用 &lt;code&gt;spaceship&lt;/code&gt; 工具有多快？&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSpaceship/SpaceshipRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSpaceship/SpaceshipRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
 
@@ -1635,7 +1635,7 @@ profile.download
 
 &lt;p&gt;尝试 &lt;code&gt;spaceship&lt;/code&gt; ，只需要运行 &lt;code&gt;spaceship&lt;/code&gt; 。然后就会自动启动 &lt;code&gt;spaceship playground&lt;/code&gt;。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSpaceship/Playground.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSpaceship/Playground.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这要求你使用 &lt;code&gt;sudo gem install pry&lt;/code&gt; 安装 &lt;code&gt;pry&lt;/code&gt; 。&lt;code&gt;pry&lt;/code&gt; 不会默认安装，因为大部分的 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; 用户不需要 &lt;code&gt;spaceship playground&lt;/code&gt; 。你可以在 &lt;code&gt;Gemfile&lt;/code&gt; 文件里添加 &lt;code&gt;pry&lt;/code&gt; 依赖。&lt;/p&gt;
 
@@ -1741,16 +1741,16 @@ profile.download
     
     <item>
       <title>Fastlane - Cert</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---cert/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---cert/</link>
       <pubDate>Tue, 28 Jun 2016 08:46:19 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---cert/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---cert/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Cert&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneCert/cert.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneCert/cert.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;cert&#34;&gt;cert&lt;/h1&gt;
 
@@ -1778,7 +1778,7 @@ profile.download
 
 &lt;p&gt;查看完成&lt;strong&gt;之后&lt;/strong&gt;，再看 &lt;code&gt;cert&lt;/code&gt; 和 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt;&lt;code&gt;sigh&lt;/code&gt;&lt;/a&gt; 如何为你做这些工作。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneCert/cert.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneCert/cert.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如上所示，我使用了 &lt;code&gt;cert &amp;amp;&amp;amp; sigh&lt;/code&gt; ，首先会创建 iOS Code Signing Certificate ，如果 &lt;code&gt;cert&lt;/code&gt; 成功，然后会为你的 App 创建 Provisioning Profile 。&lt;/p&gt;
 
@@ -1867,16 +1867,16 @@ end
     
     <item>
       <title>Fastlane - Produce</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---produce/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---produce/</link>
       <pubDate>Mon, 27 Jun 2016 17:24:12 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---produce/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---produce/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Produce&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneProduce/produce.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneProduce/produce.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;produce&#34;&gt;produce&lt;/h1&gt;
 
@@ -2055,16 +2055,16 @@ end
     
     <item>
       <title>Fastlane - Sigh</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---sigh/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---sigh/</link>
       <pubDate>Mon, 27 Jun 2016 12:39:46 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---sigh/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---sigh/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Sigh&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSigh/sigh.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSigh/sigh.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;sigh&#34;&gt;sigh&lt;/h1&gt;
 
@@ -2098,7 +2098,7 @@ end
 
 &lt;p&gt;参见&lt;code&gt;sigh&lt;/code&gt;的执行：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSigh/sighRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSigh/sighRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
 
@@ -2277,7 +2277,7 @@ end
 
 &lt;p&gt;它会像下图这样向你展示 &lt;code&gt;mobileprovision&lt;/code&gt; 文件：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSigh/QuickLookScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSigh/QuickLookScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;找不到-app-identifier&#34;&gt;找不到 App Identifier&lt;/h2&gt;
 
@@ -2294,16 +2294,16 @@ end
     
     <item>
       <title>Fastlane - Pem</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---pem/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---pem/</link>
       <pubDate>Mon, 27 Jun 2016 10:31:25 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---pem/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---pem/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Pem&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlanePem/pem.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlanePem/pem.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;pem&#34;&gt;pem&lt;/h1&gt;
 
@@ -2325,7 +2325,7 @@ end
 
 &lt;p&gt;查看这张Gif：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlanePem/PEMRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlanePem/PEMRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
 
@@ -2434,7 +2434,7 @@ end
 
 &lt;p&gt;它会像下图这样向你展示 &lt;code&gt;pem&lt;/code&gt; 文件：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlanePem/QuickLookScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlanePem/QuickLookScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;帮助&#34;&gt;帮助&lt;/h1&gt;
 
@@ -2443,16 +2443,16 @@ end
     
     <item>
       <title>Fastlane - Frameit</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---frameit/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---frameit/</link>
       <pubDate>Sun, 26 Jun 2016 11:21:05 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---frameit/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---frameit/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Frameit&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneFrameit/frameit.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneFrameit/frameit.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;frameit&#34;&gt;frameit&lt;/h1&gt;
 
@@ -2474,13 +2474,13 @@ end
 
 &lt;p&gt;这里有一个漂亮的Gif，展示了&lt;code&gt;frameit&lt;/code&gt;的执行：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneFrameit/FrameitGit.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneFrameit/FrameitGit.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;结果&#34;&gt;结果&lt;/h2&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneFrameit/ScreenshotsBig.png&#34; alt=&#34;alt text&#34; /&gt;
-&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneFrameit/ScreenshotsOverview.png&#34; alt=&#34;alt text&#34; /&gt;
-&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneFrameit/MacExample.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneFrameit/ScreenshotsBig.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/FastlaneFrameit/ScreenshotsOverview.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/FastlaneFrameit/MacExample.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;frameit&lt;/code&gt;2.0的更新算是&lt;a href=&#34;https://mindnode.com&#34;&gt; MindNode &lt;/a&gt;的赞助，参见上面的截图。&lt;/p&gt;
 
@@ -2701,16 +2701,16 @@ brew install imagemagick
     
     <item>
       <title>Fastlane - Snapshot</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---snapshot/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---snapshot/</link>
       <pubDate>Sun, 19 Jun 2016 13:52:28 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---snapshot/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---snapshot/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Snapshot&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSnapshot/snapshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/snapshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;snapshot&#34;&gt;snapshot&lt;/h1&gt;
 
@@ -2763,7 +2763,7 @@ brew install imagemagick
 
 &lt;p&gt;在&lt;code&gt;snapshot&lt;/code&gt;成功创建新的截图后，会生成一个漂亮的HTML文件来展示所有的截图，让你能够快速浏览所有截图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSnapshot/htmlPagePreviewFade.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/htmlPagePreviewFade.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;为什使用&#34;&gt;为什使用？&lt;/h2&gt;
 
@@ -2847,7 +2847,7 @@ app.launch()
 [app launch];
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSnapshot/snapshot.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/snapshot.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你可以看下项目里面的例子，然后把玩一下。&lt;/p&gt;
 
@@ -2895,7 +2895,7 @@ app.launch()
 
 &lt;p&gt;在运行完&lt;code&gt;snapshot&lt;/code&gt;，你会得到一个非常漂亮的概要：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSnapshot/testSummary.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/testSummary.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;snapfile&#34;&gt;Snapfile&lt;/h2&gt;
 
@@ -3073,16 +3073,16 @@ launch_arguments([
     
     <item>
       <title>Fastlane - Deliver</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---deliver/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---deliver/</link>
       <pubDate>Sat, 18 Jun 2016 12:49:42 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---deliver/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---deliver/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Deliver&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneDeliver/deliver.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneDeliver/deliver.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;deliver&#34;&gt;deliver&lt;/h1&gt;
 
@@ -3133,7 +3133,7 @@ launch_arguments([
 
 &lt;p&gt;查看你本地 &lt;code&gt;./fastlane/metadata&lt;/code&gt; 和 &lt;code&gt;./fastlane/screenshots&lt;/code&gt;文件夹(如果你没有使用fastlane，&lt;code&gt;./metadata&lt;/code&gt;替换)。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneDeliver/metadata.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneDeliver/metadata.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你将会看见从 iTunes Connect 获取的元数据。你可以在本地修改这些数据，然后推送回 iTunes Connect。&lt;/p&gt;
 

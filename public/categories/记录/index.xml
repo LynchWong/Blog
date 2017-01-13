@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>记录 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/categories/%E8%AE%B0%E5%BD%95/index.xml</link>
+    <link>http://lynchwong.com/categories/%E8%AE%B0%E5%BD%95/index.xml</link>
     <description>Recent content in 记录 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/categories/%E8%AE%B0%E5%BD%95/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/categories/%E8%AE%B0%E5%BD%95/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>博客迁移后续</title>
-      <link>http://lynchwong.com/blog/2016/06/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E5%90%8E%E7%BB%AD/</link>
+      <link>http://lynchwong.com/2016/06/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E5%90%8E%E7%BB%AD/</link>
       <pubDate>Thu, 02 Jun 2016 10:12:35 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E5%90%8E%E7%BB%AD/</guid>
+      <guid>http://lynchwong.com/2016/06/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E5%90%8E%E7%BB%AD/</guid>
       <description>&lt;p&gt;上篇博客还在说从 Hexo 迁移到 Hugo，现在又换回来了，你门肯定在想：
 &lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/MoveBlog/21.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/MoveBlog/21.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;我也觉得我是在发神经。换到Hugo后，折腾了好久，有些东西一直搞不定，毕竟对前端的东西不熟悉。本来都已经快弄好了，但是发现配置文件里的有些配置不起作用，导致了很大的BUG。&lt;strong&gt;disablePathToLower: true&lt;/strong&gt;，这个属性配置了没有效果，导致URL全部转成了小写，而我的博文名称都是大写的，在列表中能看到这篇博文，但是点击查看的时候却找不到页面，也就是404。然而新建的博文貌似没有这个问题，中文标题的博文也没有问题。有问题的都是我从Hexo转过来的英文标题的博文。上篇也说过博文MarkDown的格式也不一样，修改之后仍然有问题。其它主题又不满足我的需求，也不想从头一篇一篇的生成博文。所以最后只好放弃，花了一两天时间，加上前两天感冒、头痛，搞的头都要炸了。唉！&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/MoveBlog/23.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/MoveBlog/23.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;反正再换回Hexo又花不了什么时间，估计半小时就够了。所以就直接换回来了，继续换上了之前的主题：&lt;a href=&#34;http://theme-next.iissnan.com&#34;&gt; Next &lt;/a&gt;&lt;/p&gt;
 
@@ -29,7 +29,7 @@
 
 &lt;p&gt;这个主题正如作者说的&amp;rdquo;精于心，简于形&amp;rdquo;。很喜欢这个主题，我用了蛮久了，正好换回之际发现这个主题已经升级了，而且有了自己的主页。文档也比之前更健全，功能也比之前更丰富了。增加了很多功能、以及第三方服务，非常棒，而且安装、配置都很简单。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/MoveBlog/8.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/MoveBlog/8.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;总的来说，两个博客引擎都很不错。如果我从一开始就使用Hugo，可能就不会出现上面说的那些问题。不过Hexo用起来很方便，命令也很简单，发布也不需要我操作，只是速度慢点。罢了罢了，以后生成页面的时候我出去跑个10公里。&lt;/p&gt;
 
@@ -40,10 +40,10 @@
     
     <item>
       <title>博客迁移</title>
-      <link>http://lynchwong.com/blog/2016/05/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/</link>
+      <link>http://lynchwong.com/2016/05/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/</link>
       <pubDate>Mon, 23 May 2016 08:03:33 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/05/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/</guid>
+      <guid>http://lynchwong.com/2016/05/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB/</guid>
       <description>&lt;p&gt;最近花了点时间把博客引擎从 &lt;strong&gt;Hexo&lt;/strong&gt; 换到了 &lt;strong&gt;Hugo&lt;/strong&gt;。感觉前者越来越慢了，其实我的文章不算多，但是生成的时候要花很久时间。换到 &lt;strong&gt;Hugo&lt;/strong&gt; 后，速度确实快。
 &lt;/p&gt;
 
@@ -60,10 +60,10 @@
     
     <item>
       <title>最近小结</title>
-      <link>http://lynchwong.com/blog/2016/05/%E6%9C%80%E8%BF%91%E5%B0%8F%E7%BB%93/</link>
+      <link>http://lynchwong.com/2016/05/%E6%9C%80%E8%BF%91%E5%B0%8F%E7%BB%93/</link>
       <pubDate>Fri, 06 May 2016 18:29:07 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/05/%E6%9C%80%E8%BF%91%E5%B0%8F%E7%BB%93/</guid>
+      <guid>http://lynchwong.com/2016/05/%E6%9C%80%E8%BF%91%E5%B0%8F%E7%BB%93/</guid>
       <description>&lt;p&gt;最近博客写的少了，编程指南也没怎么翻译。一是公司项目紧；二是调整了作息时间；三是懒癌发作了。
 &lt;/p&gt;
 
@@ -81,7 +81,7 @@
 
 &lt;p&gt;我想我已经从程序员变为运动员了，哈哈。其实这一年跑步带给我的变化挺大的，现在每天去跑步对于我来说不是运动、不是习惯，而是我的为人。现在跑步对我来说很重要，如果我放弃了跑步，便是放弃了自己的为人。正是跑步造就了现在更好的我，对我来说跑步优先于其他事项，如果我不能跑步，我就是放弃了更好的自己，对于其他方面来说同样是损失，所以我让跑步优先于其他事项是可以的。就像许多跑者说的“当我跑步的时候，我觉得这个世界很简单，因为它就在我的脚下”；“跑步让我更专注”；“跑步是我的信仰”。跑步之于我，是信仰，更是我的为人。(看《哥谭》的时候老爷说&amp;rdquo;松林农场&amp;rdquo;不是负担，是他为人的时候。本屌真是感动了，不愧是老爷，本屌就是跟老爷学的。)&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/Running/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/Running/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这图是去年4月15日到现在(5月6号)，年初1月、2月停跑了一段时间，因为太冷了，装备又没搞好。快2000公里了，今年年底估计能到3000公里吧，我们到年底的时候再看吧，希望那时候已经参加并完成了一些马拉松。&lt;/p&gt;
 
@@ -100,10 +100,10 @@
     
     <item>
       <title>小记 - RxSwift</title>
-      <link>http://lynchwong.com/blog/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</link>
+      <link>http://lynchwong.com/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</link>
       <pubDate>Sat, 23 Apr 2016 09:30:49 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</guid>
+      <guid>http://lynchwong.com/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</guid>
       <description>&lt;p&gt;又有一个月没有写过博客了，真是罪过，深深的内疚的感觉。之前写完了&lt;a href=&#34;http://lynchwong.com/2016/03/19/Alamofire-源码学习-Request/&#34;&gt; Alamofire 源码学习 &lt;/a&gt;然后让另一个做iOS的同学看，他说看不懂，写的乱。
 &lt;/p&gt;
 
@@ -157,10 +157,10 @@
     
     <item>
       <title>小结</title>
-      <link>http://lynchwong.com/blog/2016/01/%E5%B0%8F%E7%BB%93/</link>
+      <link>http://lynchwong.com/2016/01/%E5%B0%8F%E7%BB%93/</link>
       <pubDate>Sun, 10 Jan 2016 13:15:34 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/%E5%B0%8F%E7%BB%93/</guid>
+      <guid>http://lynchwong.com/2016/01/%E5%B0%8F%E7%BB%93/</guid>
       <description>&lt;p&gt;最近比较忙，很少贴新的文章出来，之前的有些文章也是怎么简单怎么来。
 &lt;/p&gt;
 
@@ -179,10 +179,10 @@
     
     <item>
       <title>新的开始</title>
-      <link>http://lynchwong.com/blog/2015/09/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</link>
+      <link>http://lynchwong.com/2015/09/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</link>
       <pubDate>Thu, 24 Sep 2015 16:27:33 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/09/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</guid>
+      <guid>http://lynchwong.com/2015/09/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</guid>
       <description>&lt;p&gt;上一篇博客还是8月9号Post的，算算都一个多月都没写博客了，心里真是充满了罪恶感。
 &lt;/p&gt;
 
@@ -193,10 +193,10 @@
     
     <item>
       <title>继续</title>
-      <link>http://lynchwong.com/blog/2015/06/%E7%BB%A7%E7%BB%AD/</link>
+      <link>http://lynchwong.com/2015/06/%E7%BB%A7%E7%BB%AD/</link>
       <pubDate>Tue, 02 Jun 2015 10:42:52 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/%E7%BB%A7%E7%BB%AD/</guid>
+      <guid>http://lynchwong.com/2015/06/%E7%BB%A7%E7%BB%AD/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;这段时间做了两个项目，一个是用Swift+SpriteKit做得小游戏；另外一个是用OC写得App。两个项目都不大，游戏已经发布审核通过了，App今天刚提交。所以现在应该比较空了，就来把之前许下的牛逼慢慢实现。做项目的这段时间也翻译了部分编程指南的文档，主要翻译的还是Objective-C编程指南，其他的列了下大纲什么的。做App的时候使用了CoreData，突然想起这个框架其实是iOS很重要的一个框架，所以也需要做些记录，特别是CoreData多线程安全方面，后面会补一篇CoreData的东西。&lt;/p&gt;
@@ -208,10 +208,10 @@
     
     <item>
       <title>小憩</title>
-      <link>http://lynchwong.com/blog/2015/04/%E5%B0%8F%E6%86%A9/</link>
+      <link>http://lynchwong.com/2015/04/%E5%B0%8F%E6%86%A9/</link>
       <pubDate>Wed, 29 Apr 2015 09:58:31 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/04/%E5%B0%8F%E6%86%A9/</guid>
+      <guid>http://lynchwong.com/2015/04/%E5%B0%8F%E6%86%A9/</guid>
       <description>&lt;p&gt;博主近段时间感觉神经衰弱，平常空闲的时间都在写博客，这段时间想休息下。
 &lt;/p&gt;
 
@@ -222,10 +222,10 @@
     
     <item>
       <title>开篇</title>
-      <link>http://lynchwong.com/blog/2014/12/%E5%BC%80%E7%AF%87/</link>
+      <link>http://lynchwong.com/2014/12/%E5%BC%80%E7%AF%87/</link>
       <pubDate>Fri, 12 Dec 2014 15:24:31 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2014/12/%E5%BC%80%E7%AF%87/</guid>
+      <guid>http://lynchwong.com/2014/12/%E5%BC%80%E7%AF%87/</guid>
       <description>&lt;p&gt;之前用Octopress搭建的博客，后来发现Hexo不错而且基本还没开始写博文，所以就果断换到了Hexo。按着网上的教程走了一遍就搭建好了，然后选了这个Pacman主题后基本就没管博客配置的问题了，博客里面的有些功能是否能用就不太清楚了。
 &lt;/p&gt;
 

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>内存管理 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml</link>
+    <link>http://lynchwong.com/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml</link>
     <description>Recent content in 内存管理 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Advanced Memory Management Programming Guide - Using Autorelease Pool Blocks</title>
-      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---using-autorelease-pool-blocks/</link>
+      <link>http://lynchwong.com/2016/02/advanced-memory-management-programming-guide---using-autorelease-pool-blocks/</link>
       <pubDate>Sun, 28 Feb 2016 15:03:32 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---using-autorelease-pool-blocks/</guid>
+      <guid>http://lynchwong.com/2016/02/advanced-memory-management-programming-guide---using-autorelease-pool-blocks/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmAutoreleasePools.html#//apple_ref/doc/uid/20000047-CJBFBEDI&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -115,10 +115,10 @@ for (NSURL *url in urls) {
     
     <item>
       <title>Advanced Memory Management Programming Guide - Practical Memory Management</title>
-      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---practical-memory-management/</link>
+      <link>http://lynchwong.com/2016/02/advanced-memory-management-programming-guide---practical-memory-management/</link>
       <pubDate>Sun, 28 Feb 2016 15:03:11 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---practical-memory-management/</guid>
+      <guid>http://lynchwong.com/2016/02/advanced-memory-management-programming-guide---practical-memory-management/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -240,7 +240,7 @@ for (NSURL *url in urls) {
 
 &lt;p&gt;Figure 1  An illustration of cyclical references&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/PracticalMemoryManagement/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/PracticalMemoryManagement/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;解决环形持有的问题就是使用弱引用。所谓的弱引用，就是一种非持有的关系，源对象不会对它引用的对象进行持有。&lt;/p&gt;
 
@@ -360,10 +360,10 @@ for (i = 0; i &amp;lt; 10; i++) {
     
     <item>
       <title>Advanced Memory Management Programming Guide - Memory Management Policy</title>
-      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---memory-management-policy/</link>
+      <link>http://lynchwong.com/2016/02/advanced-memory-management-programming-guide---memory-management-policy/</link>
       <pubDate>Sun, 28 Feb 2016 15:02:46 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---memory-management-policy/</guid>
+      <guid>http://lynchwong.com/2016/02/advanced-memory-management-programming-guide---memory-management-policy/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmRules.html#//apple_ref/doc/uid/20000994-BAJHFBGH&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -497,10 +497,10 @@ if (string == nil) {
     
     <item>
       <title>Advanced Memory Management Programming Guide - Introduction</title>
-      <link>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---introduction/</link>
+      <link>http://lynchwong.com/2016/02/advanced-memory-management-programming-guide---introduction/</link>
       <pubDate>Sun, 28 Feb 2016 15:02:20 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/02/advanced-memory-management-programming-guide---introduction/</guid>
+      <guid>http://lynchwong.com/2016/02/advanced-memory-management-programming-guide---introduction/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -514,7 +514,7 @@ if (string == nil) {
 
 &lt;p&gt;尽管内存管理通常认为是在单个独立对象层面上考虑，但是我们的任务实际上是管理“对象图”。你需要确保除了你真的需要的对象之外，内存中没有其它的对象。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/MemoryManagementProgrammingGuideIntroduction/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/MemoryManagementProgrammingGuideIntroduction/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;at-a-glance&#34;&gt;At a Glance&lt;/h2&gt;
 

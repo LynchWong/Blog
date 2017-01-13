@@ -21,7 +21,7 @@
     <meta name="author" content="Lynch Wong">
     <meta name="keywords" content="">
 
-    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    <link rel="icon" href="http://lynchwong.com/favicon.png">
     
 
     
@@ -61,7 +61,7 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
     
     
-    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    <link rel="stylesheet" href="http://lynchwong.com/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
     
     
     
@@ -75,12 +75,12 @@
       <header id="header" data-behavior="4">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+    <a class="header-title-link" href="http://lynchwong.com/">Nobodyknows&#43; 2.5</a>
   </div>
   
     
       <a class="header-right-picture "
-         href="http://lynchwong.com/blog/#about">
+         href="http://lynchwong.com/#about">
     
     
     
@@ -96,7 +96,7 @@
   <div class="sidebar-container">
     
       <div class="sidebar-profile">
-        <a href="http://lynchwong.com/blog/#about">
+        <a href="http://lynchwong.com/#about">
           <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
         </a>
         <h4 class="sidebar-profile-name">Lynch Wong</h4>
@@ -109,7 +109,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+      <a class="sidebar-button-link " href="http://lynchwong.com/">
     
       <i class="sidebar-button-icon fa fa-lg fa-home"></i>
       
@@ -119,7 +119,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+      <a class="sidebar-button-link " href="http://lynchwong.com/archives">
     
       <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
       
@@ -129,7 +129,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+      <a class="sidebar-button-link " href="http://lynchwong.com/categories">
     
       <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
       
@@ -139,7 +139,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+      <a class="sidebar-button-link " href="http://lynchwong.com/tags">
     
       <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
       
@@ -149,7 +149,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+      <a class="sidebar-button-link " href="http://lynchwong.com/#about">
     
       <i class="sidebar-button-icon fa fa-lg fa-question"></i>
       
@@ -175,7 +175,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+      <a class="sidebar-button-link " href="http://lynchwong.com/index.xml">
     
       <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
       
@@ -216,7 +216,7 @@
   
     <span>in</span>
     
-      <a class="category-link" href="http://lynchwong.com/blog/categories/ios">iOS</a>
+      <a class="category-link" href="http://lynchwong.com/categories/ios">iOS</a>
     
   
 
@@ -265,15 +265,15 @@
 <h1 id="建立项目">建立项目</h1>
 
 <p>如下图所示，我们选择*Single View Application*，项目名称叫做*LWPlayer*，语言选择*Swift*。
-<img src="http://lynchwong.com/blog/img/iOSLWPlayer/1.png" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/iOSLWPlayer/1.png" alt="alt text" /></p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/2.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/2.png" alt="alt text" /></p>
 
 <p>然后我们将项目的*Deployment Target*修改为8.0。然后我们删除*Main.storyboard*文件，同时*Main Interface*里面的Main也去掉。因为我们删除了storyboard文件，如果不删除Main的话程序无法启动直接崩溃。</p>
 
 <p>现在项目的界面应该如下所示：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/3.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/3.png" alt="alt text" /></p>
 
 <p>这里我们删除了storyboard文件，我的打算是用代码手写界面，不使用storyboard和xib文件。大家可能都知道用代码写布局很繁琐，所以这里使用第三方的框架*SnapKit*。这个第三方框架其实就是OC版本的*Masonry*，这里就不细讲布局的事情了，参考资料<a href="https://github.com/SnapKit/Masonry"> SnapKit </a>和<a href="https://github.com/SnapKit/Masonry"> Masonry </a>。</p>
 
@@ -289,21 +289,21 @@
 
 <p>我们进入到项目目录执行如下命令，截图如下：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/4.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/4.png" alt="alt text" /></p>
 
 <p>进入到项目目录后我们创建了*Cartfile*文件，然后在里面添加需要的第三方库。如下所示：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/5.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/5.png" alt="alt text" /></p>
 
 <p>然后*:wq*保存退出，然后执行*carthage update*命令进行安装编译。</p>
 
 <p>这里就算是安装编译完成了，我们可以进到工程目录里面看下编程生成的二进制framework文件。如下图所示：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/6.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/6.png" alt="alt text" /></p>
 
 <p>不仅有iOS的，还有Mac的。现在我们还差最后一步，就是将framework添加到我们的工程。设置*Framework Search Paths<em>是最简单的方法，告诉工程到那里去找这些framework。设置为</em>$(SRCROOT)/Carthage/Build/iOS*，如果是OS X就把iOS改成Mac。如下所示：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/7.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/7.png" alt="alt text" /></p>
 
 <p>这一步和官方说明的不一样，按照官方的方法，每次添加了新的framework都要自己到Xcode里面进行手动添加。</p>
 
@@ -361,15 +361,15 @@ class ViewController: UIViewController {
 
 <p>编译运行后会发现如下错误，</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/8.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/8.png" alt="alt text" /></p>
 
 <p>这里是因为之前修改*Framework Search Paths*导致的，其实前面的这一步貌似并没有效果。所以我们还是得按照官方的来，如下所示：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/9.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/9.png" alt="alt text" /></p>
 
 <p>我们在*Embedded Binaries*这里将*Carthage/Build/iOS/SnapKit.framework*添加进来，然后编译运行，截图如下：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/10.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/10.png" alt="alt text" /></p>
 
 <h1 id="项目结构">项目结构</h1>
 
@@ -423,7 +423,7 @@ class LWPlayerViewController: UIViewController {
 
 <p>运行后截图如下：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/11.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/11.png" alt="alt text" /></p>
 
 <p>你可能发现我们设置了导航栏的外观，所以我们接下来就新建*LWNavigationController*继承自*UINavigationController*，代码如下：</p>
 
@@ -491,7 +491,7 @@ class LWNavigationController: UINavigationController {
 
 <p>运行后模拟器截图：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/12.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/12.png" alt="alt text" /></p>
 
 <h1 id="视频资源">视频资源</h1>
 
@@ -505,11 +505,11 @@ class LWNavigationController: UINavigationController {
 
 <p><a href="https://github.com/robbiehanson/CocoaHTTPServer">CocoaHTTPServer</a> ，这里是下载地址，下载完成后我们将<strong>Core</strong>，<strong>Extensions</strong>，<strong>Vendor</strong>放到新建的文件夹<strong>CocoaHTTPServer</strong>中，其他的东西我们不需要了。然后将这个文件夹拖放到工程中，如下图所示：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/13.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/13.png" alt="alt text" /></p>
 
 <p>接下来我们添加<strong>libxml2.tbd</strong>，不添加会报找不到文件的错。添加后如下图所示。</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/14.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/14.png" alt="alt text" /></p>
 
 <p>因为这个第三方库是OC，如果要混编的话我们需要添加桥接头文件，<strong>LWPlayer-Bridging-Header.h</strong>。修改文件内容的代码如下：</p>
 
@@ -518,7 +518,7 @@ class LWNavigationController: UINavigationController {
 
 <p>然后我们还要配置下头文件，如下所示：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/15.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/15.png" alt="alt text" /></p>
 
 <p>然后我们参考<a href="https://github.com/viki-org/VKVideoPlayer"> VKVideoPlayer </a>的<strong>HTTPStreamingServer</strong>，代码如下：</p>
 
@@ -571,7 +571,7 @@ class HTTPStreamingServer: NSObject {
 
 <p>然后我们将一些视频资源拖到项目中，这里我们就用<strong>VKVideoPlayer</strong>的资源，将<strong>web</strong>这个文件夹拖到我们项目中，注意我截图中的箭头，如下所示：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/16.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/16.png" alt="alt text" /></p>
 
 <h1 id="播放器">播放器</h1>
 
@@ -679,11 +679,11 @@ var hideTool = false
 
 <p>运行后截图如下：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/17.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/17.png" alt="alt text" /></p>
 
 <p>大家都知道HTTP请求在iOS9里面有变化，所以有的同学可能没有看到视频播放的画面；同样的<strong>VKVideoPlayer</strong>你可能也看不到视频播放，都是相同的原因，大家搜索都能解决。设置下<strong>.plist</strong>文件就可以了，如下图所示：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/18.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/18.png" alt="alt text" /></p>
 
 <p>注意这两个字段的类型，一个是字典类型，一个是布尔类型。</p>
 
@@ -816,7 +816,7 @@ func fullAction(sender: UIButton) {
 
 <p>然后我们将<strong>viewDidLoad()</strong>方法里面的播放的代码<strong>player.play()</strong>去掉，运行之后截图如下：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/19.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/19.png" alt="alt text" /></p>
 
 <h2 id="强制横屏">强制横屏</h2>
 
@@ -936,7 +936,7 @@ func fullAction(sender: UIButton) {
 
 <p>运行之后截图如下：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/20.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/20.png" alt="alt text" /></p>
 
 <p>现在只能横屏，还不能返回到竖屏的状态，接下来修改<strong>fullAction(sender: UIButton)</strong>方法，代码如下：</p>
 
@@ -980,7 +980,7 @@ func fullAction(sender: UIButton) {
 
 <p>运行之后如下所示:</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/21.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/21.png" alt="alt text" /></p>
 
 <h2 id="拖动进度">拖动进度</h2>
 
@@ -1034,9 +1034,9 @@ func fullAction(sender: UIButton) {
 
 <p>运行后截图如下：</p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/22.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/22.png" alt="alt text" /></p>
 
-<p><img src="http://lynchwong.com/blog/img/iOSLWPlayer/23.png" alt="alt text" /></p>
+<p><img src="http://lynchwong.com/img/iOSLWPlayer/23.png" alt="alt text" /></p>
 
 <p>第一张图启动后没有点击播放，然后我们拖动进度条，拖动后的效果就是第二张图。这个进度条不太好拖动，如果你是模拟器，用鼠标点击圆点的左上角比较好拖动。</p>
 
@@ -1054,7 +1054,7 @@ func fullAction(sender: UIButton) {
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">TAGGED IN</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/%E9%9F%B3%E9%A2%91/">音频</a>
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/tags/%E9%9F%B3%E9%A2%91/">音频</a>
 
                   </div>
                 
@@ -1066,7 +1066,7 @@ func fullAction(sender: UIButton) {
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/" data-tooltip="storyboard、xib、AutoLayout实现UILabel自动换行">
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/" data-tooltip="storyboard、xib、AutoLayout实现UILabel自动换行">
           
             <i class="fa fa-angle-left"></i>
             <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -1074,7 +1074,7 @@ func fullAction(sender: UIButton) {
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/" data-tooltip="iOS播放音频">
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/" data-tooltip="iOS播放音频">
           
             <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
             <i class="fa fa-angle-right"></i>
@@ -1091,17 +1091,17 @@ func fullAction(sender: UIButton) {
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
           <i class="fa fa-google-plus"></i>
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
           <i class="fa fa-facebook-official"></i>
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
           <i class="fa fa-twitter"></i>
         </a>
       </li>
@@ -1147,7 +1147,7 @@ func fullAction(sender: UIButton) {
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/" data-tooltip="storyboard、xib、AutoLayout实现UILabel自动换行">
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/" data-tooltip="storyboard、xib、AutoLayout实现UILabel自动换行">
           
             <i class="fa fa-angle-left"></i>
             <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -1155,7 +1155,7 @@ func fullAction(sender: UIButton) {
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/" data-tooltip="iOS播放音频">
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/" data-tooltip="iOS播放音频">
           
             <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
             <i class="fa fa-angle-right"></i>
@@ -1172,17 +1172,17 @@ func fullAction(sender: UIButton) {
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
           <i class="fa fa-google-plus"></i>
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
           <i class="fa fa-facebook-official"></i>
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
           <i class="fa fa-twitter"></i>
         </a>
       </li>
@@ -1209,17 +1209,17 @@ func fullAction(sender: UIButton) {
       <div id="share-options-bar" class="share-options-bar" data-behavior="4">
   <ul class="share-options">
     <li class="share-option">
-      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
         <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
       </a>
     </li>
     <li class="share-option">
-      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
         <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
       </a>
     </li>
     <li class="share-option">
-      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2f2015%2f10%2fios%25E8%25A7%2586%25E9%25A2%2591%25E6%2592%25AD%25E6%2594%25BE%2f">
         <i class="fa fa-twitter"></i><span>Share on Twitter</span>
       </a>
     </li>
@@ -1279,7 +1279,7 @@ func fullAction(sender: UIButton) {
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
                 <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
               </a>
               <span class="media-meta">
@@ -1297,7 +1297,7 @@ func fullAction(sender: UIButton) {
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
                 <h3 class="media-heading">Fastlane - 示例</h3>
               </a>
               <span class="media-meta">
@@ -1315,7 +1315,7 @@ func fullAction(sender: UIButton) {
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---match/">
                 <h3 class="media-heading">Fastlane - Match</h3>
               </a>
               <span class="media-meta">
@@ -1334,7 +1334,7 @@ func fullAction(sender: UIButton) {
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---scan/">
                 <h3 class="media-heading">Fastlane - Scan</h3>
               </a>
               <span class="media-meta">
@@ -1353,7 +1353,7 @@ func fullAction(sender: UIButton) {
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---gym/">
                 <h3 class="media-heading">Fastlane - Gym</h3>
               </a>
               <span class="media-meta">
@@ -1372,7 +1372,7 @@ func fullAction(sender: UIButton) {
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---boarding/">
                 <h3 class="media-heading">Fastlane - Boarding</h3>
               </a>
               <span class="media-meta">
@@ -1391,7 +1391,7 @@ func fullAction(sender: UIButton) {
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---pilot/">
                 <h3 class="media-heading">Fastlane - Pilot</h3>
               </a>
               <span class="media-meta">
@@ -1410,7 +1410,7 @@ func fullAction(sender: UIButton) {
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---spaceship/">
                 <h3 class="media-heading">Fastlane - Spaceship</h3>
               </a>
               <span class="media-meta">
@@ -1429,7 +1429,7 @@ func fullAction(sender: UIButton) {
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---cert/">
                 <h3 class="media-heading">Fastlane - Cert</h3>
               </a>
               <span class="media-meta">
@@ -1448,7 +1448,7 @@ func fullAction(sender: UIButton) {
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---produce/">
                 <h3 class="media-heading">Fastlane - Produce</h3>
               </a>
               <span class="media-meta">
@@ -1479,7 +1479,7 @@ func fullAction(sender: UIButton) {
     
   
     
-    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/newcover.jpg');"></div>
+    <div id="cover" style="background-image:url('http://lynchwong.com/images/newcover.jpg');"></div>
   
 
 
@@ -1490,7 +1490,7 @@ func fullAction(sender: UIButton) {
 <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
 
 
-<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+<script src="http://lynchwong.com/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -1515,7 +1515,7 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/10\/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE\/';
+          this.page.url = 'http:\/\/lynchwong.com\/2015\/10\/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE\/';
           
             this.page.identifier = '\/2015\/10\/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE\/'
           

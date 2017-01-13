@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>并发编程 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/index.xml</link>
+    <link>http://lynchwong.com/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/index.xml</link>
     <description>Recent content in 并发编程 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Concurrency Programming Guide - Migrating Away from Threads</title>
-      <link>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---migrating-away-from-threads/</link>
+      <link>http://lynchwong.com/2016/01/concurrency-programming-guide---migrating-away-from-threads/</link>
       <pubDate>Thu, 14 Jan 2016 13:52:12 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---migrating-away-from-threads/</guid>
+      <guid>http://lynchwong.com/2016/01/concurrency-programming-guide---migrating-away-from-threads/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ThreadMigration/ThreadMigration.html#//apple_ref/doc/uid/TP40008091-CH105-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -276,10 +276,10 @@ pthread_getspecific
     
     <item>
       <title>Concurrency Programming Guide - Dispatch Sources</title>
-      <link>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---dispatch-sources/</link>
+      <link>http://lynchwong.com/2016/01/concurrency-programming-guide---dispatch-sources/</link>
       <pubDate>Thu, 14 Jan 2016 13:51:58 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---dispatch-sources/</guid>
+      <guid>http://lynchwong.com/2016/01/concurrency-programming-guide---dispatch-sources/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -382,7 +382,7 @@ dispatch_resume(source);
 
 &lt;p&gt;Table 4-1  Getting data from a dispatch source&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/ConcurrencyProgrammingGuideOperationQueues/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/ConcurrencyProgrammingGuideOperationQueues/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;dispatch_source_get_handle&lt;/strong&gt;：这个函数返回调度源管理的底层系统的数据类型；对于一个描述符的调度队列，这个函数返回一个&lt;strong&gt;int&lt;/strong&gt;类型的值，表示调度源关联的描述符；对于信号调度源，这个函数返回一个&lt;strong&gt;int&lt;/strong&gt;类型，表示最新事件的信号数量；对于进程调度源，这个函数会返回一个&lt;strong&gt;pid_t&lt;/strong&gt;数据结构，表示被监控的进程；对于一个March端口的调度源，这个函数返回一个&lt;strong&gt;mach_port_t&lt;/strong&gt;的数据结构；对于其它的调度源，这个函数的返回值是未定义的。&lt;/li&gt;
@@ -741,10 +741,10 @@ void MyCreateTimer()
     
     <item>
       <title>Concurrency Programming Guide - Dispatch Queues</title>
-      <link>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---dispatch-queues/</link>
+      <link>http://lynchwong.com/2016/01/concurrency-programming-guide---dispatch-queues/</link>
       <pubDate>Thu, 14 Jan 2016 13:51:45 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---dispatch-queues/</guid>
+      <guid>http://lynchwong.com/2016/01/concurrency-programming-guide---dispatch-queues/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -764,7 +764,7 @@ void MyCreateTimer()
 
 &lt;p&gt;Table 3-1  Types of dispatch queues&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/ConcurrencyProgrammingGuideDispatchQueues/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/ConcurrencyProgrammingGuideDispatchQueues/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;串行：串行队列(也称为私有调度队列)按照任务添加的顺序同一时间只执行一个任务。当前正在执行的任务运行在不同的线程上(不同任务的线程可能不同)，调度队列管理这些线程。串行队列通常用来对特定资源进行同步访问。根据需要你可以创建任意多个的串行队列，虽然每个队列本身每次只能执行一个任务，但是各个队列之间是并发执行的。如果你创建了四个串行队列，每个队列同一时间一次只能执行一个任务，但是最多可以有四个任务在并发执行，每个队列有一个任务在执行。关于如何创建串行队列的更多信息，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW6&#34;&gt; Creating Serial Dispatch Queues &lt;/a&gt;。&lt;/li&gt;
@@ -798,7 +798,7 @@ void MyCreateTimer()
 
 &lt;p&gt;Table 3-2  Technologies that use dispatch queues&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/ConcurrencyProgrammingGuideDispatchQueues/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/ConcurrencyProgrammingGuideDispatchQueues/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Dispatch groups&lt;/strong&gt;：是监控一组Block对象完成的方式。(你可以根据你的需要异步或者同步的监控你的Block。)组提供了一种有用的同步机制，你的代码可以等待其它任务的完成。更多关于使用组的信息，参见&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW25&#34;&gt; Waiting on Groups of Queued Tasks &lt;/a&gt;。&lt;/li&gt;
@@ -1151,10 +1151,10 @@ dispatch_release(group);
     
     <item>
       <title>Concurrency Programming Guide - Operation Queues</title>
-      <link>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---operation-queues/</link>
+      <link>http://lynchwong.com/2016/01/concurrency-programming-guide---operation-queues/</link>
       <pubDate>Thu, 14 Jan 2016 13:51:30 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---operation-queues/</guid>
+      <guid>http://lynchwong.com/2016/01/concurrency-programming-guide---operation-queues/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -1174,7 +1174,7 @@ dispatch_release(group);
 
 &lt;p&gt;Table 2-1  Operation classes of the Foundation framework&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/ConcurrencyProgrammingGuideOperationQueues/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/ConcurrencyProgrammingGuideOperationQueues/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;NSInvocationOperation&lt;/strong&gt;：基于你应用程序的一个对象和selector来创建一个操作对象。如果你已经有存在的方法执行需要的任务，你可以使用这个类。因为这个类不要求子类化，所以你可以使用这个类动态的创建操作对象。&lt;/li&gt;
@@ -1349,7 +1349,7 @@ dispatch_release(group);
 
 &lt;p&gt;Table 2-2  Methods to override for concurrent operations&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/ConcurrencyProgrammingGuideOperationQueues/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/ConcurrencyProgrammingGuideOperationQueues/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;start&lt;/strong&gt;：(必须)所有的并发操作都必须重写这个方法，用自定义的实现替换掉默认的行为。通过调用&lt;strong&gt;start&lt;/strong&gt;方法来手动执行一个操作。因此，这个方法的实现就是操作开始的起点，设置线程及可执行环境来执行你的任务。你的实现在任何时候都不能调用&lt;strong&gt;super&lt;/strong&gt;的方法。&lt;/li&gt;
@@ -1690,10 +1690,10 @@ dispatch_release(group);
     
     <item>
       <title>Concurrency Programming Guide - Concurrency and Application Design</title>
-      <link>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---concurrency-and-application-design/</link>
+      <link>http://lynchwong.com/2016/01/concurrency-programming-guide---concurrency-and-application-design/</link>
       <pubDate>Thu, 14 Jan 2016 13:51:15 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---concurrency-and-application-design/</guid>
+      <guid>http://lynchwong.com/2016/01/concurrency-programming-guide---concurrency-and-application-design/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/ConcurrencyandApplicationDesign/ConcurrencyandApplicationDesign.html#//apple_ref/doc/uid/TP40008091-CH100-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -1865,10 +1865,10 @@ dispatch_release(group);
     
     <item>
       <title>Concurrency Programming Guide - Introduction</title>
-      <link>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---introduction/</link>
+      <link>http://lynchwong.com/2016/01/concurrency-programming-guide---introduction/</link>
       <pubDate>Thu, 14 Jan 2016 13:44:09 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/concurrency-programming-guide---introduction/</guid>
+      <guid>http://lynchwong.com/2016/01/concurrency-programming-guide---introduction/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/mac/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008091-CH1-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 

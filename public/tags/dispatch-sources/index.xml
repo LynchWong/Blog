@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Dispatch Sources on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/dispatch-sources/index.xml</link>
+    <link>http://lynchwong.com/tags/dispatch-sources/index.xml</link>
     <description>Recent content in Dispatch Sources on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/dispatch-sources/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/dispatch-sources/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>关于使用Dispatch Sources的一个BUG</title>
-      <link>http://lynchwong.com/blog/2016/03/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8dispatch-sources%E7%9A%84%E4%B8%80%E4%B8%AAbug/</link>
+      <link>http://lynchwong.com/2016/03/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8dispatch-sources%E7%9A%84%E4%B8%80%E4%B8%AAbug/</link>
       <pubDate>Thu, 03 Mar 2016 09:26:11 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/03/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8dispatch-sources%E7%9A%84%E4%B8%80%E4%B8%AAbug/</guid>
+      <guid>http://lynchwong.com/2016/03/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8dispatch-sources%E7%9A%84%E4%B8%80%E4%B8%AAbug/</guid>
       <description>&lt;p&gt;之前有在这篇博客&lt;a href=&#34;http://lynchwong.com/2016/01/29/URL-Session-Programming-Guide-Introduction/&#34;&gt; URL Session Programming Guide - Introduction &lt;/a&gt;提到在翻译完&lt;a href=&#34;http://lynchwong.com/2016/01/14/Concurrency-Programming-Guide-Introduction/&#34;&gt; 并发变成指南 &lt;/a&gt;后有要做一个图片轮播的需求，是使用的&lt;strong&gt;DISPATCH_SOURCE_TYPE_TIMER&lt;/strong&gt;类型的Dispatch Sources来做时间控制进行轮播的而没有使用NSTimer。这个在后来引起了一个BUG，实在是无心之过。
 &lt;/p&gt;
 

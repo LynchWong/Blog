@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>提交app包 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/%E6%8F%90%E4%BA%A4app%E5%8C%85/index.xml</link>
+    <link>http://lynchwong.com/tags/%E6%8F%90%E4%BA%A4app%E5%8C%85/index.xml</link>
     <description>Recent content in 提交app包 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/%E6%8F%90%E4%BA%A4app%E5%8C%85/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/%E6%8F%90%E4%BA%A4app%E5%8C%85/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>iOS提交App包</title>
-      <link>http://lynchwong.com/blog/2015/10/ios%E6%8F%90%E4%BA%A4app%E5%8C%85/</link>
+      <link>http://lynchwong.com/2015/10/ios%E6%8F%90%E4%BA%A4app%E5%8C%85/</link>
       <pubDate>Tue, 27 Oct 2015 15:45:05 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/10/ios%E6%8F%90%E4%BA%A4app%E5%8C%85/</guid>
+      <guid>http://lynchwong.com/2015/10/ios%E6%8F%90%E4%BA%A4app%E5%8C%85/</guid>
       <description>&lt;p&gt;前两天打包项目提交App Store的时候一直提交不上去，根据提示的错误信息网上都说是网络的问题，多提交几次就行了。所以刚开始的时候并不在意，过一会再提交。
 &lt;/p&gt;
 

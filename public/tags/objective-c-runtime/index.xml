@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Objective C Runtime on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/objective-c-runtime/index.xml</link>
+    <link>http://lynchwong.com/tags/objective-c-runtime/index.xml</link>
     <description>Recent content in Objective C Runtime on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/objective-c-runtime/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/objective-c-runtime/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Objective-C Runtime Programming Guide</title>
-      <link>http://lynchwong.com/blog/2015/04/objective-c-runtime-programming-guide/</link>
+      <link>http://lynchwong.com/2015/04/objective-c-runtime-programming-guide/</link>
       <pubDate>Mon, 27 Apr 2015 14:46:10 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/04/objective-c-runtime-programming-guide/</guid>
+      <guid>http://lynchwong.com/2015/04/objective-c-runtime-programming-guide/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Introduction/Introduction.html&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -111,7 +111,7 @@
 &lt;p&gt;插图3 - 1说明了这些类的元素和对象的结构体。&lt;/p&gt;
 
 &lt;p&gt;Figure 3-1  Messaging Framework
-&lt;img src=&#34;http://lynchwong.com/blog/img/ObjectiveCRuntime/messaging1.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/ObjectiveCRuntime/messaging1.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;当一个消息被发送给一个对象时，消息传递函数会根据对象的*isa*指针找到指向的类的结构体，然后在消息分发表中查找方法的选择器。如果在那里找不到选择器，*objc_msgSend*函数会根据指向父类的指针，在父类的消息分发表中查找。如果一直查找失败将会导致*objc_msgSend*函数查找到*NSObject*类。一旦查找到对应的选择器，这个函数就会调用分发表里对应的方法地址，传递接收者对象的数据结构。&lt;/p&gt;
 
@@ -273,7 +273,7 @@ for ( i = 0 ; i &amp;lt; 1000 ; i++ )
 
 &lt;p&gt;转发模拟继承，可以用来为Objective-C编程提供多继承。如图5 - 1所示，一个对象通过转发来响应消息，通过借用或者继承定义实现在另外一个类中的方法。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/ObjectiveCRuntime/forwarding.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/ObjectiveCRuntime/forwarding.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在这个插图中，*Warrior*类的实例转发了*negotiate*消息给*Diplomat*类的实例。*Warrior*将会像*Diplomat*一样。就像会响应*negotiate*消息，响应了所有(尽管所有的工作都是*Diplomat*做得)。&lt;/p&gt;
 

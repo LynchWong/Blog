@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>核心动画 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/%E6%A0%B8%E5%BF%83%E5%8A%A8%E7%94%BB/index.xml</link>
+    <link>http://lynchwong.com/tags/%E6%A0%B8%E5%BF%83%E5%8A%A8%E7%94%BB/index.xml</link>
     <description>Recent content in 核心动画 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/%E6%A0%B8%E5%BF%83%E5%8A%A8%E7%94%BB/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/%E6%A0%B8%E5%BF%83%E5%8A%A8%E7%94%BB/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Core Animation Programming Guide</title>
-      <link>http://lynchwong.com/blog/2015/04/core-animation-programming-guide/</link>
+      <link>http://lynchwong.com/2015/04/core-animation-programming-guide/</link>
       <pubDate>Mon, 27 Apr 2015 14:43:47 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/04/core-animation-programming-guide/</guid>
+      <guid>http://lynchwong.com/2015/04/core-animation-programming-guide/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004514-CH1-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;a href=&#34;http://blog.csdn.net/mad2man/article/details/16928891&#34;&gt;Core Animation编程指南&lt;/a&gt;
 &lt;/p&gt;
@@ -26,7 +26,7 @@
 
 &lt;p&gt;如果你正在开发一个iOS应用，你就已经使用到了Core Animation；如果你开发的是OS X应用，你仅需小小的付出就可以利用Core Animation的强大功能。如下图，Core Animation位于AppKit和UIKit的底层。它被紧密的集成到了Cocoa和Cocoa Touch视图工作流中。虽然被紧密的集成，Core Animation也存在扩展功能的接口，这些接口暴露给了应用的视图。使用这些接口能让你更细粒度地控制应用中的动画。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;概览&#34;&gt;概览&lt;/h2&gt;
 
@@ -76,7 +76,7 @@
 &lt;p&gt;大部分图层不做实际的绘图操作。相反，图层捕获应用的内容并缓存它们到位图中。位图有时也被称为储备（backing store）。当你随后改变了一个图层的属性值，你做的所有只是改变了与图层对象相关联的状态信息。当你的更改触发了一个动画，Core Animation传递图层的位图和图层的状态给图形处理硬件。图形处理器所做的工作是使用获得的信息渲染位图，如图1-1所示，用图形处理硬件操纵位图要比图形处理软件能获得更高的动画效果。&lt;/p&gt;
 
 &lt;p&gt;Figure 1-1  How Core Animation draws content
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;因为操纵的是静态的位图，基于图层的绘图和基于视图的绘图在技术上有明显的不同。对基于视图的绘图，对视图的改变经常会触发调用视图的drawRect：方法以重绘视图内容。但是此种方式的代价相对较高，因为它是CPU在主线程上的操作。Core Animation通过尽可能的使用图形硬件操纵缓存后的位图来避免了这种开销，从而完成相同或相似的效果。
 虽然Core Animation尽可能的使用缓存后的内容，但也必须提供初始内容并不时地更新它。这里有几种方法能够为你的应用程序提供一个带有内容的图层对象，详见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/SettingUpLayerObjects/SettingUpLayerObjects.html#//apple_ref/doc/uid/TP40004514-CH13-SW4&#34;&gt;Providing a Layer’s Contents&lt;/a&gt;。&lt;/p&gt;
@@ -86,7 +86,7 @@
 &lt;p&gt;图层的数据和状态信息是从图层内容的可视呈现中被分离了出来的。这种分离性给了Core Animation介入以及从旧的属性值动画到新的属性值的机会。例如改变一个图层的position属性会引起Core Animation将图层从当前的位置移动到新的具体位置。对其他属性做相似的改变将引起适当的动画效果。图1-2展示了一些可以执行在图层上的动画类型。可以触发动画的图层属性列表，详见&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/AnimatableProperties/AnimatableProperties.html#//apple_ref/doc/uid/TP40004514-CH11-SW1&#34;&gt;Animatable Properties&lt;/a&gt;。&lt;/p&gt;
 
 &lt;p&gt;Figure 1-2  Examples of animations you can perform on layers
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在动画运行期间，Core Animation使用硬件帮你完成每一帧的绘制工作。你只需要指定动画的开始点和结束点，剩下的交由Core Animation完成。如若需要，你也可以指定自定义时间信息和动画参数，如果你没有指定， Core Animation会提供适当的默认值。&lt;/p&gt;
 
@@ -105,14 +105,14 @@
 &lt;p&gt;图层的bounds和frame矩形的方向始终与底层平台的默认方向相匹配。图1-3显示了iOS和OS X平台上边界矩形的默认方向。在iOS中，默认情况下边界矩形的原点在图层的左上角。而OS X上边界矩形的原点则在左下角。如果你在iOS和OS X版本的app之间共享Core Animation代码，一定要对此种情况做区别对待。&lt;/p&gt;
 
 &lt;p&gt;Figure 1-3  The default layer geometries for iOS and OS X
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;注意到图1-3中position属性被定位在图层的中间位置。position属性的变化参照图层的anchorPoint属性。&lt;/p&gt;
 
 &lt;p&gt;锚点是使用单位坐标系统的属性之一。Core Animation中使用单位坐标表示的属性值可能会因为图层的尺寸变化而发生改变。你可以把单位坐标当做是总数的百分比。在单位坐标系统空间中每一个坐标的取值范围在0.0和1.0之间。比如说，沿着x轴，左侧是0.0，右侧是1.0.沿着y轴，单位坐标值方向的不同依赖于具体的平台。如图1-4所示。&lt;/p&gt;
 
 &lt;p&gt;Figure 1-4  The default unit coordinate systems for iOS and OS X
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;注意：直到OS X 10.8才出现了geometryFlipped属性，该属性可以改变默认图层y坐标的方向。当翻转变换被调用时，使用该属性来调整图层的方向有的时候是必需的。如果父视图使用了翻转变换，它的子视图内容（以及它对应的图层）将经常被颠倒。在这种情况下，设置子图层的geometryFlipped属性为YES是一种修正该问题最简单的方法。在OS X 10.8及以上版本，AppKit负责管理该属性，你不应该更改它。对于iOS app，不推荐使用geometryFlipped属性。&lt;/p&gt;
 
@@ -125,12 +125,12 @@
 &lt;p&gt;图1-5说明了改变锚点对图层position属性的影响。尽管图层没有在它的父边界内移动，将锚点从中心点移动到图层边界的原点将改变position属性值。&lt;/p&gt;
 
 &lt;p&gt;Figure 1-5  How the anchor point affects the layer’s position property
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;图1-6显示了锚点的变化是如何影响到应用在图层上的变换。当你对图层应用了一个旋转变换，图层将围绕中心点旋转。因为默认情况下，锚点被设定在图层的中心位置。一般创建这类旋转行为正是你所期望的。然而如果你改变了锚点值，旋转的结果也会发生变化。&lt;/p&gt;
 
 &lt;p&gt;Figure 1-6  How the anchor point affects layer transformations
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;图层可在三维空间中操作&#34;&gt;图层可在三维空间中操作&lt;/h3&gt;
 
@@ -139,12 +139,12 @@
 &lt;p&gt;变换行为由多个坐标确定，这些坐标通过一个数字矩阵来获取，获取的坐标结果是原始点被变换后的版本。因为Core Animation的值可在三维空间中指定，每个坐标点有四个值，这四个值需要和一个4*4的矩阵相乘。如图1-7所示。在Core Animation中，图中的变换由CATransform3D类型表示。幸运的是，你不需要直接更改这个结构中的域值来执行标准变换。Core Animation为创建缩放、平移、旋转矩阵以及矩阵比较提供了综合的函数集。除了使用函数操纵变换。Core Animation扩展了键值编码以支持你使用键路径更改一个变换操作。&lt;/p&gt;
 
 &lt;p&gt;Figure 1-7  Converting a coordinate using matrix math
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;图1-8显示了对一些常见的变换矩的配置。任何坐标与单位矩阵相乘将返回完全相同的坐标。坐标如何被更改完全依赖于你变化的矩阵因子。比如，为了仅在X轴上平移，你只需对变换矩阵的tx因子应用一个非零值，并让ty和tz值为0。如果是旋转，应用一个旋转角度的正弦和余弦值。&lt;/p&gt;
 
 &lt;p&gt;Figure 1-8  Matrix configurations for common transformations
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;不同的图层树反映了不同的动画状态&#34;&gt;不同的图层树反映了不同的动画状态&lt;/h2&gt;
 
@@ -156,12 +156,12 @@
 &lt;p&gt;每一个图层对象集合被组织在一个层次结构中，类似于app中的视图。事实上，在一个所有视图都支持图层功能的app来说，每一个树的初始结构完全与图层的层次相匹配。一个app可以添加另外的图层对象，因此图层与视图是不相关联的。可以按照需求将图层对象插入到指定的视图层级中。你可能为了优化app内容的性能而选择加入图层对象而非视图，原因在于图层的开销要比视图低。图1-9展示了出现在一个简单iOS app的图层分解图。在示例中窗口包含了一个内容视图，内容视图包含了一个按钮视图和两个独立的图层对象。每一个视图拥有一个相对应的构成图层层次的图层对象。&lt;/p&gt;
 
 &lt;p&gt;Figure 1-9  Layers associated with a window
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在图层树中的每一个对象，在渲染树和呈现树中也存在一个与之匹配的对象。如图1-10所示。正如之前提到过的，app主要与图层树中的对象进行交互，但可能有时会访问呈现树中的对象。具体地，访问图层树中对象的presentationLayer属性将返回一个在呈现树中相对应的对象。你可能会通过该对象获取在动画执行过程中的某一时刻的属性值。&lt;/p&gt;
 
 &lt;p&gt;Figure 1-10  The layer trees for a window
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;重要：只在动画运行时访问呈现树中的对象。当动画在进行中，呈现树就包含了图层显示在屏幕上的那一刻的值。该行为与图层树不同，图层树永远只表示最终的目标值。&lt;/p&gt;
 
@@ -218,7 +218,7 @@
 &lt;p&gt;Core Animation定义了许多标准的图层类，每一个图层类都有着各自的应用场景。CALayer类是所有图层对象的根类，它定义了所有图层对象必须支持的行为，它也是图层支持的视图的默认图层类型。你可以指定表2-1中的某一个图层类以改变默认的图层类型。&lt;/p&gt;
 
 &lt;p&gt;Table 2-1  CALayer subclasses and their uses
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;提供图层的内容&#34;&gt;提供图层的内容&lt;/h2&gt;
 
@@ -309,12 +309,12 @@
 &lt;p&gt;图2-1 显示了基于位置的引力设置如何影响你的图片。除了kCAGravityCenter约束，每一个约束都将图片固定在图层矩形边界的某个边缘或角落。kCAGravityCenter约束将图片居中在图层中。基于位置的引力约束没有一个选项会缩放图片。所以图片总是和它原始的尺寸一样的情况下被渲染。如果你的图片大于图层的边界，这可能导致部分图片被裁减；如果图片小于矩形边界，如果设置了背景颜色的话，则图片没有覆盖到得区域则显示图层的背景颜色。&lt;/p&gt;
 
 &lt;p&gt;Figure 2-1  Position-based gravity constants for layers
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;图2-2显示了基于缩放的引力约束如何影响你的图片。如果图片不是准确匹配图层矩形边界范围内，所有这些约束都会缩放你的图片。这些模式选项之间所不同的是如何处理图片原始的长宽比。一些模式保留原始图片的长宽比，有些则不保留。默认情况是，图层的contentsGravity属性被设置为kCAGravityResize常量值，它是唯一一个不保留图片的长宽比的选项。&lt;/p&gt;
 
 &lt;p&gt;Figure 2-2  Scaling-based gravity constants for layers
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;使用高分辨率的图片&#34;&gt;使用高分辨率的图片&lt;/h3&gt;
 
@@ -335,7 +335,7 @@
 &lt;p&gt;图层除了可以显示基于图片的内容，还可以显示被填充的背景、描边的边框。背景被渲染在图层的内容图片的后方，边框被渲染在内容图片的前方。如图2-3显示。如果图层包含子层，子层也会显示在边框的下方。因为背景颜色是处在图片的后方的，背景会从图片的任何透明的地方透射出来。&lt;/p&gt;
 
 &lt;p&gt;Figure 2-3  Adding a border and background to a layer
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;清单2-5显示了设置图层的边框和背景颜色代码。所有的这些属性都是可动画的。&lt;/p&gt;
 
@@ -355,7 +355,7 @@ myLayer.borderWidth = 3.0;
 &lt;p&gt;你可以通过给图层添加一个圆角半径来创建一个圆角矩形。圆角半径是一个可视的装饰，它遮罩了图层边界矩形的部分区域以允许底层内容的显示。如图2-4所示，因为它包括了应用一个透明蒙版，圆角半径不影响图层的contents属性中得图片，除非masksToBounds属性被设置为YES。然而，圆角半径总是影响图层的背景颜色和边框的绘图方式。&lt;/p&gt;
 
 &lt;p&gt;Figure 2-4  A corner radius on a layer
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;为了设置圆角半径，只需要为图层的cornerRadius属性设置一个值。你指定的半径值是以点衡量的，并且圆角半径会应用到图层的四个角上。&lt;/p&gt;
 
@@ -366,7 +366,7 @@ myLayer.borderWidth = 3.0;
 &lt;p&gt;图层阴影的阴影透明度shadowOpacity默认被设置为0，这有效地隐藏了阴影。改变透明度为非0值将引起Core Animaiton绘制阴影。因为默认情况下，阴影被直接定位在图层的下方。所以你可能为了能够看到阴影而改变阴影的偏移量。你指定的偏移量被应用到图层上使用的是图层的本地坐标系。本地坐标系在iOS和OS X上的表现是不同的。如图2-5所示，图中显示了一个带有偏下偏右阴影的图层。在iOS中，这需要指定一个正值，而在OS X中需要指定一个负值。&lt;/p&gt;
 
 &lt;p&gt;Figure 2-5  Applying a shadow to a layer
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/17.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/17.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;当给图层添加阴影，阴影就是图层内容的一部分，但实际上阴影扩展到了图层边界矩形的外围。结果是，如果你启用了图层的masksToBounds属性，围绕边缘的阴影将被裁减掉。如果你的图层中含有任何透明的内容，这将引起一个古怪的效果，图层下方的阴影部分依然可以看见，但是超出图层边界的部分就没有了。如果既想要阴影又要启用maskToBounds为YES，那么你可以使用两个图层。第一个是包含内容的图层，将该图层的maskToBounds属性设置为YES，然后创建一个相同尺寸且含有阴影效果的第二个图层，最后调用第二个图层的addSublayer方法将第一个图层嵌入到第二个图层中就可以了。&lt;/p&gt;
 
@@ -428,7 +428,7 @@ theLayer.opacity = 0.0;
 &lt;p&gt;图3-1显示了一个图层position属性的5秒动画。position是动画跟随一个路径。使用一个CGPathRef数据类型指定的。这个动画的代码如清单3-3所示。&lt;/p&gt;
 
 &lt;p&gt;Figure 3-1  5-second keyframe animation of a layer’s position property
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/18.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/18.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Listing 3-3  Creating a bounce keyframe animation&lt;/p&gt;
 
@@ -579,7 +579,7 @@ group.duration = 5.0;
 &lt;p&gt;每个图层对象都拥有添加、插入和移除子图层的方法。表4-1是对这些方法和行为的总结。&lt;/p&gt;
 
 &lt;p&gt;Table 4-1  Methods for modifying the layer hierarchy
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/19.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/19.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;当需要操作图层对象时你可以使用前述的这些方法。你不能使用这些方法去排列属于layer-backed视图的图层。然而，一个layer-backed视图可以作为你创建的独立图层的父图层。&lt;/p&gt;
 
@@ -622,7 +622,7 @@ myLayer.position = CGPointMake(200,200);
 &lt;p&gt;如果圆角半径被指定的话，一个图层的裁减蒙版形状包括图层的圆角半径。图4-3说明了masksToBounds属性如何影响一个拥有圆角半径的图层。当masksToBounds属性被设置为NO，整个子图层被显示，尽管它已经超出了它的父图层的边界。将masksToBounds属性设为YES，将引起超出父图层的子图层内容被裁减掉。&lt;/p&gt;
 
 &lt;p&gt;Figure 4-3  Clipping sublayers to the parent’s bounds
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/20.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/20.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;在图层之间转换坐标值&#34;&gt;在图层之间转换坐标值&lt;/h2&gt;
 
@@ -925,7 +925,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;一个图层的几何属性指定它相对于它的父图层被显示的方式。几何属性也指定了图层圆角的半径以及应用到图层和它的子层的变换。图A-1显示了示例图层的边界矩形。&lt;/p&gt;
 
 &lt;p&gt;Figure A-1  Layer geometry
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/21.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/21.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;下面列出的CALayer属性制定了一个图层的几何结构：
 * bounds
@@ -943,7 +943,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;Core Animation首先会渲染图层的背景。你可以为背景指定一个颜色。在OS X中，你也可以指定一个应用到背景内容的Core Image过滤器。图A-2显示了2个示例图层的版本。在左边的图层设置了backgroundColor属性，而右边的没有设置背景颜色。但有一个边框和一个应用在图层backgroundFilters属性上的挤压变形滤镜。&lt;/p&gt;
 
 &lt;p&gt;Figure A-2  Layer with background color
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/22.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/22.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;背景滤镜被应用到位于图层背后的内容上。该内容主要是由父图层的内容组成。你可能使用一个背景滤镜让前景图层内容突出；比如说，通过应用一个模糊滤镜。&lt;/p&gt;
 
@@ -958,7 +958,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;如果图层有任何的内容，该内容将被渲染在背景颜色的上面。你可以通过直接设置一副位图提供图层内容，或使用一个代理指定内容，或是子类化图层并直接绘制内容。并且你可以使用许多不同的绘图技术（包括Quartz、OpernGL、Quartz合成器）提供内容。图A-3显示了一个示例图层，它的内容是通过直接设置一副位图。位图内容由一个右下角是一个机器人图标的大透明空间构成。&lt;/p&gt;
 
 &lt;p&gt;Figure A-3  Layer displaying a bitmap image
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/23.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/23.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;带有圆角半径的图层不会自动裁剪它们的内容；然而，设置图层的masksToBounds属性为YES将引起图层裁减掉圆角以外的内容。&lt;/p&gt;
 
@@ -972,7 +972,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;图层可能包含一个或更多的孩子图层，孩子图层被称为子图层（sublayer）。子图层被递归地渲染并相对于父图层的边界矩形进行定位。另外，Core Animation应用父图层的sublayerTransform给每一个子图层，sublayerTransform相对于父图层的锚点。你可以使用子图层变换应用透视，应用于所有图层的其他效果也是一样的。图A-4显示了一个含有2个子图层的示例图层。左边的版本包含了背景颜色，右边的版本没有背景颜色。&lt;/p&gt;
 
 &lt;p&gt;Figure A-4  Layer displaying the sublayers content
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/24.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/24.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;设置图层的masktSToBounds属性为YES将引起超出图层边界的任何子图层被裁减掉。&lt;/p&gt;
 
@@ -986,7 +986,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;一个图层可以使用一个指定的颜色和宽显示一个可选的边框。边框按照图层的边界矩形，并会将圆角半径值考虑进去。图A-5显示了一个添加了边框的示例图层。&lt;/p&gt;
 
 &lt;p&gt;Figure A-5  Layer displaying the border attributes content
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/25.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/25.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;下面的CALayer属性将影响图层边框的显示
 * borderColor
@@ -999,7 +999,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;在OS X平台，或许你可能为图层内容应用滤镜效果。使用自定义的合成滤镜指定图层的内容与它的底部图层内容的混合方法。图A-6显示了一个应用了Core Image的分色器滤镜图层。&lt;/p&gt;
 
 &lt;p&gt;Figure A-6  Layer displaying the filters properties
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/26.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/26.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;下面的CALayer属性指定一个图层内容的滤镜：
 * filters
@@ -1014,7 +1014,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;左边和中间的版本包含一个背景颜色，所以阴影仅是显示在图层边框的周围。然而，右边的版本不包括背景颜色，在这种情况下，阴影将应用于图层的内容、边框以及子图层。&lt;/p&gt;
 
 &lt;p&gt;Figure A-7  Layer displaying the shadow properties
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/27.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/27.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;下面的CALayer属性影响图层阴影的显示：
 * shadowColor
@@ -1030,7 +1030,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;一个图层的不透明度属性决定了多少背景内容透过图层被显示。图A-8显示了一个示例图层，它的不透明度被设置为0.5。这将允许部分背景图片穿透显示出来。&lt;/p&gt;
 
 &lt;p&gt;Figure A-8  Layer including the opacity property
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/28.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/28.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;下面的CALyaer属性指定图层的不透明度：
 * opacity&lt;/p&gt;
@@ -1040,7 +1040,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;你可以使用一个蒙版遮蔽所有或部分图层内容。蒙版本身是一个图层对象，它的alpha通道被用于决定被遮蔽的内容和被透射的内容。蒙版图层内容的不透明区域允许下方的图层内容穿透显示 而透明区域部分或完全地遮蔽了下方的内容（类似于PS里面的蒙版白的为显示区域，黑的为隐藏区域）。图A-9显示了由一个蒙版图层和两个不同的背景合成的示例图层。左边的版本，图层的透明度设置为1.0。右边的版本，图层的透明度为0.5，导致穿透图层蒙版部分的背景内容数量减少。&lt;/p&gt;
 
 &lt;p&gt;Figure A-9  Layer composited with the mask property
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/29.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/29.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;下面的CALayer属性用于指定一个图层的蒙版：
 * mask&lt;/p&gt;
@@ -1056,17 +1056,17 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;表B-1 列出了你可能考虑动画的CALayer类的属性。表中也列出了每一个属性的默认动画对象类型，默认的动画对象被创建以执行一个隐式动画。&lt;/p&gt;
 
 &lt;p&gt;Table B-1  Layer properties and their default animations
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/30.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/30.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;表B-2 列出了用于默认的基于属性的动画的动画属性&lt;/p&gt;
 
 &lt;p&gt;Table B-2  Default Implied Basic Animation
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/31.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/31.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;表B-3列出了默认基于过渡动画的动画对象的配置&lt;/p&gt;
 
 &lt;p&gt;Table B-3  Default Implied Transition
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/32.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/32.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;cifilter可动画属性&#34;&gt;CIFilter可动画属性&lt;/h2&gt;
 
@@ -1112,7 +1112,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;当键的值的数据类型是一个标量或C语言的结构体，你必须在将值赋值到图层之前将值包装成对象。当访问这类类型的值的时候，你必须将检索到得对象使用正确的类的扩展，将对象解包为正确的值。表C-1列出了常用的C语言数据类型以及包装这些类型的Objective-C类。&lt;/p&gt;
 
 &lt;p&gt;Table C-1  Wrapper classes for C types
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/33.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/33.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;键路径对结构体的支持&#34;&gt;键路径对结构体的支持&lt;/h2&gt;
 
@@ -1123,7 +1123,7 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;可以使用键路径支持检索包含一个CATransform3D数据类型的属性的指定变换值。为了为一个图层的变换指定完整的键路径，你可使用字符串值transform或sublayerTransform，后面再跟上表C-2中其中一个域作为键路径。比如，为了指定一个围绕图层z轴的旋转因子，你可以指定一个transform.rotation.z的键路径。&lt;/p&gt;
 
 &lt;p&gt;Table C-2  Transform field value key paths
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/34.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/34.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;接下来的例子显示了如何使用setValue：forKeyPath方法更改一个图层。该例子设置x轴的平移因子为10点，图层将按指定的坐标轴方向平移给定的点数量。&lt;/p&gt;
 
@@ -1137,21 +1137,21 @@ myParentLayer.sublayerTransform = perspective;
 &lt;p&gt;如果给定的属性的值是CGPoint数据类型，你可以选择表C-3其中的一个域名追加给属性以获得值或设置值 。比如说，为了改变图层position属性的x域，你可以将键路径写成position.x。&lt;/p&gt;
 
 &lt;p&gt;Table C-3  CGPoint data structure fields
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/35.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/35.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;cgsize键路径&#34;&gt;CGSize键路径&lt;/h3&gt;
 
 &lt;p&gt;如果给定的属性值是一个CGSize数据类型，你可以选择表C-4中其中一个域名追加给属性以获得值或设置值。&lt;/p&gt;
 
 &lt;p&gt;Table C-4  CGSize data structure fields
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/36.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/36.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;cgrect键路径&#34;&gt;CGRect键路径&lt;/h3&gt;
 
 &lt;p&gt;如果给定的属性是CGRect数据类型值，你可以选择表C-5中其中一个域名追加给属性以获取或设置值。比如，为了改变一个图层边界属性的宽度属性，你可以将键路径写成bounds.size.width。&lt;/p&gt;
 
 &lt;p&gt;Table C-5  CGRect data structure fields
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreAnimationProgrammingGuide/37.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;</description>
+&lt;img src=&#34;http://lynchwong.com/img/CoreAnimationProgrammingGuide/37.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

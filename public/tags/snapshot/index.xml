@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Snapshot on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/snapshot/index.xml</link>
+    <link>http://lynchwong.com/tags/snapshot/index.xml</link>
     <description>Recent content in Snapshot on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/snapshot/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/snapshot/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Fastlane - Snapshot</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---snapshot/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---snapshot/</link>
       <pubDate>Sun, 19 Jun 2016 13:52:28 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---snapshot/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---snapshot/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Snapshot&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSnapshot/snapshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/snapshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;snapshot&#34;&gt;snapshot&lt;/h1&gt;
 
@@ -72,7 +72,7 @@
 
 &lt;p&gt;在&lt;code&gt;snapshot&lt;/code&gt;成功创建新的截图后，会生成一个漂亮的HTML文件来展示所有的截图，让你能够快速浏览所有截图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSnapshot/htmlPagePreviewFade.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/htmlPagePreviewFade.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;为什使用&#34;&gt;为什使用？&lt;/h2&gt;
 
@@ -156,7 +156,7 @@ app.launch()
 [app launch];
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSnapshot/snapshot.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/snapshot.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你可以看下项目里面的例子，然后把玩一下。&lt;/p&gt;
 
@@ -204,7 +204,7 @@ app.launch()
 
 &lt;p&gt;在运行完&lt;code&gt;snapshot&lt;/code&gt;，你会得到一个非常漂亮的概要：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSnapshot/testSummary.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/testSummary.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;snapfile&#34;&gt;Snapfile&lt;/h2&gt;
 

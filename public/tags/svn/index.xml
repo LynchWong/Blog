@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Svn on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/svn/index.xml</link>
+    <link>http://lynchwong.com/tags/svn/index.xml</link>
     <description>Recent content in Svn on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/svn/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/svn/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Svn</title>
-      <link>http://lynchwong.com/blog/2014/12/svn/</link>
+      <link>http://lynchwong.com/2014/12/svn/</link>
       <pubDate>Sat, 13 Dec 2014 17:04:27 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2014/12/svn/</guid>
+      <guid>http://lynchwong.com/2014/12/svn/</guid>
       <description>&lt;p&gt;从开始做iOS开发后就一直用的Git，代码托管在Github上。而之前是做.Net开发，用的VS2010。团队协作，代码托管都是用的TFS，不知道是不是叫这个，已经是很久之前的事了。
 &lt;/p&gt;
 

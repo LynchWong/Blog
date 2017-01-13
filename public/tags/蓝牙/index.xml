@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>蓝牙 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/%E8%93%9D%E7%89%99/index.xml</link>
+    <link>http://lynchwong.com/tags/%E8%93%9D%E7%89%99/index.xml</link>
     <description>Recent content in 蓝牙 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/%E8%93%9D%E7%89%99/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/%E8%93%9D%E7%89%99/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>iOS蓝牙，CoreBluetooth框架简介及入门使用</title>
-      <link>http://lynchwong.com/blog/2014/12/ios%E8%93%9D%E7%89%99corebluetooth%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8/</link>
+      <link>http://lynchwong.com/2014/12/ios%E8%93%9D%E7%89%99corebluetooth%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8/</link>
       <pubDate>Mon, 15 Dec 2014 09:27:30 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2014/12/ios%E8%93%9D%E7%89%99corebluetooth%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8/</guid>
+      <guid>http://lynchwong.com/2014/12/ios%E8%93%9D%E7%89%99corebluetooth%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8/</guid>
       <description>&lt;p&gt;做过两三个和硬件交互的项目，可能重点和难点就是交互的协议这块。而协议的选取大部分都需要硬件来决定，比如：
 &lt;/p&gt;
 
@@ -53,14 +53,14 @@
 &lt;h3 id=&#34;中央和外围设备以及它们之间蓝牙通信的规则&#34;&gt;中央和外围设备以及它们之间蓝牙通信的规则&lt;/h3&gt;
 
 &lt;p&gt;主要有两个角色参与低功耗蓝牙通信：中央(Central) 和 外围(Peripheral).基于传统的客户端－服务端的架构模型，外围通常是拥有数据同时是被其他设备需要的一方；中央通常使用外围提交上来的数据来完成一些特定的任务。如下图所示，比如，一个心率监测器也许有一些有用的信息，而这些信息正好就是你App需要的，通过这些信息然后使用一种友好的方式来向用户展示用户的心率。
-&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/centralandperipheral.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/iOSCoreBluetooth/centralandperipheral.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;中央发现和连接到外围&#34;&gt;中央发现和连接到外围&lt;/h4&gt;
 
 &lt;p&gt;外围会广播一些广告包里面的数据。广告包(advertising packet,不知道翻译的对不对)就是一个相对较小的、捆绑了外围可能包含的有用信息且必须提供的数据包，比如外围的名字和主要的功能。比如，一个数字温控器可能广播它能提供当前房间的温度。在低功耗蓝牙通信中，广播是告诉别人外围存在的主要方式。&lt;/p&gt;
 
 &lt;p&gt;中央，另一方面，可以扫描和监听任何它感兴趣且正在广播的外围设备，如下图所示，中央可以询问任何它发现广播的外围是否可以连接。
-&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/Advertising.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/iOSCoreBluetooth/Advertising.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;外围的数据是什么样的结构&#34;&gt;外围的数据是什么样的结构&lt;/h4&gt;
 
@@ -69,7 +69,7 @@
 &lt;p&gt;外围可能包含一个或者多个服务，或者提供连接的信号强度的有用信息。一个服务是为了完成外围设备的一个功能(或者设备部分功能)，且该服务收集了数据和相关的行为。比如，一个心率监测器的服务也许暴露了从心率传感器那里获得的心率数据。&lt;/p&gt;
 
 &lt;p&gt;服务本身是由特征或者包含其他服务(即，其他服务的引用)来组成的。一个特征提供了外围服务更多的细节。比如，刚才上面描述的心率服务也许包含一个描述心率传感器位置信息的特征和另外一个传送测量心率数据的特征（即这个服务包含了两个特征）。如下图阐述了一个心率监测器的服务和特征的数据可能的结构和特点。
-&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/aperipheralsserviceandcharacteristics.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/iOSCoreBluetooth/aperipheralsserviceandcharacteristics.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;中央分析-交互外围设备提供的数据&#34;&gt;中央分析、交互外围设备提供的数据&lt;/h4&gt;
 
@@ -90,12 +90,12 @@
 &lt;h5 id=&#34;本地中央和远程外围&#34;&gt;本地中央和远程外围&lt;/h5&gt;
 
 &lt;p&gt;在中央这一端，本地中央设备用CBCentralManager对象来表示。这些对象用来管理发现或者连接到远程外围设备(用CBPeripheral对象来表示),包括扫描，发现，以及连接到正在广播的外围。下图展示了在CoreBluetooth框架中本地中央和远程外围的对象表示。
-&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/CoreBluetoothobjectsonthecentralside.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/iOSCoreBluetooth/CoreBluetoothobjectsonthecentralside.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h5 id=&#34;远程外围的数据用cbservice和cbcharacteristic对象来表示&#34;&gt;远程外围的数据用CBService和CBCharacteristic对象来表示&lt;/h5&gt;
 
 &lt;p&gt;当你在和远程外围(CBPeripheral对象表示)进行数据交互时，你其实是在处理外围的服务和特征。在CoreBluetooth框架中，远程外围的服务用对象CBService表示。相对的，特征用对象CBCharacteristic表示。下图阐述了远程外围服务及特征的基础结构。
-&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/Aremoteperipheralstreeofservicesandcharacteristics.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/iOSCoreBluetooth/Aremoteperipheralstreeofservicesandcharacteristics.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;外围这边的对象&#34;&gt;外围这边的对象&lt;/h4&gt;
 
@@ -104,12 +104,12 @@
 &lt;h5 id=&#34;本地外围和远程中央&#34;&gt;本地外围和远程中央&lt;/h5&gt;
 
 &lt;p&gt;在外围这一端，本地外围设备是用CBPeripheralManager对象来表示。这些对象用本地外围设备的服务和特征的数据库来发布服务，广播给远程中央设备(用对象CBCentral表示)。同时也用来响应远程中央的读写请求。下图展示了本地外围和远程中央在CoreBluetooth框架中的表示。
-&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/CoreBluetoothobjectsontheperipheralside.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/iOSCoreBluetooth/CoreBluetoothobjectsontheperipheralside.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h5 id=&#34;本地外围的数据用对象cbmutableservice和cbmutablecharacteristic来表示&#34;&gt;本地外围的数据用对象CBMutableService和CBMutableCharacteristic来表示&lt;/h5&gt;
 
 &lt;p&gt;当你建立与本地外围(用对象CBPeripheralManager表示)的数据交互，你其实是在处理服务和特征的可变版本。在CoreBluetooth框架中，本地外围的服务用CBMutableService对象表示，相应的CBMutableCharacteristic对象来表示特征。下图阐述了本地外围服务和特征的基本结构。
-&lt;img src=&#34;http://lynchwong.com/blog/img/iOSCoreBluetooth/Alocalperipheralstreeofservicesandcharacteristics.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/iOSCoreBluetooth/Alocalperipheralstreeofservicesandcharacteristics.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;关于实现你的应用程序扮演外围角色的更多信息，请参考&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/PerformingCommonCentralRoleTasks/PerformingCommonCentralRoleTasks.html&#34;&gt;Performing Common Central Role Tasks&lt;/a&gt; 和 &lt;a href=&#34;https://developer.apple.com/library/ios/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/BestPracticesForInteractingWithARemotePeripheralDevice/BestPracticesForInteractingWithARemotePeripheralDevice.html&#34;&gt;Best Practices for Interacting with a Remote Peripheral Device&lt;/a&gt;。&lt;/p&gt;
 

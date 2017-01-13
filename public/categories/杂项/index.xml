@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>杂项 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/categories/%E6%9D%82%E9%A1%B9/index.xml</link>
+    <link>http://lynchwong.com/categories/%E6%9D%82%E9%A1%B9/index.xml</link>
     <description>Recent content in 杂项 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/categories/%E6%9D%82%E9%A1%B9/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/categories/%E6%9D%82%E9%A1%B9/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Svn</title>
-      <link>http://lynchwong.com/blog/2014/12/svn/</link>
+      <link>http://lynchwong.com/2014/12/svn/</link>
       <pubDate>Sat, 13 Dec 2014 17:04:27 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2014/12/svn/</guid>
+      <guid>http://lynchwong.com/2014/12/svn/</guid>
       <description>&lt;p&gt;从开始做iOS开发后就一直用的Git，代码托管在Github上。而之前是做.Net开发，用的VS2010。团队协作，代码托管都是用的TFS，不知道是不是叫这个，已经是很久之前的事了。
 &lt;/p&gt;
 
@@ -139,10 +139,10 @@ subdir/&lt;/p&gt;
     
     <item>
       <title>Git</title>
-      <link>http://lynchwong.com/blog/2014/12/git/</link>
+      <link>http://lynchwong.com/2014/12/git/</link>
       <pubDate>Fri, 12 Dec 2014 17:04:15 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2014/12/git/</guid>
+      <guid>http://lynchwong.com/2014/12/git/</guid>
       <description>&lt;p&gt;Git是分布式版本控制系统，相信很多同学都知道这个。类似的东西Svn，说是类似，其实有很大区别。这里推荐给大家两个地址，是学习Git很好的资料。当然还有其他优秀的资料，就不列举了。
 &lt;/p&gt;
 

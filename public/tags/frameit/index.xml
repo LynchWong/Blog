@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Frameit on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/frameit/index.xml</link>
+    <link>http://lynchwong.com/tags/frameit/index.xml</link>
     <description>Recent content in Frameit on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/frameit/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/frameit/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Fastlane - Frameit</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---frameit/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---frameit/</link>
       <pubDate>Sun, 26 Jun 2016 11:21:05 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---frameit/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---frameit/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Frameit&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneFrameit/frameit.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneFrameit/frameit.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;frameit&#34;&gt;frameit&lt;/h1&gt;
 
@@ -41,13 +41,13 @@
 
 &lt;p&gt;这里有一个漂亮的Gif，展示了&lt;code&gt;frameit&lt;/code&gt;的执行：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneFrameit/FrameitGit.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneFrameit/FrameitGit.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;结果&#34;&gt;结果&lt;/h2&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneFrameit/ScreenshotsBig.png&#34; alt=&#34;alt text&#34; /&gt;
-&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneFrameit/ScreenshotsOverview.png&#34; alt=&#34;alt text&#34; /&gt;
-&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneFrameit/MacExample.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneFrameit/ScreenshotsBig.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/FastlaneFrameit/ScreenshotsOverview.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/FastlaneFrameit/MacExample.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;frameit&lt;/code&gt;2.0的更新算是&lt;a href=&#34;https://mindnode.com&#34;&gt; MindNode &lt;/a&gt;的赞助，参见上面的截图。&lt;/p&gt;
 

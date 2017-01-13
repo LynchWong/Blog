@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>A on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/archives/a/index.xml</link>
+    <link>http://lynchwong.com/archives/a/index.xml</link>
     <description>Recent content in A on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/archives/a/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/archives/a/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>UILabel 使用 Autolayout 自动换行的BUG</title>
-      <link>http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/</link>
+      <link>http://lynchwong.com/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/</link>
       <pubDate>Fri, 26 Aug 2016 10:29:18 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/</guid>
+      <guid>http://lynchwong.com/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/</guid>
       <description>&lt;p&gt;之前有一篇 Blog 写的就是关于 UILabel 自动换行的内容，只不过不是通过代码计算，而是使用 xib、storyboard、AutoLayout 来自动换行。
 &lt;/p&gt;
 
 &lt;p&gt;最近貌似产生了一个BUG，最近做界面的时候按照这种方式自动换行的时候有些瑕疵，而之前的界面没有产生这个BUG。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/UILabelBUG/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/UILabelBUG/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;BUG已经在图中标注出来了，可以明显看到 UILabel 的那个高度跟我们期望的不一样。后来在排查BUG的时候，我用代码计算的 &lt;strong&gt;&amp;ldquo;VOA常速新闻:特朗普不担心缺少党内支持&amp;rdquo;&lt;/strong&gt; 的高度差不多是25.0左右。但是我用 Xcode 的 View UI Hierarchy 调试的时候高度是差不多50.0左右。所以可以断定的是 UILabel 进行了换行，但是我们是不需要换行的。另外，&lt;strong&gt;&amp;ldquo;永不退缩 Won&amp;rsquo;t Back Down (2012)&amp;rdquo;&lt;/strong&gt;也没有显示完全。&lt;/p&gt;
 
@@ -34,19 +34,19 @@
 
 &lt;p&gt;从图中可以看出我的 UILabel 的宽度是动态变化的，所以其实这个值应该也是变化的。但是我看我的 storyboard 里面设置的是 290.0，且是不变的。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/UILabelBUG/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/UILabelBUG/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;后来验证确实是这个的问题，其实界面是按照 6S 为基准做的，所以宽度是 375.0 减去左右边距和 30.0，应该是 345.0。所以这个 290.0 其实是不对的，以 6S 为标准应该是 345.0。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/UILabelBUG/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/UILabelBUG/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;所以按照这样的设置，在 6S 上没有图片的Cell显示应该是没问题的。截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/UILabelBUG/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/UILabelBUG/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;但是箭头指的那里还是没有显示完全，后来设置成零就没有问题了，就没有深究了。截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/UILabelBUG/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/UILabelBUG/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这样看来就正常了。&lt;/p&gt;
 

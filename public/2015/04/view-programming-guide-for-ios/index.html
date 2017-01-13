@@ -21,7 +21,7 @@
     <meta name="author" content="Lynch Wong">
     <meta name="keywords" content="">
 
-    <link rel="icon" href="http://lynchwong.com/blog/favicon.png">
+    <link rel="icon" href="http://lynchwong.com/favicon.png">
     
 
     
@@ -61,7 +61,7 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
     
     
-    <link rel="stylesheet" href="http://lynchwong.com/blog/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    <link rel="stylesheet" href="http://lynchwong.com/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
     
     
     
@@ -75,12 +75,12 @@
       <header id="header" data-behavior="4">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="http://lynchwong.com/blog/">Nobodyknows&#43; 2.5</a>
+    <a class="header-title-link" href="http://lynchwong.com/">Nobodyknows&#43; 2.5</a>
   </div>
   
     
       <a class="header-right-picture "
-         href="http://lynchwong.com/blog/#about">
+         href="http://lynchwong.com/#about">
     
     
     
@@ -96,7 +96,7 @@
   <div class="sidebar-container">
     
       <div class="sidebar-profile">
-        <a href="http://lynchwong.com/blog/#about">
+        <a href="http://lynchwong.com/#about">
           <img class="sidebar-profile-picture" src="//www.gravatar.com/avatar/e0627f84c6da124797e0e62849aa3c4e?s=110" alt="Author&#39;s picture" />
         </a>
         <h4 class="sidebar-profile-name">Lynch Wong</h4>
@@ -109,7 +109,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/">
+      <a class="sidebar-button-link " href="http://lynchwong.com/">
     
       <i class="sidebar-button-icon fa fa-lg fa-home"></i>
       
@@ -119,7 +119,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/archives">
+      <a class="sidebar-button-link " href="http://lynchwong.com/archives">
     
       <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
       
@@ -129,7 +129,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/categories">
+      <a class="sidebar-button-link " href="http://lynchwong.com/categories">
     
       <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
       
@@ -139,7 +139,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/tags">
+      <a class="sidebar-button-link " href="http://lynchwong.com/tags">
     
       <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
       
@@ -149,7 +149,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/#about">
+      <a class="sidebar-button-link " href="http://lynchwong.com/#about">
     
       <i class="sidebar-button-icon fa fa-lg fa-question"></i>
       
@@ -175,7 +175,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="http://lynchwong.com/blog/index.xml">
+      <a class="sidebar-button-link " href="http://lynchwong.com/index.xml">
     
       <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
       
@@ -216,7 +216,7 @@
   
     <span>in</span>
     
-      <a class="category-link" href="http://lynchwong.com/blog/categories/%e7%bc%96%e7%a8%8b%e6%8c%87%e5%8d%97">编程指南</a>
+      <a class="category-link" href="http://lynchwong.com/categories/%e7%bc%96%e7%a8%8b%e6%8c%87%e5%8d%97">编程指南</a>
     
   
 
@@ -286,7 +286,7 @@
 <p>为了明白views和layers之间的关系，看一个例子更有帮助。如图1 - 1展示了一个来自简单应用程序<a href="https://developer.apple.com/library/ios/samplecode/ViewTransitions/Introduction/Intro.html#//apple_ref/doc/uid/DTS40007411"> ViewTransitions </a>的视图层级与Core Animation layers对象的关系。</p>
 
 <p>Figure 1-1  Architecture of the views in a sample application
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/view-layer-store.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/view-layer-store.jpg" alt="alt text" /></p>
 
 <p>Core Animation layer对象的使用对性能有很重要的影响。事实上，一个view对象的绘制代码会尽可能少得调用，当这些代码被调用时，会被Core Animation缓存并且在之后会尽可能的重用这些代码。重用已经渲染的内容消除了昂贵的绘制周期。重用这些内容特别是对于动画来说很重要，存在的内容能够被操纵。重用比新建内容开销更小。</p>
 
@@ -324,7 +324,7 @@
 <p>大部分views的<strong>contentMode</strong>属性被设置为<strong>UIViewContentModeScaleToFill</strong>，将会缩放view的内容来适合新的frame大小。如图1 - 2展示了一些可用的content modes。如图中所示，并不是所有的content mode都会将view的bounds整个填充，可能会扭曲view的内容。</p>
 
 <p>Figure 1-2  Content mode comparisons
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/scale_aspect.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/scale_aspect.jpg" alt="alt text" /></p>
 
 <p>content modes对view的内容再循环有好处，但是你也可以设置content mode的值为<strong>UIViewContentModeRedraw</strong>当你想自定义的views在缩放、改变大小操作时进行重绘。设置view的content mode为这个值会强制系统去调用你view的<strong>drawRect:</strong>方法响应几何改变。通常来说，你应该避免使用这个值，而且你不能在系统标准的view上使用这个值。</p>
 
@@ -333,7 +333,7 @@
 <p>你可以指定view的一部分是可拉伸的，所以当view的大小改变时只有可拉伸的部分内容会被影响。你通常为按钮以及那些定义了可重复模式的views使用可拉伸的区域。你指定的可拉伸区域允许沿着view的一个或者两个坐标轴拉伸。当然，当沿着view的两个轴进行拉伸时，view的边缘必须是可重复的，来避免任何的扭曲。如图1 - 3展示了view里面的扭曲。每个view里的原始像素的颜色都自我复制，以便可以填充更大视图的相应区域。</p>
 
 <p>Figure 1-3  Stretching the background of a button
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/button_scale.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/button_scale.jpg" alt="alt text" /></p>
 
 <p>你使用view的<strong>contentStretch</strong>属性来指定可拉伸的区域。这个属性接受一个值被标准化的矩形，范围在0.0到1.0。当拉伸这个view的时候，系统乘以标准值以及当前的bounds和缩放因子来决定哪些像素需要拉伸。使用标准值可以减轻每次改变视图的边界值都更新contentStretch属性的需要。</p>
 
@@ -370,7 +370,7 @@ contentStretch - 使用这个可以改变视图内容如何拉伸
 <p>UIKit的默认坐标系统把原点设置在左上角，两条轴往下和右扩展。坐标值使用浮点数表示，这样允许内容的精确布局和定位而不用管屏幕的分辨率。如图1 - 4展示了相对于屏幕的坐标系统。除了屏幕坐标系统，windows和views也定义了它们自己的本地坐标系统，这样允许你指定相对于view或者window原点的坐标而不是屏幕。</p>
 
 <p>Figure 1-4 UIKit中的坐标系统
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/native_coordinate_system.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/native_coordinate_system.jpg" alt="alt text" /></p>
 
 <p>因为每个view和window都定义了它自己的本地坐标系统，你需要留意在任何时间内是哪个坐标系统在起作用。每次绘制或者改变一个view都是基于一个坐标系统的。在某些绘制中会基于view本身的坐标系统。在某些几何结构变更中是基于superview的坐标系统的。<strong>UIWindow</strong>和<strong>UIView</strong>类都包含了帮助你从一个坐标系统转换到另一个的方法。</p>
 
@@ -393,7 +393,7 @@ contentStretch - 使用这个可以改变视图内容如何拉伸
 <p>如图1 - 5展示了一个图像view的frame和bounds矩形之间的关系。图中，图像view的左上角被定位在superview坐标系统的（40， 40），它的矩形尺寸为240x380。对于bounds矩形，原点是（0， 0），矩形尺寸也是240x380。</p>
 
 <p>Figure 1-5  Relationship between a view&rsquo;s frame and bounds
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/frame_bounds_rects.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/frame_bounds_rects.jpg" alt="alt text" /></p>
 
 <p>即使你可以独立的改变frame，bounds和center属性，按照如下的方式改变其中一个属性还是会影响到另外两个属性：</p>
 
@@ -427,7 +427,7 @@ contentStretch - 使用这个可以改变视图内容如何拉伸
 <p>如图1 - 6演示了两个不同的转换因子是如何在视觉上组合起来的。在view的drawRect:方法中，对一个形状应用一个45度的转换因子会使该形状翻转指定的角度。另外加上一个45度的转换因子会导致整个形状翻转90度。这个形状对于绘制它的view来讲仍然只是翻转了45度，但是view自己的转换让它看起来像使翻转了90度。</p>
 
 <p>Figure 1-6  Rotating a view and its content
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/xform_rotations.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/xform_rotations.jpg" alt="alt text" /></p>
 
 <p><strong>重要：</strong>如果一个view的transform属性不是其定义时转换矩阵，那么view的frame属性是未定义的而且必须被忽略。当对view应用转换时，你必须使用view的bounds和center属性来获取view的位置和尺寸。subviews的frame矩形仍然是有效的，因为它们与view的bounds相关。</p>
 
@@ -446,7 +446,7 @@ contentStretch - 使用这个可以改变视图内容如何拉伸
 <p>当用户和界面进行交互时，或者由代码程序性的改变一些东西时，一系列复杂的事件就会发生在UIKit的内部来处理这些交互。在这个系列中的某些点，UIKit唤出你的view类，同时给它们一个机会去响应程序的行为。理解这些唤出点对于理解view在哪里融入系统很重要。如图1 - 7展示了这些事件的基本序列，从用户触屏开始到图形系统更新屏幕内容来响应结束。同样的事件序列也会发生在任何程序性的动作里。</p>
 
 <p>Figure 1-7 UIKit 与视图对象进行交互
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/drawingmodel.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/drawingmodel.jpg" alt="alt text" /></p>
 
 <p>以下的步骤分解了图1－7中的事件序列，既解释了在每一步发生了什么，也解释了应用如何响应。</p>
 
@@ -836,7 +836,7 @@ UIView* myView = [[UIView alloc] initWithFrame:viewRect];
 <p>如图3 - 1展示了视图的层怎样创建了我们期望的应用程序的视觉效果。在这个时钟程序示例中，视图层级通过不同的资源排版。tab bar 和 navigation视图是特殊的视图层级，由tab bar 和 navigation controller对象提供，用来不管理用户界面的一部分。在tab bar 和 navigation bar视图之间的所有东西都是自定义的视图层级，由时钟应用程序提供。</p>
 
 <p>Figure 3-1  Layered views in the Clock application
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/windowlayers.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/windowlayers.jpg" alt="alt text" /></p>
 
 <p>在iOS应用程序中有多种方法构建视图层级，包括Interface Builder和代码创建。下面的章节会展示怎样组装视图层级，以及怎样在层级中查找视图，在不同坐标系统中转换等。</p>
 
@@ -950,7 +950,7 @@ self.view.transform = xform;
 <p>上面的代码将会使视图围绕中心点顺时针旋转45度。如图3 - 2展示了向image view应用这个transformation 的效果：</p>
 
 <p>Figure 3-2  Rotating a view 45 degrees<br />
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/rotated_view.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/rotated_view.jpg" alt="alt text" /></p>
 
 <p>当向一个视图应用多个transformations时，你添加给CGAffineTransform结构体的这些transformations信息是非常重要的。旋转视图然后变换视图跟变换视图然后旋转是不一样的。尽管各种情形中在旋转和变换的值是相同的，transformations的顺序影响了最后的结果。除此之外，你添加应用与视图的transformations依赖于中心点。旋转式围绕中心点。缩放会改变宽度和高度但是不改变中心点。</p>
 
@@ -975,7 +975,7 @@ self.view.transform = xform;
 <p>当在旋转视图中转换坐标时，UIKit转换rectangles会假设你想要返回的rectangles是反射了原来rectangles的。如图3 - 3展示了在转换过程中旋转式怎样引起rectangle大小改变的例子。outerView包含一个旋转的视图。将子视图的坐标转换至父视图，rectangle变大了。这个larger rectangle实际上就是outerView的bounds里的smallest rectangle。</p>
 
 <p>Figure 3-3  Converting values in a rotated view
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/uiview_convert_rotated.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/uiview_convert_rotated.jpg" alt="alt text" /></p>
 
 <h2 id="运行时调整视图的尺寸和位置">运行时调整视图的尺寸和位置</h2>
 
@@ -1004,7 +1004,7 @@ self.view.transform = xform;
 <p>如图3 - 4展示了autoresizing mask应用于视图时的效果。这些给定得常量指示了当父视图的bounds改变时视图的某一方面会灵活调整。没有指定的那些常量表示视图布局的那一方面固定不变。当一个视图的单个轴配置了超过一个flexible attribute时，UIKit会均匀的分发相应的空间。</p>
 
 <p>Figure 3-4  View autoresizing mask constants
-<img src="http://lynchwong.com/blog/img/ViewProgrammingGuideforiOS/uiview_autoresize.jpg" alt="alt text" /></p>
+<img src="http://lynchwong.com/img/ViewProgrammingGuideforiOS/uiview_autoresize.jpg" alt="alt text" /></p>
 
 <p>配置autoresizing规则的最简单的方式是使用Interface Builder的Size inspector的Autosizing controls。flexible的高度和宽度与之前代码设置的效果是相同的。然而，使用margin indicators的行为和效果是相反的。在Interface Builder中，设置了margin indicator意味着margin是固定大小的，没有设置意味着margin有个灵活的尺寸。幸运的是，Interface Builder提供了动画来演示这些autoresizing会怎样影响你的视图。</p>
 
@@ -1530,7 +1530,7 @@ self.view.transform = xform;
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">TAGGED IN</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="http://lynchwong.com/blog/tags/%E8%A7%86%E5%9B%BE/">视图</a>
+  <a class="tag tag--primary tag--small" href="http://lynchwong.com/tags/%E8%A7%86%E5%9B%BE/">视图</a>
 
                   </div>
                 
@@ -1542,7 +1542,7 @@ self.view.transform = xform;
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/event-handling-guide-for-ios/" data-tooltip="Event Handling Guide for iOS">
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/2015/04/event-handling-guide-for-ios/" data-tooltip="Event Handling Guide for iOS">
           
             <i class="fa fa-angle-left"></i>
             <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -1550,7 +1550,7 @@ self.view.transform = xform;
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/programming-with-objective-c/" data-tooltip="Programming with Objective-C">
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/2015/04/programming-with-objective-c/" data-tooltip="Programming with Objective-C">
           
             <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
             <i class="fa fa-angle-right"></i>
@@ -1567,17 +1567,17 @@ self.view.transform = xform;
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fview-programming-guide-for-ios%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2f2015%2f04%2fview-programming-guide-for-ios%2f">
           <i class="fa fa-google-plus"></i>
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fview-programming-guide-for-ios%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2f2015%2f04%2fview-programming-guide-for-ios%2f">
           <i class="fa fa-facebook-official"></i>
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fview-programming-guide-for-ios%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2f2015%2f04%2fview-programming-guide-for-ios%2f">
           <i class="fa fa-twitter"></i>
         </a>
       </li>
@@ -1623,7 +1623,7 @@ self.view.transform = xform;
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/event-handling-guide-for-ios/" data-tooltip="Event Handling Guide for iOS">
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/2015/04/event-handling-guide-for-ios/" data-tooltip="Event Handling Guide for iOS">
           
             <i class="fa fa-angle-left"></i>
             <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -1631,7 +1631,7 @@ self.view.transform = xform;
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/blog/2015/04/programming-with-objective-c/" data-tooltip="Programming with Objective-C">
+            <a class="post-action-btn btn btn--default tooltip--top" href="http://lynchwong.com/2015/04/programming-with-objective-c/" data-tooltip="Programming with Objective-C">
           
             <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
             <i class="fa fa-angle-right"></i>
@@ -1648,17 +1648,17 @@ self.view.transform = xform;
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fview-programming-guide-for-ios%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2f2015%2f04%2fview-programming-guide-for-ios%2f">
           <i class="fa fa-google-plus"></i>
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fview-programming-guide-for-ios%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2f2015%2f04%2fview-programming-guide-for-ios%2f">
           <i class="fa fa-facebook-official"></i>
         </a>
       </li>
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fview-programming-guide-for-ios%2f">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2f2015%2f04%2fview-programming-guide-for-ios%2f">
           <i class="fa fa-twitter"></i>
         </a>
       </li>
@@ -1685,17 +1685,17 @@ self.view.transform = xform;
       <div id="share-options-bar" class="share-options-bar" data-behavior="4">
   <ul class="share-options">
     <li class="share-option">
-      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fview-programming-guide-for-ios%2f">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http%3a%2f%2flynchwong.com%2f2015%2f04%2fview-programming-guide-for-ios%2f">
         <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
       </a>
     </li>
     <li class="share-option">
-      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fview-programming-guide-for-ios%2f">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flynchwong.com%2f2015%2f04%2fview-programming-guide-for-ios%2f">
         <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
       </a>
     </li>
     <li class="share-option">
-      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2fblog%2f2015%2f04%2fview-programming-guide-for-ios%2f">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http%3a%2f%2flynchwong.com%2f2015%2f04%2fview-programming-guide-for-ios%2f">
         <i class="fa fa-twitter"></i><span>Share on Twitter</span>
       </a>
     </li>
@@ -1755,7 +1755,7 @@ self.view.transform = xform;
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/">
                 <h3 class="media-heading">UILabel 使用 Autolayout 自动换行的BUG</h3>
               </a>
               <span class="media-meta">
@@ -1773,7 +1773,7 @@ self.view.transform = xform;
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/07/fastlane---%E7%A4%BA%E4%BE%8B/">
                 <h3 class="media-heading">Fastlane - 示例</h3>
               </a>
               <span class="media-meta">
@@ -1791,7 +1791,7 @@ self.view.transform = xform;
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---match/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---match/">
                 <h3 class="media-heading">Fastlane - Match</h3>
               </a>
               <span class="media-meta">
@@ -1810,7 +1810,7 @@ self.view.transform = xform;
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---scan/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---scan/">
                 <h3 class="media-heading">Fastlane - Scan</h3>
               </a>
               <span class="media-meta">
@@ -1829,7 +1829,7 @@ self.view.transform = xform;
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---gym/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---gym/">
                 <h3 class="media-heading">Fastlane - Gym</h3>
               </a>
               <span class="media-meta">
@@ -1848,7 +1848,7 @@ self.view.transform = xform;
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---boarding/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---boarding/">
                 <h3 class="media-heading">Fastlane - Boarding</h3>
               </a>
               <span class="media-meta">
@@ -1867,7 +1867,7 @@ self.view.transform = xform;
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---pilot/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---pilot/">
                 <h3 class="media-heading">Fastlane - Pilot</h3>
               </a>
               <span class="media-meta">
@@ -1886,7 +1886,7 @@ self.view.transform = xform;
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---spaceship/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---spaceship/">
                 <h3 class="media-heading">Fastlane - Spaceship</h3>
               </a>
               <span class="media-meta">
@@ -1905,7 +1905,7 @@ self.view.transform = xform;
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---cert/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---cert/">
                 <h3 class="media-heading">Fastlane - Cert</h3>
               </a>
               <span class="media-meta">
@@ -1924,7 +1924,7 @@ self.view.transform = xform;
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="http://lynchwong.com/blog/2016/06/fastlane---produce/">
+              <a class="link-unstyled" href="http://lynchwong.com/2016/06/fastlane---produce/">
                 <h3 class="media-heading">Fastlane - Produce</h3>
               </a>
               <span class="media-meta">
@@ -1955,7 +1955,7 @@ self.view.transform = xform;
     
   
     
-    <div id="cover" style="background-image:url('http://lynchwong.com/blog/images/newcover.jpg');"></div>
+    <div id="cover" style="background-image:url('http://lynchwong.com/images/newcover.jpg');"></div>
   
 
 
@@ -1966,7 +1966,7 @@ self.view.transform = xform;
 <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
 
 
-<script src="http://lynchwong.com/blog/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+<script src="http://lynchwong.com/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -1991,7 +1991,7 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'http:\/\/lynchwong.com\/blog\/2015\/04\/view-programming-guide-for-ios\/';
+          this.page.url = 'http:\/\/lynchwong.com\/2015\/04\/view-programming-guide-for-ios\/';
           
             this.page.identifier = '\/2015\/04\/view-programming-guide-for-ios\/'
           

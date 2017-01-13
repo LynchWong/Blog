@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Scan on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/scan/index.xml</link>
+    <link>http://lynchwong.com/tags/scan/index.xml</link>
     <description>Recent content in Scan on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/scan/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/scan/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Fastlane - Scan</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---scan/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---scan/</link>
       <pubDate>Tue, 28 Jun 2016 09:05:20 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---scan/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---scan/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Scan&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/scan.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/scan.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;scan&#34;&gt;scan&lt;/h1&gt;
 
@@ -29,7 +29,7 @@
 
 &lt;h1 id=&#34;scan-是什么&#34;&gt;scan 是什么？&lt;/h1&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f43555263457075576f4141724533642e706e673a6c61726765.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f43555263457075576f4141724533642e706e673a6c61726765.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;scan-之前&#34;&gt;&lt;code&gt;scan&lt;/code&gt; 之前&lt;/h2&gt;
 
@@ -137,13 +137,13 @@
 
 &lt;p&gt;&lt;code&gt;scan&lt;/code&gt; 使用的是简单的 &lt;code&gt;xcodebuild&lt;/code&gt; 命令，因此保持了与 &lt;code&gt;xcodebuild&lt;/code&gt; 100%的兼容性。为了生成漂亮的输出，&lt;code&gt;scan&lt;/code&gt; 使用 &lt;a href=&#34;https://github.com/supermarin/xcpretty&#34;&gt;xcpretty&lt;/a&gt;。你总是可以在 &lt;code&gt;~/Library/Logs/scan&lt;/code&gt; 中访问原始的输出。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/scanScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/scanScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/slack.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/slack.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/scanHTML.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/scanHTML.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneScan/scanHTMLFailing.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneScan/scanHTMLFailing.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
 

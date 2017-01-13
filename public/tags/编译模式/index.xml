@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>编译模式 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/index.xml</link>
+    <link>http://lynchwong.com/tags/%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/index.xml</link>
     <description>Recent content in 编译模式 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Debug/Release等编译模式</title>
-      <link>http://lynchwong.com/blog/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</link>
+      <link>http://lynchwong.com/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Sun, 25 Oct 2015 00:07:53 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://lynchwong.com/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;通常我们的App有多种不同的编译模式，比如&lt;strong&gt;Debug&lt;/strong&gt;、&lt;strong&gt;Release&lt;/strong&gt;。我们在开发的时候大都是&lt;strong&gt;Debug&lt;/strong&gt;模式，发布的时候会选择&lt;strong&gt;Release&lt;/strong&gt;模式。通常我们的服务请求地址也会根据编译模式来进行不同的选择。当然系统已经给我们定义好了这两种编译模式，但有时候我们不止需要两种，我可以自己添加额外的编译模式。
 &lt;/p&gt;
 
@@ -58,11 +58,11 @@
 
 &lt;p&gt;项目新建之后我们没有对Scheme做任何更改，默认Scheme截图如下，模拟器运行是在&lt;strong&gt;DEBUG&lt;/strong&gt;模式下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSDebugReleas/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;修改Scheme，将&lt;strong&gt;Build Configuration&lt;/strong&gt;修改为Release，截图如下；&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSDebugReleas/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;运行之后控制台输出：&lt;/p&gt;
 
@@ -76,17 +76,17 @@
 
 &lt;p&gt;接下来我们做下修改就好了，截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSDebugReleas/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如图中所示，我们在&lt;strong&gt;Build Settings&lt;/strong&gt;中搜索macro，然后发现&lt;strong&gt;Release&lt;/strong&gt;这一项是没值的，所以到了另外一个分支里面，输出了其他结果。&lt;strong&gt;Debug&lt;/strong&gt;已经默认设置好了，所以我们这里设置一下值就好了，设置为&lt;strong&gt;RELEASE=1 $(inherited)&lt;/strong&gt;，运行之后输出结果就对了。&lt;/p&gt;
 
 &lt;p&gt;这里我们还需要添加一种编译模式，如最开始的时候说的&lt;strong&gt;Develop&lt;/strong&gt;模式。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSDebugReleas/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;我们点击&lt;strong&gt;+&lt;/strong&gt;号来添加一个编译模式，叫&lt;strong&gt;Develop&lt;/strong&gt;。截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSDebugReleas/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后我们修改Scheme为&lt;strong&gt;Develop&lt;/strong&gt;，运行后输出：&lt;/p&gt;
 

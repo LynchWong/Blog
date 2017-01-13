@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Git on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/git/index.xml</link>
+    <link>http://lynchwong.com/tags/git/index.xml</link>
     <description>Recent content in Git on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/git/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Git</title>
-      <link>http://lynchwong.com/blog/2014/12/git/</link>
+      <link>http://lynchwong.com/2014/12/git/</link>
       <pubDate>Fri, 12 Dec 2014 17:04:15 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2014/12/git/</guid>
+      <guid>http://lynchwong.com/2014/12/git/</guid>
       <description>&lt;p&gt;Git是分布式版本控制系统，相信很多同学都知道这个。类似的东西Svn，说是类似，其实有很大区别。这里推荐给大家两个地址，是学习Git很好的资料。当然还有其他优秀的资料，就不列举了。
 &lt;/p&gt;
 

@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Spaceship on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/spaceship/index.xml</link>
+    <link>http://lynchwong.com/tags/spaceship/index.xml</link>
     <description>Recent content in Spaceship on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/spaceship/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/spaceship/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Fastlane - Spaceship</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---spaceship/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---spaceship/</link>
       <pubDate>Tue, 28 Jun 2016 09:03:31 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---spaceship/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---spaceship/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Spaceship&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSpaceship/spaceship.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSpaceship/spaceship.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;spaceship&#34;&gt;spaceship&lt;/h1&gt;
 
@@ -62,7 +62,7 @@ profile.download
 
 &lt;p&gt;跟网页抓取比起来，使用 &lt;code&gt;spaceship&lt;/code&gt; 工具有多快？&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSpaceship/SpaceshipRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSpaceship/SpaceshipRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
 
@@ -75,7 +75,7 @@ profile.download
 
 &lt;p&gt;尝试 &lt;code&gt;spaceship&lt;/code&gt; ，只需要运行 &lt;code&gt;spaceship&lt;/code&gt; 。然后就会自动启动 &lt;code&gt;spaceship playground&lt;/code&gt;。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSpaceship/Playground.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSpaceship/Playground.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这要求你使用 &lt;code&gt;sudo gem install pry&lt;/code&gt; 安装 &lt;code&gt;pry&lt;/code&gt; 。&lt;code&gt;pry&lt;/code&gt; 不会默认安装，因为大部分的 &lt;a href=&#34;https://fastlane.tools&#34;&gt;fastlane&lt;/a&gt; 用户不需要 &lt;code&gt;spaceship playground&lt;/code&gt; 。你可以在 &lt;code&gt;Gemfile&lt;/code&gt; 文件里添加 &lt;code&gt;pry&lt;/code&gt; 依赖。&lt;/p&gt;
 

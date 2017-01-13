@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Coredata on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/coredata/index.xml</link>
+    <link>http://lynchwong.com/tags/coredata/index.xml</link>
     <description>Recent content in Coredata on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/coredata/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/coredata/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>CoreData: Multiple Managed Object Contexts</title>
-      <link>http://lynchwong.com/blog/2015/07/coredata-multiple-managed-object-contexts/</link>
+      <link>http://lynchwong.com/2015/07/coredata-multiple-managed-object-contexts/</link>
       <pubDate>Sat, 25 Jul 2015 13:27:53 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/coredata-multiple-managed-object-contexts/</guid>
+      <guid>http://lynchwong.com/2015/07/coredata-multiple-managed-object-contexts/</guid>
       <description>&lt;p&gt;之前就有一篇讲&lt;a href=&#34;http://lynchwong.com/2015/06/09/CoreData%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/&#34;&gt; CoreData多线程处理 &lt;/a&gt;。和&lt;a href=&#34;http://www.raywenderlich.com/store/core-data-by-tutorials?source=matthewmorey&#34;&gt;《Core Data by Tutorials: iOS 8 and Swift Edition》&lt;/a&gt;的&lt;strong&gt;Chapter 10: Multiple Managed Object Contexts&lt;/strong&gt; 感觉上类似的，内容差不了太多。
 &lt;/p&gt;
 
@@ -98,10 +98,10 @@ temporaryContext.parentContext = mainMOC;
     
     <item>
       <title>CoreData: Measuring and Boosting Performance</title>
-      <link>http://lynchwong.com/blog/2015/07/coredata-measuring-and-boosting-performance/</link>
+      <link>http://lynchwong.com/2015/07/coredata-measuring-and-boosting-performance/</link>
       <pubDate>Sat, 25 Jul 2015 13:27:29 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/coredata-measuring-and-boosting-performance/</guid>
+      <guid>http://lynchwong.com/2015/07/coredata-measuring-and-boosting-performance/</guid>
       <description>&lt;p&gt;很显然的一件事情就是我们应该努力的优化我们开发的程序性能。一个性能低下的应用程序最好的情况可能就只是收到差的评价，最坏的情况就是无法响应以及崩溃。
 &lt;/p&gt;
 
@@ -129,7 +129,7 @@ temporaryContext.parentContext = mainMOC;
 
 &lt;p&gt;在Xcode中我们可以看到我们应用程序的内存占用情况。如果我们运行前面提到的那个App，内存占用一定会很大。因为实体中有存储图片的二进制数据，图片数据会被加载到内存中。所以如果我们A的实体记录比较多的话，在程序启动的时候就要加载A的数据到UITableView中进行显示，那么内存就会消耗的很多。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataPerformance/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataPerformance/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在前面的章节我们也提到过，即使我们只是要修改A的一个属性，与这个图片属性无关，二进制数据也会全部加载到内存中，然而我们根本就用不到。&lt;/p&gt;
 
@@ -159,11 +159,11 @@ temporaryContext.parentContext = mainMOC;
 
 &lt;p&gt;在Xcode中⌘I，选择Core Data，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataPerformance/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataPerformance/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后点击红点进行记录，一段时间后，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataPerformance/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataPerformance/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;看最后一列。这列包含了Objective-C版本的调用者，获取数据的条数，以及操作的时间(微秒)。&lt;/p&gt;
 
@@ -188,10 +188,10 @@ temporaryContext.parentContext = mainMOC;
     
     <item>
       <title>CoreData: Unit Testing</title>
-      <link>http://lynchwong.com/blog/2015/07/coredata-unit-testing/</link>
+      <link>http://lynchwong.com/2015/07/coredata-unit-testing/</link>
       <pubDate>Sat, 25 Jul 2015 13:26:18 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/coredata-unit-testing/</guid>
+      <guid>http://lynchwong.com/2015/07/coredata-unit-testing/</guid>
       <description>&lt;p&gt;本章是讲CoreData单元测试的，涉及到&lt;strong&gt;XCTest&lt;/strong&gt;框架。
 &lt;/p&gt;
 
@@ -202,10 +202,10 @@ temporaryContext.parentContext = mainMOC;
     
     <item>
       <title>CoreData: Syncing with iCloud</title>
-      <link>http://lynchwong.com/blog/2015/07/coredata-syncing-with-icloud/</link>
+      <link>http://lynchwong.com/2015/07/coredata-syncing-with-icloud/</link>
       <pubDate>Fri, 24 Jul 2015 20:42:04 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/coredata-syncing-with-icloud/</guid>
+      <guid>http://lynchwong.com/2015/07/coredata-syncing-with-icloud/</guid>
       <description>&lt;p&gt;使用iCloud在多个设备间进行数据同步是很好的解决方案，但是这种方法有局限性，只适用于苹果的设备。所以并不能做到通用、跨平台。
 &lt;/p&gt;
 
@@ -216,10 +216,10 @@ temporaryContext.parentContext = mainMOC;
     
     <item>
       <title>CoreData: Versioning and Migration</title>
-      <link>http://lynchwong.com/blog/2015/07/coredata-versioning-and-migration/</link>
+      <link>http://lynchwong.com/2015/07/coredata-versioning-and-migration/</link>
       <pubDate>Fri, 24 Jul 2015 20:10:27 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/coredata-versioning-and-migration/</guid>
+      <guid>http://lynchwong.com/2015/07/coredata-versioning-and-migration/</guid>
       <description>&lt;p&gt;什么时候迁移是必须的？早期的答案就是当你需要改变数据模型的时候。
 &lt;/p&gt;
 
@@ -240,10 +240,10 @@ temporaryContext.parentContext = mainMOC;
     
     <item>
       <title>CoreData: NSFetchedResultsController</title>
-      <link>http://lynchwong.com/blog/2015/07/coredata-nsfetchedresultscontroller/</link>
+      <link>http://lynchwong.com/2015/07/coredata-nsfetchedresultscontroller/</link>
       <pubDate>Thu, 23 Jul 2015 13:34:02 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/coredata-nsfetchedresultscontroller/</guid>
+      <guid>http://lynchwong.com/2015/07/coredata-nsfetchedresultscontroller/</guid>
       <description>&lt;p&gt;使用&lt;strong&gt;UITableView&lt;/strong&gt;来展示CoreData的数据已经是标配了，&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;能够简化我们的操作，就像是CoreData与&lt;strong&gt;UITableView&lt;/strong&gt;之间的桥梁。
 &lt;/p&gt;
 
@@ -309,7 +309,7 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
 
 &lt;p&gt;运行后的截图如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSFetchedResultsController/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这里我将前面的Demo进行了一些改造，而且已经初始化了一些数据。文章最后会给出源码地址，所以这里就不一一讲解了怎么实现了。&lt;/p&gt;
 
@@ -333,7 +333,7 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
 
 &lt;p&gt;最后运行效果如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSFetchedResultsController/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这里有一个&lt;strong&gt;NSFetchedResultsController&lt;/strong&gt;的疑难杂症，如果你使用keyPath将请求查询的结果分成了多个section，那么第一个sort descriptor的属性名必须与keyPath的属性名相匹配。&lt;/p&gt;
 
@@ -344,7 +344,7 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
 
 &lt;p&gt;重新运行，截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSFetchedResultsController/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;现在看起来好像对了。&lt;/p&gt;
 
@@ -362,7 +362,7 @@ func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexP
 
 &lt;h1 id=&#34;modifying-data&#34;&gt;Modifying data&lt;/h1&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSFetchedResultsController/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如图所示，每种商品都有对应的数量。现在我们要实现一个新的功能，点击对应的商品，然后数量增加1。添加如下代码：&lt;/p&gt;
 
@@ -512,11 +512,11 @@ func controllerDidChangeContent(controller: NSFetchedResultsController) {
 
 &lt;p&gt;代码很简单，这里就不讲解了。运行之后&lt;strong&gt;Command+Control+Z&lt;/strong&gt;来模拟摇晃事件来让“+” bar button item可用：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSFetchedResultsController/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;我新添加了一种类型的商品，最后效果如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSFetchedResultsController/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;deleting-data&#34;&gt;Deleting data&lt;/h1&gt;
 
@@ -537,11 +537,11 @@ func controllerDidChangeContent(controller: NSFetchedResultsController) {
 
 &lt;p&gt;代码也很简单，不讲解了。运行后最后效果如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSFetchedResultsController/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如图所示，我删除了卫衣这个商品，由于服装只有一个商品，所以这个section也被删除了，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSFetchedResultsController/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSFetchedResultsController/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/OwnCoreDataStack/tree/NSFetchedResultsController&#34;&gt; 完整源码 &lt;/a&gt;。&lt;/p&gt;
 
@@ -550,10 +550,10 @@ func controllerDidChangeContent(controller: NSFetchedResultsController) {
     
     <item>
       <title>CoreData: Fetching</title>
-      <link>http://lynchwong.com/blog/2015/07/coredata-fetching/</link>
+      <link>http://lynchwong.com/2015/07/coredata-fetching/</link>
       <pubDate>Wed, 22 Jul 2015 22:00:06 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/coredata-fetching/</guid>
+      <guid>http://lynchwong.com/2015/07/coredata-fetching/</guid>
       <description>&lt;p&gt;前面我们从CoreData提取数据的时候都只是简单的使用了&lt;strong&gt;NSFetchRequest&lt;/strong&gt;，没有对数据进行精确的控制和刷选。&lt;/p&gt;
 
 &lt;p&gt;本章就讲讲&lt;strong&gt;NSFetchRequest&lt;/strong&gt;，但是没有Demo演示，大多都只是给出代码，相信大家都能看得懂，然后自己去尝试使用。&lt;/p&gt;
@@ -589,7 +589,7 @@ let fetchRequest4 = managedObjectModel.fetchRequestFromTemplateWithName(&amp;quo
 
 &lt;p&gt;打开&lt;strong&gt;.xcdatamodeld&lt;/strong&gt;文件，然后长按&lt;strong&gt;Add Entity&lt;/strong&gt;，然后选择&lt;strong&gt;Add Fetch Request&lt;/strong&gt;。如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFetching/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFetching/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你可以从新设置名字，这里我使用了默认的名字。也增加了谓词，如图中所示。查找name是apple的Good。使用如下代码来获取这个FetchRequest，以及使用：&lt;/p&gt;
 
@@ -775,10 +775,10 @@ if let result = batchResult {
     
     <item>
       <title>CoreData: The Core Data Stack</title>
-      <link>http://lynchwong.com/blog/2015/07/coredata-the-core-data-stack/</link>
+      <link>http://lynchwong.com/2015/07/coredata-the-core-data-stack/</link>
       <pubDate>Tue, 21 Jul 2015 21:48:02 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/coredata-the-core-data-stack/</guid>
+      <guid>http://lynchwong.com/2015/07/coredata-the-core-data-stack/</guid>
       <description>&lt;p&gt;到现在为止我们都是使用的Xcode生成的CoreData模板。使用Xcode来帮助我们并没有什么错，Xcode就是用来帮助我们提升开发效率的，而且在这些细节之处也体现了Xcode的优秀。一般情形下使用Xcode生成的CoreData模板就够用了，但是如果你想知道CoreData是如何工作的，那么你就必须创建自己的Core Data Stack。
 &lt;/p&gt;
 
@@ -1002,11 +1002,11 @@ let storeURL = documentsURL.URLByAppendingPathComponent(&amp;quot;Model&amp;quot
 
 &lt;p&gt;现在我们就来设置实体，如之前就提到的，我们应该有Warehouse和Good这两个实体，那么我就一一设置。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如上所示，我设置了一个&lt;strong&gt;Warehouse&lt;/strong&gt;实体，有一个&lt;strong&gt;name&lt;/strong&gt;属性，是&lt;strong&gt;String&lt;/strong&gt;类型。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;同样的，设置了&lt;strong&gt;Good&lt;/strong&gt;这个实体，也只有&lt;strong&gt;name&lt;/strong&gt;属性，&lt;strong&gt;String&lt;/strong&gt;类型。&lt;/p&gt;
 
@@ -1014,25 +1014,25 @@ let storeURL = documentsURL.URLByAppendingPathComponent(&amp;quot;Model&amp;quot
 
 &lt;p&gt;如下图所示，我在&lt;strong&gt;Warehouse&lt;/strong&gt;实体的&lt;strong&gt;Relationships&lt;/strong&gt;这一栏设置了一个叫做&lt;strong&gt;goods&lt;/strong&gt;的关系，&lt;strong&gt;Destination&lt;/strong&gt;设置为了&lt;strong&gt;Good&lt;/strong&gt;实体。&lt;strong&gt;Destination&lt;/strong&gt;就可以想象成关系的末端。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;设置完成后，Xcode有一个警告，如下图，先不用管，还没设置完：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;每种关系刚开始都被默认设置成了&lt;strong&gt;to-one&lt;/strong&gt;(即一对一的关系)，在上面的示例中表示我们的仓库一次只能追踪一个商品，其实这是不对的，因为我们的仓库肯定不止一个商品。仓库和商品应该是一对多的关系，所以我们应该进行修改，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;我们选择&lt;strong&gt;Good&lt;/strong&gt;实体，同样也需要设置关系，设置了一个叫做&lt;strong&gt;warehouse&lt;/strong&gt;的关系，&lt;strong&gt;Destination&lt;/strong&gt;为&lt;strong&gt;Warehouse&lt;/strong&gt;，设置&lt;strong&gt;Inverse&lt;/strong&gt;为&lt;strong&gt;goods&lt;/strong&gt;。如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这里默认的&lt;strong&gt;to-one&lt;/strong&gt;关系是正确的，因为一个商品不可能存在于多个仓库中。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Inverse&lt;/strong&gt;能够让模型进行逆向的寻找。比如给定了一条Good记录，你可以根据关系找到该商品的仓库。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你可以切换Editor Style，如上图所示，你可以清晰的看出实体之间的关系。&lt;/p&gt;
 
@@ -1074,7 +1074,7 @@ class Good: NSManagedObject {
 
 &lt;p&gt;还要进行如下所示的设置，&lt;strong&gt;Good&lt;/strong&gt;也是类似：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;a-good-persistence-lane&#34;&gt;A good persistence lane&lt;/h1&gt;
 
@@ -1115,11 +1115,11 @@ class Good: NSManagedObject {
 
 &lt;p&gt;和最开始的仓库管理类似，对ViewController进行了如下的设置，添加了UITableView以及UIBarButtonItem，设置了@IBOutlet和selector，这些就不详细讲解怎么弄了。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;运行之后，模拟器截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;要在列表中显示这个仓库的商品，但是现在还没有商品，接下来就来添加商品。&lt;/p&gt;
 
@@ -1170,7 +1170,7 @@ func saveName(name: String) {
 
 &lt;p&gt;运行之后截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你可以重启App进行检查，查看数据是否被持久化了。&lt;/p&gt;
 
@@ -1201,7 +1201,7 @@ func saveName(name: String) {
 
 &lt;p&gt;运行模拟器之后向左滑动Cell就会出现删除按钮，点击删除，如下所示删除了&lt;code&gt;water&lt;/code&gt;：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataStack/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataStack/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;同样你也可以重启App进行检查。&lt;/p&gt;
 
@@ -1210,10 +1210,10 @@ func saveName(name: String) {
     
     <item>
       <title>CoreData: 子类化NSManagedObject</title>
-      <link>http://lynchwong.com/blog/2015/07/coredata-%E5%AD%90%E7%B1%BB%E5%8C%96nsmanagedobject/</link>
+      <link>http://lynchwong.com/2015/07/coredata-%E5%AD%90%E7%B1%BB%E5%8C%96nsmanagedobject/</link>
       <pubDate>Tue, 21 Jul 2015 15:08:30 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/coredata-%E5%AD%90%E7%B1%BB%E5%8C%96nsmanagedobject/</guid>
+      <guid>http://lynchwong.com/2015/07/coredata-%E5%AD%90%E7%B1%BB%E5%8C%96nsmanagedobject/</guid>
       <description>&lt;p&gt;在之前我们设置或者获取实体的属性时时通过KVC来实现的，其实你可以使用KVC来直接操纵NSManagedObject的所有东西，但不意味着你必须这样做。使用KVC时，涉及到大量的字符串，所以可能经常导致错误的拼写。&lt;/p&gt;
 
 &lt;p&gt;最好的替代方法就是为数据模型实体创建&lt;strong&gt;NSManagedObject&lt;/strong&gt;的子类。你可以像访问属性一样来访问或者设置实体的属性。
@@ -1233,7 +1233,7 @@ Range for 32-bit integer: –2147483648 to 2147483647
 Range for 64-bit integer: –9223372036854775808 to 9223372036854775807
 &lt;strong&gt;Binary Data&lt;/strong&gt;类型可以存储二进制数据，比如图片，音乐文件等等。如果存储的二进制数据太大，会影响应用程序的性能。这就意味着你每次访问实体时都会将这个实体加载到内存中，包括这些二进制数据，即使你只是想要访问实体的其他属性，比如&lt;strong&gt;name&lt;/strong&gt;。
 幸运的是CoreData预计到了这个问题。你可以在&lt;strong&gt;Attributes&lt;/strong&gt;查看器里面选上&lt;strong&gt;Allows External Storage&lt;/strong&gt;，如下所示：
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/1.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSManagedObjectSub/1.png&#34; alt=&#34;alt text&#34; /&gt;
 勾选上了&lt;strong&gt;Allows External Storage&lt;/strong&gt;之后，CoreData会依据每次的值来决定是直接存储到数据库还是存储分离文件的URI。
 &lt;strong&gt;注意：Allows External Storage&lt;/strong&gt;选项只在&lt;strong&gt;Binary Data&lt;/strong&gt;类型下可用。而且，如果打开了这个选项，CoreData就不能使用这个属性来进行查询。&lt;/p&gt;
 
@@ -1246,9 +1246,9 @@ Range for 64-bit integer: –9223372036854775808 to 9223372036854775807
 &lt;p&gt;如下所示我们让Xcode帮我们创建了&lt;strong&gt;NSManagedObject&lt;/strong&gt;的子类&lt;strong&gt;Warehouse&lt;/strong&gt;。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/2.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSManagedObjectSub/2.png&#34; alt=&#34;alt text&#34; /&gt;
 语言我们选择Swift，生成之后截图如下：
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/3.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSManagedObjectSub/3.png&#34; alt=&#34;alt text&#34; /&gt;
 如果你之前在OC中使用过CoreData，你会发现有些不一样。与OC中&lt;strong&gt;@dynamic&lt;/strong&gt;属性是类似的，&lt;strong&gt;@NSManaged&lt;/strong&gt;属性通知Swift的编译器属性的实现和存储在运行时提供，而不是在编译时。正常模式下一个实例变量的属性存储在内存中。而managed object的属性不一样，由managed object context存储，所以源数据在编译时是不知道的。
 * String maps to String
 * Integer 16/32/64, Float, Double and Boolean map to NSNumber
@@ -1257,7 +1257,7 @@ Range for 64-bit integer: –9223372036854775808 to 9223372036854775807
 * Binary data maps to NSData
 * Transformable maps to AnyObject
 CoreData会将对象图持久到磁盘，所以默认是和对象工作。所以像integers，doubles以及Booleans封装成了NSNumber。如果你想直接使用Double或者Int32这些基本类型，你可以在创建的时候勾选上&lt;strong&gt;Use scalar properties for primitive data types&lt;/strong&gt;，如下所示：
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/4.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSManagedObjectSub/4.png&#34; alt=&#34;alt text&#34; /&gt;
 基于面向对象，建议还是不要勾选。
 接下来我们修改&lt;strong&gt;ViewController.swift&lt;/strong&gt;里面的代码，如下：
     var warehouses = [Warehouse]()
@@ -1266,13 +1266,13 @@ CoreData会将对象图持久到磁盘，所以默认是和对象工作。所以
 
 &lt;p&gt;主要是涉及到&lt;strong&gt;NSManagedObject&lt;/strong&gt;以及和KVC相关的一些代码，先清除掉与App相关的数据，删除App，然后Command+Shift+K清除数据。在运行之前还需要如下设置，在实体的查看器里面设置&lt;strong&gt;Class&lt;/strong&gt;，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/5.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSManagedObjectSub/5.png&#34; alt=&#34;alt text&#34; /&gt;
 如果不这样设置，会出现警告，说找不到&lt;strong&gt;Warehouse&lt;/strong&gt;然后使用&lt;strong&gt;NSManagedObject&lt;/strong&gt;代替。&lt;/p&gt;
 
 &lt;h1 id=&#34;数据验证&#34;&gt;数据验证&lt;/h1&gt;
 
 &lt;p&gt;CoreData能够进行数据验证，比如我设置了一个&lt;strong&gt;number&lt;/strong&gt;的属性，类型是Integer32，然后设置了最大值和最小值，如下所示：
-&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataNSManagedObjectSub/6.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/CoreDataNSManagedObjectSub/6.png&#34; alt=&#34;alt text&#34; /&gt;
 当你调用了managed object context的save操作后，验证会立即执行。managed object context会检查新值是否冲突了验证规则。如果验证出现错误，save操作就会失败。记得之前我们传递了&lt;strong&gt;NSError&lt;/strong&gt;的指针给save方法。发生错误时并没有做其他的事情，验证操作改变了这种情况。&lt;/p&gt;
 
 &lt;p&gt;如果save操作失败了，CoreData会将错误信息填充到你传递过来的引用里面，然后你要决定当错误发生时做什么。比如我们执行save操作时，实体的number属性设置的值大于了10，那么就会发生错误。如果我们将错误代码和信息打印出来就能看到具体的内容。
@@ -1291,10 +1291,10 @@ CoreData会将对象图持久到磁盘，所以默认是和对象工作。所以
     
     <item>
       <title>CoreData: 第一个CoreData应用</title>
-      <link>http://lynchwong.com/blog/2015/07/coredata-%E7%AC%AC%E4%B8%80%E4%B8%AAcoredata%E5%BA%94%E7%94%A8/</link>
+      <link>http://lynchwong.com/2015/07/coredata-%E7%AC%AC%E4%B8%80%E4%B8%AAcoredata%E5%BA%94%E7%94%A8/</link>
       <pubDate>Tue, 21 Jul 2015 09:14:43 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/coredata-%E7%AC%AC%E4%B8%80%E4%B8%AAcoredata%E5%BA%94%E7%94%A8/</guid>
+      <guid>http://lynchwong.com/2015/07/coredata-%E7%AC%AC%E4%B8%80%E4%B8%AAcoredata%E5%BA%94%E7%94%A8/</guid>
       <description>&lt;p&gt;在开发中使用过几次CoreData，还算是比较熟悉了，觉得有必要整理下。CoreData是非常重要的一个框架，功能丰富，想要完全的掌握还需要花时间。&lt;/p&gt;
 
 &lt;p&gt;该系列主要参考&lt;a href=&#34;http://www.raywenderlich.com/store/core-data-by-tutorials?source=matthewmorey&#34;&gt;《Core Data by Tutorials: iOS 8 and Swift Edition》&lt;/a&gt;，推荐购买正版看英文原版。&lt;/p&gt;
@@ -1309,7 +1309,7 @@ CoreData会将对象图持久到磁盘，所以默认是和对象工作。所以
 
 &lt;p&gt;我们新建一个项目，如下所示，记得勾选&lt;strong&gt;Use Core Data&lt;/strong&gt;，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;新建完成后你可以看见比我们平时不使用Core Data的项目要多了一些东西，而且&lt;strong&gt;AppDelegate.swift&lt;/strong&gt;里面也多了不少的代码。这些东西都是Xcode的模板为我们自动生成了，这些配置对于大多数的App都够用了，后面我们会自己创建Core Data Stack，不使用Xcode为我们创建的。&lt;/p&gt;
 
@@ -1317,21 +1317,21 @@ CoreData会将对象图持久到磁盘，所以默认是和对象工作。所以
 
 &lt;p&gt;将&lt;strong&gt;View Controller&lt;/strong&gt;包含在&lt;strong&gt;Navigation Controller&lt;/strong&gt;里面，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;给&lt;strong&gt;View Controller&lt;/strong&gt;添加如下所示的内容：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;请自行给Tableview设置约束。然后设置Tableview的dataSource，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这里只需要设置dataSource即可，然后给Tableview设置@IBOutlet，以及设置Bar Button Item的selector，如下所示&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;View Controller&lt;/strong&gt;的代码如下：&lt;/p&gt;
 
@@ -1393,7 +1393,7 @@ class ViewController: UIViewController, UITableViewDataSource {
 
 &lt;p&gt;运行后模拟器截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;点击添加可以添加新的仓库，但是这些数据并没有被保存起来，在程序运行期间存在于内存中。当我们重启设备或者退出(注意这里的退出不是指点击home键退出到主屏幕，而是从后台中清除)，这些数据就不会存在了。所以我们就需要CoreData来持久化数据，当然你也可以用其他的的持久化手段，比如使用SQLite或者读写文件等等。接下来我们就使用CoreData来持久化这些数据。&lt;/p&gt;
 
@@ -1405,7 +1405,7 @@ class ViewController: UIViewController, UITableViewDataSource {
 
 &lt;p&gt;所以我们先要创建&lt;strong&gt;managed object model&lt;/strong&gt;，Xcode自动为我们生成了数据模型文件，叫做&lt;strong&gt;WarehouseList.xcdatamodeld&lt;/strong&gt;。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;点击&lt;strong&gt;Add Entity&lt;/strong&gt;，命名为&lt;strong&gt;Warehouse&lt;/strong&gt;，如上所示。&lt;/p&gt;
 
@@ -1417,7 +1417,7 @@ class ViewController: UIViewController, UITableViewDataSource {
 
 &lt;p&gt;现在我们给&lt;strong&gt;Warehouse&lt;/strong&gt;添加一个叫做&lt;strong&gt;name&lt;/strong&gt;的&lt;strong&gt;Attributes&lt;/strong&gt;，选择String类型，如下所示。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;保存&#34;&gt;保存&lt;/h2&gt;
 
@@ -1488,7 +1488,7 @@ class ViewController: UIViewController, UITableViewDataSource {
 
 &lt;p&gt;然后我们运行添加一个仓库，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;但是当我们重启的时候会发现列表是空的，就不截图了，主要原因是因为我们并没有从CoreData中查询数据，所以，接下来我们就来查询数据。&lt;/p&gt;
 
@@ -1529,17 +1529,17 @@ class ViewController: UIViewController, UITableViewDataSource {
 
 &lt;p&gt;现在让我们运行，截图如下所示，列表中就有了我之前添加的数据了：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataFirstApp/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataFirstApp/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/WarehouseList&#34;&gt; 程序完整源码 &lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>CoreData多线程处理</title>
-      <link>http://lynchwong.com/blog/2015/06/coredata%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/</link>
+      <link>http://lynchwong.com/2015/06/coredata%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/</link>
       <pubDate>Tue, 09 Jun 2015 10:26:19 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/coredata%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/</guid>
+      <guid>http://lynchwong.com/2015/06/coredata%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86/</guid>
       <description>&lt;p&gt;首先要说明的是本篇博文不是教程，不会教你怎么从零构建使用CoreData，本篇博文主要讲的是多线程处理CoreData。
 &lt;/p&gt;
 
@@ -1606,7 +1606,7 @@ temporaryContext.parentContext = mainMOC;
 
 &lt;p&gt;首先，我们回顾下单一context的设置。你需要一个persistent store coordinator (PSC，持久化存储协调器)管理与磁盘上数据库文件的对话。所以那个PSC知道你需要模型的数据库的结构。这个模型是由所有定义包含在项目里面的模型合并而成的，告诉CoreData数据库的结构是怎样的。这个PSC通过属性设置给了MOC。需要记住的第一条规则就是：如果你调用MOC的&lt;strong&gt;saveContext&lt;/strong&gt;方法，PSC将会把数据写入磁盘。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataMultiContext/first.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataMultiContext/first.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;思考一下这张图。每当你在单个MOC中插入、更新或者删除实体类，这些改变将会通知给fetched results controller然后更新table view的内容。这些独立context的saving操作。你可以随心所欲的执行save操作。苹果给出的模板在每次添加了实体对象后以及在&lt;strong&gt;applicationWillTerminate&lt;/strong&gt;方法里都会执行save操作。&lt;/p&gt;
 
@@ -1620,7 +1620,7 @@ temporaryContext.parentContext = mainMOC;
 
 &lt;p&gt;将每一个MOC想象成改变数据的临时暂存器。在iOS5之前你可能会监听其他MOCs的改变然后通过通知将改变合并到你的main MOC(主要的MOC)。一种典型的设置如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataMultiContext/second.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataMultiContext/second.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你可能会创建一个temporary MOC(临时的MOC)给background queue(后台线程)使用。所以允许改变被保存，你应该设置跟main MOC相同的PSC给temporary MOC。&lt;/p&gt;
 
@@ -1730,7 +1730,7 @@ dispatch_async(_backgroundQueue, ^{
 
 &lt;p&gt;队列的类型在&lt;strong&gt;NSManagedObjectContext&lt;/strong&gt;新的初始化器&lt;strong&gt;initWithConcurrencyType&lt;/strong&gt;指定。注意在下面的插图中我增加了多个child MOCs，并且所有的parent都是同一个main queue MOC。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataMultiContext/third.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataMultiContext/third.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;每当child MOC执行save操作时，parent都会得知这些改变，在这种情形下，fetched results controllers也会知悉这些改变。然后这些数据还没有被持久化，因为background MOCs并不知道PSC。为了将数据写入磁盘你需要在main queue MOC上执行额外的&lt;strong&gt;saveContext:&lt;/strong&gt;操作。&lt;/p&gt;
 
@@ -1776,7 +1776,7 @@ temporaryContext.parentContext = mainMOC;
 
 &lt;p&gt;Marcus Zarra向我展示了如下的方法，该方法构建在Parent/Child方法之上，但是增加了一个额外的context专门负责磁盘的写入。如之前提及的长时间的写入操作可能会阻塞主线程造成用户界面的卡顿。该方法很聪明的将写入操作放到自己的private queue里，然后保持用户界面操作很流畅。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/CoreDataMultiContext/four.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/CoreDataMultiContext/four.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;设置CoreData也很简单了。只需要将persistentStoreCoordinator移到我们新的用来写入的MOC，然后将main MOC作为它的child。&lt;/p&gt;
 
