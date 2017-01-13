@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Swift on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/swift/index.xml</link>
+    <link>http://lynchwong.com/tags/swift/index.xml</link>
     <description>Recent content in Swift on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/swift/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/swift/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>最近的代码</title>
-      <link>http://lynchwong.com/blog/2016/06/%E6%9C%80%E8%BF%91%E7%9A%84%E4%BB%A3%E7%A0%81/</link>
+      <link>http://lynchwong.com/2016/06/%E6%9C%80%E8%BF%91%E7%9A%84%E4%BB%A3%E7%A0%81/</link>
       <pubDate>Thu, 02 Jun 2016 11:35:40 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/%E6%9C%80%E8%BF%91%E7%9A%84%E4%BB%A3%E7%A0%81/</guid>
+      <guid>http://lynchwong.com/2016/06/%E6%9C%80%E8%BF%91%E7%9A%84%E4%BB%A3%E7%A0%81/</guid>
       <description>&lt;p&gt;这三个小项目其实已经完成蛮久了，差不多一个多月的时间了。有发在Cocoachina的代码里面，我的&lt;a href=&#34;https://github.com/LynchWong&#34;&gt; GitHub &lt;/a&gt;上面也有源码。这里也只是作下记录，不做详细的讲解。
 &lt;/p&gt;
 
@@ -35,7 +35,7 @@
 
 &lt;p&gt;效果图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/RecentCoding/demo.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/RecentCoding/demo.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;播放器&#34;&gt;播放器&lt;/h1&gt;
 
@@ -60,15 +60,15 @@
 
 &lt;p&gt;效果图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/RecentCoding/intro.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/RecentCoding/intro.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>IWILLTools</title>
-      <link>http://lynchwong.com/blog/2016/01/iwilltools/</link>
+      <link>http://lynchwong.com/2016/01/iwilltools/</link>
       <pubDate>Sun, 10 Jan 2016 18:45:43 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/iwilltools/</guid>
+      <guid>http://lynchwong.com/2016/01/iwilltools/</guid>
       <description>&lt;p&gt;上篇博文也说了最近在构建一个自己的代码库，主要就是一些iOS开发中会经常用到的一些代码。使用&lt;strong&gt;Swift&lt;/strong&gt;构建，基于iOS8.0，相信很多代码在iOS7上也是可以正常工作的。这部分代码并不适合当作第三方库添加到项目中，最好作为参考使用，所以我也就没添加&lt;strong&gt;Carthage&lt;/strong&gt;和&lt;strong&gt;CocoaPods&lt;/strong&gt;的支持。&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/MyPot/IWILLTools&#34;&gt; IWILLTools &lt;/a&gt;
@@ -131,10 +131,10 @@
     
     <item>
       <title>UIButton传递参数</title>
-      <link>http://lynchwong.com/blog/2015/08/uibutton%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</link>
+      <link>http://lynchwong.com/2015/08/uibutton%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</link>
       <pubDate>Sun, 09 Aug 2015 16:23:22 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/08/uibutton%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</guid>
+      <guid>http://lynchwong.com/2015/08/uibutton%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</guid>
       <description>&lt;p&gt;今天开发自己项目的时候有个需求，需要&lt;strong&gt;UIButton&lt;/strong&gt;的Action传递多个参数。项目里的实际需求是需要传递&lt;strong&gt;NSIndexPath&lt;/strong&gt;，如果只需要section或者row那很好办，设置tag就可以了。但是两个都需要，所以就要传递对象过去了。这里就涉及到了OBJC运行时，使用关联对象就很好办了。
 &lt;/p&gt;
 
@@ -156,10 +156,10 @@ func uncheck(sender: UIButton) {
     
     <item>
       <title>SpriteKit：Scenes</title>
-      <link>http://lynchwong.com/blog/2015/04/spritekitscenes/</link>
+      <link>http://lynchwong.com/2015/04/spritekitscenes/</link>
       <pubDate>Thu, 23 Apr 2015 23:20:32 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/04/spritekitscenes/</guid>
+      <guid>http://lynchwong.com/2015/04/spritekitscenes/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;最近这周时间比较忙，空闲的时候看了看苹果官方的编程指南。发现有很多东西都是之前忽略掉的，或者就是根本不知道的。看完之后感觉收获良多，在某些方面有恍然大悟之感。其实刚开始学iOS的时候去看一些官方文档可能并没有多少作用，到了一定程度回头再去看得时候就觉得很清晰、很有逻辑。这些编程指南就像一些经典书籍一样，不同的时间回去看就会有不同的收获，这些书籍能随着时间跟随我们一起成长，我们需要做得就是细细的品，不时的回头看看，思考。看书还是多看经典的好，这也是为什么有的人觉得看了那么多书，却感觉没什么用，就是因为经典看的少。&lt;/p&gt;
@@ -314,10 +314,10 @@ backgroundLayer.convertPoint( background.position, toNode: self)
     
     <item>
       <title>SpriteKit：Actions</title>
-      <link>http://lynchwong.com/blog/2015/04/spritekitactions/</link>
+      <link>http://lynchwong.com/2015/04/spritekitactions/</link>
       <pubDate>Wed, 15 Apr 2015 10:31:17 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/04/spritekitactions/</guid>
+      <guid>http://lynchwong.com/2015/04/spritekitactions/</guid>
       <description>&lt;p&gt;上篇介绍了一些SpriteKit的基本概念，也介绍了怎么添加精灵到场景里面。但精灵在场景里都是静态的，我们还没有让它们动起来。所以这篇就讲讲怎么让精灵动起来，让游戏更生动。
 &lt;/p&gt;
 
@@ -382,7 +382,7 @@ class GameScene: SKScene {
 
 &lt;p&gt;这里我们需要研究SpriteKit每帧都做了些什么事情，官方文档&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html&#34;&gt;About Sprite Kit&lt;/a&gt;开篇就讲了这个问题，看下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;SpriteKit提供了图形渲染和动画基础，你可以用来使任意的纹理图像或者精灵动起来。SpriteKit使用传统的渲染循环，每一帧的内容会在这一帧渲染之前处理。你的游戏决定了场景的内容，以及场景内容在每一帧中怎么改变。SpriteKit使用图形硬件高效的绘制动画的每一帧。翻译的不好，大概意思就是这样。&lt;/p&gt;
 
@@ -423,7 +423,7 @@ println(&amp;quot;\(dt*1000) milliseconds since last update&amp;quot;)
 
 &lt;p&gt;可以看出是波动的，虽然是毫秒单位，人眼难以识别，但是毫秒对计算机来说已经是相当的一段时间了。所以这种波动的时间导致动画效果就如下图所示：图片来自&lt;a href=&#34;http://www.raywenderlich.com/store/ios-games-by-tutorials&#34;&gt;iOS Games by Tutorials Second Edition&lt;/a&gt;。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;总会在我们期望的准确位置附近波动。我们接下来就来修复这个问题：&lt;/p&gt;
 
@@ -460,7 +460,7 @@ println(&amp;quot;\(dt*1000) milliseconds since last update&amp;quot;)
 
 &lt;p&gt;这里有必要说一下，由于更新Swift1.2和Xcode6.3的原因，这个方法跟之前不一样了。原来是这样的&lt;code&gt;touchesBegan(touches: NSSet, withEvent event: UIEvent)&lt;/code&gt;，用&lt;code&gt;let touch = touches.anyObject() as UITouch&lt;/code&gt;获取&lt;code&gt;UITouch&lt;/code&gt;对象。简单的查了下集合类&lt;code&gt;Set&lt;/code&gt;的API改成上面那样获取&lt;code&gt;UITouch&lt;/code&gt;对象。包括as!，应该是Swift1.2版本更新的内容。这里先不说了，Xcode6.3也提供了方法将之前的Swift版本代码转变到最新版本的代码，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;试了下效果貌似不理想，可能是我使用方法不对，没做深究，大家自己试试。&lt;/p&gt;
 
@@ -526,7 +526,7 @@ velocity = CGPoint(x: unit.x * movePointsPerSec, y: unit.y * movePointsPerSec)
 
 &lt;p&gt;区别如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;“[action] to”和“[action] by”这两种模式在其他种类的动作中也存在。比如“scale to”、“scale by”、“rotate by”、“rotate to”等等，大家运用的时候多看看方法说明。&lt;/p&gt;
 
@@ -562,7 +562,7 @@ velocity = CGPoint(x: unit.x * movePointsPerSec, y: unit.y * movePointsPerSec)
 &lt;li&gt;removeNode 动作是瞬时的，没有执行时间。虽然这个动作是序列的一部分，你会看到这个动作并没有出现在下面序列的时间线里面。作为瞬时动作，在 fadeAway 动作结束了就开始，然后马上就结束了。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;group-action&#34;&gt;Group action&lt;/h3&gt;
 
@@ -585,7 +585,7 @@ velocity = CGPoint(x: unit.x * movePointsPerSec, y: unit.y * movePointsPerSec)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;上图展示了“group action”的时间线，可以看出和“sequence action”的区别。“group action”里面的动作在同一时间开始执行，单个动作的结束时间取决于自己的执行时间，“group action”的执行时间取决于执行时间最长的动作。&lt;/p&gt;
 
@@ -609,7 +609,7 @@ velocity = CGPoint(x: unit.x * movePointsPerSec, y: unit.y * movePointsPerSec)
 
 &lt;p&gt;代码很简单，下图展示了 pulseThreeTimes 动作的时间线。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;repeating-group-action&#34;&gt;Repeating Group action&lt;/h3&gt;
 
@@ -633,7 +633,7 @@ velocity = CGPoint(x: unit.x * movePointsPerSec, y: unit.y * movePointsPerSec)
 
 &lt;p&gt;下图展示了 repeat 动作的时间线。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;group-repeat-action&#34;&gt;Group repeat action&lt;/h3&gt;
 
@@ -659,7 +659,7 @@ velocity = CGPoint(x: unit.x * movePointsPerSec, y: unit.y * movePointsPerSec)
 
 &lt;p&gt;下图展示了 group 动作的时间线。其实group很好理解，完全可以理解为组合中得动作是互不相干的，这样思考起来可能就简单些了。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;run-block-action&#34;&gt;Run block action&lt;/h3&gt;
 
@@ -680,7 +680,7 @@ velocity = CGPoint(x: unit.x * movePointsPerSec, y: unit.y * movePointsPerSec)
 
 &lt;p&gt;如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;不是所有的动作都是可逆的，比如&lt;code&gt;moveTo(duration:)&lt;/code&gt;就不是的。要知道一个动作是否是可逆的，请查看苹果的官方文档的说明。如果在不可逆的动作上调用了&lt;code&gt;reversedAction()&lt;/code&gt;方法，会返回原来的动作。&lt;/p&gt;
 
@@ -747,7 +747,7 @@ ship.removeActionForKey(&amp;quot;MoveDown&amp;quot;)
 
 &lt;p&gt;最后要讲得就是我们最开始的时候给了一张游戏渲染循环的一张图，如下，我还是贴出来：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitActions/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitActions/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;之前我们讲了&lt;code&gt;update&lt;/code&gt;方法，要讲得就是接下来的。这里我们先做个假设，比如我们场景中有两个精灵，一个是我们的玩家角色，另外一个是怪物。怪物精灵执行动作从屏幕右边出现往屏幕左边移动。现在我们要检测这两个精灵的碰撞，我们在&lt;code&gt;update&lt;/code&gt;方法里面获取两个精灵的“frame”属性，然后调用&lt;code&gt;CGRectIntersectsRect(rect1: CGRect, rect2: CGRect)&lt;/code&gt;方法来检测两个精灵是否有交叉的地方，如果有就说明有碰撞。后面我们会利用SpriteKit的物理引擎来检测碰撞，这里就先这样做了。&lt;/p&gt;
 
@@ -758,10 +758,10 @@ ship.removeActionForKey(&amp;quot;MoveDown&amp;quot;)
     
     <item>
       <title>SpriteKit：简介</title>
-      <link>http://lynchwong.com/blog/2015/04/spritekit%E7%AE%80%E4%BB%8B/</link>
+      <link>http://lynchwong.com/2015/04/spritekit%E7%AE%80%E4%BB%8B/</link>
       <pubDate>Sun, 12 Apr 2015 16:40:05 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/04/spritekit%E7%AE%80%E4%BB%8B/</guid>
+      <guid>http://lynchwong.com/2015/04/spritekit%E7%AE%80%E4%BB%8B/</guid>
       <description>&lt;p&gt;前一段时间一直都在看这本书&lt;a href=&#34;http://www.raywenderlich.com/store/ios-games-by-tutorials&#34;&gt;iOS Games by Tutorials Second Edition&lt;/a&gt;，本想SpriteKit这个系列把书中的章节全部翻译过来就好了。但是书是需要购买的，有版权，包括书中配套的源码和艺术资源都是不能共享给别人的。所以这个系列还是得自己写，质量应该不会很高，仅供入门用用，高手不要喷。当然还是推荐大家去看这种原版书籍，支持正版。
 &lt;/p&gt;
 
@@ -771,17 +771,17 @@ ship.removeActionForKey(&amp;quot;MoveDown&amp;quot;)
 
 &lt;p&gt;打开Xcode，我们选择&lt;strong&gt;Create a new Xcode project&lt;/strong&gt;，然后选择&lt;strong&gt;iOS&lt;/strong&gt;中&lt;strong&gt;Application&lt;/strong&gt;的&lt;strong&gt;Game&lt;/strong&gt;选项,点击&lt;strong&gt;Next&lt;/strong&gt;，在选项框中填好对应的选项，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitIntro/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;我们语言选择Swift，这里多说一句。我自己的项目现在都是用Swift写，公司项目还是用OC，毕竟OC更稳定。不过觉得Swift是趋势，会成为主流，所以早点学习更好。&lt;strong&gt;Game Technology&lt;/strong&gt;选择SpriteKit，下拉选项里面还有SceneKit、Metal和OpenGL ES。SceneKit带来了3D引擎和一些增强功能。Metal可以说是跟OpenGL ES类似的东西，只不过只适用于苹果的平台，对苹果的硬件有特别的优化，并且很多游戏引擎如Unity3D都支持了Metal。OpenGL ES是一个编程接口规范，在不同的平台有不同的实现，直接和GPU打交道，属于比较底层的API。在以前没有引擎的时候，那些游戏开发的大神都是基于OpenGL ES开发游戏。&lt;strong&gt;Devices&lt;/strong&gt;这项选择Universal，即iPhone和iPad都适用。&lt;/p&gt;
 
 &lt;p&gt;我们点击&lt;strong&gt;Next&lt;/strong&gt;，然后&lt;strong&gt;Create&lt;/strong&gt;，创建后的项目结构截图如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitIntro/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;点击上面那个三角形的按钮Build and Run，或者快捷键⌘R，模拟器选择iPhone 6。效果图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitIntro/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;每次点击屏幕都会增加一个旋转的飞机到场景里面。&lt;/p&gt;
 
@@ -856,7 +856,7 @@ class GameViewController: UIViewController {
 
 &lt;p&gt;修改背景颜色为白色，然后用飞船的图片初始化了一个精灵，然后添加到场景中。⌘R启动模拟器，效果如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitIntro/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;设置精灵位置&#34;&gt;设置精灵位置&lt;/h2&gt;
 
@@ -880,7 +880,7 @@ class GameViewController: UIViewController {
 
 &lt;p&gt;下图展示了不同anchorPoint的值时，精灵的位置：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitIntro/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;我们注释掉之前设置精灵位置的代码，然后设置精灵的anchorPoint为(0.0, 0.0)。&lt;/p&gt;
 
@@ -889,7 +889,7 @@ class GameViewController: UIViewController {
 
 &lt;p&gt;模拟器效果如图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitIntro/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;因为我们注释掉了设置位置的代码，所以SpriteKit默认设置了position属性为(0.0, 0.0)。然后设置了anchorPoint为(0.0, 0.0)，效果就如上图中间一样，只是position变为了原点，而不是中点。所以大家就看到了飞船完整的出现在了原点的位置。如果将anchorPoint为(1.0, 1.0)，大家就看不到飞船了，大家可以试下。现在大家也可以解释为什么最开始的时候只有飞船的右上部分出现在屏幕上。大家可以设置不同的position和anchorPoint然后看看不同的飞船位置，以确保自己理解了anchorPoint。&lt;/p&gt;
 
@@ -906,7 +906,7 @@ class GameViewController: UIViewController {
 
 &lt;p&gt;效果如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SpriteKitIntro/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SpriteKitIntro/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;zRotation属性接受弧度值，类型为&lt;code&gt;CGFloat&lt;/code&gt;，这里&lt;code&gt;M_PI&lt;/code&gt;是&lt;code&gt;Double&lt;/code&gt;类型，所以使用&lt;code&gt;CGFloat&lt;/code&gt;把&lt;code&gt;M_PI&lt;/code&gt;转换成&lt;code&gt;Double&lt;/code&gt;。弧度值换乘以180然后除以π就是角度值；角度值乘以π然后除以180就是弧度值。所以这个角度值就是22.5度。&lt;/p&gt;
 
@@ -947,10 +947,10 @@ println(&amp;quot;Size: \(shipSize)&amp;quot;)
     
     <item>
       <title>SpriteKit：引言</title>
-      <link>http://lynchwong.com/blog/2015/04/spritekit%E5%BC%95%E8%A8%80/</link>
+      <link>http://lynchwong.com/2015/04/spritekit%E5%BC%95%E8%A8%80/</link>
       <pubDate>Sun, 12 Apr 2015 15:04:36 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/04/spritekit%E5%BC%95%E8%A8%80/</guid>
+      <guid>http://lynchwong.com/2015/04/spritekit%E5%BC%95%E8%A8%80/</guid>
       <description>&lt;p&gt;对于一个想学习游戏开发的新手来说，我觉得第一件事首先就是选择一款游戏引擎。如果你想从构建游戏引擎开始着手来开发一款游戏，对个人开发者以及一些小团队来说真的是有点小题大做了，毕竟免费得游戏引擎很多，而且大多都很优秀，背后有强有力的团队在更新和维护。所以我觉得结合自己的条件，以及游戏的特点选择合适的游戏引擎是很好的选择。
 &lt;/p&gt;
 
@@ -977,10 +977,10 @@ println(&amp;quot;Size: \(shipSize)&amp;quot;)
     
     <item>
       <title>Swift之高级运算符</title>
-      <link>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97%E7%AC%A6/</link>
+      <link>http://lynchwong.com/2015/03/swift%E4%B9%8B%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97%E7%AC%A6/</link>
       <pubDate>Sat, 07 Mar 2015 23:24:32 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97%E7%AC%A6/</guid>
+      <guid>http://lynchwong.com/2015/03/swift%E4%B9%8B%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97%E7%AC%A6/</guid>
       <description>&lt;p&gt;除了在之前介绍过的基本运算符,Swift 中还有许多可以对数值进行复杂操作的高级运算符。这些高级运算符包含 了在 C 和 Objective-C 中已经被大家所熟知的位运算符和移位运算符。
 &lt;/p&gt;
 
@@ -1000,7 +1000,7 @@ println(&amp;quot;Size: \(shipSize)&amp;quot;)
 
 &lt;p&gt;按位取反运算符( ~ ) 可以对一个数值的全部位进行取反:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;按位取反操作符是一个前置运算符,需要直接放在操作数的之前,并且它们之间不能添加任何空格。&lt;/p&gt;
 
@@ -1016,7 +1016,7 @@ let invertedBits = ~initialBits  // equals 11110000
 
 &lt;p&gt;按位与运算符( &amp;amp; )可以对两个数的比特位进行合并。它返回一个新的数,只有当两个操作数的对应位都为 1 的 时候,该数的对应位才为 1 。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在下面的示例当中, firstSixBits 和 lastSixBits 中间 4 个位的值都为 1 。按位与运算符对它们进行了运算,得 到二进制数值 00111100 ,等价于无符号十进制数的 60 :&lt;/p&gt;
 
@@ -1029,7 +1029,7 @@ let middleFourBits = firstSixBits &amp;amp; lastSixBits  // equals 00111100
 
 &lt;p&gt;按位或运算符( | )可以对两个数的比特位进行比较。它返回一个新的数,只要两个操作数的对应位中有任意一个为 1 时,该数的对应位就为 1 。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在下面的示例当中, someBits 和 moreBits 将不同的位设置为 1 。接位或运算符对它们进行了运算,得到二 进制数值 11111110 ,等价于无符号十进制数的 254 :&lt;/p&gt;
 
@@ -1042,7 +1042,7 @@ let combinedbits = someBits | moreBits  // equals 11111110
 
 &lt;p&gt;按位异或运算符( ^ )可以对两个数的比特位进行比较。它返回一个新的数,当两个操作数的对应位不相同时,该 数的对应位就为 1 :&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在下面的示例当中, firstBits 和 otherBits 都有一个自己设置为 1 而对方设置为 0 的位。 按位异或运算符 将这两个位都设置为 1 ,同时将其它位都设置为 0 :&lt;/p&gt;
 
@@ -1071,7 +1071,7 @@ let outputBits = firstBits ^ otherBits  // equals 00010001
 
 &lt;p&gt;以下这张图展示了 11111111 &amp;lt;&amp;lt; 1 (即把 11111111 向左移动 1 位),和 11111111 &amp;gt;&amp;gt; 1 (即把 11111111 向右移动 1 位) 的结果。蓝色的部分是被移位的,灰色的部分是被抛弃的,橙色的部分则是被填充进来的。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;下面的代码演示了 Swift 中的移位操作:&lt;/p&gt;
 
@@ -1110,7 +1110,7 @@ let blueComponent = pink &amp;amp; 0x0000FF           // blueComponent is 0x99, 
 
 &lt;p&gt;其余的比特位(通常被称为数值位)存储了这个数的真实值。有符号正整数和无符号数的存储方式是一样的,都是从 0 开始算起。这是值为 4 的 Int8 型整数的二进制位表现形式:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;符号位为 0 ,说明这是一个正数,另外 7 位则代表了十进制数值 4 的二进制表示。&lt;/p&gt;
 
@@ -1118,23 +1118,23 @@ let blueComponent = pink &amp;amp; 0x0000FF           // blueComponent is 0x99, 
 
 &lt;p&gt;这是值为 -4 的 Int8 型整数的二进制位表现形式:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这次的符号位为 1 ,说明这是一个负数,另外 7 个位则代表了数值 124 (即 128 - 4 ) 的二进制表示。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;负数的表示通常被称为二进制补码( two&amp;rsquo;s complement )表示法。用这种方法来表示负数乍看起来有点奇怪,但 它有几个优点。&lt;/p&gt;
 
 &lt;p&gt;首先,如果想对 -1 和 -4 进行加法操作,我们只需要将这两个数的全部 8 个比特位进行相加,并且将计算结 果中超出 8 位的数值丢弃:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;其次,使用二进制补码可以使负数的按位左移和右移操作得到跟正数同样的效果,即每向左移一位就将自身的数 值乘以 2,每向右一位就将自身的数值除以 2。要达到此目的,对有符号整数的右移有一个额外的规则:&lt;/p&gt;
 
 &lt;p&gt;当对正整数进行按位右移操作时,遵循与无符号整数相同的规则,但是对于移位产生的空白位使用符号位进 行填充,而不是用 0。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这个行为可以确保有符号整数的符号位不会因为右移操作而改变,这通常被称为算术移位( arithmetic shift )。&lt;/p&gt;
 
@@ -1174,7 +1174,7 @@ unsignedOverflow = unsignedOverflow &amp;amp;+ 1
 
 &lt;p&gt;unsignedOverflow 被初始化为 UInt8 所能容纳的最大整数( 255 ,以二进制表示即 11111111 )。然后使用了 溢出加法运算符( &amp;amp;+ )对其进行加 1 操作。这使得它的二进制表示正好超出 UInt8 所能容纳的位数,也就导致了 数值的溢出,如下图所示。数值溢出后,留在 UInt8 边界内的值是 00000000 ,也就是十进制数值的 0。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;同样地,当我们对一个无符号整数使用溢出减法( &amp;amp;- )进行下溢运算时也会产生类似的现象:&lt;/p&gt;
 
@@ -1186,7 +1186,7 @@ unsignedOverflow = unsignedOverflow &amp;amp;- 1
 
 &lt;p&gt;UInt8 的最小值是 0(二进制为 00000000)。使用&amp;amp;-进行溢出减 1,就会得到二进制的 11111111 即十进制的 255。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;溢出也会发生在有符号整型数值上。在对有符号整型数值进行溢出加法或溢出减法运算时,符号位也需要参与计
 算,正如按位左移/右移运算符所描述的。&lt;/p&gt;
@@ -1199,7 +1199,7 @@ signedUnderflow = signedUnderflow &amp;amp;- 1
 
 &lt;p&gt;Int8 型整数能容纳的最小值是 -128,以二进制表示即 10000000。当使用溢出减法操作符对其进行减 1 操作 时,符号位被翻转,得到二进制数值 01111111,也就是十进制数值的 127,这个值也是 Int8 型整数所能容纳的最大值。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;对于无符号与有符号整型数值来说,当出现上溢时,它们会从数值所能容纳的最大数变成最小的数。同样地,当
 发生下溢时,它们会从所能容纳的最小数变成最大的数。&lt;/p&gt;
@@ -1272,7 +1272,7 @@ let combinedVector = vector + anotherVector
 
 &lt;p&gt;这个例子实现两个向量 (3.0,1.0) 和 (2.0,4.0) 相加,得到向量 (5.0,5.0) 的过程。如 下图示:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSAdvancedOperators/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSAdvancedOperators/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;前缀和后缀运算符&#34;&gt;前缀和后缀运算符&lt;/h3&gt;
 
@@ -1412,10 +1412,10 @@ let plusMinusVector = firstVector +- secondVector
     
     <item>
       <title>Swift之访问控制</title>
-      <link>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/</link>
+      <link>http://lynchwong.com/2015/03/swift%E4%B9%8B%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/</link>
       <pubDate>Sat, 07 Mar 2015 23:24:25 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/</guid>
+      <guid>http://lynchwong.com/2015/03/swift%E4%B9%8B%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/</guid>
       <description>&lt;p&gt;访问控制可以限定其他源文件或模块中代码对你代码的访问级别。这个特性可以让我们隐藏功能实现的一些细
 节,并且可以明确的申明我们提供给其他人的接口中哪些部分是他们可以访问和使用的。
 &lt;/p&gt;
@@ -1734,10 +1734,10 @@ print(&amp;quot;The number of edits is \(stringToEdit.numberOfEdits)&amp;quot;)
     
     <item>
       <title>Swift之泛型</title>
-      <link>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%B3%9B%E5%9E%8B/</link>
+      <link>http://lynchwong.com/2015/03/swift%E4%B9%8B%E6%B3%9B%E5%9E%8B/</link>
       <pubDate>Sat, 07 Mar 2015 22:51:36 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%B3%9B%E5%9E%8B/</guid>
+      <guid>http://lynchwong.com/2015/03/swift%E4%B9%8B%E6%B3%9B%E5%9E%8B/</guid>
       <description>&lt;p&gt;泛型代码可以让你写出根据自我需求定义、适用于任何类型的,灵活且可重用的函数和类型。它可以让你避免重复的代码,用一种清晰和抽象的方式来表达代码的意图。
 &lt;/p&gt;
 
@@ -1850,7 +1850,7 @@ swapTwoValues(&amp;amp;someString, &amp;amp;anotherString)
 
 &lt;p&gt;下图展示了一个栈的压栈(push)/出栈(pop)的行为:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSGenerics/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSGenerics/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;现在有三个值在栈中;&lt;/li&gt;
@@ -1914,7 +1914,7 @@ stackOfStrings.push(&amp;quot;cuatro&amp;quot;)
 
 &lt;p&gt;下图将展示 stackOfStrings 如何 push 这四个值进栈的过程:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSGenerics/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSGenerics/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;￼从栈中 pop 并移除值&amp;rdquo;cuatro&amp;rdquo;:&lt;/p&gt;
 
@@ -1924,7 +1924,7 @@ stackOfStrings.push(&amp;quot;cuatro&amp;quot;)
 
 &lt;p&gt;下图展示了如何从栈中 pop 一个值的过程:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSGenerics/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSGenerics/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;扩展一个泛型类型&#34;&gt;扩展一个泛型类型&lt;/h2&gt;
 
@@ -2215,10 +2215,10 @@ if allItemsMatch(stackOfStrings, arrayOfStrings) {
     
     <item>
       <title>Swift之协议</title>
-      <link>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E5%8D%8F%E8%AE%AE/</link>
+      <link>http://lynchwong.com/2015/03/swift%E4%B9%8B%E5%8D%8F%E8%AE%AE/</link>
       <pubDate>Fri, 06 Mar 2015 14:12:12 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E5%8D%8F%E8%AE%AE/</guid>
+      <guid>http://lynchwong.com/2015/03/swift%E4%B9%8B%E5%8D%8F%E8%AE%AE/</guid>
       <description>&lt;p&gt;协议定义了一个蓝图,规定了用来实现某一特定工作或者功能所必需的方法和属性。类,结构体或枚举类型都可以遵循协议,并提供具体实现来完成协议定义的方法和功能。任意能够满足协议要求的类型被称为遵循(conform)这个协议。
 &lt;/p&gt;
 
@@ -3016,10 +3016,10 @@ let hamsters = [murrayTheHamster, morganTheHamster, mauriceTheHamster]
     
     <item>
       <title>Swift之扩展</title>
-      <link>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%89%A9%E5%B1%95/</link>
+      <link>http://lynchwong.com/2015/03/swift%E4%B9%8B%E6%89%A9%E5%B1%95/</link>
       <pubDate>Fri, 06 Mar 2015 11:43:37 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E6%89%A9%E5%B1%95/</guid>
+      <guid>http://lynchwong.com/2015/03/swift%E4%B9%8B%E6%89%A9%E5%B1%95/</guid>
       <description>&lt;p&gt;扩展就是向一个已有的类、结构体、枚举类型或者协议类型添加新功能(functionality)。这包括在没有权限获取原始源代码的情况下扩展类型的能力(即逆向建模)。扩展和 Objective-C 中的分类(categories)类似。(不过与 Objective-C 不同的是,Swift 的扩展没有名字。)
 &lt;/p&gt;
 
@@ -3281,10 +3281,10 @@ printIntegerKinds([3, 19, -27, 0, -6, 0, 7])
     
     <item>
       <title>Swift之嵌套类型</title>
-      <link>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E5%B5%8C%E5%A5%97%E7%B1%BB%E5%9E%8B/</link>
+      <link>http://lynchwong.com/2015/03/swift%E4%B9%8B%E5%B5%8C%E5%A5%97%E7%B1%BB%E5%9E%8B/</link>
       <pubDate>Fri, 06 Mar 2015 11:01:18 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E5%B5%8C%E5%A5%97%E7%B1%BB%E5%9E%8B/</guid>
+      <guid>http://lynchwong.com/2015/03/swift%E4%B9%8B%E5%B5%8C%E5%A5%97%E7%B1%BB%E5%9E%8B/</guid>
       <description>&lt;p&gt;枚举类型常被用于实现特定类或结构体的功能。也能够在有多种变量类型的环境中,方便地定义通用类或结构体来使用,为了实现这种功能,Swift允许你定义嵌套类型,可以在枚举类型、类和结构体中定义支持嵌套的类型。
 &lt;/p&gt;
 
@@ -3372,10 +3372,10 @@ println(&amp;quot;theAceOfSpades: \(theAceOfSpades.description)&amp;quot;)
     
     <item>
       <title>Swift之类型转换</title>
-      <link>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</link>
+      <link>http://lynchwong.com/2015/03/swift%E4%B9%8B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</link>
       <pubDate>Fri, 06 Mar 2015 10:46:22 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</guid>
+      <guid>http://lynchwong.com/2015/03/swift%E4%B9%8B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</guid>
       <description>&lt;p&gt;类型转换可以判断实例的类型,也可以将实例看做是其父类或者子类的实例。
 &lt;/p&gt;
 
@@ -3600,10 +3600,10 @@ things.append({ (name: String) -&amp;gt; String in &amp;quot;Hello, \(name)&amp;
     
     <item>
       <title>Swift之错误处理</title>
-      <link>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</link>
+      <link>http://lynchwong.com/2015/03/swift%E4%B9%8B%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</link>
       <pubDate>Fri, 06 Mar 2015 10:30:22 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/03/swift%E4%B9%8B%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</guid>
+      <guid>http://lynchwong.com/2015/03/swift%E4%B9%8B%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</guid>
       <description>&lt;p&gt;错误处理是响应错误以及从错误中返回的过程。Swift提供第一类错误支持,包括在运行时抛出,捕获,传送和控制可回收错误。
 &lt;/p&gt;
 

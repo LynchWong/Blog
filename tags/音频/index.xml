@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>音频 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/%E9%9F%B3%E9%A2%91/index.xml</link>
+    <link>http://lynchwong.com/tags/%E9%9F%B3%E9%A2%91/index.xml</link>
     <description>Recent content in 音频 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/%E9%9F%B3%E9%A2%91/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/%E9%9F%B3%E9%A2%91/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>iOS视频播放</title>
-      <link>http://lynchwong.com/blog/2015/10/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/</link>
+      <link>http://lynchwong.com/2015/10/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/</link>
       <pubDate>Wed, 14 Oct 2015 18:18:18 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/10/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/</guid>
+      <guid>http://lynchwong.com/2015/10/ios%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/</guid>
       <description>&lt;p&gt;离上一篇博客发布又是两周时间过去了，心里总是感觉空空的。两周没有发布一篇博客，感觉就像是虚度了。另外一个原因就是实在是不知道写点什么，有些内容兴趣不大就搁置了。其次就是之前的天坑真是没有动力去填了，比如CoreData，就放在那吧。上篇博客也提到了这篇做视频播放器，所以这篇就是讲讲视频播放器的。
 &lt;/p&gt;
 
@@ -42,15 +42,15 @@
 &lt;h1 id=&#34;建立项目&#34;&gt;建立项目&lt;/h1&gt;
 
 &lt;p&gt;如下图所示，我们选择*Single View Application*，项目名称叫做*LWPlayer*，语言选择*Swift*。
-&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后我们将项目的*Deployment Target*修改为8.0。然后我们删除*Main.storyboard*文件，同时*Main Interface*里面的Main也去掉。因为我们删除了storyboard文件，如果不删除Main的话程序无法启动直接崩溃。&lt;/p&gt;
 
 &lt;p&gt;现在项目的界面应该如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这里我们删除了storyboard文件，我的打算是用代码手写界面，不使用storyboard和xib文件。大家可能都知道用代码写布局很繁琐，所以这里使用第三方的框架*SnapKit*。这个第三方框架其实就是OC版本的*Masonry*，这里就不细讲布局的事情了，参考资料&lt;a href=&#34;https://github.com/SnapKit/Masonry&#34;&gt; SnapKit &lt;/a&gt;和&lt;a href=&#34;https://github.com/SnapKit/Masonry&#34;&gt; Masonry &lt;/a&gt;。&lt;/p&gt;
 
@@ -66,21 +66,21 @@
 
 &lt;p&gt;我们进入到项目目录执行如下命令，截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;进入到项目目录后我们创建了*Cartfile*文件，然后在里面添加需要的第三方库。如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后*:wq*保存退出，然后执行*carthage update*命令进行安装编译。&lt;/p&gt;
 
 &lt;p&gt;这里就算是安装编译完成了，我们可以进到工程目录里面看下编程生成的二进制framework文件。如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;不仅有iOS的，还有Mac的。现在我们还差最后一步，就是将framework添加到我们的工程。设置*Framework Search Paths&lt;em&gt;是最简单的方法，告诉工程到那里去找这些framework。设置为&lt;/em&gt;$(SRCROOT)/Carthage/Build/iOS*，如果是OS X就把iOS改成Mac。如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这一步和官方说明的不一样，按照官方的方法，每次添加了新的framework都要自己到Xcode里面进行手动添加。&lt;/p&gt;
 
@@ -138,15 +138,15 @@ class ViewController: UIViewController {
 
 &lt;p&gt;编译运行后会发现如下错误，&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这里是因为之前修改*Framework Search Paths*导致的，其实前面的这一步貌似并没有效果。所以我们还是得按照官方的来，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;我们在*Embedded Binaries*这里将*Carthage/Build/iOS/SnapKit.framework*添加进来，然后编译运行，截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;项目结构&#34;&gt;项目结构&lt;/h1&gt;
 
@@ -200,7 +200,7 @@ class LWPlayerViewController: UIViewController {
 
 &lt;p&gt;运行后截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你可能发现我们设置了导航栏的外观，所以我们接下来就新建*LWNavigationController*继承自*UINavigationController*，代码如下：&lt;/p&gt;
 
@@ -268,7 +268,7 @@ class LWNavigationController: UINavigationController {
 
 &lt;p&gt;运行后模拟器截图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;视频资源&#34;&gt;视频资源&lt;/h1&gt;
 
@@ -282,11 +282,11 @@ class LWNavigationController: UINavigationController {
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/robbiehanson/CocoaHTTPServer&#34;&gt;CocoaHTTPServer&lt;/a&gt; ，这里是下载地址，下载完成后我们将&lt;strong&gt;Core&lt;/strong&gt;，&lt;strong&gt;Extensions&lt;/strong&gt;，&lt;strong&gt;Vendor&lt;/strong&gt;放到新建的文件夹&lt;strong&gt;CocoaHTTPServer&lt;/strong&gt;中，其他的东西我们不需要了。然后将这个文件夹拖放到工程中，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;接下来我们添加&lt;strong&gt;libxml2.tbd&lt;/strong&gt;，不添加会报找不到文件的错。添加后如下图所示。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;因为这个第三方库是OC，如果要混编的话我们需要添加桥接头文件，&lt;strong&gt;LWPlayer-Bridging-Header.h&lt;/strong&gt;。修改文件内容的代码如下：&lt;/p&gt;
 
@@ -295,7 +295,7 @@ class LWNavigationController: UINavigationController {
 
 &lt;p&gt;然后我们还要配置下头文件，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后我们参考&lt;a href=&#34;https://github.com/viki-org/VKVideoPlayer&#34;&gt; VKVideoPlayer &lt;/a&gt;的&lt;strong&gt;HTTPStreamingServer&lt;/strong&gt;，代码如下：&lt;/p&gt;
 
@@ -348,7 +348,7 @@ class HTTPStreamingServer: NSObject {
 
 &lt;p&gt;然后我们将一些视频资源拖到项目中，这里我们就用&lt;strong&gt;VKVideoPlayer&lt;/strong&gt;的资源，将&lt;strong&gt;web&lt;/strong&gt;这个文件夹拖到我们项目中，注意我截图中的箭头，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;播放器&#34;&gt;播放器&lt;/h1&gt;
 
@@ -456,11 +456,11 @@ var hideTool = false
 
 &lt;p&gt;运行后截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/17.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/17.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;大家都知道HTTP请求在iOS9里面有变化，所以有的同学可能没有看到视频播放的画面；同样的&lt;strong&gt;VKVideoPlayer&lt;/strong&gt;你可能也看不到视频播放，都是相同的原因，大家搜索都能解决。设置下&lt;strong&gt;.plist&lt;/strong&gt;文件就可以了，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/18.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/18.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;注意这两个字段的类型，一个是字典类型，一个是布尔类型。&lt;/p&gt;
 
@@ -593,7 +593,7 @@ func fullAction(sender: UIButton) {
 
 &lt;p&gt;然后我们将&lt;strong&gt;viewDidLoad()&lt;/strong&gt;方法里面的播放的代码&lt;strong&gt;player.play()&lt;/strong&gt;去掉，运行之后截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/19.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/19.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;强制横屏&#34;&gt;强制横屏&lt;/h2&gt;
 
@@ -713,7 +713,7 @@ func fullAction(sender: UIButton) {
 
 &lt;p&gt;运行之后截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/20.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/20.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;现在只能横屏，还不能返回到竖屏的状态，接下来修改&lt;strong&gt;fullAction(sender: UIButton)&lt;/strong&gt;方法，代码如下：&lt;/p&gt;
 
@@ -757,7 +757,7 @@ func fullAction(sender: UIButton) {
 
 &lt;p&gt;运行之后如下所示:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/21.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/21.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;拖动进度&#34;&gt;拖动进度&lt;/h2&gt;
 
@@ -811,9 +811,9 @@ func fullAction(sender: UIButton) {
 
 &lt;p&gt;运行后截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/22.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/22.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSLWPlayer/23.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSLWPlayer/23.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;第一张图启动后没有点击播放，然后我们拖动进度条，拖动后的效果就是第二张图。这个进度条不太好拖动，如果你是模拟器，用鼠标点击圆点的左上角比较好拖动。&lt;/p&gt;
 
@@ -824,10 +824,10 @@ func fullAction(sender: UIButton) {
     
     <item>
       <title>iOS播放音频</title>
-      <link>http://lynchwong.com/blog/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/</link>
+      <link>http://lynchwong.com/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/</link>
       <pubDate>Tue, 29 Sep 2015 23:31:11 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/</guid>
+      <guid>http://lynchwong.com/2015/09/ios%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91/</guid>
       <description>&lt;p&gt;上一篇博客提到了播放声音的接口，所以本篇就是播放声音的接口了。声音播放也是项目的需求，最开始是使用的&lt;a href=&#34;https://github.com/raywenderlich/SKTUtils&#34;&gt;SKTUtils&lt;/a&gt;工具类。
 &lt;/p&gt;
 

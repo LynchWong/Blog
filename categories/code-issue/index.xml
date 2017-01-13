@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Code Issue on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/categories/code-issue/index.xml</link>
+    <link>http://lynchwong.com/categories/code-issue/index.xml</link>
     <description>Recent content in Code Issue on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/categories/code-issue/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/categories/code-issue/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>关于使用Dispatch Sources的一个BUG</title>
-      <link>http://lynchwong.com/blog/2016/03/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8dispatch-sources%E7%9A%84%E4%B8%80%E4%B8%AAbug/</link>
+      <link>http://lynchwong.com/2016/03/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8dispatch-sources%E7%9A%84%E4%B8%80%E4%B8%AAbug/</link>
       <pubDate>Thu, 03 Mar 2016 09:26:11 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/03/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8dispatch-sources%E7%9A%84%E4%B8%80%E4%B8%AAbug/</guid>
+      <guid>http://lynchwong.com/2016/03/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8dispatch-sources%E7%9A%84%E4%B8%80%E4%B8%AAbug/</guid>
       <description>&lt;p&gt;之前有在这篇博客&lt;a href=&#34;http://lynchwong.com/2016/01/29/URL-Session-Programming-Guide-Introduction/&#34;&gt; URL Session Programming Guide - Introduction &lt;/a&gt;提到在翻译完&lt;a href=&#34;http://lynchwong.com/2016/01/14/Concurrency-Programming-Guide-Introduction/&#34;&gt; 并发变成指南 &lt;/a&gt;后有要做一个图片轮播的需求，是使用的&lt;strong&gt;DISPATCH_SOURCE_TYPE_TIMER&lt;/strong&gt;类型的Dispatch Sources来做时间控制进行轮播的而没有使用NSTimer。这个在后来引起了一个BUG，实在是无心之过。
 &lt;/p&gt;
 
@@ -119,10 +119,10 @@ public class RollingPlayPicture: UIView {
     
     <item>
       <title>iOS提交App包</title>
-      <link>http://lynchwong.com/blog/2015/10/ios%E6%8F%90%E4%BA%A4app%E5%8C%85/</link>
+      <link>http://lynchwong.com/2015/10/ios%E6%8F%90%E4%BA%A4app%E5%8C%85/</link>
       <pubDate>Tue, 27 Oct 2015 15:45:05 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/10/ios%E6%8F%90%E4%BA%A4app%E5%8C%85/</guid>
+      <guid>http://lynchwong.com/2015/10/ios%E6%8F%90%E4%BA%A4app%E5%8C%85/</guid>
       <description>&lt;p&gt;前两天打包项目提交App Store的时候一直提交不上去，根据提示的错误信息网上都说是网络的问题，多提交几次就行了。所以刚开始的时候并不在意，过一会再提交。
 &lt;/p&gt;
 
@@ -142,10 +142,10 @@ public class RollingPlayPicture: UIView {
     
     <item>
       <title>Debug/Release等编译模式</title>
-      <link>http://lynchwong.com/blog/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</link>
+      <link>http://lynchwong.com/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Sun, 25 Oct 2015 00:07:53 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://lynchwong.com/2015/10/debug/release%E7%AD%89%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;通常我们的App有多种不同的编译模式，比如&lt;strong&gt;Debug&lt;/strong&gt;、&lt;strong&gt;Release&lt;/strong&gt;。我们在开发的时候大都是&lt;strong&gt;Debug&lt;/strong&gt;模式，发布的时候会选择&lt;strong&gt;Release&lt;/strong&gt;模式。通常我们的服务请求地址也会根据编译模式来进行不同的选择。当然系统已经给我们定义好了这两种编译模式，但有时候我们不止需要两种，我可以自己添加额外的编译模式。
 &lt;/p&gt;
 
@@ -190,11 +190,11 @@ public class RollingPlayPicture: UIView {
 
 &lt;p&gt;项目新建之后我们没有对Scheme做任何更改，默认Scheme截图如下，模拟器运行是在&lt;strong&gt;DEBUG&lt;/strong&gt;模式下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSDebugReleas/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;修改Scheme，将&lt;strong&gt;Build Configuration&lt;/strong&gt;修改为Release，截图如下；&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSDebugReleas/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;运行之后控制台输出：&lt;/p&gt;
 
@@ -208,17 +208,17 @@ public class RollingPlayPicture: UIView {
 
 &lt;p&gt;接下来我们做下修改就好了，截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSDebugReleas/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如图中所示，我们在&lt;strong&gt;Build Settings&lt;/strong&gt;中搜索macro，然后发现&lt;strong&gt;Release&lt;/strong&gt;这一项是没值的，所以到了另外一个分支里面，输出了其他结果。&lt;strong&gt;Debug&lt;/strong&gt;已经默认设置好了，所以我们这里设置一下值就好了，设置为&lt;strong&gt;RELEASE=1 $(inherited)&lt;/strong&gt;，运行之后输出结果就对了。&lt;/p&gt;
 
 &lt;p&gt;这里我们还需要添加一种编译模式，如最开始的时候说的&lt;strong&gt;Develop&lt;/strong&gt;模式。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSDebugReleas/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;我们点击&lt;strong&gt;+&lt;/strong&gt;号来添加一个编译模式，叫&lt;strong&gt;Develop&lt;/strong&gt;。截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSDebugReleas/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSDebugReleas/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后我们修改Scheme为&lt;strong&gt;Develop&lt;/strong&gt;，运行后输出：&lt;/p&gt;
 
@@ -248,10 +248,10 @@ public class RollingPlayPicture: UIView {
     
     <item>
       <title>storyboard、xib、AutoLayout实现UILabel自动换行</title>
-      <link>http://lynchwong.com/blog/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/</link>
+      <link>http://lynchwong.com/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/</link>
       <pubDate>Thu, 22 Oct 2015 22:23:20 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/</guid>
+      <guid>http://lynchwong.com/2015/10/storyboardxibautolayout%E5%AE%9E%E7%8E%B0uilabel%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C/</guid>
       <description>&lt;p&gt;UILabel自动换行的这种需求随处可见的，基本上大家都会，几行代码就能解决。&lt;/p&gt;
 
 &lt;p&gt;大多数开发者都是使用代码实现这种需求的，当然使用自动布局，xib，storyboard也能实现，接下来就来看看这两种方法。
@@ -259,13 +259,13 @@ public class RollingPlayPicture: UIView {
 
 &lt;p&gt;新建一个项目，然后在SB中拖放一个UILabel，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/AXSUILabelHuanHang/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;布局如图中所示，居中在ViewController中，然后我们@IBOutlet到ViewController。&lt;/p&gt;
 
 &lt;p&gt;在&lt;strong&gt;viewDidLoad()&lt;/strong&gt;方法中设置UILabel的文本信息，尽量设置超出长度。运行后如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/AXSUILabelHuanHang/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;自动布局换行&#34;&gt;自动布局换行&lt;/h1&gt;
 
@@ -279,13 +279,13 @@ public class RollingPlayPicture: UIView {
 
 &lt;p&gt;截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/3.png&#34; alt=&#34;alt text&#34; /&gt;
-&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/4.png&#34; alt=&#34;alt text&#34; /&gt;
-&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/AXSUILabelHuanHang/3.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/AXSUILabelHuanHang/4.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/AXSUILabelHuanHang/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;运行后截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/AXSUILabelHuanHang/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;代码实现换行&#34;&gt;代码实现换行&lt;/h1&gt;
 
@@ -305,17 +305,17 @@ anotherLabel.frame = CGRect(x: 0.0, y: 20.0, width: labelSize.width, height: lab
 
 &lt;p&gt;运行后效果如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AXSUILabelHuanHang/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/AXSUILabelHuanHang/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/UILabelDemo&#34;&gt; 完整源码 &lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>UIButton传递参数</title>
-      <link>http://lynchwong.com/blog/2015/08/uibutton%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</link>
+      <link>http://lynchwong.com/2015/08/uibutton%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</link>
       <pubDate>Sun, 09 Aug 2015 16:23:22 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/08/uibutton%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</guid>
+      <guid>http://lynchwong.com/2015/08/uibutton%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</guid>
       <description>&lt;p&gt;今天开发自己项目的时候有个需求，需要&lt;strong&gt;UIButton&lt;/strong&gt;的Action传递多个参数。项目里的实际需求是需要传递&lt;strong&gt;NSIndexPath&lt;/strong&gt;，如果只需要section或者row那很好办，设置tag就可以了。但是两个都需要，所以就要传递对象过去了。这里就涉及到了OBJC运行时，使用关联对象就很好办了。
 &lt;/p&gt;
 
@@ -337,10 +337,10 @@ func uncheck(sender: UIButton) {
     
     <item>
       <title>审核被拒</title>
-      <link>http://lynchwong.com/blog/2015/06/%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/</link>
+      <link>http://lynchwong.com/2015/06/%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/</link>
       <pubDate>Thu, 11 Jun 2015 11:03:47 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/</guid>
+      <guid>http://lynchwong.com/2015/06/%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/</guid>
       <description>&lt;p&gt;审核被拒估计大多数开发者都遇到过，如果从来都没有被拒过，那你上辈子一定是拯救过银河系。
 &lt;/p&gt;
 
@@ -366,7 +366,7 @@ func uncheck(sender: UIButton) {
 
 &lt;p&gt;然后就是2.9了，当我应用程序没有数据的时候，我的界面是这样的，如下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSShenHe/iOSshenhe.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSShenHe/iOSshenhe.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这张图是审核人员截图的。当程序第一次安装的时候是没有数据的，所以我在做了图中的那个提示来提醒用户还没有联系人。但是审核人员却认为我的App是未完成的，是测试版等等。看到这里的时候，我的内心是崩溃的。没办法，去除掉。然后从新打包上传审核。&lt;/p&gt;
 

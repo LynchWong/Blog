@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Match on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/match/index.xml</link>
+    <link>http://lynchwong.com/tags/match/index.xml</link>
     <description>Recent content in Match on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/match/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/match/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Fastlane - Match</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---match/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---match/</link>
       <pubDate>Tue, 28 Jun 2016 09:05:34 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---match/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---match/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Match&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/match.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;match&#34;&gt;match&lt;/h1&gt;
 
@@ -136,7 +136,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match_init.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/match_init.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;会要求你输入 Git Repo 的 URL。可以是 &lt;code&gt;https://&lt;/code&gt; 或者 &lt;code&gt;git&lt;/code&gt; URL。&lt;code&gt;match init&lt;/code&gt; 不会读取或者修改你的证书或者配置文件。&lt;/p&gt;
 
@@ -170,7 +170,7 @@ match(git_branch: &amp;quot;team2&amp;quot;, username: &amp;quot;user@team2.com&
 match development
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match_appstore_small.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/match_appstore_small.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这回创建新的证书和配置文件(如果需要)然后存储在你的 Git Repo 中。如果你之前运行 &lt;code&gt;match&lt;/code&gt; ，它会自动安装 Git Repo 里已经存在的 Profiles 。&lt;/p&gt;
 
@@ -249,7 +249,7 @@ end
 
 &lt;p&gt;除此之外，&lt;code&gt;match&lt;/code&gt; 会为你创建一个漂亮的 Repo &lt;code&gt;README.md&lt;/code&gt;，方便新的团队成员登船(入坑，哈哈，开玩笑)：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/github_repo.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/github_repo.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;fastlane&#34;&gt;fastlane&lt;/h3&gt;
 
@@ -289,11 +289,11 @@ match(app_identifier: &amp;quot;tools.fastlane.app.today_widget&amp;quot;, type:
 
 &lt;p&gt;&lt;code&gt;match&lt;/code&gt; 会使用正确的 Provisioning Profiles 的 UUID 来自动填充环境变量，准备在你的 Xcode 项目中使用。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/UDIDPrint.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/UDIDPrint.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;打开你的 target 设置，打开 &lt;code&gt;Provisioning Profile&lt;/code&gt; 选择 &lt;code&gt;Other&lt;/code&gt; ：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/XcodeProjectSettings.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/XcodeProjectSettings.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Profile 环境变量以 &lt;code&gt;$(sigh_&amp;lt;bundle_identifier&amp;gt;_&amp;lt;profile_type&amp;gt;)&lt;/code&gt; 命名&lt;/p&gt;
 
@@ -336,7 +336,7 @@ match(app_identifier: &amp;quot;tools.fastlane.app.today_widget&amp;quot;, type:
 match nuke distribution
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneMatch/match_nuke.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneMatch/match_nuke.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在删除 profiles / certificates 之前你必需确认。&lt;/p&gt;
 

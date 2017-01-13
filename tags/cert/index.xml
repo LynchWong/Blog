@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Cert on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/cert/index.xml</link>
+    <link>http://lynchwong.com/tags/cert/index.xml</link>
     <description>Recent content in Cert on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/cert/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/cert/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Fastlane - Cert</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---cert/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---cert/</link>
       <pubDate>Tue, 28 Jun 2016 08:46:19 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---cert/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---cert/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Cert&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneCert/cert.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneCert/cert.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;cert&#34;&gt;cert&lt;/h1&gt;
 
@@ -47,7 +47,7 @@
 
 &lt;p&gt;查看完成&lt;strong&gt;之后&lt;/strong&gt;，再看 &lt;code&gt;cert&lt;/code&gt; 和 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt;&lt;code&gt;sigh&lt;/code&gt;&lt;/a&gt; 如何为你做这些工作。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneCert/cert.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneCert/cert.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如上所示，我使用了 &lt;code&gt;cert &amp;amp;&amp;amp; sigh&lt;/code&gt; ，首先会创建 iOS Code Signing Certificate ，如果 &lt;code&gt;cert&lt;/code&gt; 成功，然后会为你的 App 创建 Provisioning Profile 。&lt;/p&gt;
 

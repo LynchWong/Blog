@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go语言编程 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/go%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B/index.xml</link>
+    <link>http://lynchwong.com/tags/go%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B/index.xml</link>
     <description>Recent content in Go语言编程 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/go%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/go%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Go完结</title>
-      <link>http://lynchwong.com/blog/2015/07/go%E5%AE%8C%E7%BB%93/</link>
+      <link>http://lynchwong.com/2015/07/go%E5%AE%8C%E7%BB%93/</link>
       <pubDate>Sat, 04 Jul 2015 19:48:15 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/go%E5%AE%8C%E7%BB%93/</guid>
+      <guid>http://lynchwong.com/2015/07/go%E5%AE%8C%E7%BB%93/</guid>
       <description>&lt;p&gt;其实这个系列到这里就完结了，需要的知识点基本都涉及了。知识点很散乱，很多都是抛砖引玉、指个门路，还需要大家自己去组织和总结。
 &lt;/p&gt;
 
@@ -24,10 +24,10 @@
     
     <item>
       <title>Go的文本处理</title>
-      <link>http://lynchwong.com/blog/2015/07/go%E7%9A%84%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86/</link>
+      <link>http://lynchwong.com/2015/07/go%E7%9A%84%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86/</link>
       <pubDate>Thu, 02 Jul 2015 12:34:11 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/go%E7%9A%84%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86/</guid>
+      <guid>http://lynchwong.com/2015/07/go%E7%9A%84%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86/</guid>
       <description>&lt;p&gt;应用开发中经常要处理文本信息，包括像字符串、数字、JSON、XML等。网络交互主要使用JSON和XML，现在大部分的互联网应用都是使用JSON格式的数据，所以这里我们主要讲一下JSON的处理。
 &lt;/p&gt;
 
@@ -206,10 +206,10 @@ type Studentslice struct {
     
     <item>
       <title>Go访问数据库</title>
-      <link>http://lynchwong.com/blog/2015/07/go%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+      <link>http://lynchwong.com/2015/07/go%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
       <pubDate>Thu, 02 Jul 2015 09:16:56 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/go%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+      <guid>http://lynchwong.com/2015/07/go%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
       <description>&lt;p&gt;大部分应用程序都需要数据库的支持，用来存储和查询信息，比如用户数据，产品目录，新闻列表等。
 &lt;/p&gt;
 
@@ -235,11 +235,11 @@ cp -R -n mongodb-osx-x86_64-3.0.4/ mongodb
 
 &lt;p&gt;执行完这些命令后在当前目录下生成了一个mongodb的文件夹，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后我们设置PATH变量，和之前设置GOPATH类似的，我用的shell是zsh，所以我在.zshrc中设置,如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如果你不设置这个PAHT，那么你每次执行命令都要在前面加上PATH。比如我就需要每次在执行命令前加上&lt;strong&gt;/Users/Lynch/mongodb/bin&lt;/strong&gt;。&lt;/p&gt;
 
@@ -261,7 +261,7 @@ cp -R -n mongodb-osx-x86_64-3.0.4/ mongodb
 
 &lt;p&gt;博主将/data/db目录放在了我们安装好的mongodb文件夹里面了，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;所以我使用如下命令启动：&lt;/p&gt;
 
@@ -270,9 +270,9 @@ cp -R -n mongodb-osx-x86_64-3.0.4/ mongodb
 
 &lt;p&gt;如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;可以看见提示说在端口27017等待连接了，你可以在这里使用Control + C来退出。&lt;/p&gt;
 
@@ -285,13 +285,13 @@ cp -R -n mongodb-osx-x86_64-3.0.4/ mongodb
 
 &lt;p&gt;如下所示，已经连接上了：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;默认连接使用test。这里有个警告，官方说是操作系统的原因，和MongoDB无关，所以这里就不管了。&lt;/p&gt;
 
 &lt;p&gt;你可以输入&lt;code&gt;show dbs&lt;/code&gt;来查看数据库，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这里有些概念需要悉知：数据库，集合，文档。这里集合就相当于我们关系型数据库里面的表，而每一条数据都是一个文档，而文档是JSON的拓展(BSON)形式。&lt;/p&gt;
 
@@ -306,7 +306,7 @@ cp -R -n mongodb-osx-x86_64-3.0.4/ mongodb
 
 &lt;p&gt;如下所示，返回了写入结果：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;find操作&#34;&gt;find操作&lt;/h3&gt;
 
@@ -315,28 +315,28 @@ cp -R -n mongodb-osx-x86_64-3.0.4/ mongodb
 
 &lt;p&gt;返回结果如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;update操作&#34;&gt;update操作&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;db.student.update({&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;},{&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;,&amp;quot;age&amp;quot;:26})
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后查看：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;db.student.find({&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;})    
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;remove操作&#34;&gt;remove操作&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;db.student.remove({&amp;quot;name&amp;quot;:&amp;quot;Wong&amp;quot;})
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你可以使用&lt;code&gt;db.student.count()&lt;/code&gt;来查看数据条数。&lt;/p&gt;
 
@@ -350,7 +350,7 @@ db.shutdownServer()
 
 &lt;p&gt;如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这些只是一些简单的操作，冰山一角。详细复杂高端的操作还请自行了解、学习。&lt;/p&gt;
 
@@ -408,23 +408,23 @@ func main() {
 
 &lt;p&gt;如上代码是mgo给的示例，下面我们新建一个项目，将上面的代码添加进去，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如果你现在就Run，一段时间后就得到如下错误：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;我们应该把&lt;code&gt;mgo.Dial(&amp;quot;server1.example.com,server2.example.com&amp;quot;)&lt;/code&gt;修改成&lt;code&gt;mgo.Dial(&amp;quot;127.0.0.1:27017&amp;quot;)&lt;/code&gt;，然后还要打开MongoDB，最后结果如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoDatabaseMongoDB/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoDatabaseMongoDB/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Go的Web基础</title>
-      <link>http://lynchwong.com/blog/2015/07/go%E7%9A%84web%E5%9F%BA%E7%A1%80/</link>
+      <link>http://lynchwong.com/2015/07/go%E7%9A%84web%E5%9F%BA%E7%A1%80/</link>
       <pubDate>Wed, 01 Jul 2015 12:52:12 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/07/go%E7%9A%84web%E5%9F%BA%E7%A1%80/</guid>
+      <guid>http://lynchwong.com/2015/07/go%E7%9A%84web%E5%9F%BA%E7%A1%80/</guid>
       <description>&lt;p&gt;基本上Go的语法以及一些基础的东西前面都讲完了，所以完全有能力使用Go开始编程了。当然还仅仅是编程而已，做桌面应用或者Web应用还是需要一些其他的知识。
 &lt;/p&gt;
 
@@ -444,11 +444,11 @@ func main() {
 
 &lt;p&gt;打开我们的IDE，选择我们之前创建的&lt;strong&gt;MyGo&lt;/strong&gt;项目，如下所示，如果忘了请参阅&lt;a href=&#34;http://lynchwong.com/2015/06/27/Go%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B/&#34;&gt; Go完整示例 &lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoWebBasic/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;打开之后在src下创建一个webdemo目录，然后在该目录下创建webdemo.go源文件，如下图所示(请忽略其他的文件夹)：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoWebBasic/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;现在我们进行编码，修改webdemo.go源文件的代码如下：&lt;/p&gt;
 
@@ -486,19 +486,19 @@ func main() {
 
 &lt;p&gt;你可以直接右键webdemo.go源文件来Run，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoWebBasic/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;运行后IDE如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoWebBasic/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后在浏览器里面输入&lt;a href=&#34;http://localhost:8866/&#34;&gt; http://localhost:8866/ &lt;/a&gt;，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoWebBasic/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;当然你也可以在终端里面输入&lt;strong&gt;go build webdemo&lt;/strong&gt;，然后就会生成一个可执行文件，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoWebBasic/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoWebBasic/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;双击可执行文件，然后就会监听8866端口了，在浏览器里面输入地址就可以请求了。&lt;/p&gt;
 
@@ -677,10 +677,10 @@ func main() {
     
     <item>
       <title>Go并发</title>
-      <link>http://lynchwong.com/blog/2015/06/go%E5%B9%B6%E5%8F%91/</link>
+      <link>http://lynchwong.com/2015/06/go%E5%B9%B6%E5%8F%91/</link>
       <pubDate>Tue, 30 Jun 2015 14:06:56 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/go%E5%B9%B6%E5%8F%91/</guid>
+      <guid>http://lynchwong.com/2015/06/go%E5%B9%B6%E5%8F%91/</guid>
       <description>&lt;p&gt;先留个坑，后面再填。&lt;/p&gt;
 
 &lt;p&gt;因为之前做iOS很少会有大并发的操作，顶多多线程操作。对并发了解的并不多，等之后有了一定了解的时候再记录。
@@ -815,10 +815,10 @@ channel通过操作符`&lt;-`来接收和发送数据
     
     <item>
       <title>Go的interface</title>
-      <link>http://lynchwong.com/blog/2015/06/go%E7%9A%84interface/</link>
+      <link>http://lynchwong.com/2015/06/go%E7%9A%84interface/</link>
       <pubDate>Tue, 30 Jun 2015 12:33:11 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/go%E7%9A%84interface/</guid>
+      <guid>http://lynchwong.com/2015/06/go%E7%9A%84interface/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;interface&#34;&gt;interface&lt;/h1&gt;
@@ -1250,10 +1250,10 @@ v.SetFloat(7.1)
     
     <item>
       <title>Go面向对象</title>
-      <link>http://lynchwong.com/blog/2015/06/go%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</link>
+      <link>http://lynchwong.com/2015/06/go%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</link>
       <pubDate>Tue, 30 Jun 2015 10:34:28 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/go%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</guid>
+      <guid>http://lynchwong.com/2015/06/go%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;面向对象&#34;&gt;面向对象&lt;/h1&gt;
@@ -1584,10 +1584,10 @@ func main() {
     
     <item>
       <title>Go的struct类型</title>
-      <link>http://lynchwong.com/blog/2015/06/go%E7%9A%84struct%E7%B1%BB%E5%9E%8B/</link>
+      <link>http://lynchwong.com/2015/06/go%E7%9A%84struct%E7%B1%BB%E5%9E%8B/</link>
       <pubDate>Tue, 30 Jun 2015 00:32:27 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/go%E7%9A%84struct%E7%B1%BB%E5%9E%8B/</guid>
+      <guid>http://lynchwong.com/2015/06/go%E7%9A%84struct%E7%B1%BB%E5%9E%8B/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;struct&#34;&gt;struct&lt;/h1&gt;
@@ -1713,7 +1713,7 @@ func main() {
 
 &lt;p&gt;图例如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoStruct/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoStruct/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;我们看到Student访问属性age和name的时候，就像访问自己所有用的字段一样，对，匿名字段就是这样，能够实现字段的继承。是不是很酷啊？还有比这个更酷的呢，那就是student还能访问Human这个字段作为字段名。请看下面的代码，是不是更酷了。&lt;/p&gt;
 
@@ -1795,10 +1795,10 @@ func main() {
     
     <item>
       <title>Go完整示例</title>
-      <link>http://lynchwong.com/blog/2015/06/go%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B/</link>
+      <link>http://lynchwong.com/2015/06/go%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B/</link>
       <pubDate>Sat, 27 Jun 2015 11:17:45 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/go%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B/</guid>
+      <guid>http://lynchwong.com/2015/06/go%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;在开始之前还是讲下Go编程环境以及开发工具的配置和使用。&lt;/p&gt;
@@ -1809,49 +1809,49 @@ func main() {
 
 &lt;p&gt;安装方式有很多，博主是直接使用的一键安装包。安装包这里就不提供了，大家网上自行搜索下载，安装包截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;安装成功之后在终端中输入&lt;strong&gt;go&lt;/strong&gt;命令能看到Usage信息，截图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;配置开发环境&#34;&gt;配置开发环境&lt;/h1&gt;
 
 &lt;p&gt;IDE博主使用的是IntelliJ IDEA 14 CE，截图如下，即下载的是右边的这个免费的社区版。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;安装完成之后这个IDE还并不能创建Go的Project，还需要插件的支持。&lt;/p&gt;
 
 &lt;p&gt;打开IDE后&lt;strong&gt;⌘,&lt;/strong&gt;打开偏好设置，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;大家看我已经装好了。点击图中高亮的那个按钮&lt;strong&gt;Browse Repositories&lt;/strong&gt;，弹出如下界面：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如果大家直接搜索*Go*是搜索不到，点击图中高亮的按钮&lt;strong&gt;Manage Repositories&lt;/strong&gt;，界面如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;点击&lt;strong&gt;+&lt;/strong&gt;号添加这个地址&lt;strong&gt;&lt;a href=&#34;https://plugins.jetbrains.com/plugins/alpha/5047&#34;&gt;https://plugins.jetbrains.com/plugins/alpha/5047&lt;/a&gt;&lt;/strong&gt;：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;点击OK，然后就能找到插件了，点击安装，安装完成后会要求重启：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;重启完成后我们创建新项目，发现就有了&lt;strong&gt;Go&lt;/strong&gt;的选项：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/9.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;设置gopath&#34;&gt;设置GOPATH&lt;/h2&gt;
 
 &lt;p&gt;如果你这时候新建项目，如下所示IDE会提醒你没有设置&lt;strong&gt;GOPATH&lt;/strong&gt;。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/10.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;GOPATH&lt;/strong&gt;其实就是一个目录而已，按照约定该目录下默认有三个文件夹：&lt;/p&gt;
 
@@ -1863,73 +1863,73 @@ func main() {
 
 &lt;p&gt;博主使用IntelliJ IDEA 14 CE的工作空间&lt;strong&gt;IdeaProjects&lt;/strong&gt;当做GOPATH：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/11.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;同时创建了三个子文件夹(MyGo.iml请忽略)：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/12.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;所以博主的GOPATH就是&lt;strong&gt;/Users/Lynch/IdeaProjects&lt;/strong&gt;，如下终端所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/13.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;现在我们就开始设置GOPATH，把&lt;strong&gt;export GOPATH=/Users/Lynch/IdeaProjects&lt;/strong&gt;这一行加到.bash_profile或者.zshrc中，加到哪一个里面取决于你使用的是什么Shell。OS X默认使用的是bash，而你没有修改过，那就加到.bash_profile中。博主使用的是zsh，所以加入到了.zshrc。输入&lt;strong&gt;vim .zshrc&lt;/strong&gt;命令进行编辑：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/14.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如图所示，设置好后保存退出，ESC然后输入“:wq”。然后输入&lt;strong&gt;go env&lt;/strong&gt;命令查看：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/15.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如图所示GOPATH已经设置好了。&lt;/p&gt;
 
 &lt;p&gt;推荐大家使用zsh，你可以使用&lt;strong&gt;cat /etc/shells&lt;/strong&gt;来查看系统支持的Shell。OS X默认是支持zsh的，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/16.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;使用&lt;strong&gt;chsh -s /bin/zsh&lt;/strong&gt;命令切换到想要使用的Shell，这里我们切换到zsh。然后安装&lt;strong&gt;oh my zsh&lt;/strong&gt;，之后进行配置。&lt;/p&gt;
 
 &lt;p&gt;你可以安装很多插件，比如&lt;strong&gt;autojump&lt;/strong&gt;这个插件，太强悍了，对于像博主这样的手残党来说真是太方便。简单来说就是在目录之间进行快速跳转，比如我经常到Hexo目录下，那么我只需要输入&lt;strong&gt;j h&lt;/strong&gt;就能跳转到这个目录，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/17.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/17.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;以及提示，自动补全，git支持等，这里值简单提一下，安装使用，大家自行了解。&lt;/p&gt;
 
 &lt;p&gt;现在我们来创建一个新项目，Project name叫做“MyGo”，Project location是我们之前设置好的GOPATH，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/18.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/18.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;最后的效果图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/19.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/19.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;完整示例&#34;&gt;完整示例&lt;/h1&gt;
 
 &lt;p&gt;现在我们就来做一个简单的示例程序。根据之前设置GOPATH时的叙述，源代码应该都放在src文件夹中。所以我们在src中新建一个文件夹，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/20.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/20.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后在新建的文件夹中新建一个Go的源文件：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/21.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/21.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;代码很简单，之前就讲解过，如果有没有使用的包，编译器会报错。右键&lt;strong&gt;main.go&lt;/strong&gt;：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/22.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/22.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这是可以看到IDE输出了“Hello world”：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/23.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/23.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你也可以使用go命令来执行这些操作，输入&lt;strong&gt;go build sampledemo&lt;/strong&gt;命令会在当前目录生成一个可执行文件，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/24.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/24.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/25.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/25.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;双击执行：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/26.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/26.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你可以在任意的目录执行&lt;strong&gt;go build sampledemo&lt;/strong&gt;；也可以进入应用包目录，执行&lt;strong&gt;go build&lt;/strong&gt;。&lt;/p&gt;
 
@@ -1937,25 +1937,25 @@ func main() {
 
 &lt;p&gt;然后我们在sampledemo下创建新的文件夹&lt;strong&gt;utils&lt;/strong&gt;，然后创建plus.go源文件，如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/27.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/27.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这里需要注意的就是函数名要大写，因为我们要在包外调用这个函数。这个函数简单实现了加法运算。&lt;/p&gt;
 
 &lt;p&gt;我们现在先来编译utils包，直接两条命令，貌似&lt;strong&gt;go install sampledemo/utils&lt;/strong&gt;就够了：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/28.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/28.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;编译完成之后你能看见pkg下生成了utils.a的函数包：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/29.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/29.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如图所示，修改main.go文件：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/30.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/30.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;go build sampledemo&lt;/strong&gt;重新编译，双击执行：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/31.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/31.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;main函数和init函数&#34;&gt;main函数和init函数&lt;/h1&gt;
 
@@ -1966,7 +1966,7 @@ func main() {
 &lt;p&gt;程序的初始化和执行都起始于main包。如果main包还导入了其它的包，那么就会在编译时将它们依次导入。有时一个包会被多个包同时导入，那么它只会被导入一次（例如很多包可能都会用到fmt包，但它只会被导入一次，因为没有必要导入多次）。当一个包被导入时，如果该包还导入了其它的包，那么会先将其它包导入进来，然后再对这些包中的包级常量和变量进行初始化，接着执行init函数（如果有的话），依次类推。等所有被导入的包都加载完毕了，就会开始对main包中的包级常量和变量进行初始化，然后执行main包中的init函数 (如果存在的话) ，最后执行main函数。
 下图详细地解释了整个执行过程：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoFullDemo/32.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoFullDemo/32.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;import&#34;&gt;import&lt;/h1&gt;
 
@@ -2037,10 +2037,10 @@ func main() {
     
     <item>
       <title>Go错误处理</title>
-      <link>http://lynchwong.com/blog/2015/06/go%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</link>
+      <link>http://lynchwong.com/2015/06/go%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</link>
       <pubDate>Fri, 26 Jun 2015 15:49:50 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/go%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</guid>
+      <guid>http://lynchwong.com/2015/06/go%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;错误处理&#34;&gt;错误处理&lt;/h1&gt;
@@ -2188,10 +2188,10 @@ panic(Error(&amp;quot;file not exists&amp;quot;))
     
     <item>
       <title>Go函数</title>
-      <link>http://lynchwong.com/blog/2015/06/go%E5%87%BD%E6%95%B0/</link>
+      <link>http://lynchwong.com/2015/06/go%E5%87%BD%E6%95%B0/</link>
       <pubDate>Fri, 26 Jun 2015 13:56:25 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/go%E5%87%BD%E6%95%B0/</guid>
+      <guid>http://lynchwong.com/2015/06/go%E5%87%BD%E6%95%B0/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;函数&#34;&gt;函数&lt;/h1&gt;
@@ -2431,10 +2431,10 @@ i, j: 10, 10
     
     <item>
       <title>Go流程控制</title>
-      <link>http://lynchwong.com/blog/2015/06/go%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/</link>
+      <link>http://lynchwong.com/2015/06/go%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/</link>
       <pubDate>Sun, 21 Jun 2015 01:23:08 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/go%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/</guid>
+      <guid>http://lynchwong.com/2015/06/go%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;流程控制&#34;&gt;流程控制&lt;/h1&gt;
@@ -2594,10 +2594,10 @@ goto语句的语义非常简单，就是跳转到本函数内的某个标签，�
     
     <item>
       <title>Go基本语法</title>
-      <link>http://lynchwong.com/blog/2015/06/go%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</link>
+      <link>http://lynchwong.com/2015/06/go%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</link>
       <pubDate>Fri, 19 Jun 2015 12:30:31 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/go%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</guid>
+      <guid>http://lynchwong.com/2015/06/go%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;变量&#34;&gt;变量&lt;/h1&gt;
@@ -2818,7 +2818,7 @@ fmt.Println(&amp;ldquo;Result:&amp;ldquo;, b) // 打印结果为Result: true&lt;
 
 &lt;p&gt;整型是所有编程语言里最基础的数据类型。Go语言支持表2-1所示的这些整型类型。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoBasicSyn/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoBasicSyn/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;类型表示&#34;&gt;类型表示&lt;/h3&gt;
 
@@ -2870,7 +2870,7 @@ if i == 1 || j == 2 {// 编译通过
 
 &lt;p&gt;Go语言支持表2-2所示的位运算符。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoBasicSyn/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoBasicSyn/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Go语言的大多数位运算符与C语言都比较类似，除了取反在C语言中是~x，而在Go语言中是^x。&lt;/p&gt;
 
@@ -2963,7 +2963,7 @@ str[0] = &#39;X&#39; // 编译错误
 
 &lt;p&gt;平时常用的字符串操作如表2-3所示。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/GoBasicSyn/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/GoBasicSyn/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;更多的字符串操作，请参考标准库strings包。&lt;/p&gt;
 
@@ -3318,10 +3318,10 @@ if ok { // 找到了
     
     <item>
       <title>初识Go语言</title>
-      <link>http://lynchwong.com/blog/2015/06/%E5%88%9D%E8%AF%86go%E8%AF%AD%E8%A8%80/</link>
+      <link>http://lynchwong.com/2015/06/%E5%88%9D%E8%AF%86go%E8%AF%AD%E8%A8%80/</link>
       <pubDate>Fri, 19 Jun 2015 10:37:31 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/%E5%88%9D%E8%AF%86go%E8%AF%AD%E8%A8%80/</guid>
+      <guid>http://lynchwong.com/2015/06/%E5%88%9D%E8%AF%86go%E8%AF%AD%E8%A8%80/</guid>
       <description>&lt;p&gt;作为一个程序员，要有一颗不断上进的心，不然就永远只能有程序员的称号。俗话说技多不压身，活到老学到老。
 &lt;/p&gt;
 

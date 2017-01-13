@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Alamofire on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/alamofire/index.xml</link>
+    <link>http://lynchwong.com/tags/alamofire/index.xml</link>
     <description>Recent content in Alamofire on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/alamofire/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/alamofire/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Alamofire 源码学习 - Download</title>
-      <link>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---download/</link>
+      <link>http://lynchwong.com/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---download/</link>
       <pubDate>Sat, 19 Mar 2016 13:11:31 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---download/</guid>
+      <guid>http://lynchwong.com/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---download/</guid>
       <description>&lt;p&gt;其实下载很简单，模式上来说和上传基本是一样的，至少在创建请求上模式没有区别。感觉上已经多说无益了，也是浪费时间。
 &lt;/p&gt;
 
@@ -30,10 +30,10 @@
     
     <item>
       <title>Alamofire 源码学习 - Upload</title>
-      <link>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---upload/</link>
+      <link>http://lynchwong.com/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---upload/</link>
       <pubDate>Sat, 19 Mar 2016 13:11:25 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---upload/</guid>
+      <guid>http://lynchwong.com/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---upload/</guid>
       <description>&lt;p&gt;创建这篇文章的时候是3月19号，今天已经是4月7号了。感觉时间过的好快啊，但是博客一直没更新，顿时感觉堕落了，没有成长。废话不多说了，直接进入正题。
 &lt;/p&gt;
 
@@ -416,10 +416,10 @@ public var identifier: String? { get }
     
     <item>
       <title>Alamofire 源码学习 - Request</title>
-      <link>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---request/</link>
+      <link>http://lynchwong.com/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---request/</link>
       <pubDate>Sat, 19 Mar 2016 13:11:15 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---request/</guid>
+      <guid>http://lynchwong.com/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---request/</guid>
       <description>&lt;p&gt;本来想先把框架的类图画出来，便于大家好理解类、枚举、结构体之间的关系。无奈UML全忘光了，好多画UML图的软件都是付费的，所以就打消了这个念头。
 &lt;/p&gt;
 
@@ -482,7 +482,7 @@ public var identifier: String? { get }
 
 &lt;p&gt;整个文件结构很清晰，没有定义类。首先定义了两个协议，然后就是request、upload、download的方法，其实这些方法都是一些便捷方法，方便开发者直接使用。如下图所示，结构就很清晰了：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/AlamofireRequest/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/AlamofireRequest/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;parameterencoding-swift&#34;&gt;ParameterEncoding.swift&lt;/h1&gt;
 
@@ -1112,10 +1112,10 @@ public func response&amp;lt;T: ResponseSerializerType&amp;gt;(
     
     <item>
       <title>Alamofire 源码学习 - 序</title>
-      <link>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---%E5%BA%8F/</link>
+      <link>http://lynchwong.com/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---%E5%BA%8F/</link>
       <pubDate>Wed, 16 Mar 2016 13:33:16 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---%E5%BA%8F/</guid>
+      <guid>http://lynchwong.com/2016/03/alamofire-%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0---%E5%BA%8F/</guid>
       <description>&lt;p&gt;本来这篇博文的标题是“Alamofire 源码分析”，后来想想不太恰当，所以就改成了现在的标题。&lt;/p&gt;
 
 &lt;p&gt;前段时间正好翻译完了并发编程指南和NSURLSession相关的一些东西，所以这篇博文也是必须的。

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ios多线程 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/ios%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.xml</link>
+    <link>http://lynchwong.com/tags/ios%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.xml</link>
     <description>Recent content in Ios多线程 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/ios%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/ios%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>iOS多线程</title>
-      <link>http://lynchwong.com/blog/2015/04/ios%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+      <link>http://lynchwong.com/2015/04/ios%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
       <pubDate>Fri, 10 Apr 2015 15:33:17 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/04/ios%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
+      <guid>http://lynchwong.com/2015/04/ios%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
       <description>&lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;之前的一个系列全是Swift相关的，基本上也就是做了搬运工的工作。勘误了一部分代码语法错误，相关资料参考自 &lt;a href=&#34;https://github.com/CocoaChina-editors/Welcome-to-Swift&#34;&gt;这里&lt;/a&gt;，资料算是比较旧的，跟&lt;a href=&#34;https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/index.html#//apple_ref/doc/uid/TP40014097&#34;&gt;苹果官方&lt;/a&gt;的还是有很多不一样的地方，语法，内容等。最新的Swift 1.2也在近日发布，官方又做了相应的修改、更新。所以后面等到有时间或者Swift相对稳定后再进行勘误，重新整理Swift的这个系列。&lt;/p&gt;
@@ -69,7 +69,7 @@
 
 &lt;p&gt;列表 1-2 列举你可以在你的应用程序使用的线程技术。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSMThreading/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSMThreading/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在应用层上，其他平台一样所有线程的行为本质上是相同的。线程启动之后,线 程就进入三个状态中的任何一个：运行(running)、就绪(ready)、阻塞(blocked)。如果一个线程当前没有运行，那么它不是处于阻塞，就是等待外部输入，或者已经准备就绪等待分配 CPU。线程持续在这三个状态之间切换，直到它最终退出或者进入中断 状态。&lt;/p&gt;
 
@@ -213,7 +213,7 @@ argument ：传输给target的唯一参数，也可以是nil
 
 &lt;p&gt;模拟器效果如下：启动一小断时间后图片才显示在屏幕上。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSMThreading/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSMThreading/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;nsoperation的使用&#34;&gt;NSOperation的使用&lt;/h3&gt;
 
@@ -395,7 +395,7 @@ argument ：传输给target的唯一参数，也可以是nil
 
 &lt;p&gt;表 3-1 列出了一些你应用程序可用的调度队列以及你怎样使用它们，如下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSMThreading/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSMThreading/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Serial：串行队列（也称作private dispatch queues）按照任务增加到队列的顺序，每次只执行一个任务。当前执行的任务运行在不同的线程，是通过调度队列来管理。串行队列通常用来同步访问特定的资源。你可以创建任意多个串行队列，每一个串行队列相对于其他的串行队列都是并发执行的。换句话说，如果你创建了四个串行队列，每一个队列在同一时间只能执行一个任务，但是最多可以有四个任务执行，每一个任务来自于一个串行队列。&lt;/li&gt;

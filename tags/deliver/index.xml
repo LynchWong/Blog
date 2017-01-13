@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Deliver on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/deliver/index.xml</link>
+    <link>http://lynchwong.com/tags/deliver/index.xml</link>
     <description>Recent content in Deliver on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/deliver/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/deliver/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Fastlane - Deliver</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---deliver/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---deliver/</link>
       <pubDate>Sat, 18 Jun 2016 12:49:42 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---deliver/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---deliver/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Deliver&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneDeliver/deliver.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneDeliver/deliver.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;deliver&#34;&gt;deliver&lt;/h1&gt;
 
@@ -70,7 +70,7 @@
 
 &lt;p&gt;查看你本地 &lt;code&gt;./fastlane/metadata&lt;/code&gt; 和 &lt;code&gt;./fastlane/screenshots&lt;/code&gt;文件夹(如果你没有使用fastlane，&lt;code&gt;./metadata&lt;/code&gt;替换)。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneDeliver/metadata.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneDeliver/metadata.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;你将会看见从 iTunes Connect 获取的元数据。你可以在本地修改这些数据，然后推送回 iTunes Connect。&lt;/p&gt;
 

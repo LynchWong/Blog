@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Nsurlconnection on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/nsurlconnection/index.xml</link>
+    <link>http://lynchwong.com/tags/nsurlconnection/index.xml</link>
     <description>Recent content in Nsurlconnection on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/nsurlconnection/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/nsurlconnection/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>URL Session Programming Guide - Appendix A: Life Cycle of a URL Session</title>
-      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---appendix-a-life-cycle-of-a-url-session/</link>
+      <link>http://lynchwong.com/2016/01/url-session-programming-guide---appendix-a-life-cycle-of-a-url-session/</link>
       <pubDate>Fri, 29 Jan 2016 14:14:22 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---appendix-a-life-cycle-of-a-url-session/</guid>
+      <guid>http://lynchwong.com/2016/01/url-session-programming-guide---appendix-a-life-cycle-of-a-url-session/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/NSURLSessionConcepts/NSURLSessionConcepts.html#//apple_ref/doc/uid/10000165i-CH2-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -120,10 +120,10 @@
     
     <item>
       <title>URL Session Programming Guide - Cookies and Custom Protocols</title>
-      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---cookies-and-custom-protocols/</link>
+      <link>http://lynchwong.com/2016/01/url-session-programming-guide---cookies-and-custom-protocols/</link>
       <pubDate>Fri, 29 Jan 2016 14:12:55 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---cookies-and-custom-protocols/</guid>
+      <guid>http://lynchwong.com/2016/01/url-session-programming-guide---cookies-and-custom-protocols/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/CookiesandCustomProtocols/CookiesandCustomProtocols.html#//apple_ref/doc/uid/10000165i-CH10-SW3&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -174,10 +174,10 @@
     
     <item>
       <title>URL Session Programming Guide - Understanding Cache Access</title>
-      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---understanding-cache-access/</link>
+      <link>http://lynchwong.com/2016/01/url-session-programming-guide---understanding-cache-access/</link>
       <pubDate>Fri, 29 Jan 2016 14:12:39 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---understanding-cache-access/</guid>
+      <guid>http://lynchwong.com/2016/01/url-session-programming-guide---understanding-cache-access/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Concepts/CachePolicies.html#//apple_ref/doc/uid/20001843-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -282,10 +282,10 @@ willCacheResponse:(NSCachedURLResponse *)cachedResponse
     
     <item>
       <title>URL Session Programming Guide - Authentication Challenges and TLS Chain Validation</title>
-      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---authentication-challenges-and-tls-chain-validation/</link>
+      <link>http://lynchwong.com/2016/01/url-session-programming-guide---authentication-challenges-and-tls-chain-validation/</link>
       <pubDate>Fri, 29 Jan 2016 14:12:16 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---authentication-challenges-and-tls-chain-validation/</guid>
+      <guid>http://lynchwong.com/2016/01/url-session-programming-guide---authentication-challenges-and-tls-chain-validation/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html#//apple_ref/doc/uid/TP40009507-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -434,10 +434,10 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
     
     <item>
       <title>URL Session Programming Guide - Handling Redirects and Other Request Changes</title>
-      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---handling-redirects-and-other-request-changes/</link>
+      <link>http://lynchwong.com/2016/01/url-session-programming-guide---handling-redirects-and-other-request-changes/</link>
       <pubDate>Fri, 29 Jan 2016 14:11:59 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---handling-redirects-and-other-request-changes/</guid>
+      <guid>http://lynchwong.com/2016/01/url-session-programming-guide---handling-redirects-and-other-request-changes/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/RequestChanges.html#//apple_ref/doc/uid/TP40009506-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -507,10 +507,10 @@ redirectResponse:(NSURLResponse *)redirectResponse
     
     <item>
       <title>URL Session Programming Guide - Encoding URL Data</title>
-      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---encoding-url-data/</link>
+      <link>http://lynchwong.com/2016/01/url-session-programming-guide---encoding-url-data/</link>
       <pubDate>Fri, 29 Jan 2016 14:11:44 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---encoding-url-data/</guid>
+      <guid>http://lynchwong.com/2016/01/url-session-programming-guide---encoding-url-data/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/WorkingwithURLEncoding/WorkingwithURLEncoding.html#//apple_ref/doc/uid/10000165i-CH12-SW1&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -554,10 +554,10 @@ CFStringRef encodedString = CFURLCreateStringByAddingPercentEscapes(
     
     <item>
       <title>URL Session Programming Guide - Using NSURLDownload</title>
-      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurldownload/</link>
+      <link>http://lynchwong.com/2016/01/url-session-programming-guide---using-nsurldownload/</link>
       <pubDate>Fri, 29 Jan 2016 14:11:29 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurldownload/</guid>
+      <guid>http://lynchwong.com/2016/01/url-session-programming-guide---using-nsurldownload/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLDownload.html#//apple_ref/doc/uid/20001839-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -788,10 +788,10 @@ shouldDecodeSourceDataOfMIMEType:(NSString *)encodingType
     
     <item>
       <title>URL Session Programming Guide - Using NSURLConnection</title>
-      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurlconnection/</link>
+      <link>http://lynchwong.com/2016/01/url-session-programming-guide---using-nsurlconnection/</link>
       <pubDate>Fri, 29 Jan 2016 14:11:09 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurlconnection/</guid>
+      <guid>http://lynchwong.com/2016/01/url-session-programming-guide---using-nsurlconnection/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLConnection.html#//apple_ref/doc/uid/20001836-BAJEAIEE&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -1006,10 +1006,10 @@ NSMutableURLRequest *postRequest = [NSMutableURLRequest requestWithURL:[NSURL UR
     
     <item>
       <title>URL Session Programming Guide - Using NSURLSession</title>
-      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurlsession/</link>
+      <link>http://lynchwong.com/2016/01/url-session-programming-guide---using-nsurlsession/</link>
       <pubDate>Fri, 29 Jan 2016 14:10:55 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---using-nsurlsession/</guid>
+      <guid>http://lynchwong.com/2016/01/url-session-programming-guide---using-nsurlsession/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://developer.apple.com/library/prerelease/tvos/documentation/Cocoa/Conceptual/URLLoadingSystem/Articles/UsingNSURLSession.html#//apple_ref/doc/uid/TP40013509-SW26&#34;&gt;官方文档&lt;/a&gt;
 &lt;/p&gt;
 
@@ -1503,10 +1503,10 @@ NSURLSessionDownloadTask *downloadTask = [self.backgroundSession downloadTaskWit
     
     <item>
       <title>URL Session Programming Guide - Introduction</title>
-      <link>http://lynchwong.com/blog/2016/01/url-session-programming-guide---introduction/</link>
+      <link>http://lynchwong.com/2016/01/url-session-programming-guide---introduction/</link>
       <pubDate>Fri, 29 Jan 2016 14:10:37 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/01/url-session-programming-guide---introduction/</guid>
+      <guid>http://lynchwong.com/2016/01/url-session-programming-guide---introduction/</guid>
       <description>&lt;p&gt;前一份编程指南是关于并发的，算是完成了，凑合着看吧。其实整理这些编程指南蛮花时间的，我空闲的时间基本都是在弄这个。有的时候觉得没什么意义，其实蛮有用的。特别是开发这么久了，看了苹果的说明，这些编程指南，感觉以前蒙在自己眼前的雾都散开了。前两天正好要做一个图片轮循的功能，正好我就是用的定时器类型的&lt;strong&gt;dispatch_source&lt;/strong&gt;实现定时轮循。也是因为正好看到&lt;strong&gt;dispatch_source&lt;/strong&gt;这里，如果没整理并发编程指南我可能就用&lt;strong&gt;NSTimer&lt;/strong&gt;了。所以你现在的努力、做的事情、学习的知识和技能你觉得没什么用，你也许现在不知道，但是总有一天会用上回报你的。感觉都有点像鸡汤了，就不扯了。
 &lt;/p&gt;
 
@@ -1550,7 +1550,7 @@ NSURLSessionDownloadTask *downloadTask = [self.backgroundSession downloadTaskWit
 
 &lt;p&gt;URL加载系统包含了大量重要的辅助类来帮助URL加载类修改它们的行为。主要的辅助类分为5个类别：协议支持，认证，Credentials，Cookie，配置管理，缓存管理。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/URLSessionProgrammingGuideIntroduction/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/URLSessionProgrammingGuideIntroduction/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;url-loading&#34;&gt;URL Loading&lt;/h3&gt;
 

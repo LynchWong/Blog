@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Rxswift on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/rxswift/index.xml</link>
+    <link>http://lynchwong.com/tags/rxswift/index.xml</link>
     <description>Recent content in Rxswift on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/rxswift/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/rxswift/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>小记 - RxSwift</title>
-      <link>http://lynchwong.com/blog/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</link>
+      <link>http://lynchwong.com/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</link>
       <pubDate>Sat, 23 Apr 2016 09:30:49 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</guid>
+      <guid>http://lynchwong.com/2016/04/%E5%B0%8F%E8%AE%B0---rxswift/</guid>
       <description>&lt;p&gt;又有一个月没有写过博客了，真是罪过，深深的内疚的感觉。之前写完了&lt;a href=&#34;http://lynchwong.com/2016/03/19/Alamofire-源码学习-Request/&#34;&gt; Alamofire 源码学习 &lt;/a&gt;然后让另一个做iOS的同学看，他说看不懂，写的乱。
 &lt;/p&gt;
 

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ios审核被拒 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/ios%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/index.xml</link>
+    <link>http://lynchwong.com/tags/ios%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/index.xml</link>
     <description>Recent content in Ios审核被拒 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/ios%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/ios%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>审核被拒</title>
-      <link>http://lynchwong.com/blog/2015/06/%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/</link>
+      <link>http://lynchwong.com/2015/06/%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/</link>
       <pubDate>Thu, 11 Jun 2015 11:03:47 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/06/%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/</guid>
+      <guid>http://lynchwong.com/2015/06/%E5%AE%A1%E6%A0%B8%E8%A2%AB%E6%8B%92/</guid>
       <description>&lt;p&gt;审核被拒估计大多数开发者都遇到过，如果从来都没有被拒过，那你上辈子一定是拯救过银河系。
 &lt;/p&gt;
 
@@ -39,7 +39,7 @@
 
 &lt;p&gt;然后就是2.9了，当我应用程序没有数据的时候，我的界面是这样的，如下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSShenHe/iOSshenhe.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSShenHe/iOSshenhe.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这张图是审核人员截图的。当程序第一次安装的时候是没有数据的，所以我在做了图中的那个提示来提醒用户还没有联系人。但是审核人员却认为我的App是未完成的，是测试版等等。看到这里的时候，我的内心是崩溃的。没办法，去除掉。然后从新打包上传审核。&lt;/p&gt;
 

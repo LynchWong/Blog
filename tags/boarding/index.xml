@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Boarding on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/boarding/index.xml</link>
+    <link>http://lynchwong.com/tags/boarding/index.xml</link>
     <description>Recent content in Boarding on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/boarding/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/boarding/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Fastlane - Boarding</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---boarding/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---boarding/</link>
       <pubDate>Tue, 28 Jun 2016 09:04:26 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---boarding/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---boarding/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Boarding&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneBoarding/BoardingHuge.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneBoarding/BoardingHuge.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;boarding-是什么&#34;&gt;boarding 是什么？&lt;/h1&gt;
 
@@ -33,7 +33,7 @@
 
 &lt;p&gt;你为什么不弄一个简单的网页，与你潜在的测试人员分享(比如邮件、Facebook、Twitter)，那些对你的新 App 感兴趣的人，然后让他们自己来 &lt;code&gt;board&lt;/code&gt; ？&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneBoarding/BoardingScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneBoarding/BoardingScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;感谢 &lt;a href=&#34;https://spaceship.airforce&#34;&gt;spaceship.airforce&lt;/a&gt; ，现在可以自动为你的 TestFlight beta 测试人员 boarding process 。&lt;/p&gt;
 
@@ -100,7 +100,7 @@
 &lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding/blob/master/app/views/invite/index.html.erb&#34;&gt;invite/index.html.erb&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneBoarding/BoardingOverview.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneBoarding/BoardingOverview.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;更多关于自动化过程的信息，参见 &lt;a href=&#34;https://krausefx.com&#34;&gt;my blog&lt;/a&gt; 。&lt;/p&gt;
 

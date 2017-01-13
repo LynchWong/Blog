@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ios自定义控件 on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/ios%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6/index.xml</link>
+    <link>http://lynchwong.com/tags/ios%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6/index.xml</link>
     <description>Recent content in Ios自定义控件 on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/ios%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/ios%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>自定义UITabBar</title>
-      <link>http://lynchwong.com/blog/2015/11/%E8%87%AA%E5%AE%9A%E4%B9%89uitabbar/</link>
+      <link>http://lynchwong.com/2015/11/%E8%87%AA%E5%AE%9A%E4%B9%89uitabbar/</link>
       <pubDate>Mon, 09 Nov 2015 15:48:59 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/11/%E8%87%AA%E5%AE%9A%E4%B9%89uitabbar/</guid>
+      <guid>http://lynchwong.com/2015/11/%E8%87%AA%E5%AE%9A%E4%B9%89uitabbar/</guid>
       <description>&lt;p&gt;先给出两个参考资料：&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/gf771115/article/details/37890663&#34;&gt; iOS 自定义TabBarController &lt;/a&gt;
@@ -57,7 +57,7 @@ _preSelectedButton.enabled = NO;
 
 &lt;p&gt;最开始的两行代码很有用，用来去掉UITabBar上面那条线的。如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SelfDefineUITabBar/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SelfDefineUITabBar/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;左边的和右边的数字对应。图中1的UIVIew是我自己添加到视图中的，而2就是我们要去掉的那条线。我循环去掉UITabBar的子视图也没能把这个UIImageView去掉。这个方法是参考苹果官方Demo来实现的，&lt;a href=&#34;https://developer.apple.com/library/ios/samplecode/NavBar/Introduction/Intro.html&#34;&gt; Customizing UINavigationBar &lt;/a&gt;。&lt;/p&gt;
 
@@ -69,7 +69,7 @@ _preSelectedButton.enabled = NO;
 
 &lt;p&gt;效果图如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/SelfDefineUITabBar/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/SelfDefineUITabBar/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;上传的源码最后的效果图和我这个不一样，图片资源就不提供了。&lt;/p&gt;
 
@@ -78,10 +78,10 @@ _preSelectedButton.enabled = NO;
     
     <item>
       <title>自定义进度视图</title>
-      <link>http://lynchwong.com/blog/2015/09/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%9B%E5%BA%A6%E8%A7%86%E5%9B%BE/</link>
+      <link>http://lynchwong.com/2015/09/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%9B%E5%BA%A6%E8%A7%86%E5%9B%BE/</link>
       <pubDate>Tue, 29 Sep 2015 16:37:57 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2015/09/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%9B%E5%BA%A6%E8%A7%86%E5%9B%BE/</guid>
+      <guid>http://lynchwong.com/2015/09/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%9B%E5%BA%A6%E8%A7%86%E5%9B%BE/</guid>
       <description>&lt;p&gt;最近项目需要做一个表示进度的视图，其实第三方的应该蛮多的。自己估摸着做一个应该很简单，直接着手就开始做了。
 &lt;/p&gt;
 
@@ -104,8 +104,8 @@ _preSelectedButton.enabled = NO;
 
 &lt;h3 id=&#34;功能1-圆圈进度&#34;&gt;功能1.圆圈进度&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSProgressCircleView/1.png&#34; alt=&#34;alt text&#34; /&gt;
-&lt;img src=&#34;http://lynchwong.com/blog/img/iOSProgressCircleView/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSProgressCircleView/1.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/iOSProgressCircleView/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如上图所示，这个是圆圈进度的截图。图中是一个播放声音的按钮，表示进度的圈圈会根据声音播放的进度来进行动画。当声音播放完成时整个圆圈也就动画完成了。下篇博客就写播放声音的接口，能播放本地的声音，也能播放网络声音。&lt;/p&gt;
 
@@ -149,7 +149,7 @@ _progressCircleView.userInteractionEnabled = YES;
 
 &lt;h3 id=&#34;功能2-当前步骤&#34;&gt;功能2.当前步骤&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSProgressCircleView/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSProgressCircleView/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;如上图所示，表示的是当前进行到了第几个步骤，圈中间会有显示当前进行到的步骤以及总的步骤。&lt;/p&gt;
 
@@ -182,10 +182,10 @@ _stepCircleView.currentIndex = 1;
     
     <item>
       <title>自定义iOS控件</title>
-      <link>http://lynchwong.com/blog/2014/12/%E8%87%AA%E5%AE%9A%E4%B9%89ios%E6%8E%A7%E4%BB%B6/</link>
+      <link>http://lynchwong.com/2014/12/%E8%87%AA%E5%AE%9A%E4%B9%89ios%E6%8E%A7%E4%BB%B6/</link>
       <pubDate>Wed, 17 Dec 2014 11:40:47 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2014/12/%E8%87%AA%E5%AE%9A%E4%B9%89ios%E6%8E%A7%E4%BB%B6/</guid>
+      <guid>http://lynchwong.com/2014/12/%E8%87%AA%E5%AE%9A%E4%B9%89ios%E6%8E%A7%E4%BB%B6/</guid>
       <description>&lt;p&gt;刚开始学习iOS开发的时候接触了很多Cocoa Touch的标准控件，那时就觉得这些控件好用是好用，但是可定制性不高。往往我们的需求又比较变态，特别是控件外观方面基本达不到需求，所以很多时候我们需要自己做控件。
 &lt;/p&gt;
 
@@ -210,33 +210,33 @@ _stepCircleView.currentIndex = 1;
 
 &lt;p&gt;现在我们就一步一步的开始实现“油门”控件，OS X是10.10.1，Xcode是6.6.1。我们新建一个项目，名字叫做“AcceleratorView”，我们使用OC开发。建好后的项目截图如下所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSSelfDefine/1.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;新建一个文件&lt;code&gt;Accelerator&lt;/code&gt;，继承自&lt;code&gt;UIControl&lt;/code&gt;。&lt;/p&gt;
 
 &lt;p&gt;然后我们打开&lt;code&gt;Main.storyboard&lt;/code&gt;文件，拖拽一个&lt;code&gt;View&lt;/code&gt;控件到&lt;code&gt;View Controller&lt;/code&gt;里面。如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSSelfDefine/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;然后我们将&lt;code&gt;Class&lt;/code&gt;属性改成我们刚创建的，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSSelfDefine/3.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;接下来就是为&lt;code&gt;View&lt;/code&gt;控件添加约束，我们大小设置为200 x 580，x 和 y分别是5 和 20。首先设置长宽的约束，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSSelfDefine/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;设置完成之后Xcode会有红色的警示线，表示添加的约束无法确定&lt;code&gt;View&lt;/code&gt;的位置，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSSelfDefine/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;所以我们还要继续添加约束，添加x和y的约束，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSSelfDefine/6.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;添加完成后红色的虚线消失，如下图所示：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSSelfDefine/7.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;大家可以试下不为&lt;code&gt;View&lt;/code&gt;添加约束，然后运行会发现视图错乱，那是因为iOS8、Xcode6新建的项目使用了&lt;code&gt;Size Classes&lt;/code&gt;，是为多种设备做适配用的。iOS的设备越来越多，所以适配是必须要做的，所以&lt;code&gt;AutoLayout&lt;/code&gt;和&lt;code&gt;Size Classes&lt;/code&gt;是必备技能了。这里就不说了，以后有时间也要搞一篇。这时候运行模拟器还没有什么东西，让我们继续。&lt;/p&gt;
 
@@ -270,7 +270,7 @@ _stepCircleView.currentIndex = 1;
 
 &lt;p&gt;这个“油门”控件要做成什么样的，大家都没看过，所以说有思路是不可能的，所以我们先看下效果图，然后来分析分析，应该怎么做，有个大体的思路。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/iOSSelfDefine/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/iOSSelfDefine/8.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;上图就是完成后的效果图，当然不是很美观，跟我项目里完整的还是有很大的差别，这里我们只实现这一部分。首先控件的按钮是一张图片，其他的部分全都是在&lt;code&gt;- (void)drawRect:(CGRect)rect&lt;/code&gt;方法中绘图绘上去的。N、和R分别标示不同的档位，即空档和倒档，效果分别是制动和后退。上面的档位表示前进，档位越高表示速度越快。拖动按钮来变换档位，而且标示档位的线的颜色也会改变。需求就是这些了，看到效果图，实现也应该是比较简单的。&lt;/p&gt;
 

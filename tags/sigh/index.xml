@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Sigh on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/sigh/index.xml</link>
+    <link>http://lynchwong.com/tags/sigh/index.xml</link>
     <description>Recent content in Sigh on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/sigh/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/sigh/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Fastlane - Sigh</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---sigh/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---sigh/</link>
       <pubDate>Mon, 27 Jun 2016 12:39:46 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---sigh/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---sigh/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Sigh&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSigh/sigh.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSigh/sigh.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;sigh&#34;&gt;sigh&lt;/h1&gt;
 
@@ -53,7 +53,7 @@
 
 &lt;p&gt;参见&lt;code&gt;sigh&lt;/code&gt;的执行：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSigh/sighRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSigh/sighRecording.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
 
@@ -232,7 +232,7 @@ end
 
 &lt;p&gt;它会像下图这样向你展示 &lt;code&gt;mobileprovision&lt;/code&gt; 文件：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneSigh/QuickLookScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSigh/QuickLookScreenshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;找不到-app-identifier&#34;&gt;找不到 App Identifier&lt;/h2&gt;
 

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Mobilevlckit on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/mobilevlckit/index.xml</link>
+    <link>http://lynchwong.com/tags/mobilevlckit/index.xml</link>
     <description>Recent content in Mobilevlckit on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/mobilevlckit/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/mobilevlckit/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>最近的代码</title>
-      <link>http://lynchwong.com/blog/2016/06/%E6%9C%80%E8%BF%91%E7%9A%84%E4%BB%A3%E7%A0%81/</link>
+      <link>http://lynchwong.com/2016/06/%E6%9C%80%E8%BF%91%E7%9A%84%E4%BB%A3%E7%A0%81/</link>
       <pubDate>Thu, 02 Jun 2016 11:35:40 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/%E6%9C%80%E8%BF%91%E7%9A%84%E4%BB%A3%E7%A0%81/</guid>
+      <guid>http://lynchwong.com/2016/06/%E6%9C%80%E8%BF%91%E7%9A%84%E4%BB%A3%E7%A0%81/</guid>
       <description>&lt;p&gt;这三个小项目其实已经完成蛮久了，差不多一个多月的时间了。有发在Cocoachina的代码里面，我的&lt;a href=&#34;https://github.com/LynchWong&#34;&gt; GitHub &lt;/a&gt;上面也有源码。这里也只是作下记录，不做详细的讲解。
 &lt;/p&gt;
 
@@ -35,7 +35,7 @@
 
 &lt;p&gt;效果图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/RecentCoding/demo.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/RecentCoding/demo.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;播放器&#34;&gt;播放器&lt;/h1&gt;
 
@@ -60,7 +60,7 @@
 
 &lt;p&gt;效果图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/RecentCoding/intro.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/RecentCoding/intro.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

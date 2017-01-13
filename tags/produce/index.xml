@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Produce on Nobodyknows&#43; 2.5</title>
-    <link>http://lynchwong.com/blog/tags/produce/index.xml</link>
+    <link>http://lynchwong.com/tags/produce/index.xml</link>
     <description>Recent content in Produce on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://lynchwong.com/blog/tags/produce/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://lynchwong.com/tags/produce/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Fastlane - Produce</title>
-      <link>http://lynchwong.com/blog/2016/06/fastlane---produce/</link>
+      <link>http://lynchwong.com/2016/06/fastlane---produce/</link>
       <pubDate>Mon, 27 Jun 2016 17:24:12 +0000</pubDate>
       
-      <guid>http://lynchwong.com/blog/2016/06/fastlane---produce/</guid>
+      <guid>http://lynchwong.com/2016/06/fastlane---produce/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;说明：翻译的 &lt;code&gt;Produce&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; 原文地址 &lt;/a&gt;。
 &lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/blog/img/FastlaneProduce/produce.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneProduce/produce.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;produce&#34;&gt;produce&lt;/h1&gt;
 
