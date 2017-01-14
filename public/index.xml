@@ -6,8 +6,100 @@
     <description>Recent content on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 26 Aug 2016 10:29:18 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 13 Jan 2017 23:50:22 +0800</lastBuildDate>
     <atom:link href="http://lynchwong.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>更新</title>
+      <link>http://lynchwong.com/2017/01/%E6%9B%B4%E6%96%B0/</link>
+      <pubDate>Fri, 13 Jan 2017 23:50:22 +0800</pubDate>
+      
+      <guid>http://lynchwong.com/2017/01/%E6%9B%B4%E6%96%B0/</guid>
+      <description>&lt;p&gt;上篇博客去年8月底写完就没再更了，一直在忙其它的事情。
+&lt;/p&gt;
+
+&lt;!-- toc --&gt;
+
+&lt;h1 id=&#34;最近&#34;&gt;最近&lt;/h1&gt;
+
+&lt;p&gt;去年5月之前是基本每天晚上跑步1小时，所以时间还是比较充裕的，写博客的时间就比较多。5月之后把重心放在了健身上，除了跑步，还有力量训练。时间安排上基本是先力量训练1到1个半小时，然后再跑步半小时，结束之后还要弄吃的，包括第二天的午餐。吃完弄完再洗漱，这样算下来总时间基本在3小时左右。所以按照我平常的作息，3小时基本都在晚上11点左右了，必然没时间再搞其它的事情了。&lt;/p&gt;
+
+&lt;p&gt;10月国庆回来之后一直在忙工作上的事情，改项目的架构，做新的项目。直到最近才有时间来弄博客，首先是换了博客引擎，从 &lt;strong&gt;Hexo&lt;/strong&gt; 换成了 &lt;strong&gt;Hugo&lt;/strong&gt;。然后整理了下原来的博文，只完成了部分，之后会继续整理。&lt;a href=&#34;http://lynchwong.github.io/&#34;&gt;老博客&lt;/a&gt; 还是在的，只是不能通过 &lt;a href=&#34;http://lynchwong.com&#34;&gt;http://lynchwong.com&lt;/a&gt; 域名访问了。老博客地址 &lt;a href=&#34;http://lynchwong.github.io/&#34;&gt;http://lynchwong.github.io/&lt;/a&gt;。缓存原因可能跳不过去(也有可能是我域名解析没弄好)，会跳到现在的博客，换个浏览器试试。不过没关系，老博客的文章我都转到现在这个博客上了，而且老博客也一直托管在 &lt;strong&gt;GitHub&lt;/strong&gt; 上的，没有删掉，去我 &lt;strong&gt;GitHub&lt;/strong&gt; 上随时都可以看到。老博客就停止更新了，之后的文章都在这个博客上。其实域名没有变，对其他人来说就相当于换了个界面而已。&lt;/p&gt;
+
+&lt;p&gt;新博客有一个问题就是 &lt;strong&gt;&lt;a href=&#34;http://lynchwong.com/categories/&#34;&gt;Categories&lt;/a&gt;&lt;/strong&gt; 里面中文被百分号编码了，现在还没解决，还没找到在哪里改。&lt;/p&gt;
+
+&lt;p&gt;接下来就回顾下2016，计划下2017。&lt;/p&gt;
+
+&lt;h1 id=&#34;2016&#34;&gt;2016&lt;/h1&gt;
+
+&lt;h2 id=&#34;运动&#34;&gt;运动&lt;/h2&gt;
+
+&lt;p&gt;唯运动与美食不可辜负。运动和美食可以换成其它的，这种类似的语言网上流传的太多，套路，都是套路。但是我觉得这句没有什么问题，反映了一种生活态度，而这种态度我觉得是正确的。&lt;/p&gt;
+
+&lt;p&gt;但是大部分的人的态度都是美食不可辜负，而完全没有运动。这也没什么错，只要能保持身体健康，对自己的身材满意就好。大家都知道这是不可能的，周围有两个同学已经出现腰肌劳损了；除此之外，大部分同学的身材也是一年不如一年。特别是像我们这种长时间坐在电脑前面编程的程序猿，8小时以上的静坐工作。回家以后不是继续在电脑前面玩游戏、看视频，就是躺尸在床上什么都不干。&lt;/p&gt;
+
+&lt;p&gt;保持身体健康，保持身材完美除了运动还有什么方法？现在开始运动，强身健体，等你老了少去医院少吃药，也是给你的下一代减压了。现在去健身房花的钱比起以后去医院花的钱要少的多，这笔帐我想谁都会算。&lt;/p&gt;
+
+&lt;p&gt;生命在于运动。&lt;/p&gt;
+
+&lt;h3 id=&#34;跑步&#34;&gt;跑步&lt;/h3&gt;
+
+&lt;p&gt;从15年4月开始跑步到现在，差不多两年的时间，总共跑了3246公里，16年就跑了1938.88公里。在 &lt;strong&gt;&lt;a href=&#34;https://www.endomondo.com/home&#34;&gt;Endomondo&lt;/a&gt;&lt;/strong&gt; 的 &lt;strong&gt;You VS the Year&lt;/strong&gt; 的挑战中排名6359。这些数字并不代表什么，但是看起来还是挺有成就感的。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/Update/1.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/Update/2.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;去年的计划是想去跑一场马拉松的，研究了很多跑步的知识。有计划的学习和训练，想着之后参加杭马。有段时间跑步挺疯狂的，一天两跑，早上5点起跑个10公里，晚上有时候也跑，周末有时候还去跑个半马。为了跑步还买了 &lt;strong&gt;Garmin Fenix 3&lt;/strong&gt;，买了心率带，还有些跑步装备。即使下雨也会跑，所以跑废了两副耳机。&lt;/p&gt;
+
+&lt;p&gt;后来健身开始就跑的少了，主要以5公里为主，跑量基本少了大半。如果不健身，以跑步为主，说不定已经跑了场马拉松了，16年也能跑到2500公里。&lt;/p&gt;
+
+&lt;h3 id=&#34;健身&#34;&gt;健身&lt;/h3&gt;
+
+&lt;p&gt;后来我把重心放在了健身上面，但是没有放弃跑步。只是跑的比以前少些了。偶尔空闲的时候我还是会去跑10公里，或者长距离慢跑下。两到三天不跑步就会浑身难受，跑习惯了不去跑就是这样，不跑总觉得哪里不对劲。&lt;/p&gt;
+
+&lt;p&gt;之所以把重心放在健身上面是因为，跑步跑久了对我这种体型的人来说是增肥的。大部分人刚开始跑步的时候减脂效果挺好，但是时间久了就没什么效果。到最后就是瘦的人会增重，胖的人会瘦下来；但绝不会让你线条优美，肌肉有型，前凸后翘，但对心肺是挺好的。另一方面跑步让我食欲大增，每次跑完都很饿，这种饥饿感能延续到第二天，总是想吃。&lt;/p&gt;
+
+&lt;p&gt;我对跑步没有别的诉求，跑步对于我来说就是一场修行。喜欢跑步时的那份独处，审视自己的内心，思考、回顾一下当天，跑完压力也没了。&lt;/p&gt;
+
+&lt;p&gt;所以5月份开始就侧重于健身，开始学习各种健身知识和关于吃的知识。主要是在家健身，一副哑铃、一张瑜伽垫、一个引体向上杠，这就是我的装备了。跟着 &lt;strong&gt;Keep&lt;/strong&gt; 做课程，一直做到现在，有些课程还不错，渐渐发现已经没有课程可以满足我的需求了，之后只能再往上加重量和强度了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/Update/3.png&#34; alt=&#34;alt text&#34; /&gt;
+&lt;img src=&#34;http://lynchwong.com/img/Update/4.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;到9月份的时候肌肉线条已经比较明显了，只是围度还不够大而已。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/Update/5.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;饮食&#34;&gt;饮食&lt;/h3&gt;
+
+&lt;p&gt;三分练，七分吃。对于健身的人来说，怎么吃，吃什么，吃多少永远都是个难题，特别是一些刚开始注意饮食的健身人士。而这句话也突出了吃的重要性，会练还要会吃才是真的达人，如果还会做那就是大神了。&lt;/p&gt;
+
+&lt;p&gt;首先就要了解的就是三大营养物质了，每种营养物质的热量，哪些食物含有这些营养物质。是想要增肌还是要减肥，然后计算热量的摄入和支出。根据热量来计算每种营养物质的摄入量，然后具体到每一种食物，然后将每种食物定量到每一餐。尽量采用少食多餐的饮食习惯，最好一天5、6餐。&lt;/p&gt;
+
+&lt;p&gt;去年有一个多月是自己做健身餐吃，感觉吃的很健康、很卫生。卖相和味道就不说了，两个字评价：熟的。为了弄吃的，还买了个烤箱。挺方便的，烤鸡胸肉、烤三文鱼、烤吐司都挺好吃的。今年再继续研究怎么做吃的，烤箱功能很多，很多还没用到呢。&lt;/p&gt;
+
+&lt;h1 id=&#34;2017&#34;&gt;2017&lt;/h1&gt;
+
+&lt;h2 id=&#34;运动-1&#34;&gt;运动&lt;/h2&gt;
+
+&lt;p&gt;17年的重点还是健身和饮食，当然跑步还是会继续。我就是停不下来啊，无法放弃跑步。&lt;/p&gt;
+
+&lt;p&gt;今年的跑量应该会在1000公里左右吧，马拉松什么的已经不是重点了。&lt;/p&gt;
+
+&lt;p&gt;健身的目标是今年增肌到70KG，现在已经60KG了。由于本身身材矮小、瘦弱，模版已经在那里了，我感觉70KG已经是极限了。好多人说既然不高，还健身干嘛？我只想说本来就不高，没什么优势，身材要是还不好那不是药丸么。可能会挑个健身房，具体看今年的安排了。&lt;/p&gt;
+
+&lt;p&gt;饮食目标就是研究各种健身餐，自己做给自己吃。熟悉各种食物的热量，学习各种食物的搭配。搞一份适合自己的健身菜单，要是有空，做个App，每天生成健身菜单，展示每种菜单的做法等等。&lt;/p&gt;
+
+&lt;h1 id=&#34;学习&#34;&gt;学习&lt;/h1&gt;
+
+&lt;p&gt;其实想学的东西还是挺多的，去年有过不少安排。不过有些不合适、有些不适用、有些实在是没时间再去弄了，只能砍掉了。&lt;/p&gt;
+
+&lt;p&gt;今年还是要安排学习，重点放在算法吧。也想去搞搞AI、数据，呵呵哒。&lt;/p&gt;
+
+&lt;h1 id=&#34;博客&#34;&gt;博客&lt;/h1&gt;
+
+&lt;p&gt;博客还是要坚持更新，争取每周一更吧。各个方面都，技术、运动、学习、饮食等等。主要还是针对自己的，做些记录、备忘。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>UILabel 使用 Autolayout 自动换行的BUG</title>
@@ -3069,232 +3161,6 @@ launch_arguments([
 &lt;h1 id=&#34;帮助&#34;&gt;帮助？&lt;/h1&gt;
 
 &lt;p&gt;请提交 issue 到 GitHub，并提供你关于设置的信息。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Fastlane - Deliver</title>
-      <link>http://lynchwong.com/2016/06/fastlane---deliver/</link>
-      <pubDate>Sat, 18 Jun 2016 12:49:42 +0000</pubDate>
-      
-      <guid>http://lynchwong.com/2016/06/fastlane---deliver/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;说明：翻译的 &lt;code&gt;Deliver&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; 原文地址 &lt;/a&gt;。
-&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneDeliver/deliver.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;deliver&#34;&gt;deliver&lt;/h1&gt;
-
-&lt;p&gt;使用简单的指令就能将你的应用、截图、元数据上传到App Store。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;deliver&lt;/code&gt;可以使用命令行工具上传 ipa 或者 pkg 文件，截图以及更多的数据到 iTunes Connect。&lt;/p&gt;
-
-&lt;h1 id=&#34;功能&#34;&gt;功能&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;自动化上传上百张本地化的截图&lt;/li&gt;
-&lt;li&gt;不需要使用任何一台 Mac 的 Xcode 就可以上传新的 ipa/pkg 文件到 iTunes Connect&lt;/li&gt;
-&lt;li&gt;在本地维你应用的元数据，然后将改变推送回 iTunes Connect&lt;/li&gt;
-&lt;li&gt;使用 fastlane 能够简单的实现真正的持续化的部署流程&lt;/li&gt;
-&lt;li&gt;使用 Git 管理配置文件，可以在任务一台 Mac 上部署，包括你持续集成的服务器&lt;/li&gt;
-&lt;li&gt;在将 App 元数据和截图上传到 iTC 之前会生成一个 HTML 的元数据预览&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;将构建的 App 上传到 TestFlight 查看 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; pilot &lt;/a&gt;。&lt;/p&gt;
-
-&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
-
-&lt;p&gt;安装 gem&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sudo gem install deliver
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;确保你已经安装了最新版本的 Xcode 命令行工具：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;xcode-select --install
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;快速开始&#34;&gt;快速开始&lt;/h1&gt;
-
-&lt;p&gt;指引会使用 iTunes Connect 上已经存在的 App 元数据为你创建所有必需的文件。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;cd [your_project_folder]&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;deliver init&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;输入 iTunes Connect Credentials&lt;/li&gt;
-&lt;li&gt;输入 App Identifier&lt;/li&gt;
-&lt;li&gt;在电脑为你做好所有工作之前，可以去先去来一发&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;从现在起，你可以使用 &lt;code&gt;deliver&lt;/code&gt; 来部署一个新的版本更新，或者上传新的 App 元数据和截图。&lt;/p&gt;
-
-&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
-
-&lt;p&gt;查看你本地 &lt;code&gt;./fastlane/metadata&lt;/code&gt; 和 &lt;code&gt;./fastlane/screenshots&lt;/code&gt;文件夹(如果你没有使用fastlane，&lt;code&gt;./metadata&lt;/code&gt;替换)。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneDeliver/metadata.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;你将会看见从 iTunes Connect 获取的元数据。你可以在本地修改这些数据，然后推送回 iTunes Connect。&lt;/p&gt;
-
-&lt;p&gt;运行 &lt;code&gt;deliver&lt;/code&gt; 将你本地机器的元数据上传。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;提供 ipa 文件的路径，然后上传你的 App 进行审核：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver --ipa &amp;quot;App.ipa&amp;quot; --submit_for_review
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;你页可以为 Mac OS X 的 apps 指定 pkg 文件的路径：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver --pkg &amp;quot;MacApp.pkg&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;如果你使用 fastlane，你不需要手动指定 ipa/pkg 文件的路径。&lt;/p&gt;
-
-&lt;p&gt;这些只是 &lt;code&gt;deliver&lt;/code&gt; 能做的一小部分，查看完整文档&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/deliver/Deliverfile.md&#34;&gt; Deliverfile.md &lt;/a&gt;。&lt;/p&gt;
-
-&lt;p&gt;从 iTunes Connect 下载已经存在的截图：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver download_screenshots
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;获取可用的运行选项：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver --help
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;选择之前上传的构建，然后提交审核：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver submit_build --build_number 830
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;查看&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/deliver/Deliverfile.md&#34;&gt; Deliverfile.md &lt;/a&gt;获取更多选项。&lt;/p&gt;
-
-&lt;h2 id=&#34;证书&#34;&gt;证书&lt;/h2&gt;
-
-&lt;p&gt;关于你证书是如何处理的，在&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt; credentials_manager &lt;/a&gt;中可以得到详细的描述。&lt;/p&gt;
-
-&lt;p&gt;这些东西是如何工作的？是使用的魔法吗？&lt;/p&gt;
-
-&lt;p&gt;你的密码会存储在Mac OS X 的 keychain 中，但是也可以传递使用环境变量。(&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt; CredentialsManager &lt;/a&gt;中有更多信息)&lt;/p&gt;
-
-&lt;p&gt;其实在上传任何东西到 iTunes 之前，&lt;code&gt;deliver&lt;/code&gt; 会使用收集来的数据的摘要生成一个HTML。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;deliver&lt;/code&gt;在底层使用如下技术：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;使用 iTMSTransporter 工具来上传二进制文件到 iTunes Connect。iTMSTransporter 是 Apple 提供的一个命令行工具。&lt;/li&gt;
-&lt;li&gt;与所有actions相关的元数据，&lt;code&gt;deliver&lt;/code&gt;使用的是&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; spaceship &lt;/a&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;提示&#34;&gt;提示&lt;/h1&gt;
-
-&lt;h2 id=&#34;fastlane-工具链&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt;工具链&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; &lt;code&gt;snapshot&lt;/code&gt; &lt;/a&gt;：将你iOS应用在每一种设备上进行本地化自动截图&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; &lt;code&gt;frameit&lt;/code&gt; &lt;/a&gt;：快速将你的截图放入到适合的设备框中&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; &lt;code&gt;pem&lt;/code&gt; &lt;/a&gt;：自动生成和更新你的推送通知证书&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; &lt;code&gt;sigh&lt;/code&gt; &lt;/a&gt;：管理你的 provisioning profiles&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; &lt;code&gt;produce&lt;/code&gt; &lt;/a&gt;：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; &lt;code&gt;cert&lt;/code&gt; &lt;/a&gt;：自动创建和维护iOS的 code signing certificates&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; &lt;code&gt;spaceship&lt;/code&gt; &lt;/a&gt;：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; &lt;code&gt;pilot&lt;/code&gt; &lt;/a&gt;：管理你TestFlight测试人员的最好方式，使用终端构建&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; &lt;code&gt;boarding&lt;/code&gt; &lt;/a&gt;：邀请你 TestFlight 的beta测试人员的最简单方式&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; &lt;code&gt;gym&lt;/code&gt; &lt;/a&gt;：构建你iOS应用程序&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; &lt;code&gt;scan&lt;/code&gt; &lt;/a&gt;：为你iOS和Mac应用运行测试的最简单方法&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; &lt;code&gt;match&lt;/code&gt; &lt;/a&gt;：使用Git在你的团队中同步你的 certificates 和 profiles&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/supply&#34;&gt; &lt;code&gt;supply&lt;/code&gt; &lt;/a&gt;：将你的Android应用和数据上传到 Google Play&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/screengrab&#34;&gt; &lt;code&gt;screengrab&lt;/code&gt; &lt;/a&gt;：Android版&lt;code&gt;snapshot&lt;/code&gt;，一样的功能&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;可用的语言码&#34;&gt;可用的语言码&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;no, en-US, en-CA, fi, ru, zh-Hans, nl-NL, zh-Hant, en-AU, id, de-DE, sv, ko, ms, pt-BR, el, es-ES, it, fr-CA, es-MX, pt-PT, vi, th, ja, fr-FR, da, tr, en-GB
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;默认值&#34;&gt;默认值&lt;/h2&gt;
-
-&lt;p&gt;Deliver 有指定的 &lt;code&gt;default&lt;/code&gt; 语言码，允许你提供不是本地化的值，如果你没有提供本地化的值，将会使用默认值。&lt;/p&gt;
-
-&lt;p&gt;你可以在deliverfile中使用json设置，也可以在metadata文件夹中设置。&lt;/p&gt;
-
-&lt;p&gt;假如你有&lt;code&gt;en-US, de-DE, el, it&lt;/code&gt;语言码的本地化数据。&lt;/p&gt;
-
-&lt;p&gt;你可以在deliverfile文件中如下设置：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;release_notes({
-    &#39;default&#39; =&amp;gt; &amp;quot;Shiny and new”,
-    &#39;de-DE&#39; =&amp;gt; &amp;quot;glänzend und neu&amp;quot;
-})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Deliver会为 en-US, el 和 it 使用 &amp;ldquo;Shiny and new&amp;rdquo;。&lt;/p&gt;
-
-&lt;p&gt;为 de-DE 使用 &amp;ldquo;glänzend und neu&amp;rdquo;。&lt;/p&gt;
-
-&lt;p&gt;你也可以使用文件夹达到同样目的：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;default
-  keywords.txt
-  marketing_url.txt
-  name.txt
-  privacy_url.txt
-  support_url.txt
-  release_notes.txt
-en-US
-  description.txt
-de-DE
-  description.txt
-el
-  description.txt
-it
-  description.txt
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;在这种情况下，keywords, urls, name 和 release notes 所有的本地化都会使用默认值，但是每一种语言都有完整的本地化描述。&lt;/p&gt;
-
-&lt;h2 id=&#34;自动创建截图&#34;&gt;自动创建截图&lt;/h2&gt;
-
-&lt;p&gt;如果你想 &lt;code&gt;deliver&lt;/code&gt; 集成&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; snapshot &lt;/a&gt;，查看&lt;a href=&#34;https://fastlane.tools&#34;&gt; fastlane！ &lt;/a&gt;。&lt;/p&gt;
-
-&lt;h2 id=&#34;jenkins集成&#34;&gt;Jenkins集成&lt;/h2&gt;
-
-&lt;p&gt;关于如何在 &lt;code&gt;Jenkins&lt;/code&gt; 中设置 &lt;code&gt;deliver&lt;/code&gt; 和 &lt;code&gt;fastlane&lt;/code&gt; 的详细说明，参见&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Jenkins.md&#34;&gt; fastlane README &lt;/a&gt;。&lt;/p&gt;
-
-&lt;h2 id=&#34;防火墙问题&#34;&gt;防火墙问题&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;deliver&lt;/code&gt; 使用 iTunes Transporter 来上传元数据和二进制。为了防止被防火墙阻挡，你可以指定不同的传输协议，使用方法如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS=&amp;quot;-t DAV&amp;quot; deliver
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;http代理&#34;&gt;HTTP代理&lt;/h2&gt;
-
-&lt;p&gt;iTunes Transporter 是一个 Java 应用程序，与 Xcode 绑定在一起。为了利用&lt;code&gt;DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS=&amp;quot;-t DAV&amp;quot;&lt;/code&gt;，你需要配置 iTunes Transporter 使用独立于系统代理和任何环境代理的代理设置。你可以使用 Xcode 找到配置文件：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;TOOLS_PATH=$( xcode-select -p )
-REL_PATH=&#39;../Applications/Application Loader.app/Contents/itms/java/lib/net.properties&#39;
-echo &amp;quot;$TOOLS_PATH/$REL_PATH&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据&lt;a href=&#34;http://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html&#34;&gt; Java Proxy Configuration &lt;/a&gt;为&lt;code&gt;net.properties&lt;/code&gt;增加必需的代理配置值。&lt;/p&gt;
-
-&lt;h2 id=&#34;限制&#34;&gt;限制&lt;/h2&gt;
-
-&lt;p&gt;Apple 限制每天只能上传150个二进制文件。&lt;/p&gt;
-
-&lt;h2 id=&#34;编辑-deliverfile-文件&#34;&gt;编辑&lt;code&gt;Deliverfile&lt;/code&gt;文件&lt;/h2&gt;
-
-&lt;p&gt;将语法高亮改为Ruby。&lt;/p&gt;
-
-&lt;h1 id=&#34;需要帮助&#34;&gt;需要帮助？&lt;/h1&gt;
-
-&lt;p&gt;请在 GitHub 上提交 issue 并提供关于你设置的信息。&lt;/p&gt;</description>
     </item>
     
   </channel>
