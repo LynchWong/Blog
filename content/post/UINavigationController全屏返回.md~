@@ -1,0 +1,27 @@
+---
+categories:
+- ios
+coverImage: //d1u9biwaxjngwg.cloudfront.net/welcome-to-tranquilpeak/city.jpg
+date: 2017-01-15T13:06:21+08:00
+keywords:
+- uinavigationcontroller
+- full
+- back
+metaAlignment: center
+autoThumbnailImage: no
+showTags: true
+tags:
+- UINavigationController
+- Swift
+title: UINavigationController全屏返回
+---
+
+UINavigationController 全屏返回的意思就是导航栏跟着一起动画返回，而不是系统默认的那种效果：导航栏没有动画，只有按钮有些动画效果。
+
+<!--more-->
+
+<!-- toc -->
+
+# 效果对比 #
+
+这里我就不贴 gif 图片来进行对比了，找个使用系统默认 UINavigationController 的 App 来 Push 或者 Pop 一下；然后对比使用下 iPhone 版的 网易云音乐 就知道是什么效果了。使用边界返回手势，效果更明显。

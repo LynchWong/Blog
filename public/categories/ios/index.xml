@@ -9,6 +9,69 @@
     <atom:link href="http://lynchwong.com/categories/ios/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>UINavigationController全屏返回</title>
+      <link>http://lynchwong.com/2017/01/uinavigationcontroller%E5%85%A8%E5%B1%8F%E8%BF%94%E5%9B%9E/</link>
+      <pubDate>Sun, 15 Jan 2017 13:06:21 +0800</pubDate>
+      
+      <guid>http://lynchwong.com/2017/01/uinavigationcontroller%E5%85%A8%E5%B1%8F%E8%BF%94%E5%9B%9E/</guid>
+      <description>&lt;p&gt;UINavigationController 全屏返回的意思就是导航栏跟着一起动画返回，而不是系统默认的那种效果：导航栏没有动画，只有按钮有些动画效果。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;!-- toc --&gt;
+
+&lt;h1 id=&#34;效果对比&#34;&gt;效果对比&lt;/h1&gt;
+
+&lt;p&gt;这里我就不贴 gif 图片来进行对比了，找个使用系统默认 UINavigationController 的 App 来 Push 或者 Pop 一下；然后对比使用下 iPhone 版的 网易云音乐 就知道是什么效果了。使用边界返回手势，效果更明显。&lt;/p&gt;
+
+&lt;p&gt;这两种效果哪种更好，全凭个人喜欢，当我更偏向全屏返回。&lt;/p&gt;
+
+&lt;h1 id=&#34;实现思路&#34;&gt;实现思路&lt;/h1&gt;
+
+&lt;p&gt;在网上搜索过不少资料，这里贴两个链接：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://gold.xitu.io/entry/57fcd57a67f356005886e867&#34;&gt;https://gold.xitu.io/entry/57fcd57a67f356005886e867&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://jerrytian.com/2016/01/07/用Reveal分析网易云音乐的导航控制器切换效果/&#34;&gt;http://jerrytian.com/2016/01/07/用Reveal分析网易云音乐的导航控制器切换效果/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;第一种思路是用专场动画实现的，效果挺不错。但是貌似不完整，只有 Pop 的时候才有全屏的效果，Push 的时候是没有的。
+第二种思路就是第二篇博文博主逆向网易云音乐提供的思路。&lt;/p&gt;
+
+&lt;p&gt;当然还有其它的思路，第二篇博文里面也详细介绍了其它思路，以及各种思路的优缺点。最终我选择的是网易云音乐类似的思路，使用 Swift 实现，在自己的项目里面使用，还没出现什么问题。&lt;/p&gt;
+
+&lt;h2 id=&#34;详解&#34;&gt;详解&lt;/h2&gt;
+
+&lt;p&gt;首先我们有一个 UINavigationController，然后它的导航栏是隐藏的。然后我们 Push 的是一个 Controller 容器，这个容器的子 Controller 就是一个 UINavigationController，而这个 UINavigationController 的 rootController 就是我们真正要显示的内容 Controller。&lt;/p&gt;
+
+&lt;p&gt;就相当于我们每个内容 Controller 的 UINavigationController 都是独立的，所以返回的时候自然就是全屏了。UINavigationController 应该是不能包含 UINavigationController 的，具体行不行没试过，应该没人这么干吧。所以得用容器包一下，只是这样一来，层级就很臃肿了。在我的项目里看来，效果、性能都还行吧&lt;/p&gt;
+
+&lt;h1 id=&#34;代码&#34;&gt;代码&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/FullBack&#34;&gt;GitHub&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;代码其实并不多，也很简单，思路跟第二篇博文一样，可以参考。这里不一一贴出来讲解，就说个大概。&lt;/p&gt;
+
+&lt;h2 id=&#34;globalnavigationcontroller&#34;&gt;GlobalNavigationController&lt;/h2&gt;
+
+&lt;p&gt;最外层的 UINavigationController，已经隐藏了导航栏。代码量很少，没有什么好讲的。主要遇到一个返回手势的坑 &lt;strong&gt;interactivePopGestureRecognizer is freezing app&lt;/strong&gt; ，后来在 StackOverflow 上找到了答案。搜前面加粗的关键字就能搜到，还好遇到这问题的人很多。其它的就没什么好说了，就是一些基本设置，状态栏样式，自动旋转之类的。&lt;/p&gt;
+
+&lt;h2 id=&#34;warppercontroller&#34;&gt;WarpperController&lt;/h2&gt;
+
+&lt;p&gt;这个就是前面提到的容器 Controller，它的作用很简单，就是把我们内容 Controller 的 UINavigationController 包装成 Child。所以我们 GlobalNavigationController Push 和 Pop 的都是 WarpperController。注意这里只提供了代码初始化。&lt;/p&gt;
+
+&lt;h2 id=&#34;basenavigationcontroller&#34;&gt;BaseNavigationController&lt;/h2&gt;
+
+&lt;p&gt;所有内容 Controller 的 UINavigationController，BaseNavigationController 继承自 UINavigationController，主要重写了 Push 和 Pop 的一些方法。&lt;/p&gt;
+
+&lt;p&gt;比如在 Push 的时候，我们先给内容 Controller 添加返回按钮；然后初始化一个新的 BaseNavigationController，将内容 Controller 设置成 BaseNavigationControll 的 rootController；之后再将 BaseNavigationControll 包装成 WarpperController 的 Child；最后再 Push WarpperController。&lt;/p&gt;
+
+&lt;div class=&#34;alert warning &#34;&gt;
+  &lt;p&gt;注意有些 Controller 是不支持SB或者XIB的；其次只实现了基本的功能，比如你直接设置 GlobalNavigationController 的 viewControllers 属性，可能全屏返回的效果就没了；或者使用 UINavigationController 替代了 BaseNavigationController，那么也会没有效果。所以在做有些操作前请思考下，以免效果跟你所想的不一样。最好还是看懂代码，明白每一行代码的作用，让代码的行为在你的控制之下。其实理解代码最重要的一点就是理清 Controller 的层级结构。&lt;/p&gt;
+&lt;/div&gt;</description>
+    </item>
+    
+    <item>
       <title>UILabel 使用 Autolayout 自动换行的BUG</title>
       <link>http://lynchwong.com/2016/08/uilabel-%E4%BD%BF%E7%94%A8-autolayout-%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C%E7%9A%84bug/</link>
       <pubDate>Fri, 26 Aug 2016 10:29:18 +0000</pubDate>
@@ -3068,232 +3131,6 @@ launch_arguments([
 &lt;h1 id=&#34;帮助&#34;&gt;帮助？&lt;/h1&gt;
 
 &lt;p&gt;请提交 issue 到 GitHub，并提供你关于设置的信息。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Fastlane - Deliver</title>
-      <link>http://lynchwong.com/2016/06/fastlane---deliver/</link>
-      <pubDate>Sat, 18 Jun 2016 12:49:42 +0000</pubDate>
-      
-      <guid>http://lynchwong.com/2016/06/fastlane---deliver/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;说明：翻译的 &lt;code&gt;Deliver&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; 原文地址 &lt;/a&gt;。
-&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneDeliver/deliver.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;deliver&#34;&gt;deliver&lt;/h1&gt;
-
-&lt;p&gt;使用简单的指令就能将你的应用、截图、元数据上传到App Store。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;deliver&lt;/code&gt;可以使用命令行工具上传 ipa 或者 pkg 文件，截图以及更多的数据到 iTunes Connect。&lt;/p&gt;
-
-&lt;h1 id=&#34;功能&#34;&gt;功能&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;自动化上传上百张本地化的截图&lt;/li&gt;
-&lt;li&gt;不需要使用任何一台 Mac 的 Xcode 就可以上传新的 ipa/pkg 文件到 iTunes Connect&lt;/li&gt;
-&lt;li&gt;在本地维你应用的元数据，然后将改变推送回 iTunes Connect&lt;/li&gt;
-&lt;li&gt;使用 fastlane 能够简单的实现真正的持续化的部署流程&lt;/li&gt;
-&lt;li&gt;使用 Git 管理配置文件，可以在任务一台 Mac 上部署，包括你持续集成的服务器&lt;/li&gt;
-&lt;li&gt;在将 App 元数据和截图上传到 iTC 之前会生成一个 HTML 的元数据预览&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;将构建的 App 上传到 TestFlight 查看 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; pilot &lt;/a&gt;。&lt;/p&gt;
-
-&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
-
-&lt;p&gt;安装 gem&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sudo gem install deliver
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;确保你已经安装了最新版本的 Xcode 命令行工具：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;xcode-select --install
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;快速开始&#34;&gt;快速开始&lt;/h1&gt;
-
-&lt;p&gt;指引会使用 iTunes Connect 上已经存在的 App 元数据为你创建所有必需的文件。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;cd [your_project_folder]&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;deliver init&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;输入 iTunes Connect Credentials&lt;/li&gt;
-&lt;li&gt;输入 App Identifier&lt;/li&gt;
-&lt;li&gt;在电脑为你做好所有工作之前，可以去先去来一发&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;从现在起，你可以使用 &lt;code&gt;deliver&lt;/code&gt; 来部署一个新的版本更新，或者上传新的 App 元数据和截图。&lt;/p&gt;
-
-&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
-
-&lt;p&gt;查看你本地 &lt;code&gt;./fastlane/metadata&lt;/code&gt; 和 &lt;code&gt;./fastlane/screenshots&lt;/code&gt;文件夹(如果你没有使用fastlane，&lt;code&gt;./metadata&lt;/code&gt;替换)。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneDeliver/metadata.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;你将会看见从 iTunes Connect 获取的元数据。你可以在本地修改这些数据，然后推送回 iTunes Connect。&lt;/p&gt;
-
-&lt;p&gt;运行 &lt;code&gt;deliver&lt;/code&gt; 将你本地机器的元数据上传。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;提供 ipa 文件的路径，然后上传你的 App 进行审核：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver --ipa &amp;quot;App.ipa&amp;quot; --submit_for_review
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;你页可以为 Mac OS X 的 apps 指定 pkg 文件的路径：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver --pkg &amp;quot;MacApp.pkg&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;如果你使用 fastlane，你不需要手动指定 ipa/pkg 文件的路径。&lt;/p&gt;
-
-&lt;p&gt;这些只是 &lt;code&gt;deliver&lt;/code&gt; 能做的一小部分，查看完整文档&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/deliver/Deliverfile.md&#34;&gt; Deliverfile.md &lt;/a&gt;。&lt;/p&gt;
-
-&lt;p&gt;从 iTunes Connect 下载已经存在的截图：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver download_screenshots
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;获取可用的运行选项：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver --help
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;选择之前上传的构建，然后提交审核：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;deliver submit_build --build_number 830
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;查看&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/deliver/Deliverfile.md&#34;&gt; Deliverfile.md &lt;/a&gt;获取更多选项。&lt;/p&gt;
-
-&lt;h2 id=&#34;证书&#34;&gt;证书&lt;/h2&gt;
-
-&lt;p&gt;关于你证书是如何处理的，在&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt; credentials_manager &lt;/a&gt;中可以得到详细的描述。&lt;/p&gt;
-
-&lt;p&gt;这些东西是如何工作的？是使用的魔法吗？&lt;/p&gt;
-
-&lt;p&gt;你的密码会存储在Mac OS X 的 keychain 中，但是也可以传递使用环境变量。(&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/credentials_manager&#34;&gt; CredentialsManager &lt;/a&gt;中有更多信息)&lt;/p&gt;
-
-&lt;p&gt;其实在上传任何东西到 iTunes 之前，&lt;code&gt;deliver&lt;/code&gt; 会使用收集来的数据的摘要生成一个HTML。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;deliver&lt;/code&gt;在底层使用如下技术：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;使用 iTMSTransporter 工具来上传二进制文件到 iTunes Connect。iTMSTransporter 是 Apple 提供的一个命令行工具。&lt;/li&gt;
-&lt;li&gt;与所有actions相关的元数据，&lt;code&gt;deliver&lt;/code&gt;使用的是&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; spaceship &lt;/a&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;提示&#34;&gt;提示&lt;/h1&gt;
-
-&lt;h2 id=&#34;fastlane-工具链&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt;工具链&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; &lt;code&gt;snapshot&lt;/code&gt; &lt;/a&gt;：将你iOS应用在每一种设备上进行本地化自动截图&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; &lt;code&gt;frameit&lt;/code&gt; &lt;/a&gt;：快速将你的截图放入到适合的设备框中&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; &lt;code&gt;pem&lt;/code&gt; &lt;/a&gt;：自动生成和更新你的推送通知证书&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; &lt;code&gt;sigh&lt;/code&gt; &lt;/a&gt;：管理你的 provisioning profiles&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; &lt;code&gt;produce&lt;/code&gt; &lt;/a&gt;：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; &lt;code&gt;cert&lt;/code&gt; &lt;/a&gt;：自动创建和维护iOS的 code signing certificates&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; &lt;code&gt;spaceship&lt;/code&gt; &lt;/a&gt;：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; &lt;code&gt;pilot&lt;/code&gt; &lt;/a&gt;：管理你TestFlight测试人员的最好方式，使用终端构建&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; &lt;code&gt;boarding&lt;/code&gt; &lt;/a&gt;：邀请你 TestFlight 的beta测试人员的最简单方式&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; &lt;code&gt;gym&lt;/code&gt; &lt;/a&gt;：构建你iOS应用程序&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; &lt;code&gt;scan&lt;/code&gt; &lt;/a&gt;：为你iOS和Mac应用运行测试的最简单方法&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; &lt;code&gt;match&lt;/code&gt; &lt;/a&gt;：使用Git在你的团队中同步你的 certificates 和 profiles&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/supply&#34;&gt; &lt;code&gt;supply&lt;/code&gt; &lt;/a&gt;：将你的Android应用和数据上传到 Google Play&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/screengrab&#34;&gt; &lt;code&gt;screengrab&lt;/code&gt; &lt;/a&gt;：Android版&lt;code&gt;snapshot&lt;/code&gt;，一样的功能&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;可用的语言码&#34;&gt;可用的语言码&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;no, en-US, en-CA, fi, ru, zh-Hans, nl-NL, zh-Hant, en-AU, id, de-DE, sv, ko, ms, pt-BR, el, es-ES, it, fr-CA, es-MX, pt-PT, vi, th, ja, fr-FR, da, tr, en-GB
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;默认值&#34;&gt;默认值&lt;/h2&gt;
-
-&lt;p&gt;Deliver 有指定的 &lt;code&gt;default&lt;/code&gt; 语言码，允许你提供不是本地化的值，如果你没有提供本地化的值，将会使用默认值。&lt;/p&gt;
-
-&lt;p&gt;你可以在deliverfile中使用json设置，也可以在metadata文件夹中设置。&lt;/p&gt;
-
-&lt;p&gt;假如你有&lt;code&gt;en-US, de-DE, el, it&lt;/code&gt;语言码的本地化数据。&lt;/p&gt;
-
-&lt;p&gt;你可以在deliverfile文件中如下设置：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;release_notes({
-    &#39;default&#39; =&amp;gt; &amp;quot;Shiny and new”,
-    &#39;de-DE&#39; =&amp;gt; &amp;quot;glänzend und neu&amp;quot;
-})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Deliver会为 en-US, el 和 it 使用 &amp;ldquo;Shiny and new&amp;rdquo;。&lt;/p&gt;
-
-&lt;p&gt;为 de-DE 使用 &amp;ldquo;glänzend und neu&amp;rdquo;。&lt;/p&gt;
-
-&lt;p&gt;你也可以使用文件夹达到同样目的：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;default
-  keywords.txt
-  marketing_url.txt
-  name.txt
-  privacy_url.txt
-  support_url.txt
-  release_notes.txt
-en-US
-  description.txt
-de-DE
-  description.txt
-el
-  description.txt
-it
-  description.txt
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;在这种情况下，keywords, urls, name 和 release notes 所有的本地化都会使用默认值，但是每一种语言都有完整的本地化描述。&lt;/p&gt;
-
-&lt;h2 id=&#34;自动创建截图&#34;&gt;自动创建截图&lt;/h2&gt;
-
-&lt;p&gt;如果你想 &lt;code&gt;deliver&lt;/code&gt; 集成&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; snapshot &lt;/a&gt;，查看&lt;a href=&#34;https://fastlane.tools&#34;&gt; fastlane！ &lt;/a&gt;。&lt;/p&gt;
-
-&lt;h2 id=&#34;jenkins集成&#34;&gt;Jenkins集成&lt;/h2&gt;
-
-&lt;p&gt;关于如何在 &lt;code&gt;Jenkins&lt;/code&gt; 中设置 &lt;code&gt;deliver&lt;/code&gt; 和 &lt;code&gt;fastlane&lt;/code&gt; 的详细说明，参见&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Jenkins.md&#34;&gt; fastlane README &lt;/a&gt;。&lt;/p&gt;
-
-&lt;h2 id=&#34;防火墙问题&#34;&gt;防火墙问题&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;deliver&lt;/code&gt; 使用 iTunes Transporter 来上传元数据和二进制。为了防止被防火墙阻挡，你可以指定不同的传输协议，使用方法如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS=&amp;quot;-t DAV&amp;quot; deliver
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;http代理&#34;&gt;HTTP代理&lt;/h2&gt;
-
-&lt;p&gt;iTunes Transporter 是一个 Java 应用程序，与 Xcode 绑定在一起。为了利用&lt;code&gt;DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS=&amp;quot;-t DAV&amp;quot;&lt;/code&gt;，你需要配置 iTunes Transporter 使用独立于系统代理和任何环境代理的代理设置。你可以使用 Xcode 找到配置文件：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;TOOLS_PATH=$( xcode-select -p )
-REL_PATH=&#39;../Applications/Application Loader.app/Contents/itms/java/lib/net.properties&#39;
-echo &amp;quot;$TOOLS_PATH/$REL_PATH&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;根据&lt;a href=&#34;http://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html&#34;&gt; Java Proxy Configuration &lt;/a&gt;为&lt;code&gt;net.properties&lt;/code&gt;增加必需的代理配置值。&lt;/p&gt;
-
-&lt;h2 id=&#34;限制&#34;&gt;限制&lt;/h2&gt;
-
-&lt;p&gt;Apple 限制每天只能上传150个二进制文件。&lt;/p&gt;
-
-&lt;h2 id=&#34;编辑-deliverfile-文件&#34;&gt;编辑&lt;code&gt;Deliverfile&lt;/code&gt;文件&lt;/h2&gt;
-
-&lt;p&gt;将语法高亮改为Ruby。&lt;/p&gt;
-
-&lt;h1 id=&#34;需要帮助&#34;&gt;需要帮助？&lt;/h1&gt;
-
-&lt;p&gt;请在 GitHub 上提交 issue 并提供关于你设置的信息。&lt;/p&gt;</description>
     </item>
     
   </channel>

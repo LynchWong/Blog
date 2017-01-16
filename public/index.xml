@@ -6,8 +6,71 @@
     <description>Recent content on Nobodyknows&#43; 2.5</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 13 Jan 2017 23:50:22 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 15 Jan 2017 13:06:21 +0800</lastBuildDate>
     <atom:link href="http://lynchwong.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>UINavigationController全屏返回</title>
+      <link>http://lynchwong.com/2017/01/uinavigationcontroller%E5%85%A8%E5%B1%8F%E8%BF%94%E5%9B%9E/</link>
+      <pubDate>Sun, 15 Jan 2017 13:06:21 +0800</pubDate>
+      
+      <guid>http://lynchwong.com/2017/01/uinavigationcontroller%E5%85%A8%E5%B1%8F%E8%BF%94%E5%9B%9E/</guid>
+      <description>&lt;p&gt;UINavigationController 全屏返回的意思就是导航栏跟着一起动画返回，而不是系统默认的那种效果：导航栏没有动画，只有按钮有些动画效果。&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;!-- toc --&gt;
+
+&lt;h1 id=&#34;效果对比&#34;&gt;效果对比&lt;/h1&gt;
+
+&lt;p&gt;这里我就不贴 gif 图片来进行对比了，找个使用系统默认 UINavigationController 的 App 来 Push 或者 Pop 一下；然后对比使用下 iPhone 版的 网易云音乐 就知道是什么效果了。使用边界返回手势，效果更明显。&lt;/p&gt;
+
+&lt;p&gt;这两种效果哪种更好，全凭个人喜欢，当我更偏向全屏返回。&lt;/p&gt;
+
+&lt;h1 id=&#34;实现思路&#34;&gt;实现思路&lt;/h1&gt;
+
+&lt;p&gt;在网上搜索过不少资料，这里贴两个链接：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://gold.xitu.io/entry/57fcd57a67f356005886e867&#34;&gt;https://gold.xitu.io/entry/57fcd57a67f356005886e867&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://jerrytian.com/2016/01/07/用Reveal分析网易云音乐的导航控制器切换效果/&#34;&gt;http://jerrytian.com/2016/01/07/用Reveal分析网易云音乐的导航控制器切换效果/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;第一种思路是用专场动画实现的，效果挺不错。但是貌似不完整，只有 Pop 的时候才有全屏的效果，Push 的时候是没有的。
+第二种思路就是第二篇博文博主逆向网易云音乐提供的思路。&lt;/p&gt;
+
+&lt;p&gt;当然还有其它的思路，第二篇博文里面也详细介绍了其它思路，以及各种思路的优缺点。最终我选择的是网易云音乐类似的思路，使用 Swift 实现，在自己的项目里面使用，还没出现什么问题。&lt;/p&gt;
+
+&lt;h2 id=&#34;详解&#34;&gt;详解&lt;/h2&gt;
+
+&lt;p&gt;首先我们有一个 UINavigationController，然后它的导航栏是隐藏的。然后我们 Push 的是一个 Controller 容器，这个容器的子 Controller 就是一个 UINavigationController，而这个 UINavigationController 的 rootController 就是我们真正要显示的内容 Controller。&lt;/p&gt;
+
+&lt;p&gt;就相当于我们每个内容 Controller 的 UINavigationController 都是独立的，所以返回的时候自然就是全屏了。UINavigationController 应该是不能包含 UINavigationController 的，具体行不行没试过，应该没人这么干吧。所以得用容器包一下，只是这样一来，层级就很臃肿了。在我的项目里看来，效果、性能都还行吧&lt;/p&gt;
+
+&lt;h1 id=&#34;代码&#34;&gt;代码&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/LynchWong/FullBack&#34;&gt;GitHub&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;代码其实并不多，也很简单，思路跟第二篇博文一样，可以参考。这里不一一贴出来讲解，就说个大概。&lt;/p&gt;
+
+&lt;h2 id=&#34;globalnavigationcontroller&#34;&gt;GlobalNavigationController&lt;/h2&gt;
+
+&lt;p&gt;最外层的 UINavigationController，已经隐藏了导航栏。代码量很少，没有什么好讲的。主要遇到一个返回手势的坑 &lt;strong&gt;interactivePopGestureRecognizer is freezing app&lt;/strong&gt; ，后来在 StackOverflow 上找到了答案。搜前面加粗的关键字就能搜到，还好遇到这问题的人很多。其它的就没什么好说了，就是一些基本设置，状态栏样式，自动旋转之类的。&lt;/p&gt;
+
+&lt;h2 id=&#34;warppercontroller&#34;&gt;WarpperController&lt;/h2&gt;
+
+&lt;p&gt;这个就是前面提到的容器 Controller，它的作用很简单，就是把我们内容 Controller 的 UINavigationController 包装成 Child。所以我们 GlobalNavigationController Push 和 Pop 的都是 WarpperController。注意这里只提供了代码初始化。&lt;/p&gt;
+
+&lt;h2 id=&#34;basenavigationcontroller&#34;&gt;BaseNavigationController&lt;/h2&gt;
+
+&lt;p&gt;所有内容 Controller 的 UINavigationController，BaseNavigationController 继承自 UINavigationController，主要重写了 Push 和 Pop 的一些方法。&lt;/p&gt;
+
+&lt;p&gt;比如在 Push 的时候，我们先给内容 Controller 添加返回按钮；然后初始化一个新的 BaseNavigationController，将内容 Controller 设置成 BaseNavigationControll 的 rootController；之后再将 BaseNavigationControll 包装成 WarpperController 的 Child；最后再 Push WarpperController。&lt;/p&gt;
+
+&lt;div class=&#34;alert warning &#34;&gt;
+  &lt;p&gt;注意有些 Controller 是不支持SB或者XIB的；其次只实现了基本的功能，比如你直接设置 GlobalNavigationController 的 viewControllers 属性，可能全屏返回的效果就没了；或者使用 UINavigationController 替代了 BaseNavigationController，那么也会没有效果。所以在做有些操作前请思考下，以免效果跟你所想的不一样。最好还是看懂代码，明白每一行代码的作用，让代码的行为在你的控制之下。其实理解代码最重要的一点就是理清 Controller 的层级结构。&lt;/p&gt;
+&lt;/div&gt;</description>
+    </item>
     
     <item>
       <title>更新</title>
@@ -2787,378 +2850,6 @@ brew install imagemagick
 &lt;/ul&gt;
 
 &lt;h1 id=&#34;帮助&#34;&gt;帮助&lt;/h1&gt;
-
-&lt;p&gt;请提交 issue 到 GitHub，并提供你关于设置的信息。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Fastlane - Snapshot</title>
-      <link>http://lynchwong.com/2016/06/fastlane---snapshot/</link>
-      <pubDate>Sun, 19 Jun 2016 13:52:28 +0000</pubDate>
-      
-      <guid>http://lynchwong.com/2016/06/fastlane---snapshot/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;说明：翻译的 &lt;code&gt;Snapshot&lt;/code&gt; 的指南，&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot&#34;&gt; 原文地址 &lt;/a&gt;。
-&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/snapshot.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;snapshot&#34;&gt;snapshot&lt;/h1&gt;
-
-&lt;p&gt;对你的 iOS 应用程序在每一种设备上自动截取本地化截图。&lt;/p&gt;
-
-&lt;p&gt;你必需手动创建 20 (语言) x 6 (设备) x 5 (截图) = 600 张截图。&lt;/p&gt;
-
-&lt;p&gt;很难保证所有的事情都是正确的！&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;所有更新的截图&lt;/li&gt;
-&lt;li&gt;没有加载提示&lt;/li&gt;
-&lt;li&gt;屏幕中相同的内容&lt;/li&gt;
-&lt;li&gt;干净的状态栏&lt;/li&gt;
-&lt;li&gt;上传截图 (&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; &lt;code&gt;deliver&lt;/code&gt; &lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;更多关于&lt;a href=&#34;https://krausefx.com/blog/creating-perfect-app-store-screenshots-of-your-ios-app&#34;&gt; 创建完美截图的信息 &lt;/a&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;snapshot&lt;/code&gt;完全运行在后台，当电脑在为你截图时，你可以做其它的事情。&lt;/p&gt;
-
-&lt;h1 id=&#34;注意-新的-snapshot-使用ui-tests-in-xcode-7&#34;&gt;注意：新的&lt;code&gt;snapshot&lt;/code&gt;使用UI Tests in Xcode 7&lt;/h1&gt;
-
-&lt;p&gt;苹果发布的新的 Xcode 版本内建支持了 UI Tests。这项技术使得&lt;code&gt;snapshot&lt;/code&gt;比之前更好：不必再处理 UI Automation Javascript 代码，现在你可以使用 Swift 或者 Objective C 来编写截图的代码，并且允许你断点调试。&lt;/p&gt;
-
-&lt;p&gt;所以，&lt;code&gt;snapshot&lt;/code&gt;从底层重写了代码，但是没有改变公共 API。&lt;/p&gt;
-
-&lt;p&gt;详见&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/snapshot/MigrationGuide.md&#34;&gt; MigrationGuide to 1.0 &lt;/a&gt;。&lt;/p&gt;
-
-&lt;p&gt;为什么改为 UI Tests ？&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;UI Automation 过时了&lt;/li&gt;
-&lt;li&gt;UI Tests 在未来将会进化支持更多功能&lt;/li&gt;
-&lt;li&gt;UI Tests 更容易调试&lt;/li&gt;
-&lt;li&gt;UI Tests 使用 Swift 或者 Objective C 编写&lt;/li&gt;
-&lt;li&gt;UI Tests 可以使用更干净更好的方式执行&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;功能&#34;&gt;功能&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;根据所有的模拟器，不同的语言，创建几百张截图&lt;/li&gt;
-&lt;li&gt;只需配置一次，存储在 Git 中&lt;/li&gt;
-&lt;li&gt;当电脑在为你截图的时候，你可以做其它的事情&lt;/li&gt;
-&lt;li&gt;集成&lt;a href=&#34;https://fastlane.tools&#34;&gt; fastlane &lt;/a&gt; 和 &lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; deliver &lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;生成漂亮的 Web 页面，展示所有设备的截图。最棒的是你可以发送给 Q&amp;amp;A 或者市场的团队&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;snapshot&lt;/code&gt;在截图前会自动等待所有的网络请求结束(我们不想在App Store里有网络加载的截图)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在&lt;code&gt;snapshot&lt;/code&gt;成功创建新的截图后，会生成一个漂亮的HTML文件来展示所有的截图，让你能够快速浏览所有截图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/htmlPagePreviewFade.jpg&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;为什使用&#34;&gt;为什使用？&lt;/h2&gt;
-
-&lt;p&gt;该工具会自动切换语言，设备类型和运行每一个组合的UI测试。&lt;/p&gt;
-
-&lt;h2 id=&#34;为什么要自动化这个过程&#34;&gt;为什么要自动化这个过程？&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;要花费很多时间来截图&lt;/li&gt;
-&lt;li&gt;能够浏览你所有的截图，运行所有可用的模拟器，不需要手动启动上百次&lt;/li&gt;
-&lt;li&gt;翻译人员非常容易验证的翻译，这些翻译在应用上下文中是有意义的&lt;/li&gt;
-&lt;li&gt;很容易验证本地化的标签是否在所有设备上合适&lt;/li&gt;
-&lt;li&gt;可以集成测试：你可以在脚本中测试UI元素&lt;/li&gt;
-&lt;li&gt;为每一次应用更新提供新的截图，你客户应得的&lt;/li&gt;
-&lt;li&gt;如果截图有个小错误？只需要修正然后从新运行脚本&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
-
-&lt;p&gt;安装 gem&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sudo gem install snapshot
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;确保你已经安装了 Xcode 最新版本的命令行工具：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;xcode-select --install
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;ui-tests&#34;&gt;UI Tests&lt;/h1&gt;
-
-&lt;h2 id=&#34;开始&#34;&gt;开始&lt;/h2&gt;
-
-&lt;p&gt;这个项目使用苹果新发布的 UIUI Tests。这里不会讲解如何编写脚本的细节。&lt;/p&gt;
-
-&lt;p&gt;可以从如下几个链接开始；&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.apple.com/videos/play/wwdc2015/406/&#34;&gt;WWDC 2015 Introduction to UI Tests&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.mokacoding.com/blog/xcode-7-ui-testing/&#34;&gt;A first look into UI Tests&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://masilotti.com/ui-testing-xcode-7/&#34;&gt;UI Testing in Xcode 7&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/ConfusedVorlon/HSTestingBackchannel&#34;&gt;HSTestingBackchannel : ‘Cheat’ by communicating directly with your app&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tisunov.github.io/2015/11/06/automating-app-store-screenshots-generation-with-fastlane-snapshot-and-sketch.html&#34;&gt;Automating App Store screenshots using fastlane snapshot and frameit&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;注意：由于没有从 UI Tests 触发截图的官方方法，&lt;code&gt;snapshot&lt;/code&gt;使用了一种解决方法(在&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/snapshot#how-does-it-work&#34;&gt; How Does It Work? &lt;/a&gt;中描述)来触发截图。如果你觉得应该是这样的权利，请复制雷达&lt;a href=&#34;https://openradar.appspot.com/radar?id=5056366381105152&#34;&gt; 23062925 &lt;/a&gt;。(不知道后面一句话是什么鬼意思)&lt;/p&gt;
-
-&lt;h1 id=&#34;快速开始&#34;&gt;快速开始&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;在你的项目中创建一个新的 UI Test target(&lt;a href=&#34;https://krausefx.com/blog/run-xcode-7-ui-tests-from-the-command-line&#34;&gt; top part of this article &lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;在你的项目文件夹中运行&lt;code&gt;snapshot init&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;添加 ./SnapshotHelper.swift 到你的 UI Test target (你可以移动文件到任何你想的地方)&lt;/li&gt;
-&lt;li&gt;(Objective C only) 添加桥接头文件到你的测试类：
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;#import &amp;quot;MYUITests-Swift.h&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;桥接头文件使用你的 test target 名称加上 -Swift.h。&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;在你UI测试类，点击屏幕左下角&lt;code&gt;Record&lt;/code&gt;按钮来记录你的交互&lt;/li&gt;
-&lt;li&gt;需要截图时，在交互之间调用如下方法：
-
-&lt;ul&gt;
-&lt;li&gt;Swift:&lt;code&gt;snapshot(&amp;quot;01LoginScreen&amp;quot;)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Objective C:&lt;code&gt;[Snapshot snapshot:@&amp;quot;01LoginScreen&amp;quot; waitForLoadingIndicator:YES];&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;将如下代码添加到你的 &lt;code&gt;setUp()&lt;/code&gt; 方法中&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Swift&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;let app = XCUIApplication()
-setupSnapshot(app)
-app.launch()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Objective C&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;XCUIApplication *app = [[XCUIApplication alloc] init];
-[Snapshot setupSnapshot:app];
-[app launch];
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/snapshot.gif&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;你可以看下项目里面的例子，然后把玩一下。&lt;/p&gt;
-
-&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;你的截图会默认存储在&lt;code&gt;./screenshots/&lt;/code&gt;文件夹。(如果你使用 fastlane 的话，存储在&lt;code&gt;./screenshots/&lt;/code&gt;文件夹)&lt;/p&gt;
-
-&lt;p&gt;如果在一个设备上运行截图脚本的时候发生了错误，那么那个设备就没有任何截图，然后&lt;code&gt;snapshot&lt;/code&gt;会继续下一个设备或者下一种语言。在第一错误发生后停止流程，运行&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot --stop_after_first_error
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;默认情况下，&lt;code&gt;snapshot&lt;/code&gt;在完成所有工作后会打开 html 。这个步骤可以使用如下命令跳过：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot --stop_after_first_error --skip_open_summary
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;有许多可用的选项来定义如何构建你的应用，比如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot --scheme &amp;quot;UITests&amp;quot; --configuration &amp;quot;Release&amp;quot;  --sdk &amp;quot;iphonesimulator&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;在运行&lt;code&gt;snapshot&lt;/code&gt;前重新安装应用&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot --reinstall_app --app_identifier &amp;quot;tools.fastlane.app&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;默认情况下，如果 UI Tests 失败了，&lt;code&gt;snapshot&lt;/code&gt;会自动尝试运行。这是因为 UI Tests 随机失败(e.g.&lt;a href=&#34;https://github.com/fastlane-old/snapshot/issues/372&#34;&gt;#372&lt;/a&gt;)。你可以使用如下命令来改写这个数字&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot --number_of_retries 3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;在运行&lt;code&gt;snapshot&lt;/code&gt;之前添加照片和(或者)视频到模拟器&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot --add_photos MyTestApp/Assets/demo.jpg --add_videos MyTestApp/Assets/demo.mp4
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;列出所有可用的选项：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot --help
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;在运行完&lt;code&gt;snapshot&lt;/code&gt;，你会得到一个非常漂亮的概要：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://lynchwong.com/img/FastlaneSnapshot/testSummary.png&#34; alt=&#34;alt text&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;snapfile&#34;&gt;Snapfile&lt;/h2&gt;
-
-&lt;p&gt;所有可用的选项可以存储在一个叫做&lt;code&gt;Snapfile&lt;/code&gt;的配置文件里面。由于你项目的大部分的值都不会改变，所以推荐存储在这个文件里：&lt;/p&gt;
-
-&lt;p&gt;首先确定有&lt;code&gt;Snapfile&lt;/code&gt;文件(你可以运行&lt;code&gt;snapshot init&lt;/code&gt;得到这个文件)&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;Snapfile&lt;/code&gt;文件可以包含所有&lt;code&gt;snapshot --help&lt;/code&gt;的可用选项：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;scheme &amp;quot;UITests&amp;quot;
-
-devices([
-    &amp;quot;iPhone 6&amp;quot;,
-    &amp;quot;iPhone 6 Plus&amp;quot;,
-    &amp;quot;iPhone 5&amp;quot;,
-    &amp;quot;iPhone 4s&amp;quot;
-])
-
-languages([
-    &amp;quot;en-US&amp;quot;,
-    &amp;quot;de-DE&amp;quot;,
-    &amp;quot;es-ES&amp;quot;,
-    [&amp;quot;pt&amp;quot;, &amp;quot;pt_BR&amp;quot;] # Portuguese with Brazilian locale
-])
-
-launch_arguments([&amp;quot;-username Felix&amp;quot;])
-
-# The directory in which the screenshots should be stored
-output_directory &#39;./screenshots&#39;
-
-clear_previous_screenshots true
-
-add_photos [&amp;quot;MyTestApp/Assets/demo.jpg&amp;quot;]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;完全重置所有模拟器&#34;&gt;完全重置所有模拟器&lt;/h2&gt;
-
-&lt;p&gt;你可以在终端中使用下面的命令来删除和重新创建所有iOS模拟器：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot reset_simulators
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;警告：&lt;/strong&gt;这会删除你所有的模拟器然后使用新的替换！当你运行&lt;code&gt;snapshot&lt;/code&gt;遇到非常奇怪的问题时，这非常有用。&lt;/p&gt;
-
-&lt;p&gt;你可以使用环境变量&lt;code&gt;SNAPSHOT_FORCE_DELETE&lt;/code&gt;来取消删除前要求确认的信息。&lt;/p&gt;
-
-&lt;h2 id=&#34;更新-snapshot-的-helpers&#34;&gt;更新 snapshot 的 helpers&lt;/h2&gt;
-
-&lt;p&gt;一些更新要求 helper 的文件更新。&lt;code&gt;snapshot&lt;/code&gt;会自动警告你，然后告诉你怎么升级。&lt;/p&gt;
-
-&lt;p&gt;基本的你可以运行&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot update
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;为了更新&lt;code&gt;SnapshotHelper.swift&lt;/code&gt;文件。如果你修改了你的&lt;code&gt;SnapshotHelper.swift&lt;/code&gt;文件，然后想要手动更新文件，查看&lt;a href=&#34;https://github.com/fastlane/fastlane/blob/master/snapshot/lib/assets/SnapshotHelper.swift&#34;&gt; SnapshotHelper.swift &lt;/a&gt;。&lt;/p&gt;
-
-&lt;h2 id=&#34;启动参数&#34;&gt;启动参数&lt;/h2&gt;
-
-&lt;p&gt;你可以在你应用启动的时候提供额外的参数。这些字符串通过&lt;code&gt;NSProcessInfo.processInfo().arguments&lt;/code&gt;在你的应用中(eg.不是在 testing target 中)将会可用。另外使用 user-default 语法(&lt;code&gt;-key value&lt;/code&gt;)，它们将会在&lt;code&gt;NSUserDefaults.standardUserDefaults()&lt;/code&gt;中当作键值对可用。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;launch_arguments([
-    &amp;quot;-firstName Felix -lastName Krause&amp;quot;
-])
-
-name.text = NSUserDefaults.standardUserDefaults().stringForKey(&amp;quot;firstName&amp;quot;)
-// name.text = &amp;quot;Felix&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;snapshot&lt;/code&gt;包含&lt;code&gt;-FASTLANE_SNAPSHOT YES&lt;/code&gt;，会为 user default 设置一个临时的健&lt;code&gt;FASTLANE_SNAPSHOT&lt;/code&gt;，你可以使用这个来检测&lt;code&gt;snapshot&lt;/code&gt;何时运行你的应用。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;if NSUserDefaults.standardUserDefaults().boolForKey(&amp;quot;FASTLANE_SNAPSHOT&amp;quot;) {
-    // runtime check that we are in snapshot mode
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;指定多个字符串参数，&lt;code&gt;snapshot&lt;/code&gt;会为每种参数、设备、语言的组合截图。当你需要比较相同截图不同功能标识、动态文本大小、不懂数据集时非常有用。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# Snapfile for A/B Test Comparison
-launch_arguments([
-    &amp;quot;-secretFeatureEnabled YES&amp;quot;,
-    &amp;quot;-secretFeatureEnabled NO&amp;quot;
-])
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;如何工作的&#34;&gt;如何工作的？&lt;/h2&gt;
-
-&lt;p&gt;最简单的解决方法就是在文件里面呈现 UIWindow。但那是不可能的，因为 UI Tests 并不运行在主线程上。所以&lt;code&gt;snapshot&lt;/code&gt;使用了不同的方法：&lt;/p&gt;
-
-&lt;p&gt;当你在 Xcode 中运行单元测试时，会生成一个 plist 文件，记录测试过程中(&lt;a href=&#34;http://michele.io/test-logs-in-xcode&#34;&gt; 详细信息 &lt;/a&gt;)发生的所有事件。Xcode 会在这些事件之前，之后以及运行时都会生成截图。没有办法手动触发截图事件。这些截图和plist文件存储在 DerivedData 目录，&lt;code&gt;snapshot&lt;/code&gt;存储在临时文件夹。&lt;/p&gt;
-
-&lt;p&gt;当用户在 UI Tests(Swift 或者 Objective C)中调用&lt;code&gt;snapshot(...)&lt;/code&gt;时，脚本实际上只是执行了一次旋转到.Unknown，实际上对应用没有任何影响，但是足够来触发截图了。这对应用程序没有任何影响，在你的测试中也不会做任何事情。目标就是找出一些用户永远不会触发的事件，所以这样我们就能知道是来自&lt;code&gt;snapshot&lt;/code&gt;了。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;snapshot&lt;/code&gt;然后就会迭代所有的测试的事件，然后检查我们在哪里做了这个奇怪的旋转。一旦&lt;code&gt;snapshot&lt;/code&gt;找到了所有由&lt;code&gt;snapshot&lt;/code&gt;触发的事件，它会收集应用所有实际截图的文件名的有序序列。&lt;/p&gt;
-
-&lt;p&gt;在测试的输出中，Swift的&lt;code&gt;snapshot&lt;/code&gt;函数会打印如下格式的输出：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;snapshot: [some random text here]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;snapshot&lt;/code&gt;使用正则表达式找到这些条目。在终端中&lt;code&gt;snapshot&lt;/code&gt;输出的数目和plist文件中&lt;code&gt;snapshot&lt;/code&gt;的事件数目应该是一样的。知道了这些，&lt;code&gt;snapshot&lt;/code&gt;会自动匹配这两个序列来分辨所有这些截图的名字。然后它们会被复制到输出目录然后根据语言和设备分开。&lt;/p&gt;
-
-&lt;p&gt;两样东西必需从&lt;code&gt;snapshot&lt;/code&gt;传递给&lt;code&gt;xcodebuild&lt;/code&gt;命令行工具：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;设备类型通过&lt;code&gt;xcodebuild&lt;/code&gt;参数的&lt;code&gt;destination&lt;/code&gt;参数传递&lt;/li&gt;
-&lt;li&gt;语言通过一个临时文件传递，这个文件在运行测试之前由&lt;code&gt;snapshot&lt;/code&gt;写入。然后在 UI Tests 启动应用前读入。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;如果你找到了更好的方法来做所有这里列出的工作，请提交一个 issue 到 GitHub 或者甚至是 pull request。&lt;/p&gt;
-
-&lt;p&gt;同样，feel free to duplicate radar &lt;a href=&#34;https://openradar.appspot.com/radar?id=5056366381105152&#34;&gt;23062925&lt;/a&gt;。&lt;/p&gt;
-
-&lt;h1 id=&#34;提示&#34;&gt;提示&lt;/h1&gt;
-
-&lt;h2 id=&#34;fastlane-工具链&#34;&gt;&lt;code&gt;fastlane&lt;/code&gt;工具链&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://fastlane.tools&#34;&gt; &lt;code&gt;fastlane&lt;/code&gt; &lt;/a&gt;：自动化构建和发布你 iOS 和 Android 应用程序的最简单方法&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/deliver&#34;&gt; &lt;code&gt;deliver&lt;/code&gt; &lt;/a&gt;：将你的应用、截图、元数据上传到App Store&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; &lt;code&gt;frameit&lt;/code&gt; &lt;/a&gt;：快速将你的截图放入到适合的设备框中&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pem&#34;&gt; &lt;code&gt;pem&lt;/code&gt; &lt;/a&gt;：自动生成和更新你的推送通知证书&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/sigh&#34;&gt; &lt;code&gt;sigh&lt;/code&gt; &lt;/a&gt;：管理你的 provisioning profiles&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/produce&#34;&gt; &lt;code&gt;produce&lt;/code&gt; &lt;/a&gt;：使用命令行工具在 iTunes Connect 和 Dev Portal 上创建新的iOS应用&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/cert&#34;&gt; &lt;code&gt;cert&lt;/code&gt; &lt;/a&gt;：自动创建和维护iOS的 code signing certificates&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/spaceship&#34;&gt; &lt;code&gt;spaceship&lt;/code&gt; &lt;/a&gt;：一个 Ruby library，自动连接 Apple Dev Center 和 iTunes Connect&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/pilot&#34;&gt; &lt;code&gt;pilot&lt;/code&gt; &lt;/a&gt;：管理你TestFlight测试人员的最好方式，使用终端构建&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/boarding&#34;&gt; &lt;code&gt;boarding&lt;/code&gt; &lt;/a&gt;：邀请你 TestFlight 的beta测试人员的最简单方式&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/gym&#34;&gt; &lt;code&gt;gym&lt;/code&gt; &lt;/a&gt;：构建你iOS应用程序&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/scan&#34;&gt; &lt;code&gt;scan&lt;/code&gt; &lt;/a&gt;：为你iOS和Mac应用运行测试的最简单方法&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/match&#34;&gt; &lt;code&gt;match&lt;/code&gt; &lt;/a&gt;：使用Git在你的团队中同步你的 certificates 和 profiles&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/supply&#34;&gt; &lt;code&gt;supply&lt;/code&gt; &lt;/a&gt;：将你的Android应用和数据上传到 Google Play&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/screengrab&#34;&gt; &lt;code&gt;screengrab&lt;/code&gt; &lt;/a&gt;：Android版&lt;code&gt;snapshot&lt;/code&gt;，一样的功能&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;将截图框起来&#34;&gt;将截图框起来&lt;/h2&gt;
-
-&lt;p&gt;如果你想给截图周围加一个边框，甚至是在顶部添加一个标题，查看&lt;a href=&#34;https://github.com/fastlane/fastlane/tree/master/frameit&#34;&gt; frameit &lt;/a&gt;。&lt;/p&gt;
-
-&lt;h2 id=&#34;可用的语言代码&#34;&gt;可用的语言代码&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code&gt;ALL_LANGUAGES = [&amp;quot;da&amp;quot;, &amp;quot;de-DE&amp;quot;, &amp;quot;el&amp;quot;, &amp;quot;en-AU&amp;quot;, &amp;quot;en-CA&amp;quot;, &amp;quot;en-GB&amp;quot;, &amp;quot;en-US&amp;quot;, &amp;quot;es-ES&amp;quot;, &amp;quot;es-MX&amp;quot;, &amp;quot;fi&amp;quot;, &amp;quot;fr-CA&amp;quot;, &amp;quot;fr-FR&amp;quot;, &amp;quot;id&amp;quot;, &amp;quot;it&amp;quot;, &amp;quot;ja&amp;quot;, &amp;quot;ko&amp;quot;, &amp;quot;ms&amp;quot;, &amp;quot;nl&amp;quot;, &amp;quot;no&amp;quot;, &amp;quot;pt-BR&amp;quot;, &amp;quot;pt-PT&amp;quot;, &amp;quot;ru&amp;quot;, &amp;quot;sv&amp;quot;, &amp;quot;th&amp;quot;, &amp;quot;tr&amp;quot;, &amp;quot;vi&amp;quot;, &amp;quot;zh-Hans&amp;quot;, &amp;quot;zh-Hant&amp;quot;]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;获取更多关于语言和本地代码的信息，参阅&lt;a href=&#34;https://developer.apple.com/library/ios/documentation/MacOSX/Conceptual/BPInternational/LanguageandLocaleIDs/LanguageandLocaleIDs.html&#34;&gt; Internationalization and Localization Guide &lt;/a&gt;。&lt;/p&gt;
-
-&lt;h2 id=&#34;使用干净的状态栏&#34;&gt;使用干净的状态栏&lt;/h2&gt;
-
-&lt;p&gt;你可以使用&lt;a href=&#34;https://github.com/shinydevelopment/SimulatorStatusMagic&#34;&gt; SimulatorStatusMagic &lt;/a&gt;来清理状态栏。&lt;/p&gt;
-
-&lt;h2 id=&#34;编辑-snapfile&#34;&gt;编辑&lt;code&gt;Snapfile&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;将语法高亮改为Ruby。&lt;/p&gt;
-
-&lt;h2 id=&#34;模拟器没有启动应用&#34;&gt;模拟器没有启动应用&lt;/h2&gt;
-
-&lt;p&gt;当应用程序启动后，App直接死掉。可能有两个问题：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;模拟器处于损坏的状态，你需要重新创建。你可以使用&lt;code&gt;snapshot reset_simulators&lt;/code&gt;来重置所有的模拟器(这将会删除所有安装的App)&lt;/li&gt;
-&lt;li&gt;重启往往非常有用&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;检测语言&#34;&gt;检测语言&lt;/h2&gt;
-
-&lt;p&gt;使用如下代码可以检测你当前测试使用的本地化：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;You can access the language using the `deviceLanguage` variable.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;帮助&#34;&gt;帮助？&lt;/h1&gt;
 
 &lt;p&gt;请提交 issue 到 GitHub，并提供你关于设置的信息。&lt;/p&gt;</description>
     </item>
